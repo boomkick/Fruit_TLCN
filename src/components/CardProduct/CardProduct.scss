@@ -1,0 +1,42 @@
+.card {
+
+
+    &__sale {
+        display: inline;
+        font-size: 12px;
+        padding: 0 3px;
+        height: 16px;
+        margin-left: 8px;
+        border: 1px solid #ff0000;
+    }
+
+    &__price {
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        margin-top: 4px !important;
+    }
+
+    &__discount {
+        z-index: 21;
+        position: absolute !important;
+        margin: 30px 0 0;
+
+        &_badge {
+            color: #fff;
+            display: table;
+            z-index: 20;
+            pointer-events: none;
+            height: 2.8em;
+            width: 2.8em;
+            backface-visibility: hidden;
+            padding: 0.25em 0.4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+    }
+}

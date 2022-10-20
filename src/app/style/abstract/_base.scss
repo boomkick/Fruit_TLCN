@@ -1,0 +1,180 @@
+@use "./variables" as *;
+@use "./breakpoint" as *;
+@each $color,
+$val in $colors {
+    .color-#{$color} {
+        color: $val;
+    }
+    .bg-#{$color} {
+        background-color: $val;
+    }
+}
+
+@each $val in $numbers {
+    .grid-col-#{$val} {
+        grid-template-columns: repeat($val, 1fr);
+    }
+}
+
+@each $val in $numbers {
+    .grid-col-md-#{$val} {
+        @include tablet {
+            grid-template-columns: repeat($val, 1fr);
+        }
+    }
+}
+
+@each $val in $numbers {
+    .grid-col-sm-#{$val} {
+        @include mobile {
+            grid-template-columns: repeat($val, 1fr);
+        }
+    }
+}
+
+@each $val in $numbers {
+    .col-#{$val} {
+        width: calc($val/12)*100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@each $val in $numbers {
+    .col-md-#{$val} {
+        @include tablet {
+            width: calc($val/12)*100%;
+            // padding-left: 10px;
+            // padding-right: 10px;
+        }
+    }
+}
+
+@each $val in $numbers {
+    .col-sm-#{$val} {
+        @include mobile {
+            width: calc($val/12)*100%;
+            // padding-left: 5px;
+            // padding-right: 5px;
+        }
+    }
+}
+
+@for $i from 1 through 48 {
+    .fs-#{$i} {
+        font-size: #{calc($i/16)}rem !important;
+    }
+}
+
+@for $val from 1 through 10 {
+    .fw-#{$val} {
+        font-weight: $val*100;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 1270px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: auto;
+    position: relative;
+    @include tablet {
+        padding: 0 20px;
+    }
+    @include mobile {
+        padding: 0 10px;
+    }
+}
+
+.main {
+    margin-top: 72px;
+    margin-bottom: 2rem;
+    min-height: 100vh;
+}
+
+.Toastify__toast-container--top-right {
+    top: 4rem !important
+}
+
+.text-overflow-1-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.text-overflow-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.text-overflow-3-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.text-secondary {
+    color: #666 !important;
+}
+
+.avatar--45 {
+    width: 45px;
+    height: 45px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.w-75 {
+    width: 75% !important;
+}
+
+.w-50 {
+    width: 50% !important;
+}
+
+.w-25 {
+    width: 25% !important;
+}
+
+.ma {
+    margin: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.text-with-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+        color: $main-color;
+    }
+    i {
+        font-size: 1rem;
+        margin-right: 4px;
+    }
+}
+
+.msgError{
+    color: red !important;
+}

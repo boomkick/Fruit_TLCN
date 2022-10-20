@@ -1,0 +1,61 @@
+#main {
+    background-color: #fff;
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.my-account {
+
+    max-width: 100%;
+    background-color: #f7f7f7;
+    border-top: 1px solid #ececec;
+    border-bottom: 1px solid #ececec;
+
+
+    &-title {
+        margin: 0px 175px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        display: block;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &-content {
+        padding: 30px 0px;
+        margin: 0px 175px;
+    }
+
+    & h3 {
+        text-transform: uppercase;
+        font-family: "Roboto", sans-serif;
+        margin-bottom: 9px;
+        font-size: 19px;
+        font-weight: 400;
+    }
+
+    & p {
+        display: block;
+        margin-bottom: 7.5px;
+    }
+
+    & input {
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        padding: 0 0.75em;
+        height: 2.507em;
+        font-size: .97em;
+        border-radius: 0;
+        max-width: 100%;
+        width: 100%;
+        vertical-align: middle;
+        background-color: #fff;
+        color: #333;
+        font-family: 'Open Sans', Helvetica, sans-serif;
+        margin-bottom: 15px;
+    }
+
+    & label {
+        margin-bottom: 5.4px;
+    }
+}

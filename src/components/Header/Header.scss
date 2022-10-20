@@ -1,0 +1,142 @@
+#header {
+  border-bottom: 1px solid #333;
+}
+
+
+.header {
+  height: 70px;
+  width: 100%;
+  z-index: 30;
+  position: relative;
+  background-size: cover;
+  background-position: 50% 0;
+  background-color: #1a2d36;
+  display: block;
+
+  &__logo {
+    // vertical-align:middle;
+    width: 80px;
+    max-height: 70px;
+    margin-left: 0;
+    margin-right: 30px;
+    line-height: 1;
+  }
+
+  .element {
+    max-height: 100%;
+  }
+
+  &__leftElement {
+    margin-right: auto;
+  }
+
+  &__rightElement {
+    margin-left: auto;
+  }
+}
+
+.navbar {
+  position: relative;
+  margin-top: 1px;
+  display: inline-flex;
+  list-style: none;
+  align-items: center;
+
+  & li {
+    display: block;
+    padding: 0;
+    // line-height: 37px;
+    margin: 0 10px;
+  }
+
+  li:hover .subnav{
+    display: block;
+  }
+
+  li:first-child {
+    margin-left: 0 !important;
+  }
+
+  li:last-child {
+    margin-right: 0 !important;
+  }
+
+  li.divider {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgb(51 69 76);
+    height: 30px;
+    vertical-align: middle;
+    position: relative;
+    margin: 0 7.5px;
+  }
+
+  & li a {
+    font-family: "Open Sans", sans-serif;
+    padding: 10px 0;
+    line-height: 16px;
+    font-weight: 300;
+    font-size: 14px;
+    display: block;
+    align-items: center;
+    // text-align: center;
+  }
+
+  > li > a {
+    color: #ffffff;
+  }
+
+  .subnav {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+
+    a:hover {
+      background-color: #eaedef;
+      color: #2d525f;
+    }
+
+    &__dropdown {
+      border: 2px solid #ddd;
+      box-shadow: 1px 1px 15px rgb(0 0 0 / 15%);
+      font-size: 100%;
+      padding: 0;
+      min-width: 230px;
+    }
+
+    &::after {
+      visibility: hidden;
+      display: block;
+      content: "";
+      clear: both;
+      height: 0;
+    }
+  }
+
+
+  .buttonCart,.buttonSearch {
+    display: inline-block;
+
+    .icon {
+      font-size: 1em;
+      margin-left: 0.12em;
+      margin-right: 0.12em;
+      min-width: 2.5em;
+      padding-left: 0.6em;
+      padding-right: 0.6em;
+      display: inline-block;
+    }
+  }
+}
+
+.child:after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-top: 6px solid #333;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  color: #ffffff;
+}

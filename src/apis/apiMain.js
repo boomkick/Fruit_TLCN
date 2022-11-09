@@ -3,7 +3,7 @@ import queryString from 'query-string';
 
 
 // create axiosProducts to test favorite product
-const baseURL='https://playerhostedapitest.herokuapp.com/api/'
+const baseURL='https://www.senki.me/api'
 export const axiosProducts = axios.create({
     baseURL: baseURL,
     headers: {
@@ -18,7 +18,7 @@ const apiMain = {
 
     ///authentication
     getProducts: async (params) => {
-        const res = await axiosProducts.get('/products', {params})
+        const res = await axiosProducts.get('/products/all', {params})
         return res.data;
     },
 }

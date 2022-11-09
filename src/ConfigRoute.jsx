@@ -1,5 +1,6 @@
 import Home from "./pages/Home";
 import CustomerAccount from "./pages/CustomerAccount";
+import ProductDetail from "./pages/ProductDetail";
 import { Route, Routes } from "react-router-dom";
 
 
@@ -13,7 +14,7 @@ function ConfigRoute() {
         <Route path="my-account/*" element={<CustomerAccount />} />
       </Route> */}
       <Route path="my-account/*" element={<CustomerAccount />} />
-
+      <Route path="product-detail/*" element={<ProductDetail />} />
     </Routes>
   );
 }

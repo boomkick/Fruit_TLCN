@@ -27,7 +27,8 @@ import { toast } from "react-toastify";
 
 function Login(props) {
   const dispatch = useDispatch();
-  const client_url = "https://tiki-web.vercel.app/"
+  // const client_url = "https://tiki-web.vercel.app/"
+  const client_url = "http://localhost:3000/"
 
   const {
     register,
@@ -53,7 +54,7 @@ function Login(props) {
     setLoading(true);
     let params = {
       password: data.pass,
-      phone: data.phoneNumber,
+      phone: data.email,
     };
 
     apiAuth
@@ -91,22 +92,18 @@ function Login(props) {
           <Stack spacing={2}>
             <Stack>
               <TextField
-                {...register("phoneNumber", {
-                  required: "Hãy nhập số điện thoại",
+                {...register("email", {
+                  required: "Hãy nhập email",
                   pattern: {
-                    value: /\d+/,
-                    message: "Số điện thoại không hợp lệ",
-                  },
-                  minLength: {
-                    value: 10,
-                    message: "Số điện thoại phải có ít nhất 10 chữ số",
+                    value: /\S+@\S+\.\S+/,
+                    message: "Email không hợp lệ",
                   },
                 })}
-                label="Số Điện Thoại"
+                label="Email"
                 variant="standard"
               />
-              {errors.phoneNumber && (
-                <ErrorInput message={errors.phoneNumber.message} />
+              {errors.email && (
+                <ErrorInput message={errors.email.message} />
               )}
             </Stack>
 
@@ -138,7 +135,7 @@ function Login(props) {
             </FormControl>
 
             {isNoAccount && (
-              <ErrorAfterSubmit message="Số điện thoại chưa được đăng ký" />
+              <ErrorAfterSubmit message="Email chưa được đăng ký" />
             )}
 
             {wrongPass && (
@@ -205,24 +202,6 @@ function Login(props) {
         </p>
       </Stack>
 
-      <Box
-        sx={{
-          flex: 3,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "10px",
-        }}
-      >
-        <img
-          alt=""
-          src="https://salt.tikicdn.com/ts/upload/eb/f3/a3/25b2ccba8f33a5157f161b6a50f64a60.png"
-          width="203"
-        />
-        <h4>Mua sắm tại Tiki</h4>
-        <span>Siêu ưu đãi mỗi ngày</span>
-      </Box>
 
       <span style={{ position: "absolute", top: 0, right: 0 }}>
         <IconButton onClick={props.closeModalLogin}>

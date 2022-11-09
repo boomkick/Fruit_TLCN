@@ -128,15 +128,15 @@
   }
 }
 
-.child:after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-top: 6px solid #333;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 5px;
-  color: #ffffff;
+.modal-login {
+  position: absolute;
+  margin-top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30rem;
+  background-color: white;
+  box-shadow: 24px;
+  padding: 32px;
+  border-radius: 20px;
 }
+

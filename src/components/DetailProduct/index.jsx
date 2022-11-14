@@ -13,8 +13,10 @@ import InfoIcon from '@mui/icons-material/Info';
 import BookIcon from '@mui/icons-material/Book';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import AppleIcon from '@mui/icons-material/Apple';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 //import img
-import imgDefault from "../../assets/img/img_default.jpg";
+import imgProduct from "../../assets/img/product_le_han_quoc.jpg";
 
 function DetailProduct({ data }) {
   const list_cities = () => [
@@ -28,13 +30,13 @@ function DetailProduct({ data }) {
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
                     <div className="detailProduct__primary-img">
-                        <img alt="" src={imgDefault}></img>
+                        <img alt="" src={imgProduct}></img>
                     </div>
                     <div className="detailProduct__list-img">
-                        <img className="detailProduct__item-img" alt="" src={imgDefault}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgDefault}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgDefault}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgDefault}></img>
+                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
                     </div>
                 </Box>
                 <Box className="detailProduct__general">
@@ -108,33 +110,35 @@ function DetailProduct({ data }) {
                                     height: "100%",
                                     marginRight: "15px"
                                 }}/>
-                                <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+                                <p>Nhận hàng, kiểm tra, thanh toán tận tay</p>
                             </div>
                             <div className="detailProduct__support-box-item">
-                                <VolunteerActivismIcon sx={{
+                                <AppleIcon sx={{
                                     width: "50px",
                                     height: "100%",
                                     marginRight: "15px"
                                 }}/>
-                                <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+                                <p>Sản phẩm tươi và sạch, luôn đảm bảo chất lượng cho người dùng</p>
                             </div>
                         </div>
                         <div className="detailProduct__support-box">
                         <div className="detailProduct__support-box-item">
-                                <VolunteerActivismIcon sx={{
+                                <PhoneIphoneIcon sx={{
                                     width: "50px",
                                     height: "100%",
                                     marginRight: "15px"
                                 }}/>
-                                <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+                                <p>Hotline đặt hàng
+                                093 471 0592
+                                (Làm việc cả T7, CN)</p>
                             </div>
                             <div className="detailProduct__support-box-item">
-                                <VolunteerActivismIcon sx={{
+                                <FacebookIcon sx={{
                                     width: "50px",
                                     height: "100%",
                                     marginRight: "15px"
                                 }}/>
-                                <p>Đặt hàng online, giao hàng COD toàn quốc</p>
+                                <p>Hỗ trợ qua Facebook Messenger</p>
                             </div>
                         </div>
                     </div>

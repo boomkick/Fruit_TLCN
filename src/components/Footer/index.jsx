@@ -37,7 +37,7 @@ function Header() {
               </li>
               <li>
                 <Link className="footer_content" to={"/"}>
-                  Hướng dẫn mua đàn guitar cho người mới tập
+                  Hướng dẫn mua trái cây cho người mới
                 </Link>
               </li>
             </ul>
@@ -51,22 +51,22 @@ function Header() {
             <ul style={{ listStyle: "none" }}>
               <li>
                 <Link className="footer_content" to={"/"}>
-                  Đàn Guitar Acoustic
+                  Trái cây nội địa
                 </Link>
               </li>
               <li>
                 <Link className="footer_content" to={"/"}>
-                  Đàn Guitar Epiphone DR-100
+                  Trái cây nhập khẩu
                 </Link>
               </li>
               <li>
                 <Link className="footer_content" to={"/"}>
-                  Capo Guitar Giá Rẻ
+                  Giỏ hàng đi lễ
                 </Link>
               </li>
               <li>
                 <Link className="footer_content" to={"/"}>
-                  Dây Đàn Guitar
+                  Giỏ quà đi đám
                 </Link>
               </li>
             </ul>
@@ -93,13 +93,13 @@ function Header() {
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              D35 KQH Ngô Quyền, phường 7 Tp Đà Lạt, Lâm Đồng
+              1 Đ. Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức
               </li>
               <li>
               Làm việc kể cả Thứ 7 - Chủ Nhật
               </li>
               <li>
-                Hotline: 093 471 0592
+                Hotline: 0357 22 44 36
               </li>
             </ul>
           </div>

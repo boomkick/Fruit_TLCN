@@ -14,6 +14,7 @@ import { logoutSuccess } from "../../slices/authSlice";
 import Login from "../Login";
 import SignUp from "../SignUp";
 import { VerticalAlignCenter } from "@mui/icons-material";
+import imgLogo from "../../assets/img/fruity.png"
 
 const privatePath = ["/customer/", "/admin/", "/payment"];
 
@@ -84,8 +85,8 @@ function Header() {
         <Link className="header__logo" to={"/"}>
           <img
             alt=""
-            style={{ width: "70px", height: "70px" }}
-            src="https://guitar.station.vn/wp-content/uploads/2018/11/Logo-White-500x500.png"
+            style={{ width: "50px", height: "50px" }}
+            src={imgLogo}
           />
         </Link>
 
@@ -95,55 +96,51 @@ function Header() {
             <li>
               <Link to={"/"}>
                 <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
-                  Đàn Guitar
+                  Trang chủ
+                </Typography>
+              </Link>
+            </li>
+            <li>
+              <Link to={"/"}>
+                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
+                  Sản phẩm
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
-                {/* <FontAwesomeIcon icon="fa-light fa-chevron-down" /> */}
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"/"}>Trái cây ta</Link>
+                </li>
+                <li>
+                  <Link to={"/"}>Trái cây nhập khẩu</Link>
                 </li>
               </ul>
             </li>
             <li>
               <Link to={"/"}>
                 <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
-                  Nhạc Cụ Khác
+                  Giỏ Quà
                   <ArrowDropDownOutlinedIcon />
                 </Typography>
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"/"}>Giỏ Quà Lễ Hội</Link>
+                </li>
+                <li>
+                  <Link to={"/"}>Giỏ Quà Sinh Nhật</Link>
+                </li>
+                <li>
+                  <Link to={"/"}>Giỏ Trái Cây + Hoa Tươi</Link>
                 </li>
               </ul>
             </li>
             <li>
               <Link to={"/"}>
                 <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
-                  Phụ Kiện Guitar
-                  <ArrowDropDownOutlinedIcon />
+                  Giới Thiệu
                 </Typography>
               </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px",paddingBottom:"6px" }}>
-                  Tự Học Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
-                </li>
-              </ul>
             </li>
             <li>
               <Link to={"/"}>
@@ -154,7 +151,13 @@ function Header() {
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"/"}>Liên hệ shop</Link>
+                </li>
+                <li>
+                  <Link to={"/"}>Hướng Dẫn Sử Dụng</Link>
+                </li>
+                <li>
+                  <Link to={"/"}>Yêu cầu khẩn cấp</Link>
                 </li>
               </ul>
             </li>

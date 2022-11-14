@@ -66,9 +66,9 @@ function SlideBackGround() {
           <div className="bg bg1"></div>
           <div className="text-content">
             <h3 className="text-heading" style={{ textTransform: "uppercase" }}>
-              Đàn Kalimba xinh xắn, giá rẻ và cực kỳ dễ chơi
+            QUÀ TẶNG TRÁI CÂY – TRAO LỜI MUỐN NÓI 
             </h3>
-            <h4 className="text-description">Giá chỉ từ 390,000đ</h4>
+            <h4 className="text-description">Giá chỉ từ 1.000.000đ</h4>
             <p style={{ margin: "25px 0" }}>
               <Box
                 sx={{
@@ -104,7 +104,7 @@ function SlideBackGround() {
               className="text-heading"
               style={{ lineHeight: "60px", textTransform: "uppercase" }}
             >
-              Mua đàn guitar trực tuyến, uy tín, tiện lợi
+              Vị ngon bùng nổ vị giác
             </h2>
             <p>
               <Stack
@@ -126,7 +126,7 @@ function SlideBackGround() {
                     },
                   }}
                 >
-                  Hướng dẫn chọn đàn guitar
+                  Tư vấn trái cây
                 </Button>
                 <Button
                   sx={{
@@ -141,7 +141,7 @@ function SlideBackGround() {
                     },
                   }}
                 >
-                  Mua đàn guitar
+                  Mua sản phẩm ngay
                 </Button>
               </Stack>
             </p>
@@ -226,8 +226,8 @@ function SlideHome() {
                       fontSize: "16px",
                     }}
                   >
-                    {"Miễn phí vận chuyển toàn quốc cho đơn hàng phụ kiện từ "}
-                    <strong>299,000đ</strong>
+                    {"Giao hàng hỏa tốc trong vòng 4h và miễn phí vận chuyển khi có hóa đơn trên "}
+                    <strong>400,000đ</strong>
                   </p>
                 </div>
               </Stack>
@@ -275,11 +275,11 @@ function SlideHome() {
                 <div className="icon-text">
                   <p
                     style={{
+                      fontSize: "16px",
                       lineHeight: "22px",
                     }}
                   >
-                    Tặng bộ phụ kiện hấp dẫn khi mua đàn guitar, bảo trì trọn
-                    đời
+                    Trái cây tươi ngon 100%, không ngon không lấy tiền
                   </p>
                 </div>
               </Stack>
@@ -327,6 +327,7 @@ function SlideHome() {
                 <div className="icon-text">
                   <p
                     style={{
+                      fontSize: "16px",
                       lineHeight: "22px",
                     }}
                   >
@@ -554,176 +555,6 @@ function SlideHome() {
               </SwiperSlide>
               <SwiperSlide>
                 <CardCategory />
-              </SwiperSlide>
-            </Swiper>
-          </Box>
-
-          {/* guide */}
-
-          <Box
-            sx={{
-              maxWidth: "1170px",
-              width: "100%",
-              margin: "0 175px",
-              padding: "0px 15px 30px",
-            }}
-          >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-              sx={{
-                marginBottom: "20px",
-              }}
-            >
-              <h2 className="section-title">
-                <b></b>
-                <span className="section-title-main">
-                  {"Hướng dẫn chơi đàn"}
-                </span>
-                <b></b>
-              </h2>
-            </Stack>
-
-            <Swiper
-              slidesPerView={3}
-              spaceBetween={20}
-              slidesPerGroup={3}
-              loop={true}
-              loopFillGroupWithBlank={true}
-              navigation={true}
-              modules={[Pagination, Navigation]}
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <a href="https://guitar.station.vn/3-cach-chinh-day-dan-guitar/"
-                  className="card__wrap"
-                  style={{
-                    width: "260px",
-                  }}
-                >
-                  <Card className="card" sx={{ boxShadow: "none" }}>
-                    <div className="card__category">
-                      <div className="card__category_title">
-                        <h5
-                          style={{ fontWeight: "400", letterSpacing: ".05em" }}
-                        >
-                          3 Cách Chỉnh Dây Đàn Guitar Cho Người Mới Tập
-                        </h5>
-                      </div>
-                    </div>
-                    <CardMedia
-                      component="img"
-                      image="https://guitar.station.vn/wp-content/uploads/2017/03/tuning-guitar-to-CGCGCE-225x150.jpg"
-                      sx={{ borderRadius: "2%", minHeight: "300px" }}
-                    />
-                  </Card>
-                </a>
-              </SwiperSlide>
-              <SwiperSlide>
-                <a href="https://guitar.station.vn/3-meo-don-gian-nhat-de-hoc-hop-am-guitar/"
-                  className="card__wrap"
-                  to={`/`}
-                  style={{
-                    width: "260px",
-                  }}
-                >
-                  <Card className="card" sx={{ boxShadow: "none" }}>
-                    <div className="card__category">
-                      <div className="card__category_title">
-                        <h5
-                          style={{ fontWeight: "400", letterSpacing: ".05em" }}
-                        >
-                          3 mẹo đơn giản khiến bạn học hợp âm guitar tiến bộ
-                        </h5>
-                      </div>
-                    </div>
-                    <CardMedia
-                      component="img"
-                      image="https://guitar.station.vn/wp-content/uploads/2016/06/meo-hoc-hop-am-guitar-500x282.jpg"
-                      sx={{ borderRadius: "2%", minHeight: "300px" }}
-                    />
-                  </Card>
-                </a>
-              </SwiperSlide>
-              <SwiperSlide>
-                <a href="https://guitar.station.vn/huong-dan-cach-chon-mot-cay-dan-guitar-acoustic-tot/"
-                  className="card__wrap"
-                  to={`/`}
-                  style={{
-                    width: "260px",
-                  }}
-                >
-                  <Card className="card" sx={{ boxShadow: "none" }}>
-                    <div className="card__category">
-                      <div className="card__category_title">
-                        <h5
-                          style={{ fontWeight: "400", letterSpacing: ".05em" }}
-                        >
-                          Hướng dẫn cách chọn một cây guitar acoustic tốt
-                        </h5>
-                      </div>
-                    </div>
-                    <CardMedia
-                      component="img"
-                      image="https://guitar.station.vn/wp-content/uploads/2016/04/cach-chuyen-hop-am-nhanh-225x150.jpg"
-                      sx={{ borderRadius: "2%", minHeight: "300px" }}
-                    />
-                  </Card>
-                </a>
-              </SwiperSlide>
-              <SwiperSlide>
-                <a href="https://guitar.station.vn/nen-chon-mua-dan-guitar-go-nguyen-mieng-hay-go-ep/"
-                  className="card__wrap"
-                  to={`/`}
-                  style={{
-                    width: "260px",
-                  }}
-                >
-                  <Card className="card" sx={{ boxShadow: "none" }}>
-                    <div className="card__category">
-                      <div className="card__category_title">
-                        <h5
-                          style={{ fontWeight: "400", letterSpacing: ".05em" }}
-                        >
-                          Có nên chọn đàn guitar gỗ ép ?
-                        </h5>
-                      </div>
-                    </div>
-                    <CardMedia
-                      component="img"
-                      image="https://guitar.station.vn/wp-content/uploads/2016/05/Best-Acoustic-Guitar-1024x677-227x150.jpg"
-                      sx={{ borderRadius: "2%", minHeight: "300px" }}
-                    />
-                  </Card>
-                </a>
-              </SwiperSlide>
-              <SwiperSlide>
-                <a href="https://guitar.station.vn/5-cach-tu-hoc-guitar-tai-nha-nhanh-tien-bo-nhat/"
-                  className="card__wrap"
-                  to={`/`}
-                  style={{
-                    width: "260px",
-                  }}
-                >
-                  <Card className="card" sx={{ boxShadow: "none" }}>
-                    <div className="card__category">
-                      <div className="card__category_title">
-                        <h5
-                          style={{ fontWeight: "400", letterSpacing: ".05em" }}
-                        >
-                          5 cách tự học đàn guitar tại nhà nhanh tiến bộ
-                        </h5>
-                      </div>
-                    </div>
-                    <CardMedia
-                      component="img"
-                      image="https://guitar.station.vn/wp-content/uploads/2016/02/tu-hoc-dan-guitar-tai-nha-250x141.jpg"
-                      sx={{ borderRadius: "2%", minHeight: "300px" }}
-                    />
-                  </Card>
-                </a>
               </SwiperSlide>
             </Swiper>
           </Box>

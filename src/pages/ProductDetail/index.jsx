@@ -18,25 +18,7 @@ import {
 
 } from "@mui/material";
 import "./ProductDetail.scss";
-import CheckIcon from "@mui/icons-material/Check";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import StarIcon from '@mui/icons-material/Star';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import { toast } from "react-toastify";
-import QuantityButtons from "../../components/QuantityButtons";
-import InfoIcon from '@mui/icons-material/Info';
-import BookIcon from '@mui/icons-material/Book';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../../components/CardProduct";
 // styles swiper
@@ -53,7 +35,7 @@ function ProductDetail() {
     const [product, setProduct] = useState({});
 
     let data = {
-      name: "Capo Musedo – MC1",
+      name: "Lê Hàn Quốc",
       discount: "119,000",
       price: "140,000",
       rate: "5",
@@ -64,14 +46,14 @@ function ProductDetail() {
       {
         id:1,
         userName: "lethuyen",
-        content: "Capo thiết kế cho cần đàn nhỏ của acoustic nên kẹp sướng lắm luôn, nhìn vừa sang vừa chất. Do hồi xưa mình mua nhầm 1 cái hàng fake nên giờ cầm vào cái của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
+        content: "Hồi xưa cũng đặt online mà hàng về là không thấy màu xanh giờ đặt của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
         rating: 5,
         post_date: "05/11/2022"
       },
       {
         id:2,
         userName: "lethuyen",
-        content: "Capo thiết kế cho cần đàn nhỏ của acoustic nên kẹp sướng lắm luôn, nhìn vừa sang vừa chất. Do hồi xưa mình mua nhầm 1 cái hàng fake nên giờ cầm vào cái của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
+        content: "Hồi xưa cũng đặt online mà hàng về là không thấy màu xanh giờ đặt của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
         rating: 5,
         post_date: "05/11/2022"
       }

@@ -4,7 +4,7 @@ import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 //import img
-import img from "../../assets/img/HD-119-TOP-Copy-2-360x360.jpg";
+import img from "../../assets/img/product_nho_mau_don_han_quoc.jpg";
 
 function CardProduct({ data }) {
   return (
@@ -40,17 +40,8 @@ function CardProduct({ data }) {
           //   sx={{ position: "absolute" }}
         />
         <CardContent className="card__content">
-          {/* <Typography className="card__price" color={`${data?.discount!==0 ? "#ff0000" : "#000000"}`} variant="h5" component="div">
-                    {
-                        data?.discount!==0 ?
-                        <>{numWithCommas(Math.round(data?.price*(1-0.01*data.discount)))} ₫ <Box className="card__sale">{data?.discount}%</Box>
-                        </>
-                        :
-                        <>{numWithCommas(data?.price)} ₫ </>
-                    } 
-                    </Typography> */}
-          <Typography>Guitar Acoustic Station HD-119</Typography>
-          <Typography>1,290,000 đ</Typography>
+          <Typography>Nho Mẫu Đơn Đỏ Hàn Quốc</Typography>
+          <Typography>1,500,000₫</Typography>
         </CardContent>
       </Card>
     </Link>

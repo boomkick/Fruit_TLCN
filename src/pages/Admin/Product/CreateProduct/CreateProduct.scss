@@ -1,0 +1,15 @@
+.btn {
+    &__upload {
+    width: 50%;
+    background-color: rgb(228, 228, 228) !important;
+    border: 1px dashed #d9d9d9 !important;
+    cursor: pointer;
+    height: 300px;
+    }
+    &__add {
+    background-color: #fff !important;
+    border: 1px dashed #1890ff !important;    
+    color:#1890ff;
+    width: 62.5%;    
+    }
+}

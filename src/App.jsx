@@ -6,14 +6,15 @@ import ConfigRoute from "./ConfigRoute";
 import './app/style/App.scss'
 
 function App() {
+  const isAdmin = true;
   return (
     <div className="App">
       <BrowserRouter>
         
         
-          <Header />
+          {isAdmin ? null : <Header />}
           <ConfigRoute />
-          <Footer/>
+          {isAdmin ? null : <Footer />}
 
         
       </BrowserRouter>

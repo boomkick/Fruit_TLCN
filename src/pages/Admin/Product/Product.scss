@@ -1,0 +1,55 @@
+.productAdmin {
+    &__filter {
+        background-color: #fff;
+        & .MuiTypography-root {
+            font-weight: 500;
+        }
+    }
+}
+
+.productTable {
+    & th,
+    & td {
+        border: 1px solid #bfbfbf !important;
+        border-collapse: collapse;
+    }
+    & th {
+        background-color: #e8e8e8 !important;
+        font-weight: bold;
+        width: calc(13*100%/101);
+        &:nth-child(1) {
+            width: calc(8*100%/101);
+        }
+        &:nth-child(2) {
+            width: calc(20*100%/101);
+        }
+        &:nth-child(2) {
+            width: calc(18*100%/101);
+        }
+        &:nth-child(9) {
+            width: calc(15*100%/101);
+        }
+        &:nth-child(10) {
+            width: calc(18*100%/101);
+        }
+    }
+    & p {
+        font-size: 12px !important;
+    }
+    &__button {
+        &__end {
+            cursor: pointer;
+            border: 1px solid #bfbfbf;
+            height: 28px;
+            &>div {
+                flex: 1;
+                margin: auto;
+                text-align: center;
+            }
+            &>span {
+                height: 100%;
+                border-left: 1px solid #bfbfbf;
+            }
+        }
+    }
+}

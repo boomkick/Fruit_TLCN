@@ -1,0 +1,23 @@
+.tableCategory{
+    & td{
+        font-size: 13px !important;
+    }
+    & p{
+        font-size: 13px !important;
+    }
+}
+
+.category{
+    &__iconSearch{
+        position:absolute;
+        top:50%;
+        transform:translateY(-50%);
+        right:12px;
+        cursor:pointer;
+    }
+}
+.btn {
+    &__update {
+        width:100% !important;
+    }
+}

@@ -1,0 +1,34 @@
+    @use "./abstract/" as *;
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        background-color: #f5f5fa;
+        min-width: 460px;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+    
+    .MuiButton-root {
+        text-transform: none !important;
+    }
+    
+    div,
+    p,
+    input,
+    a,
+    td {
+        font-size: 13px;
+    }
+    
+    .color-primary {
+        color: $main-admin-color;
+    }

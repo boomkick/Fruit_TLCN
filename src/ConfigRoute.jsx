@@ -1,6 +1,7 @@
 import Home from "./pages/Home";
 import CustomerAccount from "./pages/CustomerAccount";
 import ProductDetail from "./pages/ProductDetail";
+import Admin from "./pages/Admin";
 import { Route, Routes } from "react-router-dom";
 
 
@@ -15,6 +16,7 @@ function ConfigRoute() {
       </Route> */}
       <Route path="my-account/*" element={<CustomerAccount />} />
       <Route path="product-detail/*" element={<ProductDetail />} />
+      <Route path="admin/*" element={<Admin />} />
     </Routes>
   );
 }

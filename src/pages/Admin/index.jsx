@@ -46,8 +46,8 @@ import CreateCategory from "./Category/CruCategory/index";
 // import Dashboard from "./Dashboard";
 import Order from "./Order";
 import Product from "./Product";
-import CreateProduct from "./Product/CreateProduct";
-import DetailProduct from "./Product/DetailProduct";
+import CreateDetailProduct from "./Product/CreateDetailProduct";
+// import DetailProduct from "./Product/DetailProduct";
 // import Review from "./Review";
 // import User from "./User";
 // import DetailUser from "./User/DetailUser";
@@ -448,8 +448,8 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Product />} />
-                <Route path="create" element={<CreateProduct />} />
-                <Route path="detail/:id" element={<DetailProduct />} />
+                <Route path="create" element={<CreateDetailProduct />} />
+                <Route path="detail/:id" element={<CreateDetailProduct />} />
               </Routes>
             }
           />

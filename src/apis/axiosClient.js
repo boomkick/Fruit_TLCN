@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 // const baseURL='https://playerhostedapitest.herokuapp.com/api/'
 //const baseURL='http://localhost:5000/api'
 const baseURL='https://www.senki.me/api'
+const apiURL='https://localhost:7039'
 export const axiosClient = axios.create({
     baseURL: baseURL,
     headers: {
@@ -65,3 +66,11 @@ export const axiosInstance = (user, dispatch, stateSuccess,stateFail) => {
         }
     );
 }
+
+export const axiosAdmin = axios.create({
+    baseURL: apiURL,
+    headers: {
+        "Content-Type": "application/json"
+    },
+    paramsSerializer: (params) => queryString.stringify(params)
+});

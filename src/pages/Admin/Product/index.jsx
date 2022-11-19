@@ -14,7 +14,6 @@ import {
     MenuItem,
     FormControl,
     Select,
-    Checkbox,
     Modal
 } from '@mui/material';
 import "./Product.scss"
@@ -22,12 +21,16 @@ import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import apiProduct from '../../../apis/apiProduct';
 
 function Product() {
     const [modalDelete, setModalDelete] = React.useState(false);
     const [category, setCategory] = React.useState(1);
     const [price, setPrice] = React.useState(1);
     const [quantity, setQuantity] = React.useState(1);
+    const [products, setProducts] = React.useState([]);
+    const [page, setPage] = React.useState(1);
+    const [totalPage, setTotalPage] = React.useState(1);
 
     const openModalDelete = () => setModalDelete(true);
     const closeModalDelete = () => setModalDelete(false);
@@ -41,6 +44,22 @@ function Product() {
     const handleChangeQuantity = (event) => {
         setQuantity(event.target.value)
     }
+
+    React.useEffect(() => {
+        const getData = async () => {
+            apiProduct.getProducts(page)
+                .then(response=>{
+                setProducts(response.data.products);
+                setTotalPage(response.data.maxPage);     
+                })
+                .catch(setProducts([]))
+        };
+        getData();
+      }, [page]);
+
+    const handleChangePage = (event, newValue) => {
+        setPage(newValue);
+      };
     return (
         <>
             <Box className="productAdmin">
@@ -130,7 +149,6 @@ function Product() {
                                 <TableCell>ID</TableCell>
                                 <TableCell>Tên sản phẩm</TableCell>
                                 <TableCell>Giá bán</TableCell>
-                                <TableCell>Nhà cung cấp</TableCell>
                                 <TableCell>Danh mục</TableCell>
                                 <TableCell>Số lượng</TableCell>
                                 <TableCell>Trạng thái</TableCell>
@@ -138,40 +156,35 @@ function Product() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {[1, 2, 3, 4, 5, 6, 7].map(row => (
-                                <TableRow key={row} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                            {products.length >= 1 ? products.map(row => (
+                                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                     <TableCell>
                                         <Stack>
-                                            <Typography>123456789</Typography>
+                                            <Typography>{row.id}</Typography>
                                         </Stack>
                                     </TableCell>
                                     <TableCell>
                                         <Stack>
-                                            <Typography sx={{ color: "#1890ff" }}>Táo độc</Typography>
+                                            <Typography sx={{ color: "#1890ff" }}>{row.name}</Typography>
                                         </Stack>
                                     </TableCell>
                                     <TableCell>
                                         <Stack direction="row" justifyContent="center">
-                                            <Typography sx={{ margin: "auto 0" }}>7.898.000</Typography>
+                                            <Typography sx={{ margin: "auto 0" }}>{row.price}</Typography>
                                             <EditIcon sx={{ width: "12px" }} />
                                         </Stack>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography>Bách hóa xanh</Typography>
-                                        <Typography>Bách hóa xanh</Typography>
+                                        <Typography>{row.category.name}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography>Trái cây ta</Typography>
+                                        <Typography>{row.quantity}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography>100</Typography>
-                                    </TableCell>
-                                    <TableCell align='center'>
-                                        <Typography>Đang bán</Typography>
+                                        <Typography>{row.status}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
                                         <Stack spacing={1} justifyContent="center" py={1}>
-                                            <Button variant="contained">Chi tiết</Button>
                                             <Button variant="contained">Sửa</Button>
                                             <Button onClick={openModalDelete} variant="outlined" color="error">
                                                 Xóa
@@ -179,10 +192,12 @@ function Product() {
                                         </Stack>
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )) : <></>}
                         </TableBody>
                     </Table>
-                    <Pagination count={7} color="primary" variant="outlined" shape="rounded" />
+                    {totalPage >= 1 ? <Stack spacing={2} mt="10px">
+                        <Pagination count={totalPage} page={page} onChange={handleChangePage} color="primary"/>
+                    </Stack > : <></>}
                     <Modal
                         sx={{ overflowY: "scroll" }}
                         open={modalDelete}

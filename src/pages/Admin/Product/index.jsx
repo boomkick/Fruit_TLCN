@@ -44,6 +44,9 @@ function Product() {
     const handleChangeQuantity = (event) => {
         setQuantity(event.target.value)
     }
+    const handleChangePage = (event, newValue) => {
+        setPage(newValue);
+      };
 
     React.useEffect(() => {
         const getData = async () => {
@@ -57,9 +60,7 @@ function Product() {
         getData();
       }, [page]);
 
-    const handleChangePage = (event, newValue) => {
-        setPage(newValue);
-      };
+    console.log(page);
     return (
         <>
             <Box className="productAdmin">
@@ -185,7 +186,9 @@ function Product() {
                                     </TableCell>
                                     <TableCell align='center'>
                                         <Stack spacing={1} justifyContent="center" py={1}>
-                                            <Button variant="contained">Sửa</Button>
+                                            <Link to={`/admin/product/detail/${row.id}`} style={{flex:1}}>
+                                                <Button variant="contained">Sửa</Button>
+                                            </Link>
                                             <Button onClick={openModalDelete} variant="outlined" color="error">
                                                 Xóa
                                             </Button>

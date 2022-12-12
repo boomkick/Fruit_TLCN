@@ -10,13 +10,14 @@ function CardProduct({ data }) {
   return (
     <Link
       className="card__wrap"
-      to={`/`}
+      to={`/product-detail/${data?.id}`}
       style={{
         width: "270px",
       }}
     >
       <Card className="card" sx={{boxShadow:"none",}}>
-        <div className="card__discount">
+        {data?.salePrice ? (
+          <div className="card__discount">
           <div className="card__discount_badge">
             <div
               style={{
@@ -32,16 +33,18 @@ function CardProduct({ data }) {
             </div>
           </div>
         </div>
+        ) : <></>}
+        
         <CardMedia
           component="img"
           width="270px"
-          height="270px"
-          image={img}
+          image={data?.image?.url}
+          style={{height: "270px"}}
           //   sx={{ position: "absolute" }}
         />
         <CardContent className="card__content">
-          <Typography>Nho Mẫu Đơn Đỏ Hàn Quốc</Typography>
-          <Typography>1,500,000₫</Typography>
+          <Typography>{data?.name}</Typography>
+          <Typography>{data?.price}₫</Typography>
         </CardContent>
       </Card>
     </Link>

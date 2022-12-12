@@ -3,18 +3,16 @@ import queryString from 'query-string';
 import jwt_decode from 'jwt-decode';
 // const baseURL='https://playerhostedapitest.herokuapp.com/api/'
 //const baseURL='http://localhost:5000/api'
-const baseURL='https://www.senki.me/api'
+const baseURL='https://localhost:7039'
 const apiURL='https://localhost:7039'
 export const axiosClient = axios.create({
     baseURL: baseURL,
     headers: {
         "Content-Type": "application/json"
     },
-    withCredentials: true,
+    withCredentials: false,
     paramsSerializer: (params) => queryString.stringify(params)
 });
-
-
 
 const refreshToken = async (user) => {
     const res = await axiosClient.post('/auth/refreshtoken', { refreshToken: user.refreshToken  }, { headers: { Authorization: `Bearer ${user.accessToken}` }, })

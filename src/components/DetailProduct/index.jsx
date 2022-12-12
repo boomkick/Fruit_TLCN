@@ -30,23 +30,34 @@ function DetailProduct({ data }) {
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
                     <div className="detailProduct__primary-img">
-                        <img alt="" src={imgProduct}></img>
+                        <img alt="" src={data?.productImages[0]?.url}></img>
                     </div>
                     <div className="detailProduct__list-img">
-                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        {
+                            data?.productImages.length > 0 ? data?.productImages.map((item) => (
+                                <img className="detailProduct__item-img" alt="" src={item?.url}></img>
+                            )) : <></>
+                        }
+                        {/* // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
+                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img> */}
                     </div>
                 </Box>
                 <Box className="detailProduct__general">
                     <div className="detailProduct__info">
                         <h3>{data?.name}</h3>
                         <div className="detailProduct__info-underline-title"></div>
-                        <div className="detailProduct__info-price">
-                            <h4 className="detailProduct__info-price-original">{data?.price}</h4>
-                            <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
-                        </div>
+                            { data?.discount ? (
+                                <div className="detailProduct__info-price">
+                                    <h4 className="detailProduct__info-price-original">{data?.price}</h4>
+                                    <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
+                                </div>
+                            ) : (
+                                <div className="detailProduct__info-price">
+                                    <h4 className="detailProduct__info-price-sale">{data?.price}</h4>
+                                </div>
+                            )}
                         <div className="detailProduct__info-rate">
                             <div className="detailProduct__info-rate-star">
                                 <StarIcon sx={{ fontSize: 18 }}/>

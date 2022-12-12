@@ -34,7 +34,7 @@ function SignUp(props) {
   const [loading, setLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
 
-  const client_url = "https://tiki-web.vercel.app/"
+  const client_url = "http://localhost:3000/"
 
   const {
     register,
@@ -44,26 +44,12 @@ function SignUp(props) {
   } = useForm();
 
   const handleCheckPass = () => {
-    if (watch("pass") !== watch("passConf")) {
+    if (watch("password") !== watch("passConf")) {
       setIsDiffPass(true);
     } else {
       setIsDiffPass(false);
       return true;
     }
-  };
-
-  const handleCheckPhone = async () => {
-    let param = {
-      phone: watch("email"),
-    };
-    await apiAuth
-      .postCheckPhone(param)
-      .then((res) => {
-        setInvalidPhone(false);
-      })
-      .catch((error) => {
-        setInvalidPhone(true);
-      });
   };
 
   const onSubmit = async () => {
@@ -72,13 +58,35 @@ function SignUp(props) {
       return
     }
     setLoading(true)
-    if (handleCheckPhone() && handleCheckPass()) {
-      if (invalidPhone === false && isDiffPass === false) {
+    if (handleCheckPass()) {
+      if (isDiffPass === false) {
         let param = {
-          password: watch("pass"),
-          phone: watch("email"),
+          phone: watch("phone"),
+          password: watch("password"),
+          email: watch("email"),
+          firstName: watch("firstName"),
+          lastName: watch("lastName"),
+          cityId: watch("cityId"),
+          districtId: watch("districtId"),
+          wardId: watch("wardId"),
+          detailLocation: watch("detailLocation"),
         };
-        apiAuth.postRegister(param).then(setIsSuccess(true))
+        apiAuth.postRegister(param)
+        .then((res) => {
+          if (res.status === 200){
+            setIsSuccess(true)
+            console.log(isSuccess)
+          } else if (res.status === 400){
+            setIsSuccess(true)
+            console.log("state: ", isSuccess)
+            console.log("123")
+            // console.log(res)
+          }
+        })
+        .catch((res) => {
+          setIsSuccess(false)
+
+        })
         .finally(()=>setLoading(false));
       }
     }
@@ -110,12 +118,93 @@ function SignUp(props) {
               )}
             </Stack>
 
+            <Stack width="100%">
+              <TextField
+                {...register("phone", {
+                  required: "Hãy nhập số điện thoại",
+                  minLength: {
+                    value: 9,
+                    message: "Số điện thoại phải có ít nhất 9 số",
+                  },
+                  maxLength: {
+                    value: 12,
+                    message: "Số điện thoại có tối đa 12 số",
+                  },
+                })}
+                label="Số điện thoại"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+
+              {errors.phone && (
+                <ErrorInput message={errors.phone.message} />
+              )}
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("firstName", {
+                  required: "Hãy nhập tên"
+                })}
+                label="Tên"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("lastName", {
+                  required: "Hãy nhập họ"
+                })}
+                label="Họ"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("cityId")}
+                label="Thành phố"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("districtId")}
+                label="Quận"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("wardId")}
+                label="Huyện"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
+            <Stack width="100%">
+              <TextField
+                {...register("detailLocation")}
+                label="Địa chỉ"
+                variant="standard"
+                sx={{ flex: 1 }}
+              />
+            </Stack>
+
             <FormControl sx={{ width: "100%" }} variant="standard">
               <InputLabel htmlFor="outlined-adornment-password">
                 Nhập mật khẩu
               </InputLabel>
               <Input
-                {...register("pass", {
+                {...register("password", {
                   required: "Hãy nhập mật khẩu",
                   minLength: {
                     value: 8,
@@ -188,7 +277,7 @@ function SignUp(props) {
               Hoàn Tất
             </Button>
 
-            {isSuccess && <SuccessRegister handleOpenLogin={props.handleOpenLogin} />}
+            {isSuccess ? <SuccessRegister handleOpenLogin={props.handleOpenLogin} /> : <></>}
           </Stack>
         </form>
 

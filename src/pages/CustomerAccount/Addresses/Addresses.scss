@@ -1,0 +1,63 @@
+.addresses {
+    .heading {
+        font-size: 19px;
+        line-height: 21px;
+        font-weight: 300;
+        margin: 20px 0px 15px;
+    }
+
+    .new {
+        background-color: rgb(255, 255, 255);
+        font-size: 15px;
+        height: 60px;
+        width: 100%;
+        border: 1px dashed rgb(216, 216, 216);
+        margin: 0px 0px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.items {
+    background-color: rgb(255, 255, 255);
+    padding: 17px !important;
+    border-radius: 4px;
+    margin: 0px 0px 10px !important;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px !important;
+    line-height: 19px;
+
+    .info {
+        .name {
+            text-transform: uppercase;
+            margin: 0px 0px 10px !important;
+        }
+
+        .address {
+            margin: 0px 0px 5px !important;
+        }
+    }
+}
+
+.action {
+    height: 50%;
+    .Modify {
+        font-size: 14px;
+        color: rgb(27, 168, 255);
+        display: inline-block;
+        padding: 6px 12px;
+    }
+
+    .Delete {
+        font-size: 14px;
+        color: rgb(255, 66, 78);
+        border: 0px;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        outline: 0px;
+        background-color: #efefef;
+    }
+}

@@ -29,37 +29,27 @@ function CreateDetailProduct(props) {
   const [category, setCategory] = useState("")
   const [listCategory, setListCategory] = useState([])
   const [price, setPrice] = useState("")
-  const [quantity, setQuantity] = useState("")
+  // const [quantity, setQuantity] = useState("")
   const [unit, setUnit] = useState("")
   const [minPurchase, setMinPurchase] = useState("")
   const [description, setDescription] = useState("")
   const [status, setStatus] = useState("")
   const navigate = useNavigate();
-  
-  const idBrand=useParams().id
-  
+
   // useEffect(() => {
   //   const getData = async () => {
-  //     apiBrand.getAllBrand()
+  //     setListCategory([]);
+  //     apiCategory.getAll()
   //       .then(res => {
-  //         setBrand(res.data.ListBrand);
-  //         console.log(res.data.ListBrand)
+  //         setListCategory(res.data.categories);
   //       })
+  //       .catch(() => {
+  //         setListCategory([]);
+  //       });
+        
   //   };
   //   getData();
-  // }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      const params = { id: props.district }
-      setListCategory([]);
-      apiCategory.getAll()
-        .then(res => {
-          setListCategory(res.data.categories);
-        })
-    };
-    getData();
-  }, [listCategory])
+  // }, [listCategory])
 
   // Change value of select box
 
@@ -75,14 +65,14 @@ function CreateDetailProduct(props) {
     const params = {
       "Name": name,
       "CategoryId": category,
-      "Quantity": quantity,
+      // "Quantity": quantity,
       "Price": price,
       "Unit": unit,
       "MinPurchase": minPurchase,
       "Description": description,
       "Status": status,
     }
-    if(!(name && category && quantity && price && unit && minPurchase && description && status)) {
+    if(!(name && category && price && unit && minPurchase && description && status)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
@@ -92,7 +82,7 @@ function CreateDetailProduct(props) {
         toast.success("Thêm sản phẩm thành công")
         setName("")
         setCategory("")
-        setQuantity("")
+        // setQuantity("")
         setPrice("")
         setUnit("")
         setMinPurchase("")
@@ -111,14 +101,14 @@ function CreateDetailProduct(props) {
     const params = {
       "Name": name,
       "CategoryId": category,
-      "Quantity": quantity,
+      // "Quantity": quantity,
       "Price": price,
       "Unit": unit,
       "MinPurchase": minPurchase,
       "Description": description,
       "Status": status,
     }
-    if(!(name && category && quantity && price && unit && minPurchase && description && status)) {
+    if(!(name && category && price && unit && minPurchase && description && status)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
@@ -183,11 +173,11 @@ function CreateDetailProduct(props) {
           <TextField value={name} onChange={(event) => { setName(event.target.value) }}
               size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
         </Stack>
-        <Stack direction="row">
+        {edit == true ? <Stack direction="row">
           <Typography className="cruBrand__label">Số lượng</Typography>
           <TextField value={name} onChange={(event) => { setName(event.target.value) }}
               size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
+        </Stack> : <></>}
 
         <Stack direction="row" >
           <Typography className="cruBrand__label">Mô Tả</Typography>

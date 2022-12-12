@@ -6,7 +6,7 @@ export const paymentMethod = [
         text: 'Tiền mặt',
     },
     {
-        id: 0,
+        id: 1,
         value: 'MOMO',
         text: 'Qua thẻ',
     },

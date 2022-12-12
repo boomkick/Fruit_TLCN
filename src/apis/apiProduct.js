@@ -1,5 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
+import { axiosClient } from './axiosClient';
 const apiURL='https://localhost:7039/'
 export const axiosAdmin = axios.create({
     baseURL: apiURL,
@@ -17,6 +18,14 @@ const apiProduct = {
         const res = await axiosAdmin.get(`/Product?page=${page}`)
         console.log(res)
         console.log(typeof res.data)
+        return res.data;
+    },
+    getTop8Product: async () => {
+        const res = await axiosClient.get('Product/gettop8product/')
+        return res.data;
+    },
+    getProductDetail: async (id) => {
+        const res = await axiosClient.get(`Product/${id}/`)
         return res.data;
     },
     // saveOrder: async (params) => {

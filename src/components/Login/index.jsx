@@ -24,11 +24,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import Loading from "../Loading";
 import { toast } from "react-toastify";
+import apiProfile from "../../apis/apiProfile";
 
 function Login(props) {
   const dispatch = useDispatch();
   // const client_url = "https://tiki-web.vercel.app/"
-  const client_url = "http://localhost:3000/"
+  const client_url = "https://localhost:3000/"
 
   const {
     register,
@@ -54,13 +55,17 @@ function Login(props) {
     setLoading(true);
     let params = {
       password: data.pass,
-      phone: data.email,
+      email: data.email,
     };
 
     apiAuth
       .postLogin(params)
       .then((res) => {
-        let { accessToken, refreshToken, user } = res.data;
+        let { accessToken, user } = res.data;
+        Object.assign(user, {
+          fullName: user.firstName + " " + user.lastName
+        })
+        let refreshToken = ""
         dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
         toast.success(`Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`)
         props.closeModalLogin();

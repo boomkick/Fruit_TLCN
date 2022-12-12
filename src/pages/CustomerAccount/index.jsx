@@ -42,14 +42,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 import OverView from "./OverView/index";
-import Info from "./Info/index";
-
-
+import Info from "./Info";
+import Addresses from "./Addresses";
+import CreateAddress from "./Addresses/CreateAddress";
+import PhoneNumber from "./Info/PhoneNumber";
+import Password from "./Info/Password";
+import Email from "./Info/Email";
+import Orders from "./Orders"
 
 function CustomerAccount() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const location = useLocation();
-  const tab = sidebarTab.find((item) => location.pathname === (item.link));
+  const tab = sidebarTab.find((item) => location.pathname === item.link);
+  console.log("12344343")
 
   const user = useSelector((state) => state.auth.user);
 
@@ -62,10 +67,8 @@ function CustomerAccount() {
 
   useEffect(() => {
     const handleChangePath = () => {
-      const tab = sidebarTab.find((item) =>
-        location.pathname === (item.link)
-      );
-      console.log(tab)
+      const tab = sidebarTab.find((item) => location.pathname === item.link);
+      console.log(tab);
       if (tab) setSelectedTab(tab?.id || 1);
     };
 
@@ -96,7 +99,6 @@ function CustomerAccount() {
               }}
             >
               {sidebarTab.find((item) => item.id === selectedTab)?.name || ""}
-              
             </small>
           </div>
         </div>
@@ -124,39 +126,25 @@ function CustomerAccount() {
               ":last-child": { border: "none" },
             }}
           >
-            <Stack
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-              spacing={3}
-            >
-              <Avatar
-                sx={{
-                  width: 70,
-                  height: 70,
-                }}
-                src={
-                  "https://secure.gravatar.com/avatar/fc7eaee039cecde3a379319bd183c433?s=70&d=mm&r=g"
-                }
-              />
-              <Typography>ex</Typography>
-            </Stack>
             {sidebarTab.map((item) => {
               return (
                 <Link key={item.id} to={item.link}>
                   <Tab
-                    onClick={() => 
+                    onClick={() =>
                       // navigate(item.link);
                       setSelectedTab(item.id)
                     }
                     key={item.id}
                     label={item.name}
+                    value={value}
                     sx={{
+                      width: "100%",
                       fontSize: "12px",
                       textTransform: "none",
                       fontWeight: "500",
                       borderBottom: 1,
                       borderColor: "divider",
+                      alignItems: "flex-start",
                     }}
                   />
                 </Link>
@@ -164,8 +152,7 @@ function CustomerAccount() {
             })}
           </Tabs>
 
-          <Box flex={1} mt="16px">
-            {/* <Outlet /> */}
+          <Box flex={1} mt="16px" pl="20px">
             <Routes>
               <Route
                 path=""
@@ -180,37 +167,46 @@ function CustomerAccount() {
                 path="orders"
                 element={
                   <Routes>
-                    <Route index element={<OverView />} />
+                    <Route index element={<Orders />} />
+                    {/* <Route path="detail/:id" element={<DetailOrder />} /> */}
                   </Routes>
                 }
               />
 
               <Route
-                path="edit-address/*"
+                path="address/*"
                 element={
                   <Routes>
-                    <Route index element={<OverView />} />
+                    <Route index element={<Addresses />} />
+                    <Route path="create" element={<CreateAddress />} />
+                    <Route
+                      path="edit"
+                      element={<CreateAddress edit={true} />}
+                    ></Route>
                   </Routes>
                 }
               />
 
               <Route
-                path="edit-account"
+                path="edit-account/*"
                 element={
                   <Routes>
                     <Route index element={<Info />} />
+                    <Route path="phone" element={<PhoneNumber />} />
+                    <Route path="email" element={<Email />} />
+                    <Route path="pass" element={<Password />} />
                   </Routes>
                 }
               />
 
-              <Route
+              {/* <Route
                 path="logout"
                 element={
                   <Routes>
                     <Route index element={<OverView />} />
                   </Routes>
                 }
-              />
+              /> */}
             </Routes>
           </Box>
         </Box>

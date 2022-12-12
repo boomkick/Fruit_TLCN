@@ -27,6 +27,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import apiMain from "../../apis/apiMain";
+import apiProduct from "../../apis/apiProduct";
 
 function Home() {
   return (
@@ -154,16 +155,24 @@ function SlideBackGround() {
 
 function SlideHome() {
   const [sales, setSales] = useState([]);
+  const [top8Product, setTop8Product] = useState([]);
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await apiMain.getProducts({ _page: 2, _limit: 20 });
+    // const getData = async () => {
+    //   const response = await apiMain.getProducts({ _page: 2, _limit: 20 });
+    //   if (response) {
+    //     setSales(response.data);
+    //   }
+    // };
+    // getData();
+    const getTop8Product = async () => {
+      const response = await apiProduct.getTop8Product();
       if (response) {
-        setSales(response.data);
+        setTop8Product(response.data);
       }
     };
-    getData();
-  }, []);
+    getTop8Product();
+  }, [top8Product]);
 
   return (
     <>
@@ -381,34 +390,11 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
+              {top8Product.map((item) => (
+                <SwiperSlide>
+                <CardProduct data={item}/>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </Box>
 

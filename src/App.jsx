@@ -6,7 +6,7 @@ import ConfigRoute from "./ConfigRoute";
 import './app/style/App.scss'
 
 function App() {
-  const isAdmin = true;
+  const isAdmin = false;
   return (
     <div className="App">
       <BrowserRouter>

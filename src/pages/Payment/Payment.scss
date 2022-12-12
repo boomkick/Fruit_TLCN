@@ -1,0 +1,33 @@
+.payment {
+    &__title {
+        font-size: 14px !important;
+        margin-bottom: 16px !important;
+        text-transform: uppercase;
+    }
+    &__btn-detail {
+        display: flex;
+        align-items: center;
+        color: #1890ff;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    &__name-detail {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        font-size: 12px !important;
+        flex: 1;
+    }
+    &__listItem {
+        // border: 1px solid #bfbfbf;
+        // border-radius: 8px;
+        width: 90%;
+        overflow: hidden;
+        &>* {
+            border-bottom: 1px solid #bfbfbf;
+        }
+    }
+}

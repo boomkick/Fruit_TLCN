@@ -30,9 +30,49 @@ import apiMain from "../../apis/apiMain";
 import { Pagination, Navigation, Autoplay } from "swiper";
 import DetailProduct from "../../components/DetailProduct"
 import Comment from "../../components/Comment"
+import apiProduct from "../../apis/apiProduct";
 
 function ProductDetail() {
-    const [product, setProduct] = useState({});
+    const user = useSelector((state) => state.auth.user);
+    const [product, setProduct] = useState();
+    const [reviews, setReviews] = useState([]);
+    const [top8Product, setTop8Product] = useState([]);
+    const { id } = useParams();
+    
+
+    // Lấy dữ liệu top 8 sản phẩm
+    useEffect(() => {
+      const getTop8Product = async () => {
+        const response = await apiProduct.getTop8Product();
+        if (response) {
+          setTop8Product(response.data);
+        }
+      };
+      getTop8Product();
+
+      const getProductDetail = async () => {
+        const response = await apiProduct.getProductDetail(id);
+        if (response) {
+          setProduct(response.data);
+        }
+      };
+      getProductDetail();
+
+    }, []);
+
+    // Lấy dữ liệu sản phẩm chi tiết
+    // useEffect(() => {
+    //   const getProductDetail = async () => {
+    //     const response = await apiProduct.getProductDetail(id);
+    //     if (response) {
+    //       setProduct(response.data);
+    //     }
+    //   };
+    //   getProductDetail();
+    //   console.log(product)
+    // }, []);
+
+    // Lấy dữ liệu nhận xét sản phẩm
 
     let data = {
       name: "Lê Hàn Quốc",
@@ -61,7 +101,7 @@ function ProductDetail() {
 
     return (
         <Box className= "container" style={{ backgroundColor: "#fff"}}>
-            <DetailProduct data={data} />
+            <DetailProduct data={product} />
 
             <Box sx={{
               width: "100%",
@@ -87,34 +127,11 @@ function ProductDetail() {
                 className="mySwiper"
                 style={{ borderTop: "1px solid #ECECEC" }}
               >
+                {top8Product.map((item) => (
                 <SwiperSlide>
-                  {/* <CardProduct data={item} /> */}
-                  <CardProduct />
+                <CardProduct data={item}/>
                 </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
+              ))}
               </Swiper>
             </Box>
             <Comment data={list_comment}/>
@@ -151,60 +168,6 @@ function ProductDetail() {
                 <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}}>GỬI</Button>
             </Box>
 
-            <Box sx={{
-              width: "100%",
-              padding: "0px 15px 30px",
-              borderTop: "1px solid #ECECEC"
-            }}>
-                <Box className="detailProduct__title">
-                  <h2>
-                      {"Top sản phẩm bán chạy"}
-                  </h2>
-                </Box>
-              <Swiper
-                slidesPerView={4}
-                spaceBetween={0}
-                slidesPerGroup={4}
-                loop={true}
-                loopFillGroupWithBlank={true}
-                pagination={{
-                  clickable: true,
-                }}
-                navigation={true}
-                modules={[Pagination, Navigation]}
-                className="mySwiper"
-                style={{ borderTop: "1px solid #ECECEC" }}
-              >
-                <SwiperSlide>
-                  {/* <CardProduct data={item} /> */}
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-                <SwiperSlide>
-                  <CardProduct />
-                </SwiperSlide>
-              </Swiper>
-            </Box>
         </Box>
     );
 }

@@ -18,7 +18,7 @@ function CardCategory({ data }) {
       <Card className="card" sx={{ boxShadow: "none" }}>
         <div className="card__category">
           <div className="card__category_title">
-              <h5 style={{fontWeight:"400",letterSpacing: ".05em",}}>Đàn guitar</h5>
+              <h5 style={{fontWeight:"400",letterSpacing: ".05em",}}>Trái cây</h5>
               <p>42 sản phẩm</p>
           </div>
         </div>

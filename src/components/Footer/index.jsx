@@ -74,7 +74,7 @@ function Header() {
         </div>
 
         <div style={{ padding: "0px 15px" }}>
-          <span className="footer_title">Kết Nối Với Guitar Station</span>
+          <span className="footer_title">Kết Nối Với Stanthorpe</span>
           <div className="footer_divier"></div>
           <div>
             <ul style={{ listStyle: "none" }}>

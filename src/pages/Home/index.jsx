@@ -172,7 +172,7 @@ function SlideHome() {
       }
     };
     getTop8Product();
-  }, [top8Product]);
+  }, []);
 
   return (
     <>
@@ -442,34 +442,11 @@ function SlideHome() {
               modules={[Pagination, Navigation]}
               className="mySwiper"
             >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardProduct />
-              </SwiperSlide>
+              {top8Product.map((item) => (
+                <SwiperSlide>
+                <CardProduct data={item}/>
+                </SwiperSlide>
+              ))}
             </Swiper>
           </Box>
 
@@ -495,54 +472,12 @@ function SlideHome() {
                 <b></b>
                 <span className="section-title-main">
                   <DoneIcon sx={{ marginRight: "12px" }}></DoneIcon>
-                  {"Top danh mục"}
+                  {"Toàn bộ sản phẩm"}
                 </span>
                 <b></b>
               </h2>
             </Stack>
 
-            <Swiper
-              slidesPerView={5}
-              spaceBetween={20}
-              slidesPerGroup={5}
-              loop={true}
-              loopFillGroupWithBlank={true}
-              pagination={{
-                clickable: true,
-              }}
-              navigation={true}
-              modules={[Pagination, Navigation]}
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                {/* <CardProduct data={item} /> */}
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardCategory />
-              </SwiperSlide>
-            </Swiper>
           </Box>
         </div>
       </section>

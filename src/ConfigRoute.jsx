@@ -31,6 +31,11 @@ function ConfigRoute() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="cart" element={<Cart />} />
+       {/* user */}
+      <Route path="payment" element={<Payment />} />
+      <Route path="my-account/*" element={<CustomerAccount />} />
+      {/* admin */}
+      <Route path="admin/*" element={<Admin />} />
 
       {/* Routing customer account */}
       <Route element={<PrivateRoute roles={["USER", "ADMIN"]} />}>

@@ -15,6 +15,7 @@ import Login from "../Login";
 import SignUp from "../SignUp";
 import { VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
+import img from "../../assets/img/logo.png"
 
 const privatePath = ["/my-account/", "/admin/", "/payment"];
 
@@ -34,8 +35,6 @@ function Header() {
   const cart = useSelector((state) => state.cart.items); // get cart from store
   const user = useSelector((state) => state.auth.user); //get user from store
 
-  console.log("cart", cart);
-  console.log("user", user);
   const handleLogout = () => {
     dispatch(logoutSuccess());
     const isPrivate =
@@ -73,12 +72,12 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    console.log("13416545643.")
     const getData = async () => {
       apiCategory
-        .showAllCategoryHeader()
+        .showAllCategory()
         .then((res) => {
-          console.log("a", res.data.category);
-          setCategories(res.data.category);
+          setCategories(res.data);
         })
         .catch((error) => {
           setCategories([]);
@@ -105,7 +104,7 @@ function Header() {
           <img
             alt=""
             style={{ width: "100%", height: "100%",objectFit:"cover" }}
-            src="https://res.cloudinary.com/dddmdgm0w/image/upload/v1670075080/senki_avatar/senki_avatar/senki-high-resolution-logo-white-on-transparent-background_ouktxc.png"
+            src={img}
           />
         </Link>
 
@@ -117,71 +116,21 @@ function Header() {
                 to={"/"}
               >
                 <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Đàn Guitar
-                  <ArrowDropDownOutlinedIcon />
+                  Danh mục trái cây
+                  <ArrowDropDownOutlinedIcon sx={{paddingBottom: "6px"}}/>
                 </Typography>
                 {/* <FontAwesomeIcon icon="fa-light fa-chevron-down" /> */}
               </Link>
               <ul className="subnav subnav__dropdown">
+                {categories.map((item) => {
+                  return (
+                    <li>
+                      <Link to={`/product-category/${item?.id}`}>{item?.name}</Link>
+                    </li>    
+                  )
+                })}
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"#"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Nhạc Cụ Khác
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link
-                    to={"product-category/0b4020de-ef99-4fca-83ee-92fc62e0b6d9"}
-                  >
-                    Đàn Ukulele
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"product-category/9b1e2a20-c19c-44e2-abab-9412343b4e1f"}
-                  >
-                    Kèn harmonica
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to={"product-category/ccefc41e-1e12-45f7-a8e5-98c8db8227f5"}
-                  >
-                    Rollup Piano
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Phụ Kiện Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
-                  Tự Học Guitar
-                  <ArrowDropDownOutlinedIcon />
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"/"}>Danh mục trái cây</Link>
                 </li>
               </ul>
             </li>
@@ -194,7 +143,8 @@ function Header() {
               </Link>
               <ul className="subnav subnav__dropdown">
                 <li>
-                  <Link to={"/"}>Đàn Guitar Acoustic</Link>
+                  <Link to={"/"}>Hướng dẫn sử dụng</Link>
+                  <Link to={"/"}>Hướng dẫn đăng kí tài khoản</Link>
                 </li>
               </ul>
             </li>

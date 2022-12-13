@@ -28,7 +28,6 @@ import apiProfile from "../../apis/apiProfile";
 
 function Login(props) {
   const dispatch = useDispatch();
-  // const client_url = "https://tiki-web.vercel.app/"
   const client_url = "https://localhost:3000/"
 
   const {

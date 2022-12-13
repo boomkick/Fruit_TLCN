@@ -15,17 +15,47 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import AppleIcon from '@mui/icons-material/Apple';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 //import img
 import imgProduct from "../../assets/img/product_le_han_quoc.jpg";
+import apiCart from "../../apis/apiCart";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function DetailProduct({ data }) {
-  const list_cities = () => [
+    const user = useSelector((state) => state.auth.user);
+    const [quantity, setQuantity] = React.useState(1);
+
+    const list_cities = () => [
     { label: 'Ho Chi Minh', year: 1994 },
     { label: 'Ha Noi', year: 1972 },
     { label: 'Da Nang', year: 1974 },
     { label: 'Can Tho', year: 2008 },
     { label: 'Hai Phong', year: 1957 },
   ]
+
+  async function handleClickAddItem() {
+    console.log(user);
+    let param = {
+        productId: data?.id,
+        quantity: quantity
+    }
+    const response = await apiCart.postCart(param)
+    .then((res) => {
+        toast.success("Đã thêm sản phẩm thành công")
+    })
+    .catch((error => {
+        toast.error(error.toString())
+    }))
+    console.log("response", response);
+    if (response?.status === 200){
+        toast.success("Đã thêm sản phẩm thành công")
+    } else {
+        toast.error("Đã thêm sản phẩm thất bại")
+    }
+
+  }
   return (
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
@@ -38,10 +68,6 @@ function DetailProduct({ data }) {
                                 <img className="detailProduct__item-img" alt="" src={item?.url}></img>
                             )) : <></>
                         }
-                        {/* // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img>
-                        // <img className="detailProduct__item-img" alt="" src={imgProduct}></img> */}
                     </div>
                 </Box>
                 <Box className="detailProduct__general">
@@ -86,8 +112,16 @@ function DetailProduct({ data }) {
                                 />
                         </div>
                         <div className="detailProduct__quantity-info">
-                            <QuantityButtons/>
-                            <button className="detailProduct__add-to-cart" style={{ fontWeight: 600}}>THÊM VÀO GIỎ HÀNG</button>
+                            <ButtonGroup size="small" aria-label="small outlined button group" className="quantity-buttons">
+                                <Button onClick={() => {(quantity > 0) ? setQuantity(quantity - 1) : setQuantity(0)}}>-</Button>
+                                <Button >{quantity}</Button>
+                                <Button onClick={() => {setQuantity(quantity + 1)}}>+</Button>
+                            </ButtonGroup>
+                            <button 
+                                className="detailProduct__add-to-cart" 
+                                style={{ fontWeight: 600, cursor: "pointer"}}
+                                onClick={handleClickAddItem}
+                            >THÊM VÀO GIỎ HÀNG</button>
                         </div>
                         <div className="detailProduct__info-guide">
                             <div style={{display: "flex", fontSize: "20px", lineHeight: "28px"}}>

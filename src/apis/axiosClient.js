@@ -24,7 +24,7 @@ export const axiosClientWithToken = axios.create({
     headers: {
         "Content-Type": "application/json"
     },
-    withCredentials: true,
+    withCredentials: false,
     paramsSerializer: (params) => queryString.stringify(params)
 });
 
@@ -38,6 +38,7 @@ export const axiosInstance = (user, dispatch, stateSuccess,stateFail) => {
                 return config;
             }
             const decodeToken = jwt_decode(user?.accessToken);
+            console.log("decode", decodeToken);
             
             if (decodeToken.exp < date.getTime() / 1000) {
                 try{
@@ -57,6 +58,7 @@ export const axiosInstance = (user, dispatch, stateSuccess,stateFail) => {
             }else{
                 config.headers['Authorization'] = `Bearer ${user.accessToken}`;
             }
+            config.headers['Authorization'] = `Bearer ${user.accessToken}`;
             return config;
         },
         err => {

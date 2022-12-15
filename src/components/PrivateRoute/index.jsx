@@ -16,18 +16,19 @@ const PrivateRoute = ({
     const dispatch = useDispatch()
     useEffect(() => {
         const verify = async () => {
+            console.log("user: ", user);
             if (user) {
                 /*const veri = await apiMain.verifyToken(user, dispatch, loginSuccess)
                 if (veri?.status !== 200) {
                     toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại", { autoClose: 1000, pauseOnHover: false, hideProgressBar: true })
                     setAuth(false);
                 }*/
-                if(!user.refreshToken){
-                    toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại")
-                    setAuth(false);
-                    dispatch(logoutSuccess())
-                    return
-                }
+                // if(!user.refreshToken){
+                //     toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại")
+                //     setAuth(false);
+                //     dispatch(logoutSuccess())
+                //     return
+                // }
                 // const tokenDecode = jwt_decode(user?.refreshToken)
                 // let date = new Date();
                 // if (tokenDecode.exp < date.getTime() / 1000) {
@@ -36,13 +37,8 @@ const PrivateRoute = ({
                 //     dispatch(logoutSuccess())
                 //     return
                 // }
-                let user_role = role.map((item) => {
-                    if(item.id === user.id){
-                      return item
-                    }
-                  })
-                const userHasRequiredRole = roles.includes(user_role.id) ? true : false
-                console.log("here: ", userHasRequiredRole);
+                let user_role = role.find((item) => item.id === user.role)
+                const userHasRequiredRole = roles.includes(user_role.value) ? true : false
                 if (!userHasRequiredRole) {
                     toast.warning("Bạn không có quyền truy cập", { autoClose: 1000, pauseOnHover: false, hideProgressBar: true })
                     setAuth(false);

@@ -33,6 +33,7 @@ function CartItem(props) {
     setData(props.data);
     setQuantity(props.data.quantity);
   }, [props.data]);
+
   const updateQuantity = (otp) => {
     if (otp === "-") {
       if (data.quantity <= 1) {
@@ -54,6 +55,7 @@ function CartItem(props) {
       );
     }
   };
+
   const onChangeQuantity = (e) => {
     setQuantity(e.target.value);
     if (e.target.value === "") {
@@ -93,11 +95,11 @@ function CartItem(props) {
       <Box className="cart-item cart">
         <Stack direction="row" alignItems="center" className="cart-item__cell cart-item__description">
           {/* <Checkbox checked={data?.choose} onChange={handleChangeChoose} className="cart__checkbox" /> */}
-          <img src={data?.imageList[0]?.url} alt="" />
+          <img src={data?.product?.image?.url} alt="" />
           <Stack className="cart-item__content">
-            <Link to={data?.id?`/product-detail/${data.id}`:''}>
+            <Link to={`/product-detail/${data?.product?.id}`}>
               <Typography fontSize="13px" className="text-overflow-2-lines" variant="h5">
-                {data?.name}
+                {data?.product?.name}
               </Typography>
             </Link>
           </Stack>

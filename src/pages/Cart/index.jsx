@@ -21,51 +21,49 @@ import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { clearCoupon } from "../../slices/paymentSlice";
+import apiCart from "../../apis/apiCart";
 
 function ShoppingCart() {
+  const user = useSelector((state) => state.auth.user);
+  const [cartItems, setCartItems] = useState([])
   const [open, setOpen] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkAll, setCheckAll] = useState(false);
   const [couponValue, setCouponValue] = useState(0);
-  const CartItems = useSelector((state) => state.cart.items);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
   const coupon = useSelector((state) => state.payment.coupon);
   const addressShip = useSelector((state) => state.payment.address);
 
+  // get cart by user
+  useEffect(() => {
+    // title web
+    const loadTitle = () => {
+      document.title = "Giỏ hàng";
+    };
+    loadTitle();
+
+    apiCart.getCart()
+      .then((res) => {
+        setCartItems(res?.data);
+      })
+      .catch((error) => {
+        toast.error(error.toString());
+      })
+  }, [])
+
+  // Caculate sum money
   useEffect(() => {
     const calcPrice = () => {
-      const total = CartItems.reduce(
+      const total = cartItems.reduce(
         (t, num) => t + num.price * num.quantity,
         0
       );
       setTotalPrice(total);
     };
     calcPrice();
-  }, [CartItems]);
-
-  useEffect(() => {
-    const loadTitle = () => {
-      document.title = "Giỏ hàng";
-    };
-    loadTitle();
-  }, []);
-  useEffect(() => {
-    const handle = () => {
-      if (coupon) {
-        let value = 0;
-        if (coupon.unit === "đ") {
-          value = coupon.value / 1000;
-        } else {
-          if (totalPrice > 0) value = (coupon.value * totalPrice) / 100 / 1000;
-        }
-        setCouponValue(value);
-      }
-    };
-    handle();
-  }, [coupon, totalPrice]);
+  }, [cartItems]);
 
   const handleDeleteAll = () => {
     dispatch(deleteAll());
@@ -79,6 +77,7 @@ function ShoppingCart() {
   };
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
+
   const handleOpenAddress = useCallback(() => {
     if (user) {
       setOpenAddress(true);
@@ -90,21 +89,11 @@ function ShoppingCart() {
 
   const navigate = useNavigate();
   const handleBuy = () => {
-    // if (CartItems.filter((item) => item.choose).length === 0) {
-    //   toast.warning("Vui lòng chọn ít nhất một món hàng");
-    // } else {
-    //   navigate("/payment");
-    // }
     navigate("/payment");
   };
-  // const finalPrice = () => {
-  //   return totalPrice - (coupon?.value || 0) > 0
-  //     ? Math.round(totalPrice - (coupon?.value || 0))
-  //     : 0;
-  // };
 
 
-  console.log("ci",CartItems)
+  console.log("ci",cartItems)
   return (
     <>
       <Box className="container">
@@ -121,7 +110,7 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${CartItems.length} sản phẩm)`}
+                  {`Sản phẩm (${cartItems.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
                 <Stack>Số lượng</Stack>
@@ -133,7 +122,7 @@ function ShoppingCart() {
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {CartItems.map((item) => (
+                {cartItems.map((item) => (
                   <CartItem key={item.id} data={item} />
                 ))}
               </Stack>

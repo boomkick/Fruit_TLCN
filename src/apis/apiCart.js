@@ -23,7 +23,7 @@ export const axiosClientWithPayment = axios.create({
 
 const apiCart = {
     getCart: async (params) => {
-        const res = await axiosClientWithToken.get('/Cart', {params})
+        const res = await axiosClientWithToken.get('/Cart')
         return res.data;
     },
     postCart: async (params) => {

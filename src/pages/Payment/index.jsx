@@ -241,7 +241,7 @@ function Payment() {
                         <img
                           height="60px"
                           width="60px"
-                          src={item?.imageList[0]?.url}
+                          src={item?.product?.image?.url}
                           alt=""
                         />
                       </Box>

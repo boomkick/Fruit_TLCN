@@ -6,6 +6,9 @@ export const cartSlice = createSlice({
         items: []
     },
     reducers: {
+        updateCart: (state, action)=> {
+            state.items = action.payload
+        },
         addItem:(state,action)=>{
             let newItem = action.payload
             let items = [...state.items]
@@ -51,6 +54,7 @@ export const cartSlice = createSlice({
 const findIndexItem = (arr,item)=>arr.findIndex(e=>e.id===item.id) 
 const delItems = (arr,item)=>arr.filter(e=>e.id!==item.id)
 export const {
+    updateCart,
     removeItem,
     updateItem,
     chooseAll,

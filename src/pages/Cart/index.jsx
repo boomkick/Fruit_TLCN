@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-// import { CartItems } from "../../constraints/Cart"
+// import { cart } from "../../constraints/Cart"
 import InfoIcon from "@mui/icons-material/Info";
 import DiscountIcon from "@mui/icons-material/Discount";
 import { numWithCommas } from "../../constraints/Util";
 import { useSelector, useDispatch } from "react-redux";
+import { updateCart } from "../../slices/cartSlice";
 
 import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +26,6 @@ import apiCart from "../../apis/apiCart";
 
 function ShoppingCart() {
   const user = useSelector((state) => state.auth.user);
-  const [cartItems, setCartItems] = useState([])
   const [open, setOpen] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -33,6 +33,7 @@ function ShoppingCart() {
   const [checkAll, setCheckAll] = useState(false);
   const [couponValue, setCouponValue] = useState(0);
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart.items);
   const coupon = useSelector((state) => state.payment.coupon);
   const addressShip = useSelector((state) => state.payment.address);
 
@@ -46,7 +47,7 @@ function ShoppingCart() {
 
     apiCart.getCart()
       .then((res) => {
-        setCartItems(res?.data);
+        dispatch(updateCart(res?.data));
       })
       .catch((error) => {
         toast.error(error.toString());
@@ -56,14 +57,14 @@ function ShoppingCart() {
   // Caculate sum money
   useEffect(() => {
     const calcPrice = () => {
-      const total = cartItems.reduce(
-        (t, num) => t + num.price * num.quantity,
+      const total = cart.reduce(
+        (total, item) => total + item.quantity * item.product.price,
         0
       );
       setTotalPrice(total);
     };
     calcPrice();
-  }, [cartItems]);
+  }, [cart]);
 
   const handleDeleteAll = () => {
     dispatch(deleteAll());
@@ -89,11 +90,19 @@ function ShoppingCart() {
 
   const navigate = useNavigate();
   const handleBuy = () => {
+    console.log(cart)
+    cart.forEach((item) => {
+      let param = {
+        productId: item.product.id,
+        quantity: item.quantity
+      }
+      apiCart.putCart(param)
+  })
     navigate("/payment");
   };
 
 
-  console.log("ci",cartItems)
+  console.log("ci",cart)
   return (
     <>
       <Box className="container">
@@ -110,7 +119,7 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${cartItems.length} sản phẩm)`}
+                  {`Sản phẩm (${cart.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
                 <Stack>Số lượng</Stack>
@@ -122,7 +131,7 @@ function ShoppingCart() {
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {cartItems.map((item) => (
+                {cart.map((item) => (
                   <CartItem key={item.id} data={item} />
                 ))}
               </Stack>

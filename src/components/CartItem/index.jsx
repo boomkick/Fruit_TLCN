@@ -3,29 +3,27 @@ import "./CartItem.scss";
 import { Checkbox, Typography, Dialog, Button, Box, Stack } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { numWithCommas } from "../../constraints/Util";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeItem, updateItem } from "../../slices/cartSlice";
 import {Link} from "react-router-dom";
+import apiCart from "../../apis/apiCart";
 
 function CartItem(props) {
   const [data, setData] = useState(props.data);
   const [quantity, setQuantity] = useState(props.data.quantity);
-
-
   const dispatch = useDispatch();
 
+  // Xử lí button xóa sản phẩm
   const [open, setOpen] = React.useState(false);
-
   const handleClickRemove = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleRemoveItem = () => {
     dispatch(removeItem(data));
+    apiCart.deleteCart(data.id);
     setOpen(false);
   };
 
@@ -34,6 +32,7 @@ function CartItem(props) {
     setQuantity(props.data.quantity);
   }, [props.data]);
 
+  // Xử lí thêm và giảm số lượng sản phẩm
   const updateQuantity = (otp) => {
     if (otp === "-") {
       if (data.quantity <= 1) {
@@ -42,7 +41,7 @@ function CartItem(props) {
         dispatch(
           updateItem({
             ...data,
-            quantity: data.quantity - 1,
+            quantity: data.quantity - 1
           })
         );
       }
@@ -50,7 +49,7 @@ function CartItem(props) {
       dispatch(
         updateItem({
           ...data,
-          quantity: data.quantity + 1,
+          quantity: data.quantity + 1
         })
       );
     }
@@ -77,19 +76,6 @@ function CartItem(props) {
     }
   };
 
-  console.log("d",data);
-  
-  console.log("p",props);
-
-  // const handleChangeChoose = () => {
-  //   dispatch(
-  //     updateItem({
-  //       ...data,
-  //       choose: !data.choose,
-  //     })
-  //   );
-  // };
-
   return (
     <>
       <Box className="cart-item cart">
@@ -105,7 +91,7 @@ function CartItem(props) {
           </Stack>
         </Stack>
         <Box className="cart-item__cell cart-item__price">
-          {numWithCommas(data?.price || 0)} ₫
+          {numWithCommas(data?.product?.price || 0)} ₫
         </Box>
         <Box className="cart-item__cell">
           <Box className="cart-item__quantity">
@@ -127,7 +113,7 @@ function CartItem(props) {
           </Box>
         </Box>
         <Box className="cart-item__cell cart-item__total">
-          {numWithCommas(data?.price * data?.quantity)} ₫
+          {numWithCommas(data?.quantity * data?.product?.price)} ₫
         </Box>
         <Box className="cart-item__cell">
           <span style={{ cursor: "pointer" }} onClick={handleClickRemove}>

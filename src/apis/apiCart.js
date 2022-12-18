@@ -30,8 +30,12 @@ const apiCart = {
         const res = await axiosClientWithToken.post('/Cart', params)
         return res.data;
     },
-    updateCart: async (params) => {
+    putCart: async (params) => {
         const res = await axiosClientWithToken.put('/Cart',params)
+        return res.data;
+    },
+    deleteCart: async (params) => {
+        const res = await axiosClientWithToken.delete(`/Cart/${params}`)
         return res.data;
     },
     // changeTypeOrder: async (params, id) => {

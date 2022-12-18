@@ -28,8 +28,28 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import apiMain from "../../apis/apiMain";
 import apiProduct from "../../apis/apiProduct";
+import { useDispatch, useSelector } from "react-redux";
+import apiAddress from "../../apis/apiAddress";
+import { setAddress } from "../../slices/addressSlice";
 
 function Home() {
+  const address = useSelector((state) => {
+    console.log("state: ", state)
+    return state.address.locations
+  })
+  // console.log(state)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (address === null) {
+      apiAddress.getVietNamLocations()
+        .then((res) => {
+          dispatch(setAddress(res.data));
+          console.log("address: ", address);
+        })
+    }
+  }, []);
+
   return (
     <Stack spacing={2} className="home">
       <Box id="section1">

@@ -14,9 +14,10 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import paymentSlice from '../slices/paymentSlice';
+import addressSlice from '../slices/addressSlice';
 
 
-const rootReducer = combineReducers({ auth: authReducer, cart: cartReducer, search: searchReducer,payment:paymentSlice })
+const rootReducer = combineReducers({ auth: authReducer, cart: cartReducer, search: searchReducer, payment:paymentSlice, address:addressSlice })
 
 const persistConfig = {
   key: 'root',

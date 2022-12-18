@@ -37,7 +37,8 @@ function CreateAddress(props) {
   useEffect(() => {
     const loaddata = () => {
       if (edit === true) {
-        apiAddress.getProfileUser().then((res) => {
+        apiAddress.getProfileUser()
+        .then((res) => {
           const address = res.data.user.address;
           if (address) {
             setFullName(address.fullName);

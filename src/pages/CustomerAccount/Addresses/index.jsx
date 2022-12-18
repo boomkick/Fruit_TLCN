@@ -12,7 +12,29 @@ import { toast } from "react-toastify";
 function Addresses() {
   const user = useSelector(state => state.auth.user);
 
-  const [addresses, setAddresses] = useState(user.address);
+  // Xử lí nhận địa chỉ user
+  const [userAddress, setUserAddress] = useState({});
+
+  useEffect(() => {
+    // Gán userAddress
+    console.log(user)
+    if (user){
+      setUserAddress({
+        cityId: user.cityId,
+        districtId: user.districtId,
+        wardId: user.wardId,
+        detailLocation: user.detailLocation,
+      })
+    }
+  }, []);
+
+  // Check có địa chỉ
+  const isAddress = (address) => {
+    if (address.cityId !== "" || address.districtId !== "" || address.wardId !== "" || address.detailLocation !== ""){
+      return false
+    }
+    return true
+  }
 
   // useEffect(() => {
   //   const getData = async () => {
@@ -28,7 +50,7 @@ function Addresses() {
   return (
     <Stack spacing={2} className="addresses">
       <Typography className="heading">Địa chỉ nhận hàng</Typography>
-      {addresses.length === 0 ? (
+      {isAddress(userAddress) ? (
         <Link to="/my-account/address/create">
           <Button className="new" variant="outlined" startIcon={<AddIcon />}>
             Thêm địa chỉ mới
@@ -45,25 +67,35 @@ function Addresses() {
       )}
 
       <Stack spacing={5}>
-        {addresses.length === 0 ? (
+        {isAddress(userAddress) ? (
           // <EmptyNotify title="Bạn chưa có địa chỉ" />
           <Typography>Bạn chưa có địa chỉ</Typography>
         ) : (
           <Stack
-            key={addresses.id}
+            key={userAddress.id}
             direction="row"
             width="100%"
             className="items"
           >
             <Stack className="info">
-              <Typography className="name">{addresses.fullName}</Typography>
-              {/* <Typography className="name">{addresses.companyName}</Typography> */}
+              <Typography className="name">{user.firstName + " " + user.lastName}</Typography>
               <Typography className="address">
-                Địa chỉ:{" "}
-                {`${addresses.addressDetail}, ${addresses.commune.name}, ${addresses.district.name}, ${addresses.province.name}`}
+                Địa chỉ:
               </Typography>
-              <Typography className="number">
-                Điện thoại: {addresses.phoneNumber}
+              <Typography className="address">
+                Thành phố:{userAddress.cityId ? ` ${userAddress.cityId}` : " Chưa có thông tin"}
+              </Typography>
+              <Typography className="address">
+                Quận:{userAddress.districtId ? ` ${userAddress.districtId}` : " Chưa có thông tin"}
+              </Typography>
+              <Typography className="address">
+                Phường:{userAddress.wardId ? ` ${userAddress.wardId}` : " Chưa có thông tin"}
+              </Typography>
+              <Typography className="address">
+                Địa chỉ chi tiết:{userAddress.detailLocation ? ` ${userAddress.detailLocation}` : " Chưa có thông tin"}
+              </Typography>
+              <Typography className="number" style={{marginTop: "5px"}}>
+                Điện thoại: {user.phone}
               </Typography>
             </Stack>
           </Stack>

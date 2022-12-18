@@ -2,9 +2,8 @@
 import { axiosClient, axiosClientWithToken } from "./axiosClient";
 
 const apiAddress = {
-
     getProfileUser: async (params) => {
-        const res = await axiosClientWithToken.get('/user/profile')
+        const res = await axiosClientWithToken.get('/account/profile')
         return res.data;
     },
 
@@ -29,18 +28,26 @@ const apiAddress = {
         const res = await axiosClientWithToken.get('/address', { params })
         return res.data;
     },
-    getCommuneInDistrictById: async (params) => {
-        const res = await axiosClient.get(`address/commune/${params.id}/district`)
+    getVietNamLocations: async (params) => {
+        const res = await axiosClientWithToken.get('/Location/VietnamLocation')
         return res.data;
     },
-    getDistrictInProvinceById: async (params)=>{
-        const res= await axiosClient.get(`address/district/${params.id}/province`)
+    getGlobalLocations: async (params) => {
+        const res = await axiosClientWithToken.get('/Location/GlobalLocation')
         return res.data;
     },
-    getAllProvince : async (params)=>{
-        const res = await axiosClient.get('address/province')
-        return res.data;
-    },
+    // getCommuneInDistrictById: async (params) => {
+    //     const res = await axiosClient.get(`address/commune/${params.id}/district`)
+    //     return res.data;
+    // },
+    // getDistrictInProvinceById: async (params)=>{
+    //     const res= await axiosClient.get(`address/district/${params.id}/province`)
+    //     return res.data;
+    // },
+    // getAllProvince : async (params)=>{
+    //     const res = await axiosClient.get('address/province')
+    //     return res.data;
+    // },
 
 }
 export default apiAddress;

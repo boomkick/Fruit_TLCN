@@ -13,7 +13,7 @@ export const sidebarTab = [
     {
         id: 3,
         name: 'Địa chỉ',
-        link: '/my-account/edit-address'
+        link: '/my-account/address'
     },
     {
         id: 4,

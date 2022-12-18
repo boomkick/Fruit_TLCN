@@ -9,12 +9,14 @@ import { axiosInstance } from './apis/axiosClient';
 import { loginSuccess, logoutSuccess } from './slices/authSlice';
 
 function App() {
+  // Lấy thông tin user
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   if (user) {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
   }
   const isAdmin = window.location.href.includes("admin");
+
   return (
     <div className="App">
       <BrowserRouter>

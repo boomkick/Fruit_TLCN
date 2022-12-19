@@ -14,22 +14,56 @@ import { useState } from "react";
 // import apiAddress from "../../apis/apiAddress";
 import { useEffect } from "react";
 import PropTypes from 'prop-types';
+import { useSelector } from "react-redux";
 
 function SelectBoxAddress(props) {
-    const [listprovince, setListProvince] = useState([])
-    const [listdistrict, setListDistrict] = useState([])
-    const [listcommune, setListCommune] = useState([])
-   
-    const {province,district,commune} = props
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     apiAddress.getAllProvince()
-    //       .then(res => {
-    //         setListProvince(res.data.list);
-    //       })
-    //   };
-    //   getData();
-    // }, []);
+    const address = useSelector((state) => state.address.locations)
+    const [listCity, setListCity] = useState([])
+    const [listDistrict, setListDistrict] = useState([])
+    const [listWard, setListWard] = useState([])
+
+    const [selectedCity, setSelectedCity] = useState({})
+    const [selectedDistrict, setSelectedDistrict] = useState({})
+    const [selectedWard, setSelectedWard] = useState({})
+
+    // const {userCity, userDistrict, userWard} = props
+    
+    // Gán danh sách dữ liệu của thành phố -> quận -> phường
+    useEffect(() => {
+      let listAllCity = []
+      let listAllDistrict = []
+      let listAllWard = []
+      const setDataCity = async () => {
+        address.forEach(city => {
+          listAllCity.push(city)
+          listAllDistrict = listAllDistrict.concat(city?.level2s)
+          city?.level2s.forEach(district => {
+            listAllWard = listAllWard.concat(district?.level3s)
+          })
+        });
+
+        setListCity(listAllCity)
+        setListDistrict(listAllDistrict)
+        setListWard(listAllWard)
+      };
+
+      setDataCity();
+    }, []);
+
+    // Gán giá trị địa chỉ nếu có của người mua hàng
+    useEffect(() => {
+      console.log("props: ", props)
+      console.log(listCity)
+      let city = listCity.find((item) => item.level1_id === props.userCity)
+      console.log("city select:", city)
+      setSelectedCity(city)
+
+      let district = listDistrict.find((item) => item.level2_id === props.userDistrict)
+      setSelectedDistrict(district)
+
+      let ward = listWard.find((item) => item.level3_id === props.userWard)
+      setSelectedWard(ward)
+    }, [])
   
     // useEffect(() => {
     //   const getData = async () => {
@@ -87,14 +121,14 @@ function SelectBoxAddress(props) {
               size="small"
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={province}
+              value={selectedCity ? selectedCity.name : ""}
               label="Age"
-              onChange={e=>props.onChangeProvince(e.target.value)}
+              onChange={e=>props.onChangeCity(e.target.value)}
               
               input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
             >
               {
-                listprovince.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)
+                listCity.map(item => <MenuItem value={item.level1_id}>{item.name}</MenuItem>)
               }
             </Select>
           </FormControl>
@@ -110,13 +144,13 @@ function SelectBoxAddress(props) {
               sx={{ flex: 0.65 }}
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={district}
+              value={selectedDistrict ? selectedDistrict.name : ""}
               label="Age"
               onChange={e=>props.onChangeDistrict(e.target.value)}
               input={<InputCustom placeholder="Chọn Quận/Huyện" />}
             >
               {
-                listdistrict.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)
+                listDistrict.map(item => <MenuItem value={item.level2_id}>{item.name}</MenuItem>)
               }
             </Select>
           </FormControl>
@@ -130,13 +164,13 @@ function SelectBoxAddress(props) {
             <Select
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={commune}
+              value={selectedWard ? selectedWard.name : ""}
               label="Age"
               onChange={e=>props.onChangeCommune(e.target.value)}
               input={<InputCustom placeholder="Chọn Xã/Thị trấn" />}
             >
               {
-                listcommune.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)
+                listWard.map(item => <MenuItem value={item.level3_id}>{item.name}</MenuItem>)
               }
             </Select>
           </FormControl>

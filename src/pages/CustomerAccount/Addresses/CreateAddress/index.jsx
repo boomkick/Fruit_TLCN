@@ -28,9 +28,9 @@ function CreateAddress(props) {
   // const [addressType, setAddressType] = useState("");
   const [addressid, setAddressid] = useState("");
   const [edit, setEdit] = useState(props.edit);
-  const [province, setProvince] = React.useState("");
+  const [city, setCity] = React.useState("");
   const [district, setDistrict] = React.useState("");
-  const [commune, setCommune] = React.useState("");
+  const [ward, setWard] = React.useState("");
   const navigate = useNavigate();
   const params = useParams();
 
@@ -39,15 +39,14 @@ function CreateAddress(props) {
       if (edit === true) {
         apiAddress.getProfileUser()
         .then((res) => {
-          const address = res.data.user.address;
-          if (address) {
-            setFullName(address.fullName);
-            setCompanyName(address.companyName);
-            setPhone(address.phoneNumber);
-            setAddressDetail(address.addressDetail);
-            setCommune(address.commune.id);
-            setDistrict(address.district.id);
-            setProvince(address.province.id);
+          const user = res.data;
+          if (user) {
+            setFullName(user.firstName + " " + user.lastName);
+            setPhone(user.phone);
+            setAddressDetail(user.detailLocation);
+            setWard(user.wardId);
+            setDistrict(user.districtId);
+            setCity(user.cityId);
           } else {
             navigate("/my-account/address/create");
             toast.error("Địa chỉ này không tồn tại!");
@@ -60,38 +59,38 @@ function CreateAddress(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [edit]);
 
-  const handleChangeProvince = (value) => {
-    setProvince(value);
+  const handleChangeCity = (value) => {
+    setCity(value);
   };
 
   const handleChangeDistrict = (value) => {
     setDistrict(value);
   };
 
-  const handleChangeCommune = (value) => {
-    setCommune(value);
+  const handleChangeWard = (value) => {
+    setWard(value);
   };
   const handleSave = () => {
     const params = {
       addressDetail: addressDetail,
       // addressType: Number(addressType),
-      commune: commune,
+      ward: ward,
       companyName: companyName,
       district: district,
       fullName: fullName,
       phone: phone,
-      province: province,
+      city: city,
     };
     if (
       !(
         addressDetail &&
         // addressType &&
-        commune &&
+        ward &&
         // companyName &&
         district &&
         fullName &&
         phone &&
-        province
+        city
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
@@ -106,9 +105,9 @@ function CreateAddress(props) {
           setPhone("");
           setAddressDetail("");
           // setAddressType(1);
-          setCommune("");
+          setWard("");
           setDistrict("");
-          setProvince("");
+          setCity("");
         })
         .catch((error) => {
           toast.error("Thêm địa chỉ thất bại!");
@@ -120,25 +119,24 @@ function CreateAddress(props) {
     const params = {
       addressDetail: addressDetail,
       // addressType: Number(addressType),
-      commune: commune,
+      ward: ward,
       companyName: companyName,
       district: district,
       fullName: fullName,
       phone: phone,
-      province: province,
+      city: city,
     };
 
-    console.log(params)
     if (
       !(
         addressDetail &&
         // addressType &&
-        commune &&
+        ward &&
         // companyName &&
         district &&
         fullName &&
         phone &&
-        province
+        city
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
@@ -159,13 +157,14 @@ function CreateAddress(props) {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
+        {console.log("city", city)}
         <SelectBoxAddress
-          province={province}
-          district={district}
-          commune={commune}
-          onChangeProvince={handleChangeProvince}
+          userCity={city}
+          userDistrict={district}
+          userWard={ward}
+          onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}
-          onChangeCommune={handleChangeCommune}
+          onChangeWard={handleChangeWard}
         />
 
         <Stack direction="row">
@@ -186,7 +185,7 @@ function CreateAddress(props) {
 
         <Stack direction="row">
           <Typography className="create-address__label">
-            Số nhà, tên đường
+            Địa chỉ chi tiết
           </Typography>
           <Stack className="create-address__input">
             <InputCustom
@@ -194,7 +193,7 @@ function CreateAddress(props) {
               onChange={(event) => {
                 setAddressDetail(event.target.value);
               }}
-              multiline
+              size="small"
               rows={4}
               placeholder="Nhập địa chỉ"
             ></InputCustom>

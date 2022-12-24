@@ -12,24 +12,23 @@ import { useSelector } from "react-redux";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const theme = useTheme();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(3);
   // const [page, setPage] = useState(1);
   // const [totalPage, setTotalPage] = useState(1);
   const user = useSelector(state => state.auth.user)
 
-
   useEffect(() => {
     const getData = async () => {
-      apiCart.getOrders()
+      await apiCart.getOrders()
         .then(response=>{
-           setOrders(response.data.orders);
+           setOrders(response.data.carts);
         })
         .catch(setOrders([]))
     };
     getData();
   }, [user]);
 
-  console.log("222",orders)
+  console.log("orders",orders)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -85,7 +84,7 @@ function Orders() {
             )}
           </TabPanel> */}
           {orderTabs.map((item) => {
-            const tmp = getOrderByType(orders, item.slug);
+            const tmp = getOrderByType(orders, item.id);
             if (tmp.length === 0)
               return (
                 <TabPanel key={item.id} value={value} index={item.id} dir={theme.direction}>
@@ -129,6 +128,8 @@ function a11yProps(index) {
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
+  console.log("index", index)
+  console.log("value", value)
 
   return (
     <div
@@ -143,7 +144,12 @@ function TabPanel(props) {
   );
 }
 
-const getOrderByType = (orders, slug) =>
-  orders.filter((item) => item.status === slug);
+const getOrderByType = (orders, id) => {
+  let result = id === 3 ? orders : orders.filter((item) => item.status === id)
+    console.log("id: ", id);
+    console.log("result: ", result)
+  return result;
+}
+  
 
 export default memo(Orders);

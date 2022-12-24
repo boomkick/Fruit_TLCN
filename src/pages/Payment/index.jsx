@@ -117,37 +117,28 @@ function Payment() {
       );
       return;
     }
-
-    let payload = CartItems.map((item) => {
-      return {
-        productId: item.id,
-        productName: item.name,
-        productImage: item.imageList[0].url,
-        quantity: item.quantity,
-        price: item.price,
-      };
-    });
-
+    let payload = {}
+    let listCartDetail = {
+      listCartDetailId: CartItems.map((item) => {
+        return item.id
+      })
+    };
+    payload = {
+      CityId: paymentAddress.city, 
+      DistrictId: paymentAddress.district, 
+      WardId: paymentAddress.ward, 
+      DetailLocation: paymentAddress.addressDetail, 
+      Name: paymentAddress.name, 
+      Phone: paymentAddress.phone, 
+      paymentMethod: 0, 
+      ...listCartDetail
+    }
+    
     setLoading(true);
-    if (payment == 2) {
+    if (payment == 1) {
+      payload.paymentMethod = 1;
       apiCart
-        .saveOrderPayPal(payload)
-        .then((res) => {
-          toast.success("Đặt hàng thành công!");
-          dispatch(deleteAll());
-          // navigate(res.data.link);
-          window.location.assign(res.data.link);
-        })
-        .catch((error) => {
-          toast.error("Đặt hàng không thành công. Vui lòng thử lại");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-
-    } else {
-      apiCart
-        .saveOrderCOD(payload)
+        .postPayment(payload)
         .then((res) => {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
@@ -160,6 +151,20 @@ function Payment() {
           setLoading(false);
         });
 
+    } else {
+      apiCart
+        .postPayment(payload)
+        .then((res) => {
+          toast.success("Đặt hàng thành công!");
+          dispatch(deleteAll());
+          navigate("/my-account/orders");
+        })
+        .catch((error) => {
+          toast.error("Đặt hàng không thành công. Vui lòng thử lại");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -412,16 +417,16 @@ function Payment() {
 
 const paymentMethods = [
   {
-    id: "1",
+    id: "0",
     display: "Thanh toán tiền mặt khi nhận hàng",
-    value: "1",
+    value: "0",
     image:
       "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg",
   },
   {
-    id: "2",
+    id: "1",
     display: "Thanh toán bằng Momo",
-    value: "2",
+    value: "1",
     image:
       "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
   },

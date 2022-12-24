@@ -36,14 +36,12 @@ function DetailProduct({ data }) {
   ]
 
   async function handleClickAddItem() {
-    console.log(user);
     let param = {
         productId: data?.id,
         quantity: quantity
     }
     await apiCart.postCart(param)
     .then((res) => {
-        console.log(res)
         toast.success("Đã thêm sản phẩm thành công")
     })
     .catch((error => {

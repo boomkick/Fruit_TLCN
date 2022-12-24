@@ -38,14 +38,13 @@ const apiCart = {
         const res = await axiosClientWithToken.delete(`/Cart/${params}`)
         return res.data;
     },
-    // changeTypeOrder: async (params, id) => {
-    //     const res = await axiosClient.patch(`/Cart/${id}`,params)
-    //     return res.data;
-    // },
-    // makePaymentMomo: async (params) => {
-    //     const res = await axiosClientWithPayment.post('/create-payment',params)
-    //     return res.data;
-    // },
-    
+    postPayment: async (params) => {
+        const res = await axiosClientWithToken.post(`/Cart/payment`, params)
+        return res.data;
+    },
+    getOrders: async () => {
+        const res = await axiosClientWithToken.get('/Cart/Carthistory')
+        return res.data;
+    },
 }
 export default apiCart;

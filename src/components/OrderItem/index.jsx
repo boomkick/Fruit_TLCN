@@ -4,6 +4,7 @@ import "./OrderItem.scss";
 import { orderTabs } from "../../constraints/OrderItem";
 import { numWithCommas } from "../../constraints/Util";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 function OrderItem(props) {
   const { order } = props;
   const state = getState(order);
@@ -11,7 +12,7 @@ function OrderItem(props) {
     <Box className="orderItem">
       <Stack direction='row' className="orderItem__heading">
         {state?.icon && <>
-        <state.icon/> <Typography>{order.status}</Typography>
+        <state.icon/> <Typography>{state.type}</Typography>
         </>}
 
         <Typography
@@ -22,7 +23,7 @@ function OrderItem(props) {
           {state?.display}
         </Typography>
       </Stack>
-      {order?.orderDetails.slice(0,2).map((item) => (
+      {order?.cartDetails.slice(0,2).map((item) => (
         <Stack
           key={item.id}
           className="orderItem__product"
@@ -34,22 +35,22 @@ function OrderItem(props) {
             direction="row"
             justifyContent="space-between"
           >
-            <img alt="" src={item.productImage} />
+            <img alt="" src={item.product.image.url} />
             <span className="orderItem__quantity">
               x{item.quantity}
             </span>
           </Stack>
           <Stack flex={1} mx="12px">
-          <Link to={item.productId?`/product-detail/${item?.productId}`:''}>
+          <Link to={item.product.id ?`/product-detail/${item?.product?.id}`:''}>
             
             <Typography className="text-overflow-2-lines" fontSize="13px">
-              {item.productName}
+              {item.product.name}
             </Typography>
           </Link>
           </Stack>
           <Stack>
             <Typography className="orderItem__price">
-              {numWithCommas(item.price * item.quantity)} ₫
+              {numWithCommas(item.price)} ₫
             </Typography>
           </Stack>
         </Stack>
@@ -63,7 +64,7 @@ function OrderItem(props) {
             component="span"
             fontSize="17px" fontWeight='500' color="#333"
           >
-            {numWithCommas(order.total)} ₫
+            {numWithCommas(order.bill.total)} ₫
           </Typography>
         </Box>
         <Box className="orderItem__groupbtn">
@@ -77,6 +78,6 @@ function OrderItem(props) {
   );
 }
 
-const getState = (state) => orderTabs.find((item) => item.slug === state.status);
+const getState = (state) => orderTabs.find((item) => item.id === state.status);
 
 export default OrderItem;

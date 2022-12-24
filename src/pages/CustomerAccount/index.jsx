@@ -49,6 +49,7 @@ import PhoneNumber from "./Info/PhoneNumber";
 import Password from "./Info/Password";
 import Email from "./Info/Email";
 import Orders from "./Orders"
+import DetailOrder from "./Orders/DetailOrder";
 
 function CustomerAccount() {
   // const navigate = useNavigate();
@@ -164,11 +165,11 @@ function CustomerAccount() {
               />
 
               <Route
-                path="orders"
+                path="orders/*"
                 element={
                   <Routes>
                     <Route index element={<Orders />} />
-                    {/* <Route path="detail/:id" element={<DetailOrder />} /> */}
+                    <Route path="detail/:id" element={<DetailOrder />} />
                   </Routes>
                 }
               />

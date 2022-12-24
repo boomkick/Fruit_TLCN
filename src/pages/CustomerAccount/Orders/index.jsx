@@ -8,6 +8,8 @@ import { orderTabs} from "../../../constraints/OrderItem";
 import { useEffect } from "react";
 import apiCart from "../../../apis/apiCart";
 import { useSelector } from "react-redux";
+import { Route, Routes } from "react-router-dom";
+import DetailOrder from "./DetailOrder";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
@@ -146,8 +148,6 @@ function TabPanel(props) {
 
 const getOrderByType = (orders, id) => {
   let result = id === 3 ? orders : orders.filter((item) => item.status === id)
-    console.log("id: ", id);
-    console.log("result: ", result)
   return result;
 }
   

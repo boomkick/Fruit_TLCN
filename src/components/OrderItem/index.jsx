@@ -69,7 +69,7 @@ function OrderItem(props) {
         </Box>
         <Box className="orderItem__groupbtn">
           <Button variant="outlined">Mua lại</Button>
-          <Link to={`/customer/order/detail/${order.id}`}><Button variant="outlined">Xem chi tiết</Button>
+          <Link to={`/my-account/orders/detail/${order.id}`}><Button variant="outlined">Xem chi tiết</Button>
           </Link>
           
         </Box>

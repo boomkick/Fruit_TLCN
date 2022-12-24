@@ -8,6 +8,6 @@ export const paymentMethod = [
     {
         id: 1,
         value: 'MOMO',
-        text: 'Qua thẻ',
+        text: 'Dịch vụ thanh toán MOMO',
     },
 ]

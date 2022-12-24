@@ -7,8 +7,9 @@ import {
   Select,
   FormControl,
   InputLabel,
-  InputBase
+  InputBase,
 } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from '@mui/material/styles';
 import { useState } from "react";
 // import apiAddress from "../../apis/apiAddress";
@@ -26,10 +27,11 @@ function SelectBoxAddress(props) {
     const [selectedDistrict, setSelectedDistrict] = useState({})
     const [selectedWard, setSelectedWard] = useState({})
 
-    // const {userCity, userDistrict, userWard} = props
+    const {userCity, userDistrict, userWard} = props
     
     // Gán danh sách dữ liệu của thành phố -> quận -> phường
     useEffect(() => {
+      console.log("props: ", props);
       let listAllCity = []
       let listAllDistrict = []
       let listAllWard = []
@@ -52,63 +54,35 @@ function SelectBoxAddress(props) {
 
     // Gán giá trị địa chỉ nếu có của người mua hàng
     useEffect(() => {
-      console.log("props: ", props)
-      console.log(listCity)
-      let city = listCity.find((item) => item.level1_id === props.userCity)
-      console.log("city select:", city)
+      let city = listCity.find((item) => item?.level1_id == userCity)
       setSelectedCity(city)
 
-      let district = listDistrict.find((item) => item.level2_id === props.userDistrict)
+      let district = listDistrict.find((item) => item?.level2_id === userDistrict)
       setSelectedDistrict(district)
 
-      let ward = listWard.find((item) => item.level3_id === props.userWard)
+      let ward = listWard.find((item) => item?.level3_id === userWard)
       setSelectedWard(ward)
     }, [])
-  
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const params = { id: props.province }
-    //     setListCommune([]);
-    //     setListDistrict([]);
-    //     apiAddress.getDistrictInProvinceById(params)
-    //       .then(res => {
-    //         setListDistrict(res.data.list);
-            
-    //       })
-    //   };
-    //   getData();
-    // }, [props.province])
-  
-    // useEffect(() => {
-    //   const getData = async () => {
-    //     const params = { id: props.district }
-    //     setListCommune([]);
-    //     apiAddress.getCommuneInDistrictById(params)
-    //       .then(res => {
-    //         setListCommune(res.data.list);
-    //       })
-    //   };
-    //   getData();
-    // }, [props.district])
 
-    // useEffect(()=>{
-    //   const handle = ()=>{
-    //     if(!props.setAddressDetails)
-    //       return
-    //     let province = listprovince?.find(item=>item.id === props.province)
-    //     let district = listdistrict?.find(item=>item.id === props.district)
-    //     let commune = listcommune?.find(item=>item.id === props.commune)
-        
-    //     if(province && district && commune)
-    //         props.setAddressDetails(`${province.name}, ${district.name}, ${commune.name}`)
-    //     else
-    //         props.setAddressDetails('')
-    //   }
-    //   handle()
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // },[props.district,props.commune,props.province])
-  
-   
+
+    // Main ------------------start
+    // Trong trường hợp selectedCity bị thay đổi thì
+    // const handleChangeCity = (item) => {
+    //   setSelectedCity(item)
+    // }
+    // useEffect(() => {
+    //   console.log("(selectedCity", selectedCity)
+    //   setListDistrict(selectedCity?.level2s)
+    // }, [selectedCity]);
+
+    // // Trong trường hợp selectedCity bị thay đổi thì
+    // const handleChangeDistrict = (item) => {
+    //   setSelectedCity(item)
+    // }
+    // useEffect(() => {
+    //   setListWard(selectedDistrict?.level3s)
+    // }, [selectedDistrict]);
+    // // Main ------------------end
   
   return (
     <>
@@ -121,15 +95,14 @@ function SelectBoxAddress(props) {
               size="small"
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={selectedCity ? selectedCity.name : ""}
+              // value={selectedCity ?? "123214"}
+              value={selectedCity ? selectedCity.level1_id : ""}
               label="Age"
               onChange={e=>props.onChangeCity(e.target.value)}
               
               input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
             >
-              {
-                listCity.map(item => <MenuItem value={item.level1_id}>{item.name}</MenuItem>)
-              }
+              {listCity ? listCity.map(item => <MenuItem value={item.level1_id}>{item.name}</MenuItem>) : <></>}
             </Select>
           </FormControl>
         </Stack>
@@ -144,14 +117,12 @@ function SelectBoxAddress(props) {
               sx={{ flex: 0.65 }}
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={selectedDistrict ? selectedDistrict.name : ""}
+              value={selectedDistrict ? selectedDistrict.level2_id : ""}
               label="Age"
               onChange={e=>props.onChangeDistrict(e.target.value)}
               input={<InputCustom placeholder="Chọn Quận/Huyện" />}
             >
-              {
-                listDistrict.map(item => <MenuItem value={item.level2_id}>{item.name}</MenuItem>)
-              }
+              {listDistrict ? listDistrict.map(item => <MenuItem value={item.level2_id}>{item.name}</MenuItem>) : <></>}
             </Select>
           </FormControl>
         </Stack>
@@ -164,14 +135,12 @@ function SelectBoxAddress(props) {
             <Select
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
-              value={selectedWard ? selectedWard.name : ""}
+              value={selectedWard ? selectedWard.level3_id : ""}
               label="Age"
-              onChange={e=>props.onChangeCommune(e.target.value)}
+              onChange={e=>props.onChangeWard(e.target.value)}
               input={<InputCustom placeholder="Chọn Xã/Thị trấn" />}
             >
-              {
-                listWard.map(item => <MenuItem value={item.level3_id}>{item.name}</MenuItem>)
-              }
+              {listWard ? listWard.map(item => <MenuItem value={item.level3_id}>{item.name}</MenuItem>) : <></>}
             </Select>
           </FormControl>
         </Stack></>
@@ -201,12 +170,12 @@ const InputCustom = styled(InputBase)(({ theme }) => ({
   }));
 
   SelectBoxAddress.propTypes = {
-    province: PropTypes.string,
+    city: PropTypes.string,
     district:PropTypes.string,
-    commune:PropTypes.string,
-    onChangeProvince:PropTypes.func,
+    ward:PropTypes.string,
+    onChangeCity:PropTypes.func,
     onChangeDistrict:PropTypes.func,
-    onChangeCommune:PropTypes.func
+    onChangeWard:PropTypes.func
   };
 
 export default SelectBoxAddress

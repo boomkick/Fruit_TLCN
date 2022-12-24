@@ -40,7 +40,7 @@ function ProductDetail() {
     const { id } = useParams();
     
 
-    // Lấy dữ liệu top 8 sản phẩm
+    // Lấy dữ liệu top 8 sản phẩm và dữ liệu chi tiết sản phẩm
     useEffect(() => {
       const getTop8Product = async () => {
         const response = await apiProduct.getTop8Product();
@@ -59,28 +59,6 @@ function ProductDetail() {
       getProductDetail();
 
     }, []);
-
-    // Lấy dữ liệu sản phẩm chi tiết
-    // useEffect(() => {
-    //   const getProductDetail = async () => {
-    //     const response = await apiProduct.getProductDetail(id);
-    //     if (response) {
-    //       setProduct(response.data);
-    //     }
-    //   };
-    //   getProductDetail();
-    //   console.log(product)
-    // }, []);
-
-    // Lấy dữ liệu nhận xét sản phẩm
-
-    let data = {
-      name: "Lê Hàn Quốc",
-      discount: "119,000",
-      price: "140,000",
-      rate: "5",
-      sold: "235"
-    };
 
     let list_comment = [
       {

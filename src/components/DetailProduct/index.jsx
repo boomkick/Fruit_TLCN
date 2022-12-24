@@ -41,7 +41,7 @@ function DetailProduct({ data }) {
         productId: data?.id,
         quantity: quantity
     }
-    const response = await apiCart.postCart(param)
+    await apiCart.postCart(param)
     .then((res) => {
         console.log(res)
         toast.success("Đã thêm sản phẩm thành công")
@@ -49,13 +49,6 @@ function DetailProduct({ data }) {
     .catch((error => {
         toast.error(error.toString())
     }))
-    toast.success("Đã thêm sản phẩm thành công")
-    console.log("response", response);
-    if (response?.status === 200){
-        toast.success("Đã thêm sản phẩm thành công")
-    } else {
-        toast.error("Đã thêm sản phẩm thất bại")
-    }
 
   }
   return (

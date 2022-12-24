@@ -19,13 +19,15 @@ import apiAddress from "../../../../apis/apiAddress";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddress } from "../../../../slices/paymentSlice";
 
 function CreateAddress(props) {
-  const [fullName, setFullName] = useState("");
-  const [companyName, setCompanyName] = useState("");
+  const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   // const [addressType, setAddressType] = useState("");
+  const paymentAddress = useSelector((state) => state.payment.address);
   const [addressid, setAddressid] = useState("");
   const [edit, setEdit] = useState(props.edit);
   const [city, setCity] = React.useState("");
@@ -33,6 +35,7 @@ function CreateAddress(props) {
   const [ward, setWard] = React.useState("");
   const navigate = useNavigate();
   const params = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loaddata = () => {
@@ -41,7 +44,7 @@ function CreateAddress(props) {
         .then((res) => {
           const user = res.data;
           if (user) {
-            setFullName(user.firstName + " " + user.lastName);
+            setName(user.firstName + " " + user.lastName);
             setPhone(user.phone);
             setAddressDetail(user.detailLocation);
             setWard(user.wardId);
@@ -70,25 +73,22 @@ function CreateAddress(props) {
   const handleChangeWard = (value) => {
     setWard(value);
   };
+
   const handleSave = () => {
     const params = {
       addressDetail: addressDetail,
-      // addressType: Number(addressType),
       ward: ward,
-      companyName: companyName,
       district: district,
-      fullName: fullName,
+      name: name,
       phone: phone,
       city: city,
     };
     if (
       !(
         addressDetail &&
-        // addressType &&
         ward &&
-        // companyName &&
         district &&
-        fullName &&
+        name &&
         phone &&
         city
       )
@@ -96,45 +96,31 @@ function CreateAddress(props) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return;
     } else {
-      apiAddress
-        .saveAddress(params)
-        .then((res) => {
-          toast.success("Thêm địa chỉ thành công");
-          setFullName("");
-          setCompanyName("");
-          setPhone("");
-          setAddressDetail("");
-          // setAddressType(1);
-          setWard("");
-          setDistrict("");
-          setCity("");
-        })
-        .catch((error) => {
-          toast.error("Thêm địa chỉ thất bại!");
-        });
+      dispatch(setAddress(params));
+      toast.success("Cập nhật địa chỉ nhận hàng thành công");
     }
   };
 
   const handleUpdate = () => {
     const params = {
       addressDetail: addressDetail,
-      // addressType: Number(addressType),
       ward: ward,
-      companyName: companyName,
       district: district,
-      fullName: fullName,
+      name: name,
       phone: phone,
       city: city,
     };
+    // Dữ liệu test
+    params.city = "01"
+    params.district = "001"
+    params.ward = "00001"
 
     if (
       !(
         addressDetail &&
-        // addressType &&
         ward &&
-        // companyName &&
         district &&
-        fullName &&
+        name &&
         phone &&
         city
       )
@@ -142,14 +128,9 @@ function CreateAddress(props) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return;
     }
-    apiAddress
-      .saveAddress(params)
-      .then((res) => {
-        toast.success("Cập nhật thành công");
-      })
-      .catch((error) => {
-        toast.error("Cập nhật thất bại!");
-      });
+    dispatch(setAddress(params));
+    toast.success("Cập nhật địa chỉ nhận hàng thành công");
+    navigate("/payment");
   };
 
   return (
@@ -157,7 +138,6 @@ function CreateAddress(props) {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
-        {console.log("city", city)}
         <SelectBoxAddress
           userCity={city}
           userDistrict={district}
@@ -173,9 +153,9 @@ function CreateAddress(props) {
           </Typography>
           <Stack className="create-address__input">
             <InputCustom
-              value={fullName}
+              value={name}
               onChange={(event) => {
-                setFullName(event.target.value);
+                setName(event.target.value);
               }}
               placeholder="Nhập họ và tên"
               size="small"

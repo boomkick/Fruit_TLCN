@@ -4,7 +4,8 @@ export const paymentSlice = createSlice({
     name: "payment",
     initialState: {
         coupon: null,
-        address:null
+        address:null,
+        paymentMethod:null,
     },
     reducers: {
         setCoupon: (state, action) => {

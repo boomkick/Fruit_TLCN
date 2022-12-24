@@ -7,6 +7,8 @@ import './app/style/App.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from './apis/axiosClient';
 import { loginSuccess, logoutSuccess } from './slices/authSlice';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // Lấy thông tin user
@@ -20,13 +22,11 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        
-        
+          <ToastContainer />
           {isAdmin ? null : <Header />}
           <ConfigRoute />
           {isAdmin ? null : <Footer />}
 
-        
       </BrowserRouter>
     </div>
   );

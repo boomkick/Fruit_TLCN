@@ -4,7 +4,7 @@ import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
 //import img
-import img from "../../assets/img/dan_guitar_cc300_6-360x360.jpg";
+import img from "../../assets/img/product_le_han_quoc.jpg";
 
 function CardCategory({ data }) {
   return (

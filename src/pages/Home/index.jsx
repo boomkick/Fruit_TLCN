@@ -20,7 +20,7 @@ import CardProduct from "../../components/CardProduct";
 import CardCategory from "../../components/CardCategory";
 
 //import img
-import img from "../../assets/img/HD-119-TOP-Copy-2-360x360.jpg";
+import img from "../../assets/img/product_le_han_quoc.jpg";
 
 // styles swiper
 import "swiper/css";

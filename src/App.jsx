@@ -18,14 +18,15 @@ function App() {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
   }
   const isAdmin = window.location.href.includes("admin");
+  const isEmployee = window.location.href.includes("employee");
 
   return (
     <div className="App">
       <BrowserRouter>
           <ToastContainer />
-          {isAdmin ? null : <Header />}
+          {isAdmin || isEmployee ? null : <Header />}
           <ConfigRoute />
-          {isAdmin ? null : <Footer />}
+          {isAdmin || isEmployee ? null : <Footer />}
 
       </BrowserRouter>
     </div>

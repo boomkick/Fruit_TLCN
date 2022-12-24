@@ -207,7 +207,7 @@ function Header() {
                 <>
                   <Button onClick={openModalLogin} sx={{ color: "white" }}>
                     <Typography sx={{ fontSize: "14px", color: "white" }}>
-                      Đăng nhập / Đăng ký
+                      Đăng nhập
                     </Typography>
                   </Button>
                 </>
@@ -229,7 +229,7 @@ function Header() {
             <li>
               <div className="buttonSearch">
                 <Link
-                  to={"/"}
+                  to={`/product-category/${categories[0]?.id}`}
                   className="icon"
                   aria-label="Tìm Kiếm"
                   data-open="#search-lightbox"

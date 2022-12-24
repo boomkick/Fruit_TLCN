@@ -214,3 +214,15 @@
 
   
 }
+
+.products-consumer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.products-pagination {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

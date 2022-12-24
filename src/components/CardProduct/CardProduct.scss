@@ -1,6 +1,5 @@
+@import "../../../src/style/abstract/variables";
 .card {
-
-
     &__sale {
         display: inline;
         font-size: 12px;
@@ -37,6 +36,30 @@
             white-space: nowrap;
             vertical-align: baseline;
             border-radius: 0.25rem;
+        }
+    }
+
+    &__content{
+        &-name {
+            font-size: 16px;
+            font-weight: 600;
+            padding-bottom: 5px;
+            &:hover {
+                color:$client-main-color-hover;
+            }
+        }
+        &-category {
+            font-size: 14px;
+            font-weight: 400;
+            text-overflow: ellipsis;
+            overflow: hidden; 
+            max-width: 100px;
+            color: #666666;
+        }
+        &-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: $client-main-color;
         }
     }
 }

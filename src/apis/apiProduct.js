@@ -16,8 +16,6 @@ export const axiosAdmin = axios.create({
 const apiProduct = {
     getProducts: async (page) => {
         const res = await axiosAdmin.get(`/Product?page=${page}`)
-        console.log(res)
-        console.log(typeof res.data)
         return res.data;
     },
     getTop8Product: async () => {
@@ -26,6 +24,10 @@ const apiProduct = {
     },
     getProductDetail: async (id) => {
         const res = await axiosClient.get(`Product/${id}/`)
+        return res.data;
+    },
+    getProductsByPage: async (page, pageSize) => {
+        const res = await axiosAdmin.get(`/Product?page=${page}&pageSize=${pageSize}`)
         return res.data;
     },
     // saveOrder: async (params) => {

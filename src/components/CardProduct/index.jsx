@@ -40,11 +40,16 @@ function CardProduct({ data }) {
           width="270px"
           image={data?.image?.url}
           style={{height: "270px"}}
-          //   sx={{ position: "absolute" }}
         />
         <CardContent className="card__content">
-          <Typography>{data?.name}</Typography>
-          <Typography>{data?.price}₫</Typography>
+          <Box style={{
+            display: "flex",
+            justifyContent: "space-between"
+          }}>
+            <p className="card__content-name">{data?.name}</p>
+            <p className="card__content-category">{data?.category?.name ? data?.category?.name : "Danh mục"}</p>
+          </Box>
+          <p className="card__content-price" align="left">{data?.price}₫</p>
         </CardContent>
       </Card>
     </Link>

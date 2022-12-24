@@ -7,6 +7,7 @@ import { Card, CardMedia } from "@mui/material";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper";
+import { Pagination as MuiPagination } from "@mui/material";
 
 //import icons
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -176,15 +177,12 @@ function SlideBackGround() {
 function SlideHome() {
   const [sales, setSales] = useState([]);
   const [top8Product, setTop8Product] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [maxPage, setMaxPage] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    // const getData = async () => {
-    //   const response = await apiMain.getProducts({ _page: 2, _limit: 20 });
-    //   if (response) {
-    //     setSales(response.data);
-    //   }
-    // };
-    // getData();
+    // Get 8 sản phẩm được mua nhiều nhất
     const getTop8Product = async () => {
       const response = await apiProduct.getTop8Product();
       if (response) {
@@ -192,8 +190,22 @@ function SlideHome() {
       }
     };
     getTop8Product();
-  }, []);
 
+    // get all sản phẩm theo page và pageSize = 8
+    const getAllProduct = async () => {
+      const response = await apiProduct.getProductsByPage(currentPage, 8);
+      if (response) {
+        setAllProducts(response.data.products);
+        setMaxPage(response.data.maxPage);
+      }
+      console.log("all: ", allProducts);
+    };
+    getAllProduct();
+  }, [currentPage]);
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  }
   return (
     <>
       <section className="section" id="section_1">
@@ -497,7 +509,16 @@ function SlideHome() {
                 <b></b>
               </h2>
             </Stack>
-
+              {/* Toàn bộ sản phẩm */}
+              <div className="products-consumer">
+                {allProducts.map((item) => (
+                  <CardProduct data={item}/>
+                ))}
+              </div>
+              {/* Pagination cho all product */}
+              <Box className="products-pagination">
+                <MuiPagination count={maxPage} onChange={handleChangePage} page={currentPage} shape="rounded" sx={{ alignItems: "center" }}/>
+              </Box>
           </Box>
         </div>
       </section>

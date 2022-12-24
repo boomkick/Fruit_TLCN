@@ -4,27 +4,27 @@ import { Button, Modal, Box, Stack, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 import apiAddress from '../../apis/apiAddress'
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAddress } from '../../slices/paymentSlice';
 
 function ChooseAddress(props) {
     const [addresses, setAddresses] = useState([]);
     const dispatch = useDispatch()
+    const paymentAddress = useSelector((state) => state.payment.address)
     
     useEffect(() => {
         const getAddresses = () => {
-            apiAddress.getUserAddress()
-                .then(res => {
-                    setAddresses(res.data.addressList)
-                })
+            let data  = []
+            data.push(paymentAddress)
+            setAddresses(data)
         }
         getAddresses()
     }, [])
 
     const chooseAddressShip = (address)=>{
-    //props.chooseAddressShip(address)
-        props.handleClose()
-        dispatch(setAddress(address))
+        // props.handleClose()
+        // dispatch(setAddress(address))
+        console.log(address);
     }
 
     return (
@@ -34,22 +34,24 @@ function ChooseAddress(props) {
         >
             <Box className='choose-address'>
                 <Stack direction='row' className="choose-coupon__heading">
-                    <span>Chọn địa chỉ</span>
+                    <h3>Chọn địa chỉ</h3>
                     <CloseIcon onClick={props.handleClose} height="24px" />
                 </Stack>
-                <Stack spacing={5}>{
+                <Stack spacing={5}>
+                    {/* Chỉ hiện thông tin địa chỉ giao hàng START */}
+                    {
                     addresses.map((item) => {
                         return (
                             <Stack
                                 direction="row"
                                 width="100%"
                                 className="items"
-                                key={item.id}
+                                key={item.name}
                             >
                                 <Stack className="info">
-                                    <Typography className="name">{item.fullName}</Typography>
-                                    <Typography className="address">Địa chỉ: {`${item.addressDetail}, ${item.commune.name}, ${item.district.name}, ${item.province.name}`}</Typography>
-                                    <Typography className="number">Điện thoại: {item.phoneNumber}</Typography>
+                                    <Typography className="name">Người nhận: {item.name}</Typography>
+                                    <Typography className="address">Địa chỉ: {`${item.addressDetail}, ${item.city}, ${item.district}, ${item.ward}`}</Typography>
+                                    <Typography className="number">Điện thoại: {item.phone}</Typography>
                                 </Stack>
 
                                 <Stack direction="row" className="action">
@@ -63,7 +65,9 @@ function ChooseAddress(props) {
                             </Stack>
                         );
                     })
-                }</Stack>
+                    }
+                    {/* END */}
+                </Stack>
 
             </Box>
         </Modal>

@@ -28,67 +28,65 @@ import apiAddress from "../../apis/apiAddress";
 import Loading from "../../components/Loading";
 
 function Payment() {
-  const [open, setOpen] = useState(false);
+  const CartItems = useSelector((state) => state.cart.items);
+  const paymentAddress = useSelector((state) => state.payment.address);
+  const user = useSelector((state) => state.auth.user);
   const [totalPrice, setTotalPrice] = useState(0);
-  const handleOpen = useCallback(() => setOpen(true), []);
-  const handleClose = useCallback(() => setOpen(false), []);
-  const [openAddress, setOpenAddress] = useState(false);
-
   const [payment, setPayment] = useState("1");
   const [expandDetail, setExpandDetail] = useState(false);
-  const [couponValue, setCouponValue] = useState(0);
   const [loading, setLoading] = useState(false);
-  const CartItems = useSelector((state) => state.cart.items);
-  const coupon = useSelector((state) => state.payment.coupon);
-  // const addresses = useSelector((state) => state.payment.address);
   const [addresses, setAddresses] = useState();
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Tính tổng giá tiền, phí vận chuyển, mã giảm giá nếu có
   const feeShip = 15000;
-
   useEffect(() => {
     const calcPrice = () => {
       const total = CartItems.reduce(
-        (t, num) => t + num.price * num.quantity,
+        (t, item) => t + item.product.price * item.quantity,
         0
       );
       setTotalPrice(total);
     };
+    console.log(CartItems)
     calcPrice();
   }, [CartItems]);
 
+  // Địa chỉ nhận hàng
+  const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
+  const [openAddress, setOpenAddress] = useState(false);
+  const handleOpenAddress = useCallback(() => setOpenAddress(true), []);
+  const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
   useEffect(() => {
     const getAddresses = () => {
-      apiAddress
-        .getProfileUser()
-        .then((res) => {
-          setAddresses(res.data.user.address);
-          console.log(res.data.user.address);
-        })
-        .catch(() => {
+      if(!paymentAddress) {
           navigate("/my-account/address/create");
           toast.warning("Vui lòng thêm địa chỉ mới");
-        });
+      }
     };
     getAddresses();
   }, []);
-
-  useEffect(() => {
-    const handle = () => {
-      if (coupon) {
-        let value = 0;
-        if (coupon.unit === "đ") {
-          value = coupon.value;
-        } else {
-          if (totalPrice > 0) value = (coupon.value * totalPrice) / 100;
-        }
-        setCouponValue(value);
-      }
-    };
-    handle();
-  }, [coupon, totalPrice]);
+  
+  // Set coupon mã giảm giá [Chưa làm]
+  const [couponValue, setCouponValue] = useState(0);
+  // const coupon = useSelector((state) => state.payment.coupon);
+  // useEffect(() => {
+  //   const handle = () => {
+  //     if (coupon) {
+  //       let value = 0;
+  //       if (coupon.unit === "đ") {
+  //         value = coupon.value;
+  //       } else {
+  //         if (totalPrice > 0) value = (coupon.value * totalPrice) / 100;
+  //       }
+  //       setCouponValue(value);
+  //     }
+  //   };
+  //   handle();
+  // }, [coupon, totalPrice]);
 
   useEffect(() => {
     const loadTitle = () => {
@@ -105,15 +103,13 @@ function Payment() {
     setExpandDetail((pre) => !pre);
   };
 
-  const handleOpenAddress = useCallback(() => setOpenAddress(true), []);
-  const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
-
   const finalPrice = () => {
     return totalPrice + feeShip - (couponValue || 0) > 0
       ? Math.round(totalPrice + feeShip - (couponValue || 0))
       : 0;
   };
 
+  // Thanh toán
   const handleSubmit = () => {
     if (loading) {
       toast.info(
@@ -121,23 +117,6 @@ function Payment() {
       );
       return;
     }
-
-    // if (!addressShip) {
-    //   toast.warning("Vui lòng chọn địa chỉ giao hàng");
-    //   return;
-    // }
-
-    // const payload = {
-    //   CartItems.map((item) => {
-    //     return {
-    //       productId: item.id,
-    //       productName: item.name,
-    //       productImage: item.imageList[0].url,
-    //       quantity: item.quantity,
-    //       price: item.price,
-    //     };
-    //   }),
-    // };
 
     let payload = CartItems.map((item) => {
       return {
@@ -184,19 +163,6 @@ function Payment() {
     }
   };
 
-  // const handleCancel = (id) => {
-  //   let params = {
-  //     //...order,
-  //     type: {
-  //       id: orderTabs[5].id,
-  //       name: orderTabs[5].type,
-  //     },
-  //   };
-  //   apiCart
-  //     .changeTypeOrder(params, id)
-
-  // }
-
   return (
     <>
       <Box className="container">
@@ -229,6 +195,7 @@ function Payment() {
                     paddingBottom: "20px",
                   }}
                 ></Box>
+                {/* Danh sách sản phẩm trong giỏ hàng [START] */}
                 <Stack className="payment__listItem">
                   {CartItems.map((item) => (
                     <Stack
@@ -254,20 +221,17 @@ function Payment() {
                       >
                         <Link to={"/"}>
                           <Typography sx={{ fontSize: "14px" }}>
-                            {item?.name} x {item?.quantity}
+                            {item?.product?.name} x {item?.quantity}
                           </Typography>
                         </Link>
-
-                        {/* <Typography fontSize="14px" color="#888">
-                          SL:{item?.quantity}
-                        </Typography> */}
                         <Typography fontSize="14px" color="#888">
-                          {numWithCommas(item?.quantity * item?.price || 0)} đ
+                          {numWithCommas(item?.quantity * item?.product?.price || 0)} đ
                         </Typography>
                       </Stack>
                     </Stack>
                   ))}
                 </Stack>
+                {/* Danh sách sản phẩm trong giỏ hàng [END] */}
               </Box>
             </Box>
           </Grid>
@@ -456,10 +420,10 @@ const paymentMethods = [
   },
   {
     id: "2",
-    display: "Thanh toán bằng PayPal",
+    display: "Thanh toán bằng Momo",
     value: "2",
     image:
-      "https://cdn.pixabay.com/photo/2018/05/08/21/29/paypal-3384015__480.png",
+      "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
   },
 ];
 

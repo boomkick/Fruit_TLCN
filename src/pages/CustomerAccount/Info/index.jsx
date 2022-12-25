@@ -62,6 +62,8 @@ function Info() {
   const [image, setImage] = useState([]);
   const [gender, setGender] = useState(user.gender)
   const [fullname, setFullName] = useState(user.fullName)
+  const [firstName, setFirstName] = useState(user.firstName)
+  const [lastName, setLastName] = useState(user.lastName)
   const [nickname, setNickName] = useState(user.nickName)
   const [modalDeleteAvatar, setModalDeleteAvatar] = useState(false);
   const [modalViewAvatar, setModalViewAvatar] = useState(false);
@@ -149,25 +151,25 @@ function Info() {
       return 30;
     else return 31;
   }
-  const onChangeFullName = (event) => {
-    setFullName(event.target.value);
+  const onChangeFirstName = (event) => {
+    setFirstName(event.target.value);
   }
-  const onChangeNickName = (event) => {
-    setNickName(event.target.value);
+  const onChangeLastName = (event) => {
+    setLastName(event.target.value);
   }
   const onChangeGender = (event) => {
     setGender(event.target.value);
   }
   
   const onSaveChange = () => {
-    if (!(fullname && gender && nickname)) {
+    if (!(firstName && gender && lastName)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
     const params = {
-      fullName: fullname,
+      firstName: firstName,
       gender: gender,
-      nickName: nickname
+      lastName: lastName
     };
     setUpdating(true)
     apiProfile
@@ -245,10 +247,10 @@ function Info() {
                 alignItems="flex-start"
                 justifyContent="space-between"
               >
-                <label>Họ & tên</label>
-                <input id="input-name" placeholder="Thêm họ tên" type="text"
-                  value={fullname}
-                  onChange={onChangeFullName}
+                <label>Họ</label>
+                <input id="input-name" placeholder="Thêm họ" type="text"
+                  value={firstName}
+                  onChange={onChangeFirstName}
                 />
               </Stack>
 
@@ -258,13 +260,13 @@ function Info() {
                 alignItems="flex-star"
                 justifyContent="space-between"
               >
-                <label>Nickname</label>
+                <label>Tên</label>
                 <input
                   id="input-nickname"
-                  placeholder="Thêm nickname"
+                  placeholder="Thêm Tên"
                   type="text"
-                  value={nickname}
-                  onChange={onChangeNickName}
+                  value={lastName}
+                  onChange={onChangeLastName}
                 />
               </Stack>
             </Stack>

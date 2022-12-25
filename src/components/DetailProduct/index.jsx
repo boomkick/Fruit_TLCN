@@ -5,10 +5,7 @@ import {
   Box,
 } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import QuantityButtons from "../../components/QuantityButtons";
 import InfoIcon from '@mui/icons-material/Info';
 import BookIcon from '@mui/icons-material/Book';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -22,9 +19,14 @@ import imgProduct from "../../assets/img/product_le_han_quoc.jpg";
 import apiCart from "../../apis/apiCart";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { productUnit, productStatus } from "../../constraints/Product";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 
 function DetailProduct({ data }) {
     const user = useSelector((state) => state.auth.user);
+    const status = productStatus.find((item) => item.id == data?.status)
     const [quantity, setQuantity] = React.useState(1);
 
     const list_cities = () => [
@@ -49,6 +51,32 @@ function DetailProduct({ data }) {
     }))
 
   }
+
+  function handleStatusProduct(status) {
+    if(status?.id == 0) {
+        return (
+            <>
+                <AddShoppingCartIcon style={{color: "#49A94D"}}/>
+                <p>{status?.text}</p>
+            </>
+        )
+    }else if (status?.id == 1) {
+        return (
+            <>
+                <ProductionQuantityLimitsIcon style={{color: "E40100"}}/>
+                <p>{status?.text}</p>
+            </>
+        )
+    }else {
+        return (
+            <>
+                <RemoveShoppingCartIcon style={{color: "E40100"}}/>
+                <p>{status?.text}</p>
+            </>
+        )
+    }
+  }
+
   return (
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
@@ -69,12 +97,12 @@ function DetailProduct({ data }) {
                         <div className="detailProduct__info-underline-title"></div>
                             { data?.discount ? (
                                 <div className="detailProduct__info-price">
-                                    <h4 className="detailProduct__info-price-original">{data?.price}</h4>
-                                    <h4 className="detailProduct__info-price-sale">{data?.discount}</h4>
+                                    <h4 className="detailProduct__info-price-original">{data?.price}đ</h4>
+                                    <h4 className="detailProduct__info-price-sale">{data?.discount}đ</h4>
                                 </div>
                             ) : (
                                 <div className="detailProduct__info-price">
-                                    <h4 className="detailProduct__info-price-sale">{data?.price}</h4>
+                                    <h4 className="detailProduct__info-price-sale">{data?.price}đ</h4>
                                 </div>
                             )}
                         <div className="detailProduct__info-rate">
@@ -85,9 +113,9 @@ function DetailProduct({ data }) {
                                 <StarIcon sx={{ fontSize: 18 }}/>
                                 <StarIcon sx={{ fontSize: 18 }}/>
                             </div>
-                            <p> ({data?.rate} đánh giá)  |  Đã bán {data?.sold}</p>
+                            <p> ({data?.rate} đánh giá)</p>
                         </div>
-                        <div className="detailProduct__info-shipping">
+                        {/* <div className="detailProduct__info-shipping">
                             <p>
                                 <LocalShippingIcon sx={{ fontSize: 20}}/>
                                 <span> Bạn muốn vận chuyển đến?</span>
@@ -103,9 +131,34 @@ function DetailProduct({ data }) {
                                 }}
                                 renderInput={(params) => <TextField {...params} label="Chọn Tỉnh/ Thành phố" />}
                                 />
+                        </div> */}
+                        <div className="detailProduct__info-general">
+                            <div>
+                                <p className="detailProduct__info-general-text">Đơn vị :</p>
+                                <p className="detailProduct__info-general-text">Giá trị tối thiểu :</p>
+                                <p className="detailProduct__info-general-text">Mô tả :</p>
+                            </div>
+                            <div >
+                                <p className="detailProduct__info-general-text">{productUnit.find(item => item.id == data?.unit)?.text}</p>
+                                <p className="detailProduct__info-general-text">{data?.unit == 0 ? `${data?.minPurchase} kilogram`: `${data?.minPurchase} phần`}</p>
+                                <p className="detailProduct__info-general-text">{data?.description}</p>
+                            </div>
                         </div>
-                        <div className="detailProduct__quantity-info">
-                            <ButtonGroup size="small" aria-label="small outlined button group" className="quantity-buttons">
+                        <div className="detailProduct__status">
+                            {status?.id != 0 ? <></> : 
+                            <>
+                                <ButtonGroup size="small" aria-label="small outlined button group" className="quantity-buttons" style={{height: "40px"}}>
+                                    <Button onClick={() => {(quantity > 0) ? setQuantity(quantity - 1) : setQuantity(0)}}>-</Button>
+                                    <Button >{quantity}</Button>
+                                    <Button onClick={() => {setQuantity(quantity + 1)}}>+</Button>
+                                </ButtonGroup>
+                                <button 
+                                    className="detailProduct__add-to-cart" 
+                                    style={{ fontWeight: 600, cursor: "pointer"}}
+                                    onClick={handleClickAddItem}
+                                >THÊM VÀO GIỎ HÀNG</button>
+                            </>}
+                            {/* <ButtonGroup size="small" aria-label="small outlined button group" className="quantity-buttons" style={{height: "40px"}}>
                                 <Button onClick={() => {(quantity > 0) ? setQuantity(quantity - 1) : setQuantity(0)}}>-</Button>
                                 <Button >{quantity}</Button>
                                 <Button onClick={() => {setQuantity(quantity + 1)}}>+</Button>
@@ -114,7 +167,10 @@ function DetailProduct({ data }) {
                                 className="detailProduct__add-to-cart" 
                                 style={{ fontWeight: 600, cursor: "pointer"}}
                                 onClick={handleClickAddItem}
-                            >THÊM VÀO GIỎ HÀNG</button>
+                            >THÊM VÀO GIỎ HÀNG</button> */}
+                            <div className="detailProduct__status-info">
+                                {handleStatusProduct(status)}
+                            </div>
                         </div>
                         <div className="detailProduct__info-guide">
                             <div style={{display: "flex", fontSize: "20px", lineHeight: "28px"}}>

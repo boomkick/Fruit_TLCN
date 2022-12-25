@@ -103,11 +103,10 @@ function ProductDetail() {
                 navigation={true}
                 modules={[Pagination, Navigation]}
                 className="mySwiper"
-                style={{ borderTop: "1px solid #ECECEC" }}
               >
                 {top8Product.map((item) => (
                 <SwiperSlide>
-                <CardProduct data={item}/>
+                  <CardProduct data={item}/>
                 </SwiperSlide>
               ))}
               </Swiper>

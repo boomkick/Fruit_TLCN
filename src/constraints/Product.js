@@ -29,7 +29,7 @@ export const productStatus = [
     {
         id: 0,
         value: 'SELLING',
-        text: 'Đang bán',
+        text: 'Còn hàng',
     },
     {
         id: 1,

@@ -272,7 +272,7 @@ function Info() {
             </Stack>
           </Stack>
 
-          <Stack direction="row" spacing={5} alignItems="center">
+          {/* <Stack direction="row" spacing={5} alignItems="center">
             <label>Giới tính</label>
             <RadioGroup
               row
@@ -284,7 +284,7 @@ function Info() {
               <FormControlLabel value="Nam" control={<Radio />} label="Nam" />
               <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" />
             </RadioGroup>
-          </Stack>
+          </Stack> */}
 
 
 

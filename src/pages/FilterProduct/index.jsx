@@ -30,18 +30,15 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
+import { Pagination as MuiPagination } from "@mui/material";
 import SearchBar from "../../components/SearchBar";
 import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
   const idCategory = useParams().id;
-  // const slugCategory = useParams().slug;
-  // const [category, setCategory] = useState(null);
-
+  const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [value, setValue] = useState(1);
   const [filter, setFilter] = useState({});
   const [filterPrice, setFilterPrice] = useState({
@@ -50,51 +47,46 @@ function FilterProduct(props) {
     apply: false,
     value: "",
   });
+  const [maxPage, setMaxPage] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
 
   //Filter change price
   const [valueFilterPrice, setValueFilterPrice] = React.useState([
-    295000, 7500000,
+    0, 1000000,
   ]);
-  // const [page, setPage] = useState(0);
-  // const [test, setTest] = useState([1,2,3]);
-  // const [filter, setFilter] = useState({});
-
-  const [productFilter, setProductFilter] = useState([]);
-
-  // const navigate = useNavigate();
-  // const size = 30;
-  // const sort = "product_id";
 
   useEffect(() => {
     const getData = async () => {
       let param = {
-        page: 0,
-        size: 6,
-        min_price: 0,
-        max_price: 10000000,
+        categoryId: idCategory,
+        page: currentPage,
+        pageSize: 8,
       };
 
       if (filterPrice.apply) {
-        param = {
-          ...param,
-          min_price: filterPrice.minPrice,
-          max_price: filterPrice.maxPrice,
-        };
+        param["minPrice"] = filterPrice.minPrice
+        param["maxPrice"] = filterPrice.maxPrice
       }
+
       switch (value) {
         case 1: {
           break;
         }
+        case 2: {
+          // Hàng mới
+          param["orderBy"] = "ID"
+          break;
+        }
         case 3: {
-          param = { ...param, sort: "product_id" };
+          // Giá từ thấp lên cao
+          param["orderBy"] = "PRICE"
+          param["order"] = "ASC"
           break;
         }
         case 4: {
-          param = { ...param, sort: "price_asc" };
-          break;
-        }
-        case 5: {
-          param = { ...param, sort: "price_desc" };
+          // Giá từ cao xuống thấp
+          param["orderBy"] = "PRICE"
+          param["order"] = "DESC"
           break;
         }
         default: {
@@ -103,32 +95,42 @@ function FilterProduct(props) {
       }
 
       apiProduct
-        .getProductsByCateId(param, idCategory)
+        .getProductsByCategory(param)
         .then((res) => {
-          setProducts(res.data.list);
+          setProducts(res.data.products);
+          setMaxPage(res.data.maxPage);
         })
         .catch((error) => {
           setProducts(null);
         });
 
-      console.log("111", param);
     };
     getData();
-  }, [idCategory, filter, filterPrice.apply, value]);
+  }, [idCategory, filter, filterPrice.apply, value, currentPage]);
 
+  // Lấy dữ liệu category
   useEffect(() => {
-    const getData = async () => {
-      apiCategory
-        .showAllCategoryHeader()
+    const getCategories = async () => {
+      await apiCategory
+        .showAllCategory()
         .then((res) => {
-          setCategories(res.data.category);
+          setCategories(res.data);
         })
         .catch((error) => {
           setCategories([]);
         });
+      
+      if(categories) {
+        setCategory(categories.find((item) => item.id == idCategory))
+      }
     };
-    getData();
+
+    getCategories();
   }, []);
+  
+  useEffect(() => {
+    setCategory(category)
+  }, [idCategory])
 
   const handleChangeFilterPrice = (event, newValue) => {
     setValueFilterPrice(newValue);
@@ -139,20 +141,6 @@ function FilterProduct(props) {
     });
   };
 
-  // const onSetFilterPrice = (value, index) => {
-  //   setFilterPrice((pre) => {
-  //     return {
-  //       ...pre,
-  //       option: index,
-  //       value: value,
-  //     };
-  //   });
-  // };
-
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  //   console.log(newValue)
-  // };
   const handleChange = (event) => {
     setValue(Number(event.target.value));
   };
@@ -163,8 +151,12 @@ function FilterProduct(props) {
     });
   };
 
-  console.log("33",products)
-
+  // Xử lí phân trang
+  
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  }
+  
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
       <Stack className="filterProduct__sidebar" direction="column">
@@ -172,7 +164,7 @@ function FilterProduct(props) {
           <Typography className="filterProduct__title">TÌM KIẾM</Typography>
           <Box
             sx={{
-              backgroundColor: "#F4BA36",
+              backgroundColor: "#3D8B91",
               border: 0,
               height: "3px",
               margin: "7px 0",
@@ -190,7 +182,7 @@ function FilterProduct(props) {
           </Typography>
           <Box
             sx={{
-              backgroundColor: "#F4BA36",
+              backgroundColor: "#3D8B91",
               border: 0,
               height: "3px",
               margin: "7px 0",
@@ -198,12 +190,12 @@ function FilterProduct(props) {
               width: "100%",
             }}
           />
-          <FormGroup>
+          <FormGroup sx={{textOverflow: "ellipsis", overflow: "hidden" }}>
             {categories.map((item) => (
               <Box
                 key={item.id}
                 onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
+                sx={{ padding: "6px"}}
               >
                 <Link to={`/product-category/${item.id}`}>
                   <Box fontSize="14px">{item.name}</Box>
@@ -219,8 +211,8 @@ function FilterProduct(props) {
                 value={valueFilterPrice}
                 onChange={handleChangeFilterPrice}
                 // valueLabelDisplay="auto"
-                min={295000}
-                max={7500000}
+                min={0}
+                max={1000000}
                 sx={{ color: "#666" }}
                 disabled={filterPrice.apply}
               />
@@ -245,11 +237,11 @@ function FilterProduct(props) {
             </Box>
           </Box>
         </Box>
-        <Box className="filterProduct__form">
-          <Typography className="filterProduct__title">THƯƠNG HIỆU</Typography>
+          <Box className="filterProduct__form">
+            <Typography className="filterProduct__title">THƯƠNG HIỆU</Typography>
           <Box
             sx={{
-              backgroundColor: "#F4BA36",
+              backgroundColor: "#3D8B91",
               border: 0,
               height: "3px",
               margin: "7px 0",
@@ -309,7 +301,7 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              Category
+              {category?.name ? category?.name : "Category"}
             </Typography>
           </Box>
           <Box sx={{ minWidth: 120 }}>
@@ -331,20 +323,18 @@ function FilterProduct(props) {
           </Box>
         </Stack>
         <Box>
-          {/* <Grid container spacing={2}>
-            {productFilter.map((item) => (
-              <Grid key={item.id} item xs={3}>
-                <CardProduct data={item} />
-              </Grid>
-            ))}
-          </Grid> */}
           <Grid container spacing={2}>
-            {(value===2 ? products?.sort((a,b) => b.sellAmount - a.sellAmount) : products)?.map((item) => (
+            {(products)?.map((item) => (
               <Grid key={item.id} item xs={3}>
                 <CardProduct data={item} />
               </Grid>
             ))}
           </Grid>
+          {maxPage < 2 ? <></> : (
+            <Box className="products-pagination">
+            <MuiPagination count={maxPage} onChange={handleChangePage} page={currentPage} shape="rounded" sx={{ alignItems: "center" }}/>
+          </Box>
+          )}
         </Box>
       </Box>
     </Stack>
@@ -361,18 +351,14 @@ const tabs = [
   },
   {
     id: 2,
-    name: "Bán chạy",
-  },
-  {
-    id: 3,
     name: "Hàng mới",
   },
   {
-    id: 4,
+    id: 3,
     name: "Giá thấp",
   },
   {
-    id: 5,
+    id: 4,
     name: "Giá cao",
   },
 ];

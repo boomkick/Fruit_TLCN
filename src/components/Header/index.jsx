@@ -72,7 +72,6 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    console.log("13416545643.")
     const getData = async () => {
       apiCategory
         .showAllCategory()

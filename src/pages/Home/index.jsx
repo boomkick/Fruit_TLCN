@@ -35,7 +35,6 @@ import { setAddress } from "../../slices/addressSlice";
 
 function Home() {
   const address = useSelector((state) => {
-    console.log("state: ", state)
     return state.address.locations
   })
   // console.log(state)

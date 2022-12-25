@@ -30,6 +30,16 @@ const apiProduct = {
         const res = await axiosAdmin.get(`/Product?page=${page}&pageSize=${pageSize}`)
         return res.data;
     },
+    getProductsByCategory: async (params) => {
+        let search = ""
+        for (let item in params) {
+            search = search + item.toString() + "=" + params[item] + "&";
+        }
+        search = search.slice(0, -1);
+        console.log("search", search)
+        const res = await axiosAdmin.get(`/Product?${search}`)
+        return res.data;
+    },
     // saveOrder: async (params) => {
     //     const res = await axiosAdmin.post('/myorders',params)
     //     return res.data;

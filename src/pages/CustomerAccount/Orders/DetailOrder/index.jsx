@@ -65,7 +65,7 @@ function DetailOrder() {
                     <Box className="detailOrder__boxInfo">
                         <Typography >HÌNH THỨC THANH TOÁN</Typography>
                         <Box p={1.25} className="detailOrder__content">
-                            <Typography>{paymentMethod.find( item => item.id == order?.bill?.paymentMethod).text}</Typography>
+                            <Typography>{paymentMethod.find( item => item.id == order?.bill?.paymentMethod)?.text}</Typography>
                         </Box>
                     </Box>
                 </Stack>

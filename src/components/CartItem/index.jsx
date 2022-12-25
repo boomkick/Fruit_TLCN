@@ -3,6 +3,7 @@ import "./CartItem.scss";
 import { Checkbox, Typography, Dialog, Button, Box, Stack } from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { numWithCommas } from "../../constraints/Util";
+import { productUnit } from "../../constraints/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, updateItem } from "../../slices/cartSlice";
 import {Link} from "react-router-dom";
@@ -92,6 +93,12 @@ function CartItem(props) {
         </Stack>
         <Box className="cart-item__cell cart-item__price">
           {numWithCommas(data?.product?.price || 0)} ₫
+        </Box>
+        <Box className="cart-item__cell cart-item__price">
+          {productUnit.find(item => item.id == data?.product?.unit)?.text}
+        </Box>
+        <Box className="cart-item__cell cart-item__price">
+          {data?.product?.unit == 0 ? `${data?.product?.minPurchase} kilogram`: `${data?.product?.minPurchase} phần`}
         </Box>
         <Box className="cart-item__cell">
           <Box className="cart-item__quantity">

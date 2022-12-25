@@ -1,19 +1,30 @@
 .cart {
     &>* {
         &:nth-child(1) {
-            width: 44.45%;
+            width: 35%;
             font-size: 14px;
         }
         &:nth-child(2) {
-            width: 21.11%;
+            width: 14.45%;
             font-size: 13px;
         }
-        &:nth-child(3),
+        &:nth-child(3) {
+            width: 14.45%;
+            font-size: 13px;
+        }
         &:nth-child(4) {
             width: 14.45%;
             font-size: 13px;
         }
         &:nth-child(5) {
+            width: 14.45%;
+            font-size: 13px;
+        }
+        &:nth-child(6) {
+            width: 14.45%;
+            font-size: 13px;
+        }
+        &:nth-child(7) {
             width: 3.33%;
             font-size: 13px;
         }

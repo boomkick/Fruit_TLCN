@@ -122,6 +122,8 @@ function ShoppingCart() {
                   {`Sản phẩm (${cart.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
+                <Stack>Đơn vị</Stack>
+                <Stack>Giá trị tối thiểu</Stack>
                 <Stack>Số lượng</Stack>
                 <Stack>Tạm tính</Stack>
                 <Stack>

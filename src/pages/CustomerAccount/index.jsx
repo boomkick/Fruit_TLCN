@@ -55,7 +55,9 @@ function CustomerAccount() {
   // const navigate = useNavigate();
   const location = useLocation();
   const tab = sidebarTab.find((item) => location.pathname === item.link);
-  console.log("12344343")
+  console.log("location.pathname: ", location.pathname);
+
+  console.log("tab: ", tab);
 
   const user = useSelector((state) => state.auth.user);
 
@@ -124,6 +126,7 @@ function CustomerAccount() {
               width: "25%",
               paddingLeft: "15px",
               paddingBottom: "30px",
+              flex: 1,
               ":last-child": { border: "none" },
             }}
           >
@@ -153,7 +156,7 @@ function CustomerAccount() {
             })}
           </Tabs>
 
-          <Box flex={1} mt="16px" pl="20px">
+          <Box flex={4} mt="16px" pl="20px">
             <Routes>
               <Route
                 path=""

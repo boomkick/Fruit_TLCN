@@ -111,13 +111,13 @@ function Header() {
         {/* Left Element */}
         <div className="element header__leftElement">
           <ul className="navbar">
-            <li>
+            <li className="header__leftElement-item">
               <Link
                 to={"/"}
               >
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
+                <Typography className="header__leftElement-main" sx={{ fontSize: "14px", fontWeight: "700", position: "relative", padding: "5px 30px 5px 10px"  }} >
                   Danh mục trái cây
-                  <ArrowDropDownOutlinedIcon sx={{paddingBottom: "6px"}}/>
+                  <ArrowDropDownOutlinedIcon sx={{position: "absolute", top: "2px"}}/>
                 </Typography>
                 {/* <FontAwesomeIcon icon="fa-light fa-chevron-down" /> */}
               </Link>
@@ -129,16 +129,13 @@ function Header() {
                     </li>    
                   )
                 })}
-                <li>
-                  <Link to={"/"}>Danh mục trái cây</Link>
-                </li>
               </ul>
             </li>
-            <li>
+            <li className="header__leftElement-item">
               <Link to={"/"}>
-                <Typography sx={{ fontSize: "14px", paddingBottom: "6px" }}>
+                <Typography className="header__leftElement-main" sx={{ fontSize: "14px", fontWeight: "700", position: "relative", padding: "5px 30px 5px 10px" }} >
                   Hỗ Trợ Khách Hàng
-                  <ArrowDropDownOutlinedIcon />
+                  <ArrowDropDownOutlinedIcon sx={{ position: "absolute", top: "2px" }}/>
                 </Typography>
               </Link>
               <ul className="subnav subnav__dropdown">
@@ -159,7 +156,7 @@ function Header() {
                 <>
                   <Stack>
                     <Button
-                      sx={{ color: "white", padding: "6px 0" }}
+                      sx={{ color: "#3D8B91", padding: "6px 0"}}
                       endIcon={<ArrowDropDownOutlinedIcon />}
                     >
                       <Typography
@@ -167,7 +164,8 @@ function Header() {
                         sx={{
                           fontSize: "14px",
                           textAlign: "start",
-                          color: "white",
+                          color: "#3D8B91",
+                          fontWeight: "700",
                         }}
                       >
                         {user.fullName}
@@ -205,8 +203,8 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Button onClick={openModalLogin} sx={{ color: "white" }}>
-                    <Typography sx={{ fontSize: "14px", color: "white" }}>
+                  <Button onClick={openModalLogin} sx={{color: "#3D8B91"}}>
+                    <Typography sx={{ fontSize: "14px" }}>
                       Đăng nhập
                     </Typography>
                   </Button>
@@ -236,7 +234,7 @@ function Header() {
                   data-focus="input.search-field"
                 >
                   <SearchIcon
-                    sx={{ fontSize: "20px", color: "#ffffff", margin: "1px" }}
+                    sx={{ fontSize: "25px", margin: "1px", color: "#3D8B91" }}
                   />
                 </Link>
               </div>

@@ -1,5 +1,9 @@
+@import "../../../src/style/abstract/variables";
 #header {
-  border-bottom: 1px solid #333;
+  // border-bottom: 1px solid #333;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  position: sticky;
+  top: 0;
 }
 
 
@@ -10,12 +14,14 @@
   position: relative;
   background-size: cover;
   background-position: 50% 0;
-  background-color: #1a2d36;
+  background-color: #ffffff;
   display: block;
 
 
   &__account {
     position: relative;
+    color: black;
+    cursor: pointer;
   }
 
   &__dropdown {
@@ -27,6 +33,7 @@
     background-color: #fff;
     right: -140%;
     border-radius: 4px;
+    box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
 
     &::before {
       position: absolute;
@@ -37,7 +44,7 @@
       border-right: 12px solid transparent;
       border-bottom: 12px solid #fff;
       top: -12px;
-      left: 50%;
+      left: 22%;
       transform: translateX(-50%);
     }
 
@@ -103,6 +110,12 @@
 
   &__leftElement {
     margin-right: auto;
+    &-item:hover &-main{
+        color: white;
+        background-color: $client-main-color-hover;
+        border-radius: 5px;
+        transition: ease 0.2s;
+    }
   }
 
   &__rightElement {
@@ -157,7 +170,7 @@
   }
 
   >li>a {
-    color: #ffffff;
+    color: black;
   }
 
   .subnav {
@@ -166,16 +179,15 @@
     background-color: #ffffff;
 
     a:hover {
-      background-color: #eaedef;
-      color: #2d525f;
+      color: $client-main-color-hover;
     }
 
     &__dropdown {
-      border: 2px solid #ddd;
-      box-shadow: 1px 1px 15px rgb(0 0 0 / 15%);
+      box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
       font-size: 100%;
       padding: 0;
       min-width: 230px;
+      border-radius: 2px;
     }
 
     &::after {

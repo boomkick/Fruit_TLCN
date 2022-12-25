@@ -1,3 +1,4 @@
+@import "../../../src/style/abstract/variables";
 #footer {
   font-size: 15px;
   border-bottom: 1px solid #333;
@@ -12,7 +13,7 @@
   position: relative;
   background-size: cover;
   background-position: 50% 0;
-  background-color:  #252121;
+  background-color:  #363636;
   list-style: none;
 
   &_title {
@@ -28,7 +29,7 @@
     display: block;
     flex: 1;
     height: 3px;
-    background-color: #f4ba36;
+    background-color: $client-main-color;
     width: 100%;
     max-width: 30px;
   }

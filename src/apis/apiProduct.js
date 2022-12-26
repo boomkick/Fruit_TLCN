@@ -40,6 +40,10 @@ const apiProduct = {
         const res = await axiosAdmin.get(`/Product?${search}`)
         return res.data;
     },
+    postProduct: async (params) => {
+        const res = await axiosAdmin.post(`/Product`, params);
+        return res.data;
+    },
     // saveOrder: async (params) => {
     //     const res = await axiosAdmin.post('/myorders',params)
     //     return res.data;

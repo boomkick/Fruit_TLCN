@@ -138,7 +138,7 @@ function Employee() {
           <Stack direction="row" justifyContent="space-between">
             <Stack sx={{ padding: "12px" }}>
               <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
-                Cập nhật nhà bán
+                Cập nhật thông tin
               </Typography>
               <Stack
                 direction="row"

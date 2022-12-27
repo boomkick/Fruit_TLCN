@@ -288,9 +288,10 @@ function Info() {
 
 
 
-          <Button variant="contained" sx={{ width: 200, alignSelf: "center" }}
+          <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
             onClick={onSaveChange}
           >
+            {/* style={{backgroundColor: "#3D8B91"}} */}
             {updating&&<Loading color="#fff"/>}Lưu thay đổi
           </Button>
         </Stack>
@@ -310,7 +311,7 @@ function Info() {
               <ListItemText primary="Số điện thoại" secondary={user.phone} />
             </Stack>
             <Link to="/my-account/edit-account/phone">
-              <Button size="small" variant="outlined">
+              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
                 Cập nhật
               </Button>
             </Link>
@@ -332,7 +333,7 @@ function Info() {
             </Stack>
 
             <Link to="/my-account/edit-account/email">
-              <Button size="small" variant="outlined">
+              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
                 Cập nhật
               </Button>
             </Link>
@@ -349,7 +350,7 @@ function Info() {
               <ListItemText primary="Đổi mật khẩu" />
             </Stack>
             <Link to="/my-account/edit-account/pass">
-              <Button size="small" variant="outlined">
+              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
                 Đổi mật khẩu
               </Button>
             </Link>

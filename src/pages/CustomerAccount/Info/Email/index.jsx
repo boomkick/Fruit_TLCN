@@ -77,6 +77,7 @@ function Email() {
             </Box>
 
             <Button
+              sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
               onClick={(event) => {
                 handleChange(event);
               }}

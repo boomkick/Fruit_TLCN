@@ -37,6 +37,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import LogoutIcon from '@mui/icons-material/Logout';
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
@@ -47,6 +48,7 @@ import CreateCategory from "./Category/CruCategory/index";
 import Order from "./Order";
 import Product from "./Product";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
+import logo_shop from "../../assets/img/logo.png"
 // import DetailProduct from "./Product/DetailProduct";
 // import Review from "./Review";
 // import User from "./User";
@@ -148,7 +150,7 @@ function Admin() {
           <Stack direction="row" justifyContent="space-between">
             <Stack sx={{ padding: "12px" }}>
               <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
-                Cập nhật nhà bán
+                Cập nhật thông tin
               </Typography>
               <Stack
                 direction="row"
@@ -191,7 +193,7 @@ function Admin() {
                   <Stack width="56px" height="56px">
                     <img
                       style={{ borderRadius: "8px" }}
-                      src="https://salt.tikicdn.com/ts/sellercenterFE/bb/d5/88/7898a8f9179435d5cf3f28bb3d99a82c.jpeg"
+                      src="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
                     />
                   </Stack>
                   <Stack sx={{ overflow: "auto" }}>
@@ -313,7 +315,7 @@ function Admin() {
                     borderRadius="50%"
                     alt=""
                     component="img"
-                    src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
+                    src={logo_shop}
                     onClick={handleClickAccount}
                     sx={{ width: "24px", height: "24px" }}
                   />
@@ -334,7 +336,7 @@ function Admin() {
                         <Box
                           borderRadius="50%"
                           component="img"
-                          src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
+                          src={logo_shop}
                           sx={{ width: "40px", height: "40px" }}
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
@@ -357,14 +359,21 @@ function Admin() {
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
                         >
-                          Hồ sơ nhà bán
+                          Thông tin các nhân
                         </Button>
                         <Button
                           variant="text"
                           startIcon={<DriveFileRenameOutlineOutlinedIcon />}
                           sx={{ color: "#333" }}
                         >
-                          Thay đổi mật khẩu
+                          Đổi mật khẩu
+                        </Button>
+                        <Button
+                          variant="text"
+                          startIcon={<LogoutIcon />}
+                          sx={{ color: "#333" }}
+                        >
+                          Đăng xuất
                         </Button>
                       </ListItem>
                     </Stack>
@@ -380,13 +389,14 @@ function Admin() {
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             <img
-              src="https://salt.tikicdn.com/cache/w32/ts/sellercenterFE/93/76/03/2a08fa4ae6a024a752fbba87d145bce8.png"
+              src={logo_shop}
               alt=""
+              style={{width: "50px"}}
             />
           </IconButton>
 
           <Typography sx={{ ml: "1rem", fontWeight: "bold" }} variant="h6">
-            Admin Center
+            Quản trị viên
           </Typography>
         </DrawerHeader>
 

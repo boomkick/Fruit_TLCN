@@ -75,7 +75,7 @@ function PhoneNumber() {
             <Box height="25px">
               <Typography color={fcolor} fontSize="14px" >{message}</Typography>
             </Box>
-            <Button variant="contained"
+            <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
               onClick={(event) => {
                 handleChange(event);
               }}>Lưu thay đổi</Button>

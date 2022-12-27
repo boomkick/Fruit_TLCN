@@ -119,6 +119,8 @@ function CreateDetailProduct(props) {
         setMinPurchase("")
         setDescription("")
         setStatus("")
+        setFiles([])
+        setReview([rev])
       })
       .catch(error => {
         toast.error("Thêm sản phẩm thất bại!")

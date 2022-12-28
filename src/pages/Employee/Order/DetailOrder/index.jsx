@@ -66,6 +66,7 @@ function DetailOrder() {
       .getCancelCart(id)
       .then((res) => {
         toast.success("Hủy đơn thành công");
+        navigate('/employee/order');
       })
       .catch((error) => {
         toast.error("Hủy đơn không thành công");

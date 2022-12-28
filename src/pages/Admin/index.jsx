@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
 import { styled } from "@mui/material/styles";
@@ -54,7 +54,8 @@ import logo_shop from "../../assets/img/logo.png"
 // import User from "./User";
 // import DetailUser from "./User/DetailUser";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutSuccess } from "../../slices/authSlice";
 
 const drawerWidth = 240;
 
@@ -243,6 +244,15 @@ function Admin() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  // Xử lí đăng xuất
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    navigate("/");
+  };
+
   return (
     <Stack direction="row">
       <CssBaseline />
@@ -281,7 +291,7 @@ function Admin() {
                 onClick={() => setOpenNotify(true)}
                 sx={{ border: "1px solid silver" }}
               >
-                <Badge color="info" badgeContent={3}>
+                <Badge color="info" badgeContent={6}>
                   <NotificationsNoneOutlinedIcon />
                 </Badge>
               </IconButton>
@@ -372,6 +382,7 @@ function Admin() {
                           variant="text"
                           startIcon={<LogoutIcon />}
                           sx={{ color: "#333" }}
+                          onClick={handleLogout}
                         >
                           Đăng xuất
                         </Button>

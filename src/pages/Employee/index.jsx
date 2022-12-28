@@ -134,13 +134,6 @@ function Employee() {
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutSuccess());
-    // const isPrivate =
-    //   privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
-    //     ? true
-    //     : false;
-    // if (isPrivate) {
-    //   navigate("/");
-    // }
     navigate("/");
   };
 
@@ -360,14 +353,14 @@ function Employee() {
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
                         >
-                          Hồ sơ nhân viên
+                          Thông tin cá nhân
                         </Button>
                         <Button
                           variant="text"
                           startIcon={<DriveFileRenameOutlineOutlinedIcon />}
                           sx={{ color: "#333" }}
                         >
-                          Thay đổi mật khẩu
+                          Đổi mật khẩu
                         </Button>
                         <Button
                           variant="text"
@@ -398,7 +391,7 @@ function Employee() {
           </IconButton>
 
           <Typography sx={{ ml: "2px", fontWeight: "bold" }} variant="h6">
-            Process Center
+            Nhân viên
           </Typography>
         </DrawerHeader>
 

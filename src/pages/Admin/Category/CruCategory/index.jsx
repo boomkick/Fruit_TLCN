@@ -23,82 +23,74 @@ import {
 function CrudCategory(props) {
     const [id, setId] = useState("");
     const [name, setName] = useState("")
-    const [parent, setParent] = useState("")
-    const [listType, setListType] = useState([]);
+    const [listCategory, setListCategory] = useState([]);
+    const [category, setCategory] = useState(null);
     const [edit, setEdit] = useState(props.edit);
     const params = useParams();
     const navigate = useNavigate();
+
     useEffect(() => {
-        const loaddata = () => {
+        const loaddata = async () => {
+            await apiCategory.showAllCategory()
+            .then((res) => {
+                setListCategory(res.data);
+            })
+            .catch((error) => {
+                setListCategory([]);
+            });
+
             if (edit === true) {
-                apiCategory.findCategoryById({ id: params.id })
-                    .then(res => {
-                        const category = res.data
-                        if (category) {
-                            setName(category.name)
-                            setParent(category.parent)
-                        }
-                        else {
-                            navigate("/admin/category")
-                            toast.error("Sản phẩm này không tồn tại!")
-                        }
-                    }
-                    )
-                setId(params.id)
+                setId(params?.id)
+                console.log("listCategory: ", listCategory);
+                setCategory(listCategory.find((item) => item.id == id))
+                console.log("category: ", category);
+                console.log("params: ", params);
             }
         }
         loaddata()
-    }, [edit])
+    }, [])
 
+    // useEffect(() => {
+    //     setCategory(listCategory.find((item) => item.id == id))
+    // }, [edit])
     useEffect(() => {
-        const getData = async () => {
-            apiCategory.showAllCategory()
-                .then(res => {
-                    setListType(res.data.listCategory);
-                })
-        };
-        getData();
+        if (props.edit) {
+            setEdit(props.edit)
+        }
     }, []);
 
-    const handleChangeType = (event) => {
-        setParent(event.target.value);
-    };
     const handleUpdate = () => {
         const params = {
-            "id": id,
-            "name": name,
-            "parent": parent
+            "name": name
         }
-        if (!(name && parent)) {
+        if (!(name && id)) {
             toast.warning("Vui lòng nhập đầy đủ thông tin !!");
             return
         }    
-        apiCategory.updateCategory(params)
+        apiCategory.putCategory(params, id)
             .then(res => {
                 toast.success("Cập nhật thành công")
             })
             .catch(error => {
-                toast.error("Cập nhật thất bại!")
+                toast.error("Tên danh mục đã tồn tại")
             })
     }
     const handleSave = () => {
         const params = {
-            "name": name,
-            "parent": parent
+            "name": name
         }
-        if (!(name && parent)) {
+        if (!(name)) {
             toast.warning("Vui lòng nhập đầy đủ thông tin !!");
             return
         }
         else {
-            apiCategory.insertCategory(params)
+            apiCategory.postCategory(params)
                 .then(res => {
                     toast.success("Thêm sản phẩm thành công")
                     setName("")
-                    setParent("")
                 })
                 .catch(error => {
-                    toast.error("Thêm sản phẩm thất bại!")
+                toast.error("Tên danh mục đã tồn tại")
                 })
         }
     }
@@ -106,25 +98,8 @@ function CrudCategory(props) {
         <Box>
             <Stack p={3} justifyContent="center" sx={{ width: "700px" }} spacing={3}>
                 <Stack direction="row" p={2} >
-                    <Typography sx={{ width: "200px" }}>Danh mục cha</Typography>
-                    <FormControl className="create-address__input" sx={{ flex: 1 }}>
-                        <Select
-                            size="small"
-                            labelId="demo-simple-select-helper-label"
-                            id="demo-simple-select-helper"
-                            value={parent}
-                            onChange={handleChangeType}
-                            input={<InputCustom placeholder="Chọn Loại" />}
-                        >
-                            {
-                                listType.map(item => item.name !== name && <MenuItem value={item.id} >{item.name}</MenuItem>)
-                            }
-                        </Select>
-                    </FormControl>
-                </Stack>
-                <Stack direction="row" p={2} >
                     <Typography sx={{ width: "200px" }}>Tên danh mục</Typography>
-                    <TextField value={name} onChange={(event) => {
+                    <TextField value={category?.name} onChange={(event) => {
                         setName(event.target.value)
                     }} size="small" id="outlined-basic" variant="outlined" sx={{ flex: 1 }} />
                 </Stack>

@@ -2,23 +2,19 @@ import {  axiosClient, axiosClientWithToken } from "./axiosClient";
 
 const apiCategory = {
     showAllCategory: async (params) => {
-        const res = await axiosClient.get('/Category', params)
+        const res = await axiosClientWithToken.get('/Category', params)
         return res.data;
     },
     deleteCategory: async (params) => {
-        const res = await axiosClientWithToken.delete(`/admin/category/${params.id}`)
+        const res = await axiosClientWithToken.delete(`/Category/${params.id}`)
         return res.data;
     },
-    findCategoryById: async (params) => {
-        const res = await axiosClientWithToken.get(`/admin/category/${params.id}`)
+    postCategory: async (params) => {
+        const res = await axiosClientWithToken.post(`/Category/insert`,params)
         return res.data;
     },
-    insertCategory: async (params) => {
-        const res = await axiosClientWithToken.post(`/admin/category/insert`,params)
-        return res.data;
-    },
-    updateCategory: async (params) => {
-        const res = await axiosClientWithToken.put(`/admin/category/update/${params.id}`)
+    putCategory: async (params, id) => {
+        const res = await axiosClientWithToken.put(`/Category/${id}`, params)
         return res.data;
     }
 }

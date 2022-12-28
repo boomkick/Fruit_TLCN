@@ -18,7 +18,8 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Category() {
   const [query, setQuery] = useState("");
@@ -30,18 +31,13 @@ function Category() {
     const getData = async () => {
       apiCategory.showAllCategory()
         .then(res => {
-          setCategory(res.data.listCategory);
+          setCategory(res.data);
         })
     };
     getData();
   }, []);
   const handleDelete = () => {
-    const newcategory = category.filter(item => {
-      return itemdelete.id !== item.id
-    }
-    )
-    setCategory(newcategory)
-    closeDialogDeleteAll()
+    
     apiCategory.deleteCategory({ id: itemdelete.id })
       .then(res => {
         toast.success("Xóa thành công")
@@ -109,14 +105,26 @@ function Category() {
                     {item.name}
                   </TableCell>
                   {/* <TableCell align="left">{item.parent}</TableCell> */}
-                  <TableCell>
-                    <Stack spacing={1} justifyContent="center" py={1}>
+                  <TableCell >
+                    <Stack spacing={1} justifyContent="center" py={1} style={{display: "flex", flexDirection: "row"}}>
                       <Link to={`edit/${item.id}`} >
-                        <Button sx={{ flex: 1 }} variant="contained" className="btn__update">Sửa</Button>
+                        <EditIcon 
+                        style={{cursor: "pointer"}} 
+                        sx={{
+                          "&:hover": { color: "#FFFFFF", backgroundColor: "green" }, 
+                          transition: "ease 0.2s",
+                          borderRadius: "5px"
+                        }}/>
                       </Link>
-                      <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
+                      {/* <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
                         Xóa
-                      </Button>
+                      </Button> */}
+                      <DeleteIcon onClick={() => openDialogDeleteAll(item)} variant="outlined" style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}} 
+                      sx={{
+                        "&:hover": { color: "#FFFFFF", backgroundColor: "red" }, 
+                        transition: "ease 1s",
+                        borderRadius: "5px",
+                      }}/>
                     </Stack>
                   </TableCell>
                 </TableRow>

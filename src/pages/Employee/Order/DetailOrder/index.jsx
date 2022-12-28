@@ -80,7 +80,7 @@ function DetailOrder() {
           Chi tiết đơn hàng {order?.id}
         </Typography>
         <Typography sx={{ fontSize: "13px", textAlign: "end" }}>
-          Ngày đặt hàng: {order?.createdAt}
+          Ngày đặt hàng: {order?.createdDate}
         </Typography>
       </Stack>
       <Stack
@@ -114,7 +114,7 @@ function DetailOrder() {
               <img
                 width="56px"
                 height="16px"
-                src="https://salt.tikicdn.com/ts/upload/2a/47/46/0e038f5927f3af308b4500e5b243bcf6.png"
+                src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Slogan-VN.png"
                 alt=""
               />
               {order?.shipping ? order?.shipping : "Giao hàng nhanh"} 
@@ -127,8 +127,7 @@ function DetailOrder() {
           <Box p={1.25} className="detailOrder__content">
             <Typography>{paymentMethod.find((item) => item.id == order?.bill?.paymentMethod)?.text}</Typography>
             <Typography style={{ color: "#fda223" }}>
-              Thanh toán thất bại. Vui lòng thanh toán lại hoặc chọn phương thức
-              thanh toán khác
+              {order?.bill?.purchaseDate ? order?.bill?.purchaseDate : "Chưa thanh toán"}
             </Typography>
           </Box>
         </Stack>

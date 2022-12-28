@@ -11,7 +11,7 @@ export const sidebar = [
     },
     {
         id: 2,
-        text: 'Duyệt Đơn hàng',
+        text: 'Xử lí đơn hàng',
         icon: ShoppingCartOutlinedIcon,
         link: '/employee/order'
     },

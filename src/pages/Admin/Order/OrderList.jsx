@@ -25,7 +25,6 @@ import { styled } from '@mui/material/styles';
 import DetailOrder from "./DetailOrder";
 
 const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"]
-const listOrderDate = ["Hôm nay", "7 ngày qua", "30 ngày qua", "Toàn thời gian"]
 const items = [
     { id: 0, label: 'Tất cả'},
     { id: 2, label: 'Đang xử lý'},
@@ -144,12 +143,12 @@ function OrderList() {
                     </Select>
                 </Stack> */}
             </Stack>
-
+            {/* 
             <Stack direction="row" p={2} spacing="16px">
                 <Button variant="outlined" borderRadius="16px">Chưa in phiếu</Button>
                 <Button variant="outlined"  borderRadius="16px">Lấy hàng thất bại</Button>
                 <Button variant="outlined" borderRadius="16px">Giao hàng thất bại</Button>
-            </Stack>
+            </Stack> */}
 
             <Table
                 className="tableCategory"

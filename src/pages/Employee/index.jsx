@@ -1,15 +1,11 @@
-
-
 import * as React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { sidebar } from "../../constraints/Employee";
 import { Notifies } from "../../constraints/AdminNotify";
 import { styled } from "@mui/material/styles";
-import "./Admin.scss";
-
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
-import "./Admin.scss";
+import "./Employee.scss";
 import {
   Box,
   Toolbar,
@@ -40,9 +36,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 // import Dashboard from "./Dashboard";
 import Order from "./Order";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import logo_shop from "../../assets/img/logo.png"
+import { logoutSuccess } from "../../slices/authSlice";
 
 const drawerWidth = 240;
 
@@ -131,6 +129,21 @@ function Employee() {
     setOpenNotify(false);
   };
 
+  // Xử lí đăng xuất
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(logoutSuccess());
+    // const isPrivate =
+    //   privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
+    //     ? true
+    //     : false;
+    // if (isPrivate) {
+    //   navigate("/");
+    // }
+    navigate("/");
+  };
+
   const formNotify = () => {
     return (
       <Box sx={{ zIndex: "10", width: "400px", mt: "5rem" }}>
@@ -181,7 +194,7 @@ function Employee() {
                   <Stack width="56px" height="56px">
                     <img
                       style={{ borderRadius: "8px" }}
-                      src={logo_shop}
+                      src="https://img.freepik.com/premium-vector/female-user-profile-avatar-is-woman-character-screen-saver-with-emotions_505620-617.jpg?w=2000"
                     />
                   </Stack>
                   <Stack sx={{ overflow: "auto" }}>
@@ -269,7 +282,7 @@ function Employee() {
                 onClick={() => setOpenNotify(true)}
                 sx={{ border: "1px solid silver" }}
               >
-                <Badge color="info" badgeContent={3}>
+                <Badge color="info" badgeContent={6}>
                   <NotificationsNoneOutlinedIcon />
                 </Badge>
               </IconButton>
@@ -303,7 +316,7 @@ function Employee() {
                     borderRadius="50%"
                     alt=""
                     component="img"
-                    src={logo_shop}
+                    src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
                     onClick={handleClickAccount}
                     sx={{ width: "24px", height: "24px" }}
                   />
@@ -315,7 +328,7 @@ function Employee() {
                       fontWeight: "Light",
                     }}
                   >
-                    {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                    {user.firstName + " " + user.lastName}
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -324,12 +337,12 @@ function Employee() {
                         <Box
                           borderRadius="50%"
                           component="img"
-                          src={logo_shop}
+                          src="https://www.shareicon.net/data/512x512/2016/08/05/806962_user_512x512.png"
                           sx={{ width: "40px", height: "40px" }}
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                            {user.firstName + " " + user.lastName}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -355,6 +368,14 @@ function Employee() {
                           sx={{ color: "#333" }}
                         >
                           Thay đổi mật khẩu
+                        </Button>
+                        <Button
+                          variant="text"
+                          startIcon={<LogoutIcon />}
+                          sx={{ color: "#333" }}
+                          onClick={handleLogout}
+                        >
+                          Đăng xuất
                         </Button>
                       </ListItem>
                     </Stack>

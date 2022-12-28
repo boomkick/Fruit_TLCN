@@ -6,8 +6,8 @@ import OrderList from "./OrderList";
 function Order() {
     return (<>
         <Routes>
-            <Route path='/' element={<OrderList />} />
-            <Route path="detail/:id" element={<DetailOrder />} />
+            <Route path='/*' element={<OrderList />} />
+            <Route path='detail/:id' element={<DetailOrder />} />
         </Routes>
     </>
     )

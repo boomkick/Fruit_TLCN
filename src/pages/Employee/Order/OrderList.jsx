@@ -23,9 +23,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import DetailOrder from "./DetailOrder";
+import { cartStatus } from "../../../constraints/Cart";
 
-const listStatus = ["Mã đơn hàng", "SKU", "Thông tin khách hàng"]
-const listOrderDate = ["Hôm nay", "7 ngày qua", "30 ngày qua", "Toàn thời gian"]
 const items = [
     { id: 0, label: 'Đang xử lý'},
     { id: 1, label: 'Đã vận chuyển'},
@@ -36,36 +35,33 @@ const items = [
 function OrderList() {
     const [selected, setSelected] = React.useState(0)
     const [orders, setOrders] = useState([]);
-    const [page, setPage] = useState(1);
-    const [totalPage, setTotalPage] = useState(1);
+    const [maxPage, setMaxPage] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
     
     const size =6;
 
     useEffect(() => {
         const getData = async () => {
-          let param = {
-            _page: page,
-            _limit: size,
-            _sort: 'createdAt',
-            _order :'desc',
-            };
-            if (selected != 0) {
-                param["type.id"]=selected;
+            let param = {
+                page: currentPage,
+                pageSize: 8,
+              };
+            if (selected != 3 ) {
+                param["CartStatus"]=selected;
             }
             setOrders([])
-        //   apiCart.getOrders(param)
-        //     .then(response=>{
-        //     setOrders(response.data);
-        //     setTotalPage(Math.ceil(response.pagination._totalRows / size))        
-        //     })
-        //     .catch(setOrders([]))
-            
+            apiCart.getAllOrders(param)
+                .then(response=>{
+                setOrders(response.data.carts);
+                setMaxPage(response.data.maxPage);
+                })
+                .catch(setOrders([]))
         };
         getData();
-      }, [page, selected]);
+      }, [currentPage, selected]);
 
-    const handleDate = (timestamp) => {
-        let date = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(timestamp)
+    const handleDate = (stringDate) => {
+        let date = stringDate ? stringDate.slice(0, 10) : "Không tồn tại"
         return date ;
     }
 
@@ -81,19 +77,17 @@ function OrderList() {
     const onChangeOrderDate = (e) => {
         setOrderDate(e.target.value)
     }
-    const handleChangePage = (event, newValue) => {
-        setPage(newValue);
+    const handleChangeCurrentPage = (event, newValue) => {
+        setCurrentPage(newValue);
       };
     return (<>
     
         <Stack p={3} bgcolor="#fff">
             <Typography fontSize="26px">Danh sách đơn hàng</Typography>
             <Stack direction="row" spacing="2rem" p={2} alignItems="center">
-                <Typography>Vui lòng xem hướng dẫn và gửi góp ý:</Typography>
+                <Typography>Xem hướng dẫn xử lí đơn hàng theo đúng quy trình ở đây:</Typography>
                 <a href="https://hocvien.tiki.vn/faq/gioi-thieu-giao-dien-quan-ly-don-hang-moi/">
                     <Typography color= "#1890FF" fontSize="14px">Hướng dẫn xử lý đơn hàng</Typography></a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdbp82PL58iyly_85SGcml8NcDYQEt1dK97QOJMZedVU7aVMA/viewform">
-                    <Typography color="#1890FF" fontSize="14px">Gửi góp ý</Typography></a>
             </Stack>
             <Stack direction="row" spacing={0.5} p={2}>
                 {
@@ -106,19 +100,10 @@ function OrderList() {
                 }
             </Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
-                <Stack width="256px">
-                    <Select
-                        value={status}
-                        onChange={onChangeStatus}
-                        input={<BootstrapInput />}
-                    >{
-                            [0, 1, 2].map(item =>
-                                <MenuItem value={item}>{listStatus[item]}</MenuItem>)
-                        }
-                    </Select>
+                <Stack width="130px">
+                    <Button variant="contained" style={{padding: "7px 10px"}}>Bộ lọc</Button>
                 </Stack>
-
-
+              
                 <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
                     <TextField
                         id="outlined-basic"
@@ -131,23 +116,6 @@ function OrderList() {
                         <SearchIcon sx={{ fontSize: "28px" }} />
                     </span>
                 </Stack>
-                {/* <Stack width="256px">
-                    <Select
-                        value={orderDate}
-                        onChange={onChangeOrderDate}
-                        input={<BootstrapInput />}
-                    >{
-                            [0, 1, 2, 3].map(item =>
-                                <MenuItem value={item}>{listOrderDate[item]}</MenuItem>)
-                        }
-                    </Select>
-                </Stack> */}
-            </Stack>
-
-            <Stack direction="row" p={2} spacing="16px">
-                <Button variant="outlined" borderRadius="16px">Chưa in phiếu</Button>
-                <Button variant="outlined"  borderRadius="16px">Lấy hàng thất bại</Button>
-                <Button variant="outlined" borderRadius="16px">Giao hàng thất bại</Button>
             </Stack>
 
             <Table
@@ -159,30 +127,32 @@ function OrderList() {
                 <TableHead>
                     <TableRow>
                         <TableCell><Checkbox /></TableCell>
-                        <TableCell sx={{ width: "20%", top: "64px" }}>Mã đơn hàng/Ngày đặt hàng</TableCell>
+                        <TableCell sx={{ width: "22%", top: "64px" }}>Mã đơn hàng/Ngày đặt hàng</TableCell>
                         <TableCell sx={{ width: "15%", top: "64px" }}>Trạng thái&nbsp;</TableCell>
-                        <TableCell align="center" sx={{ width: "20%", top: "64px" }}>Ngày xác nhận/hạn xác nhận&nbsp;</TableCell>
-                        <TableCell align="center" sx={{ width: "20%", top: "64px" }}>Giá trị đơn hàng&nbsp;</TableCell>
-                        <TableCell sx={{ width: "15%", top: "64px" }}>Nhãn đơn hàng&nbsp;</TableCell>
+                        <TableCell align="center" sx={{ width: "20%", top: "64px" }}>Ngày xác nhận&nbsp;</TableCell>
+                        <TableCell align="center" sx={{ width: "18%", top: "64px" }}>Giá trị đơn hàng&nbsp;</TableCell>
+                        <TableCell sx={{ width: "15%", top: "64px" }}>Tên người nhận&nbsp;</TableCell>
                         <TableCell sx={{ width: "10%", top: "64px" }}>Thao tác&nbsp;</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {orders.map((row) => (
+                    {orders.map((item) => (
                         <TableRow
-                            key={row.id}
+                            key={item.id}
                             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                         >
                             <TableCell><Checkbox /></TableCell>
-                            <TableCell component="th" scope="row">{row.id} <br/>/ {handleDate(row.createdAt)}</TableCell>
-                            <TableCell align="left">{row.type.name}</TableCell>
-                            <TableCell align="center">{handleDate(row.updatedAt)}</TableCell>
-                            <TableCell align="center">{row.totalPrice}</TableCell>
-                            <TableCell align="left">{row.type.name}</TableCell>
+                            <TableCell component="th" scope="row">{item.id} / {handleDate(item.createdDate)}</TableCell>
+                            <TableCell align="left">{cartStatus.find((e) => e.id == item.status)?.text}</TableCell>
+                            <TableCell align="center">{item?.bill?.purchaseDate ? item?.bill?.purchaseDate : "Chưa xác nhận"}</TableCell>
+                            <TableCell align="center">{item?.bill?.total}</TableCell>
+                            <TableCell align="left">{item?.name}</TableCell>
                             <TableCell align="center">
                                 <Stack spacing={1} justifyContent="center" py={1}>
-                                    <Link to={`detail/${row.id}`}>
-                                        <Button sx={{ width: "100px" }} variant="outlined" >Xem chi tiết</Button>
+                                    <Link to={`detail/${item.id}`}>
+                                        <Button sx={{ width: "100px" }} variant="outlined" >
+                                            {selected != 0 ? "Xem chi tiết" : "Xử lí đơn hàng"}
+                                        </Button>
                                     </Link>
                                 </Stack>
                             </TableCell>
@@ -190,8 +160,8 @@ function OrderList() {
                     ))}
                 </TableBody>
             </Table>
-            {totalPage > 1 ? <Stack spacing={2} mt="10px">
-                <Pagination count={totalPage} page={page} onChange={handleChangePage} color="primary"/>
+            {maxPage > 1 ? <Stack spacing={2} mt="10px">
+                <Pagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
             </Stack > : <></>}
         </Stack>
         <Routes>

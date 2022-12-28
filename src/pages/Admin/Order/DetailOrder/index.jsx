@@ -11,15 +11,14 @@ import apiNotify from "../../../../apis/apiNotify";
 function DetailOrder() {
   const id = useParams().id;
   const [order, setOrder] = useState(null);
+  const [listOrder, setListOrder] = useState([]);
   useEffect(() => {
     const getData = () => {
-      let params = {
-        id,
-      };
       apiCart
-        .getOrders(params)
+        .getAllOrders()
         .then((res) => {
-          setOrder(res[0]);
+          setListOrder(res.data.carts);
+          setOrder(listOrder.find((item) => item.id == id))
         })
         .catch((error) => {
           setOrder(null);

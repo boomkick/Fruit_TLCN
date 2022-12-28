@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { axiosClient, axiosClientWithToken } from "./axiosClient";
+import { axiosAdmin, axiosClient, axiosClientWithToken } from "./axiosClient";
 import queryString from 'query-string';
 const baseURL='https://localhost:7039'
 
@@ -44,6 +44,24 @@ const apiCart = {
     },
     getOrders: async () => {
         const res = await axiosClientWithToken.get('/Cart/Carthistory')
+        return res.data;
+    },
+    getAllOrders: async (params) => {
+        let search = ""
+        for (let item in params) {
+            search = search + item.toString() + "=" + params[item] + "&";
+        }
+        search = search.slice(0, -1);
+        console.log("search", search)
+        const res = await axiosClientWithToken.get(`/Cart/processCart?${search}`)
+        return res.data;
+    },
+    putProcessCart: async (params, id) => {
+        const res = await axiosClientWithToken.put(`/Cart/ProcessCart/${id}`,params)
+        return res.data;
+    },
+    getCancelCart: async (id) => {
+        const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;
     },
 }

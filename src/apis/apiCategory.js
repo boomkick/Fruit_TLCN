@@ -10,7 +10,7 @@ const apiCategory = {
         return res.data;
     },
     postCategory: async (params) => {
-        const res = await axiosClientWithToken.post(`/Category/insert`,params)
+        const res = await axiosClientWithToken.post(`/Category/`,params)
         return res.data;
     },
     putCategory: async (params, id) => {

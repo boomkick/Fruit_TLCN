@@ -43,13 +43,6 @@ function Header() {
     dispatch(clearCoupon());
     dispatch(clearPaymentMethod());
     dispatch(logoutSuccess());
-    // const isPrivate =
-    //   privatePath.findIndex((e) => location.pathname.includes(e)) >= 0
-    //     ? true
-    //     : false;
-    // if (isPrivate) {
-    //   navigate("/");
-    // }
     navigate("/");
   };
 

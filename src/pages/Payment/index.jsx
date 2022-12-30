@@ -60,6 +60,8 @@ function Payment() {
   const [openAddress, setOpenAddress] = useState(false);
   const handleOpenAddress = useCallback(() => setOpenAddress(true), []);
   const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
+  const [linkMomo, setLinkMomo] = useState(null)
+
   useEffect(() => {
     const getAddresses = () => {
       console.log("paymentAddress:", paymentAddress);
@@ -143,7 +145,8 @@ function Payment() {
         .then((res) => {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
-          navigate("/my-account/orders");
+          // navigate("/my-account/orders");
+          setLinkMomo(res?.data?.paymentUrl)
         })
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");
@@ -168,6 +171,9 @@ function Payment() {
         });
     }
   };
+  const handleOnlickMomo = () => {
+    navigate("/my-account/orders");
+  }
 
   return (
     <>
@@ -402,6 +408,13 @@ function Payment() {
               >
                 {loading && <Loading />} Mua hàng
               </button>
+              {linkMomo ? (
+                <Typography
+                  style={{ fontSize: "16px", fontWeight: 500, color: "black", marginBottom: "10px", backgroundColor: "#FFFFFF", padding: "5px", display: "flex" }}
+                >
+                  Vui lòng thành toán qua: <a href={linkMomo} onClick={handleOnlickMomo} target="_blank"  style={{color: "#3D8B91", fontWeight:"700", fontSize: "16px", paddingTop: "2px", marginLeft: "10px"}}>Link</a>
+                </Typography>
+              ): <></>}
             </Box>
           </Grid>
         </Grid>

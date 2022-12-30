@@ -85,13 +85,13 @@ function DetailOrder() {
                             <Stack key={item} direction="row" className="detailOrder-Table__row">
                                 <Stack direction="row" className="orderDetail__item">
                                     <Box mr={1.875}>
-                                        <img height="60px" width="60px" src={item.product.image.url} alt="" />
+                                        <img height="60px" width="60px" src={item?.product?.image?.url} alt="" />
                                     </Box>
                                     <Stack spacing={1.5}>
-                                        <Link to={item.product.id ? `/product-detail/${item.product.id}`:''}>
-                                            <Typography fontSize="14px" >{item.product.name}</Typography>
+                                        <Link to={item?.product?.id ? `/product-detail/${item?.product?.id}`:''}>
+                                            <Typography fontSize="14px" >{item?.product?.name}</Typography>
                                         </Link>
-                                        <Typography fontSize="13px">ID product in bill: {item.id}</Typography>
+                                        <Typography fontSize="13px">ID product in bill: {item?.id}</Typography>
                                         <Stack direction="row" spacing={1}>
                                             <Button variant="outlined" sx={{ fontSize: "12px", width: "102px", height: "30px", padding: 0 }}>Viết nhận xét</Button>
                                         </Stack>

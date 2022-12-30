@@ -44,18 +44,6 @@ const apiProduct = {
         const res = await axiosAdmin.post(`/Product`, params);
         return res.data;
     },
-    // saveOrder: async (params) => {
-    //     const res = await axiosAdmin.post('/myorders',params)
-    //     return res.data;
-    // },
-    // changeTypeOrder: async (params, id) => {
-    //     const res = await axiosAdmin.patch(`/myorders/${id}`,params)
-    //     return res.data;
-    // },
-    // makePaymentMomo: async (params) => {
-    //     const res = await axiosAdminWithPayment.post('/create-payment',params)
-    //     return res.data;
-    // },
     
 }
 export default apiProduct;

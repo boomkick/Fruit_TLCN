@@ -36,8 +36,14 @@ function Category() {
     };
     getData();
   }, []);
+
   const handleDelete = () => {
-    
+    const newcategory = category.filter(item => {
+      return itemdelete.id !== item.id
+    }
+    )
+    setCategory(newcategory)
+    closeDialogDeleteAll()
     apiCategory.deleteCategory({ id: itemdelete.id })
       .then(res => {
         toast.success("Xóa thành công")

@@ -70,6 +70,7 @@ function CrudCategory(props) {
         apiCategory.putCategory(params, id)
             .then(res => {
                 toast.success("Cập nhật thành công")
+                navigate("/admin/category")
             })
             .catch(error => {
                 toast.error("Tên danh mục đã tồn tại")

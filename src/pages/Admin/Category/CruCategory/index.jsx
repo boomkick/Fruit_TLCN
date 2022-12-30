@@ -87,7 +87,7 @@ function CrudCategory(props) {
         else {
             apiCategory.postCategory(params)
                 .then(res => {
-                    toast.success("Thêm sản phẩm thành công")
+                    toast.success("Thêm danh mục thành công")
                     setName("")
                 })
                 .catch(error => {

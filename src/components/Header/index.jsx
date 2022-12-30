@@ -196,6 +196,24 @@ function Header() {
                       Tài khoản của tôi
                     </Link>
 
+                    {user?.role == 1 ? (<>
+                      <Link
+                      to={"/employee"}
+                      onClick={() => replacePage("/employee")}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Trang nhân viên
+                    </Link>
+                    </>) : user.role == 2 ?  (<>
+                      <Link
+                      to={"/admin"}
+                      onClick={() => replacePage("/admin")}
+                      style={{ padding: "8px 20px" }}
+                    >
+                      Trang quản trị viên
+                    </Link>
+                    </>) : <></>}
+
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản
                     </Box>
@@ -276,5 +294,8 @@ function Header() {
     </header>
   );
 }
+const replacePage = (param) => {
+  window.location.replace(param);
+};
 
 export default Header;

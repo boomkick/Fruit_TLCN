@@ -23,19 +23,13 @@ import { productUnit, productStatus } from "../../constraints/Product";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import { useState } from "react";
 
 function DetailProduct({ data }) {
     const user = useSelector((state) => state.auth.user);
+    const [productImage, setProductImage] = useState(data?.productImages[0]?.url);
     const status = productStatus.find((item) => item.id == data?.status)
     const [quantity, setQuantity] = React.useState(1);
-
-    const list_cities = () => [
-    { label: 'Ho Chi Minh', year: 1994 },
-    { label: 'Ha Noi', year: 1972 },
-    { label: 'Da Nang', year: 1974 },
-    { label: 'Can Tho', year: 2008 },
-    { label: 'Hai Phong', year: 1957 },
-  ]
 
   async function handleClickAddItem() {
     let param = {
@@ -77,16 +71,21 @@ function DetailProduct({ data }) {
     }
   }
 
+  // Xử lí chọn hiển thị khi chọn hình ảnh
+  const handleChangeImage = (event) => {
+    setProductImage(event.target.src);
+  }
+
   return (
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
                     <div className="detailProduct__primary-img">
-                        <img alt="" src={data?.productImages[0]?.url}></img>
+                        <img alt="" src={productImage}></img>
                     </div>
                     <div className="detailProduct__list-img">
                         {
                             data?.productImages.length > 0 ? data?.productImages.map((item) => (
-                                <img className="detailProduct__item-img" alt="" src={item?.url}></img>
+                                <img className="detailProduct__item-img" alt="" src={item?.url} onClick={handleChangeImage}></img>
                             )) : <></>
                         }
                     </div>
@@ -134,11 +133,13 @@ function DetailProduct({ data }) {
                         </div> */}
                         <div className="detailProduct__info-general">
                             <div>
-                                <p className="detailProduct__info-general-text">Đơn vị :</p>
-                                <p className="detailProduct__info-general-text">Giá trị tối thiểu :</p>
-                                <p className="detailProduct__info-general-text">Mô tả :</p>
+                                <p className="detailProduct__info-general-text">Số lượng:</p>
+                                <p className="detailProduct__info-general-text">Đơn vị:</p>
+                                <p className="detailProduct__info-general-text">Giá trị tối thiểu:</p>
+                                <p className="detailProduct__info-general-text">Mô tả:</p>
                             </div>
                             <div >
+                                <p className="detailProduct__info-general-text">{data?.quantity + " sản phẩm"}</p>
                                 <p className="detailProduct__info-general-text">{productUnit.find(item => item.id == data?.unit)?.text}</p>
                                 <p className="detailProduct__info-general-text">{data?.unit == 0 ? `${data?.minPurchase} kilogram`: `${data?.minPurchase} phần`}</p>
                                 <p className="detailProduct__info-general-text">{data?.description}</p>

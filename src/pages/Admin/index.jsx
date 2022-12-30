@@ -127,6 +127,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Admin() {
+  React.useEffect(() => {
+    // window.location.reload();
+  }, [])
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);

@@ -41,6 +41,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 import logo_shop from "../../assets/img/logo.png"
 import { logoutSuccess } from "../../slices/authSlice";
+import { useEffect } from "react";
 
 const drawerWidth = 240;
 

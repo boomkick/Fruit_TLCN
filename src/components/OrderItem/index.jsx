@@ -25,7 +25,7 @@ function OrderItem(props) {
       </Stack>
       {order?.cartDetails.slice(0,2).map((item) => (
         <Stack
-          key={item.id}
+          key={item?.id}
           className="orderItem__product"
           direction="row"
           justifyContent="space-between"
@@ -35,22 +35,22 @@ function OrderItem(props) {
             direction="row"
             justifyContent="space-between"
           >
-            <img alt="" src={item.product.image.url} />
+            <img alt="" src={item?.product?.image?.url} />
             <span className="orderItem__quantity">
-              x{item.quantity}
+              x{item?.quantity}
             </span>
           </Stack>
           <Stack flex={1} mx="12px">
-          <Link to={item.product.id ?`/product-detail/${item?.product?.id}`:''}>
+          <Link to={item?.product?.id ?`/product-detail/${item?.product?.id}`:''}>
             
             <Typography className="text-overflow-2-lines" fontSize="13px">
-              {item.product.name}
+              {item?.product?.name}
             </Typography>
           </Link>
           </Stack>
           <Stack>
             <Typography className="orderItem__price">
-              {numWithCommas(item.price)} ₫
+              {numWithCommas(item?.price)} ₫
             </Typography>
           </Stack>
         </Stack>
@@ -64,12 +64,12 @@ function OrderItem(props) {
             component="span"
             fontSize="17px" fontWeight='500' color="#333"
           >
-            {numWithCommas(order.bill.total)} ₫
+            {numWithCommas(order?.bill?.total || 0)} ₫
           </Typography>
         </Box>
         <Box className="orderItem__groupbtn">
           {/* <Button variant="outlined">Mua lại</Button> */}
-          <Link to={`/my-account/orders/detail/${order.id}`}><Button variant="outlined">Xem chi tiết</Button>
+          <Link to={`/my-account/orders/detail/${order?.id}`}><Button variant="outlined">Xem chi tiết</Button>
           </Link>
           
         </Box>

@@ -56,6 +56,7 @@ import logo_shop from "../../assets/img/logo.png"
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../slices/authSlice";
+import UpdateDetailProduct from "./Product/UpdateDetailProduct";
 
 const drawerWidth = 240;
 
@@ -470,7 +471,7 @@ function Admin() {
               <Routes>
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
-                <Route path="detail/:id" element={<CreateDetailProduct />} />
+                <Route path="detail/:id" element={<UpdateDetailProduct />} />
               </Routes>
             }
           />

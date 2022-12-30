@@ -2,7 +2,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 // import apiBrand from "../../../../apis/apiBrand";
-import "./CreateDetailProduct.scss";
+import "./UpdateDetailProduct.scss";
 import {
   Stack,
   Button,
@@ -23,12 +23,22 @@ import { useParams,useNavigate } from "react-router-dom";
 import { productUnit, productStatus } from "../../../../constraints/Product";
 import apiCategory from "../../../../apis/apiCategory"
 import apiProduct from "../../../../apis/apiProduct"
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
+class ProductImageEdit {
+  constructor(id, url, editStatus, file) {
+    this.id = id,
+    this.url = url,
+    this.editStatus = editStatus,
+    this.file = file
+  }
+}
 
-function CreateDetailProduct(props) {
+function UpdateDetailProduct() {
+  const {id} = useParams()
   const [review, setReview] = React.useState([rev])
   const [files, setFiles] = React.useState([])
-  const [edit, setEdit] = useState(props.edit)
   const [product, setProduct] = useState({})
   const [name, setName] = useState("")
   const [category, setCategory] = useState("")
@@ -40,6 +50,9 @@ function CreateDetailProduct(props) {
   const [description, setDescription] = useState("")
   const [status, setStatus] = useState("")
   const navigate = useNavigate();
+
+  // Xử lí phần danh sách hình ảnh hiển thị ban đầu
+  const [filesEdit, setFilesEdit] = useState([])
 
   // Get all categories
   useEffect(() => {
@@ -66,7 +79,6 @@ function CreateDetailProduct(props) {
       } else {
         let filesState = [...files, e.target.files[0]]
         setFiles(filesState)
-        console.log("filesState", filesState);
         let reviewsState = [...review, URL.createObjectURL(e.target.files[0])]
         if (review[0] === rev) {
           reviewsState = [URL.createObjectURL(e.target.files[0])]
@@ -76,61 +88,7 @@ function CreateDetailProduct(props) {
     }
   }
 
-  // handle Add product
-
-  const handleInsert = () => {
-    console.log("fileStateInsert: ", files);
-    // {"CategoryId": 3, "name": "Lê Hàn Quốc", "Price": 500000, "Quantity": 80, "Unit": "UNIT", "MinPurchase":1, "Description": "aaaa", "status":"SELLING"}
-    let unitString = unit == 0 ? "WEIGHT" : "UNIT"
-    let statusString = status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK"
-    let params = new FormData(); 
-    const product = {
-        Name: name,
-        CategoryId: category,
-        Quantity: quantity,
-        Price: price,
-        // Unit: unit,
-        Unit: unitString,
-        MinPurchase: minPurchase,
-        Description: description,
-        // Status: status,
-        Status: statusString,
-    }
-
-    params.append('product', JSON.stringify(product));
-    files.forEach((item) => {
-      params.append('files', item);
-    })
-    for (var pair of params.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-  }
-    if(!(name && category && price && quantity && unitString && minPurchase && description && statusString)) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return
-    }
-    else{
-    apiProduct.postProduct(params)
-      .then(res => {
-        toast.success("Thêm sản phẩm thành công")
-        setName("")
-        setCategory("")
-        setQuantity("")
-        setPrice("")
-        setUnit("")
-        setMinPurchase("")
-        setDescription("")
-        setStatus("")
-        setFiles([])
-        setReview([rev])
-      })
-      .catch(error => {
-        toast.error("Thêm sản phẩm thất bại!")
-      })
-    }
-  }
-
   // handle update product
-
   const handleUpdate = () => {
     const params = {
       "Name": name,
@@ -158,37 +116,51 @@ function CreateDetailProduct(props) {
   }
 
   // get data for a particular product
-
-
   // Set thông tin cho product detail
-  // useEffect(() => {
-  //   const loaddata = () => {
-  //     if (edit === true) {
-  //       apiProduct.getProductDetail({id: id})
-  //         .then(res => {
-  //           const product = res.data
-  //           console.log(product)
-  //             if (product) {
-  //               setName("")
-  //               setCategory("")
-  //               setQuantity("")
-  //               setPrice("")
-  //               setUnit("")
-  //               setMinPurchase("")
-  //               setDescription("")
-  //               setStatus("")
-  //               setFiles([])
-  //               setReview([rev])
-  //             }
-  //             else {
-  //               navigate("/admin/brand/create")
-  //               toast.error("Địa chỉ này không tồn tại!")
-  //             }
-  //         })
-  //     }
-  //   }
-  //   loaddata()
-  // }, [edit])
+  useEffect(() => {
+    const loaddata = async () => {
+          console.log(id)
+          await apiProduct.getProductDetail(id)
+          .then(res => {
+            const product = res.data
+              if (product) {
+                setName(product?.name)
+                setCategory(product?.category?.id)
+                setQuantity(product?.quantity)
+                setPrice(product?.price)
+                setUnit(product?.unit)
+                setMinPurchase(product?.minPurchase)
+                setDescription(product?.description)
+                setStatus(product?.status)
+                // old image
+                let listProductImageEdit = []
+                product?.productImages.forEach(item => {
+                  let productImageEdit = new ProductImageEdit(item.id, item.url, "None", null);
+                  listProductImageEdit.push(productImageEdit)
+                });
+                setFilesEdit(listProductImageEdit)
+                // new image
+                setFiles([])
+                setReview([])
+              }
+              else {
+                navigate("/admin/product/")
+                toast.error("Địa chỉ này không tồn tại!")
+              }
+          })
+    }
+    loaddata()
+  }, [])
+
+  // Xử lí xóa hình ảnh
+  const handleDeleteImage = (index) => {
+    let oldFile = filesEdit
+    let newItem = oldFile.pop(index)
+    newItem.editStatus = "DELETE"
+    console.log("filesEdit", filesEdit)
+    console.log("newItem", newItem)
+    setFilesEdit([...oldFile, newItem]);
+  }
 
   return (
     <Box width={'100%'} bgcolor='#fff'>
@@ -234,11 +206,6 @@ function CreateDetailProduct(props) {
             </Select>
           </FormControl>
         </Stack>
-        {/* {edit == true ? <Stack direction="row">
-          <Typography className="cruBrand__label">Số lượng</Typography>
-          <TextField value={name} onChange={(event) => { setQuantity(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack> : <></>} */}
 
         <Stack direction="row" >
           <Typography className="cruBrand__label">Mô Tả</Typography>
@@ -288,21 +255,41 @@ function CreateDetailProduct(props) {
             </Select>
           </FormControl>
         </Stack>
-
-        {/* <Stack direction="row">
-          <Typography className="cruBrand__label">Liên hệ</Typography>
-          <TextField value={phone} onChange={(event) => { setPhone(event.target.value) }} size="small" id="outlined-multiline-flexible"
-            multiline
-            maxRows={4} variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <SelectBoxAddress province={province} district={district} commune={commune}
-          onChangeProvince={handleChangeProvince}
-          onChangeDistrict={handleChangeDistrict}
-          onChangeCommune={handleChangeCommune}
-          classLabel="cruBrand__label"
-        /> */}
         <Stack direction="row" p={2}>
-          <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Thêm ảnh:</Typography>
+          <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Ảnh sản phẩm:</Typography>
+          <Stack >
+            <div style={{display: "flex", marginBottom: "5px"}}>
+              {filesEdit.map((item, index) => {
+                  return (<>
+                    <img src={item?.url} width="180px" height="180px" style={{marginRight: "10px"}} alt="" />
+                    <Stack spacing={1} justifyContent="center" py={1} style={{display: "flex", flexDirection: "row", borderRight: "1px solid #ccc", marginRight: "2px"}}>
+                        <EditIcon 
+                        style={{cursor: "pointer"}} 
+                        sx={{
+                          "&:hover": { color: "#FFFFFF", backgroundColor: "green" }, 
+                          transition: "ease 0.2s",
+                          borderRadius: "5px"
+                        }}
+                        onClick={() => toast.error("Bạn đã xác nhận edit sản phẩm này")}
+                        />
+                      {/* <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
+                        Xóa
+                      </Button> */}
+                      <DeleteIcon onClick={handleDeleteImage(item)} variant="outlined" style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}} 
+                      sx={{
+                        "&:hover": { color: "#FFFFFF", backgroundColor: "red" }, 
+                        transition: "ease 1s",
+                        borderRadius: "5px",
+                      }}/>
+                    </Stack>
+                  </>)
+              })}
+            </div>
+            <input type="file" id="myfile" name="myfile" onChange={onChangeImg}></input>
+          </Stack>
+        </Stack>
+        <Stack direction="row" p={2}>
+          <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Thêm ảnh chỉnh sửa:</Typography>
           <Stack >
             <div style={{display: "flex", marginBottom: "5px"}}>
               {review.map((item) => {
@@ -314,8 +301,7 @@ function CreateDetailProduct(props) {
         </Stack>
 
         <Stack justifyContent="center">
-          <Button width="450px" variant="contained" onClick={edit ? handleUpdate
-                : handleInsert} >{edit? "Cập nhật":"Thêm"}</Button>
+          <Button width="450px" variant="contained" onClick={handleUpdate} >{"Cập nhật"}</Button>
         </Stack>
       </Stack>
     </Box>
@@ -345,4 +331,4 @@ const InputCustom = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default CreateDetailProduct;
+export default UpdateDetailProduct;

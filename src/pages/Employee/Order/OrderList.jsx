@@ -86,7 +86,7 @@ function OrderList() {
             <Typography fontSize="26px">Danh sách đơn hàng</Typography>
             <Stack direction="row" spacing="2rem" p={2} alignItems="center">
                 <Typography>Xem hướng dẫn xử lí đơn hàng theo đúng quy trình ở đây:</Typography>
-                <a href="https://hocvien.tiki.vn/faq/gioi-thieu-giao-dien-quan-ly-don-hang-moi/">
+                <a href="https://www.sapo.vn/blog/quy-trinh-xu-ly-don-hang-toi-uu-nhat">
                     <Typography color= "#1890FF" fontSize="14px">Hướng dẫn xử lý đơn hàng</Typography></a>
             </Stack>
             <Stack direction="row" spacing={0.5} p={2}>

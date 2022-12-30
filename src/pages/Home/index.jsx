@@ -1,9 +1,8 @@
 import "./Home.scss";
 import { Stack, Button, Box } from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Link, useNavigate } from "react-router-dom";
-import { Card, CardMedia } from "@mui/material";
+import {  useNavigate } from "react-router-dom";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper";
@@ -18,16 +17,11 @@ import DoneIcon from "@mui/icons-material/Done";
 
 //import component
 import CardProduct from "../../components/CardProduct";
-import CardCategory from "../../components/CardCategory";
-
-//import img
-import img from "../../assets/img/product_le_han_quoc.jpg";
 
 // styles swiper
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import apiMain from "../../apis/apiMain";
 import apiProduct from "../../apis/apiProduct";
 import { useDispatch, useSelector } from "react-redux";
 import apiAddress from "../../apis/apiAddress";

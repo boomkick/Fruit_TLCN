@@ -60,6 +60,10 @@ const apiCart = {
         const res = await axiosClientWithToken.put(`/Cart/ProcessCart/${id}`,params)
         return res.data;
     },
+    getProcessCart: async (params) => {
+        const res = await axiosClientWithToken.get(`/Cart/ProcessCart/${params.id}`)
+        return res.data;
+    },
     getCancelCart: async (id) => {
         const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;

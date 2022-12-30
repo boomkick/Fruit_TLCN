@@ -34,7 +34,6 @@ function ConfigRoute() {
         <Route path="my-account/*" element={<CustomerAccount />} />
       </Route>
 
-
       <Route path="product-detail/:id" element={<ProductDetail />} />
       <Route path="product-category/:id" element={<FilterProduct />} />
     </Routes>

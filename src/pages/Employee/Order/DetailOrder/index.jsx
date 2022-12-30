@@ -25,10 +25,9 @@ function DetailOrder() {
   useEffect(() => {
     const getData = async () => {
       await apiCart
-        .getAllOrders()
+        .getProcessCart({id: id})
         .then((res) => {
-          setListOrder(res.data.carts);
-          setOrder(listOrder.find((item) => item.id == id))
+          setOrder(res.data)
         })
         .catch((error) => {
           setOrder(null);

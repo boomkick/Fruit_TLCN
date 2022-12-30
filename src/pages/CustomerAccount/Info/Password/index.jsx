@@ -11,16 +11,21 @@ import {
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import apiProfile from "../../../../apis/apiProfile"; 
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Password() {
+  const user = useSelector((state) => state.auth.user);
   const [showPass, setShowPass] = React.useState(false);
   const [confirmPassword, setconfirmPassword] = React.useState("");
   const [newPassword, setnewPassword] = React.useState("");
-  const [oldPassword, setoldPassword] = React.useState("");
+  // const [oldPassword, setoldPassword] = React.useState("");
   const [message, setMessage] = React.useState("*");
   const [newMessage, setNewMessage] = React.useState("*")
   const [fontSizeMessage, setFontSizeMessage] = React.useState("")
   //const [valid, setValid] = React.useState({ new: false, cf: false });
+  const navigate = useNavigate()
   
   const Rcolor = "#2196f3"
   const Fcolor = "#ee0033"
@@ -29,9 +34,9 @@ function Password() {
   
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");//regex kiểm tra mật khẩu hợp lệ
   
-  const onChangeoldPassword = (event) => {
-      setoldPassword(event.target.value)
-  }
+  // const onChangeoldPassword = (event) => {
+  //     setoldPassword(event.target.value)
+  // }
   
   const onChangenewPassword = (event) => {
     setnewPassword(event.target.value)
@@ -65,15 +70,13 @@ function Password() {
   const handleChangePassword = () => {
     //if (valid.new && valid.cf){
       const params = {
-        "confirmPassword": confirmPassword,
-        "newPassword": newPassword,
-        "oldPassword": oldPassword
+        "email": user.email,
+        "password": confirmPassword,
       }
-      apiProfile.putChangePassword(params)
+      apiProfile.postChangePassword(params)
         .then(response => {
-          setFontSizeMessage("16px")
-          setNColor(Rcolor)
-          setMessage("Thay đổi thành công")
+          toast.success("Vui lòng xác nhận mật khẩu qua email")
+          navigate("/my-account/edit-account")
         })
         .catch(error => {
           setFontSizeMessage("16px")
@@ -123,7 +126,7 @@ function Password() {
                 <input name="phone" id='phone' type="text" style={{ position:'absolute', top:0, left:0,width:'0',height:'0',opacity:'0'}}/>
 
         <Stack className="customer-info__input-container" spacing={3}>
-          {passwordInput("Nhập mật khẩu hiện tại", oldPassword, onChangeoldPassword)}
+          {/* {passwordInput("Nhập mật khẩu hiện tại", oldPassword, onChangeoldPassword)} */}
 
           <Stack>
             {passwordInput("Nhập mật khẩu mới", newPassword, onChangenewPassword)}

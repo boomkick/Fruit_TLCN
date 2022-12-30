@@ -36,7 +36,7 @@ function DetailOrder() {
         });
     };
     getData();
-  }, [id, listOrder]);
+  }, []);
 
   const handleComfirm = () => {
     let params = {

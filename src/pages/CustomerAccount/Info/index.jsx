@@ -347,11 +347,11 @@ function Info() {
           >
             <Stack direction="row" spacing={1}>
               <LockIcon color="disabled" />
-              <ListItemText primary="Đổi mật khẩu" />
+              <ListItemText primary="Mật khẩu của bạn" />
             </Stack>
             <Link to="/my-account/edit-account/pass">
               <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
-                Đổi mật khẩu
+                Quên mật khẩu
               </Button>
             </Link>
           </Stack>

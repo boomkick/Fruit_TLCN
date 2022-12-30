@@ -24,10 +24,11 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { useState } from "react";
+import { useEffect } from "react";
 
 function DetailProduct({ data }) {
     const user = useSelector((state) => state.auth.user);
-    const [productImage, setProductImage] = useState(data?.productImages[0]?.url);
+    const [productImage, setProductImage] = useState("");
     const status = productStatus.find((item) => item.id == data?.status)
     const [quantity, setQuantity] = React.useState(1);
 
@@ -45,7 +46,7 @@ function DetailProduct({ data }) {
     }))
 
   }
-
+  
   function handleStatusProduct(status) {
     if(status?.id == 0) {
         return (
@@ -80,7 +81,7 @@ function DetailProduct({ data }) {
     <Box className="detailProduct">
                 <Box className="detailProduct__img">
                     <div className="detailProduct__primary-img">
-                        <img alt="" src={productImage}></img>
+                        <img alt="" src={productImage ||data?.productImages[0]?.url}></img>
                     </div>
                     <div className="detailProduct__list-img">
                         {

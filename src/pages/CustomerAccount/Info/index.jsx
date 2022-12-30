@@ -298,7 +298,7 @@ function Info() {
               <LocalPhoneOutlinedIcon color="disabled" />
               <ListItemText primary="Số điện thoại" secondary={user.phone} />
             </Stack> */}
-            <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
+            <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
               <TextField
                   id="outlined-basic"
                   value={phone}
@@ -332,7 +332,7 @@ function Info() {
                 secondary={user.email}
               />
             </Stack> */}
-            <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
+            <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
               <TextField
                   id="outlined-basic"
                   value={email}

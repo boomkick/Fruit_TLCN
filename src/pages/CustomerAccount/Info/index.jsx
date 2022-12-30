@@ -392,7 +392,7 @@ function Info() {
         <Stack sx={{ padding: "2rem" }} className="modal-info" spacing={2}>
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="h6" component="h2">
-              Cập nhật ảnh đại diện
+              Cập nhật avatar
             </Typography>
 
             <IconButton onClick={closeModalUploadAvatar}>

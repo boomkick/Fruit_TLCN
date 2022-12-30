@@ -30,7 +30,7 @@ import {
   ListItem,
   ListItemButton,
 } from "@mui/material";
-
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import MenuIcon from "@mui/icons-material/Menu";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
@@ -127,9 +127,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Admin() {
-  React.useEffect(() => {
-    // window.location.reload();
-  }, [])
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
@@ -341,7 +338,7 @@ function Admin() {
                       fontWeight: "Light",
                     }}
                   >
-                    {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                    {user.firstName + " " + user.lastName}
                   </Typography>
                   <ExpandMoreOutlinedIcon />
                   {openAccount ? (
@@ -355,7 +352,7 @@ function Admin() {
                         />
                         <Stack sx={{ paddingLeft: "10px" }}>
                           <Typography sx={{ fontWeight: "bold" }}>
-                            {/* {user.fullName} */}<p>Tran Manh Thang</p>
+                            {user.firstName + " " + user.lastName}
                           </Typography>
                         </Stack>
                       </Stack>
@@ -368,6 +365,14 @@ function Admin() {
                           alignItems: "left",
                         }}
                       >
+                        <Button
+                          variant="text"
+                          startIcon={<HomeOutlinedIcon />}
+                          onClick={() => replacePage("/")}
+                          sx={{ color: "#333" }}
+                        >
+                          Trang bán hàng
+                        </Button>
                         <Button
                           variant="text"
                           startIcon={<PersonOutlineIcon />}
@@ -510,5 +515,8 @@ function Admin() {
     </Stack>
     );
 }
+const replacePage = (param) => {
+  window.location.replace(param);
+};
 
 export default Admin;

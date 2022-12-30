@@ -38,7 +38,7 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import Order from "./Order";
 import { useDispatch, useSelector } from "react-redux";
 import LogoutIcon from '@mui/icons-material/Logout';
-
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import logo_shop from "../../assets/img/logo.png"
 import { logoutSuccess } from "../../slices/authSlice";
 import { useEffect } from "react";
@@ -351,6 +351,14 @@ function Employee() {
                       >
                         <Button
                           variant="text"
+                          startIcon={<HomeOutlinedIcon />}
+                          onClick={() => replacePage("/")}
+                          sx={{ color: "#333" }}
+                        >
+                          Trang bán hàng
+                        </Button>
+                        <Button
+                          variant="text"
                           startIcon={<PersonOutlineIcon />}
                           sx={{ color: "#333" }}
                         >
@@ -453,5 +461,9 @@ function Employee() {
     </Stack>
     );
 }
+
+const replacePage = (param) => {
+  window.location.replace(param);
+};
 
 export default Employee;

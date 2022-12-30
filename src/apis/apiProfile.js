@@ -17,8 +17,8 @@ const apiProfile = {
           }})
         return res.data;
     },
-    putChangeInfo: async (params) => {
-        const res = await axiosClientWithToken.put('/account/changeInfo', params)
+    putUpdateProfile: async (params) => {
+        const res = await axiosClientWithToken.put('/account/updateProfile', params)
         return res.data;
     },
     getUserbyID: async (params) => {

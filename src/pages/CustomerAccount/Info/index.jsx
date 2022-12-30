@@ -29,6 +29,7 @@ import {
   Divider,
   Badge,
   ClickAwayListener,
+  TextField,
 } from "@mui/material";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -61,10 +62,10 @@ function Info() {
 
   const [image, setImage] = useState([]);
   const [gender, setGender] = useState(user.gender)
-  const [fullname, setFullName] = useState(user.fullName)
   const [firstName, setFirstName] = useState(user.firstName)
   const [lastName, setLastName] = useState(user.lastName)
-  const [nickname, setNickName] = useState(user.nickName)
+  const [phone, setPhone] = useState(user.phone)
+  const [email, setEmail] = useState(user.email)
   const [modalDeleteAvatar, setModalDeleteAvatar] = useState(false);
   const [modalViewAvatar, setModalViewAvatar] = useState(false);
   const [modalNational, setModalNational] = useState(false);
@@ -157,23 +158,26 @@ function Info() {
   const onChangeLastName = (event) => {
     setLastName(event.target.value);
   }
-  const onChangeGender = (event) => {
-    setGender(event.target.value);
+  const onChangePhone = (event) => {
+    setPhone(event.target.value);
+  }
+  const onChangeEmail = (event) => {
+    setEmail(event.target.value);
   }
   
   const onSaveChange = () => {
-    if (!(firstName && gender && lastName)) {
+    if (!(firstName && lastName && phone && email)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
     const params = {
       firstName: firstName,
-      gender: gender,
-      lastName: lastName
+      lastName: lastName,
+      phone: phone,
     };
     setUpdating(true)
     apiProfile
-      .putChangeInfo(params)
+      .putUpdateProfile(params)
       .then((response) => {
         toast.success("Thay đổi thành công");
         getUserProfile();
@@ -187,7 +191,7 @@ function Info() {
   const getUserProfile = () => {
     apiProfile.getUserProfile()
       .then((res) => {
-        let newUser = res.data.user
+        let newUser = res.data
         dispatch(loginSuccess({ ...user, ...newUser }))
       })
   }
@@ -272,22 +276,6 @@ function Info() {
             </Stack>
           </Stack>
 
-          {/* <Stack direction="row" spacing={5} alignItems="center">
-            <label>Giới tính</label>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              value={gender}
-              onChange={onChangeGender}
-            >
-              <FormControlLabel value="Nam" control={<Radio />} label="Nam" />
-              <FormControlLabel value="Nữ" control={<Radio />} label="Nữ" />
-            </RadioGroup>
-          </Stack> */}
-
-
-
           <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
             onClick={onSaveChange}
           >
@@ -306,15 +294,28 @@ function Info() {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Stack direction="row" spacing={1}>
+            {/* <Stack direction="row" spacing={1}>
               <LocalPhoneOutlinedIcon color="disabled" />
               <ListItemText primary="Số điện thoại" secondary={user.phone} />
-            </Stack>
-            <Link to="/my-account/edit-account/phone">
+            </Stack> */}
+            <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
+              <TextField
+                  id="outlined-basic"
+                  value={phone}
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  size="small"
+                  onChange={onChangePhone}
+              />
+              <span className="order__iconSearch">
+                  <LocalPhoneOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
+              </span>
+          </Stack>
+            {/* <Link to="/my-account/edit-account/phone">
               <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
                 Cập nhật
               </Button>
-            </Link>
+            </Link> */}
           </Stack>
 
           <Stack
@@ -323,20 +324,34 @@ function Info() {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Stack direction="row" spacing={1}>
+            {/* <Stack direction="row" spacing={1}>
               <EmailOutlinedIcon color="disabled" />
 
               <ListItemText
                 primary="Địa chỉ email"
                 secondary={user.email}
               />
-            </Stack>
+            </Stack> */}
+            <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
+              <TextField
+                  id="outlined-basic"
+                  value={email}
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  size="small"
+                  onChange={onChangeEmail}
+                  disabled
+              />
+              <span className="order__iconSearch">
+                  <EmailOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
+              </span>
+          </Stack>
 
-            <Link to="/my-account/edit-account/email">
+            {/* <Link to="/my-account/edit-account/email">
               <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
                 Cập nhật
               </Button>
-            </Link>
+            </Link> */}
           </Stack>
 
           <Typography>Bảo mật</Typography>

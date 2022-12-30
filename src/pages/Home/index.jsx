@@ -402,7 +402,7 @@ function SlideHome() {
                 <b></b>
                 <span className="section-title-main">
                   <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
-                  {"Top sản phẩm bán chạy"}
+                  {"Trái cây được mua nhiều nhất"}
                 </span>
                 <b></b>
               </h2>
@@ -454,7 +454,7 @@ function SlideHome() {
                   <CardGiftcardIcon
                     sx={{ marginRight: "12px" }}
                   ></CardGiftcardIcon>
-                  {"Sale hấp dẫn"}
+                  {"Khuyến mãi bùng nổ"}
                 </span>
                 <b></b>
               </h2>

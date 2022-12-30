@@ -45,6 +45,7 @@ import OverView from "./OverView/index";
 import Info from "./Info";
 import Addresses from "./Addresses";
 import CreateAddress from "./Addresses/CreateAddress";
+import AddRecieveAddress from "./Addresses/AddRecieveAddress";
 import PhoneNumber from "./Info/PhoneNumber";
 import Password from "./Info/Password";
 import Email from "./Info/Email";
@@ -183,6 +184,7 @@ function CustomerAccount() {
                   <Routes>
                     <Route index element={<Addresses />} />
                     <Route path="create" element={<CreateAddress />} />
+                    <Route path="add" element={<AddRecieveAddress />} />
                     <Route
                       path="edit"
                       element={<CreateAddress edit={true} />}

@@ -90,15 +90,19 @@ function ShoppingCart() {
 
   const navigate = useNavigate();
   const handleBuy = () => {
-    console.log(cart)
-    cart.forEach((item) => {
-      let param = {
-        productId: item.product.id,
-        quantity: item.quantity
-      }
-      apiCart.putCart(param)
-  })
-    navigate("/payment");
+    if(cart.length > 0){
+      cart.forEach((item) => {
+        let param = {
+          productId: item.product.id,
+          quantity: item.quantity
+        }
+        apiCart.putCart(param)
+      })
+      navigate("/payment");
+    }
+    else {
+      toast.info("Hiện bạn chưa có sản phẩm nào trong giỏ cả")
+    }
   };
 
 

@@ -62,9 +62,10 @@ function Payment() {
   const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
   useEffect(() => {
     const getAddresses = () => {
+      console.log("paymentAddress:", paymentAddress);
       if(!paymentAddress) {
-          navigate("/my-account/address/create");
-          toast.warning("Vui lòng thêm địa chỉ mới");
+          navigate("/my-account/address/add");
+          toast.warning("Vui lòng thêm địa chỉ nhận hàng");
       }
     };
     getAddresses();

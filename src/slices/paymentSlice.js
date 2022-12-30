@@ -14,11 +14,17 @@ export const paymentSlice = createSlice({
         setAddress: (state, action) => {
             state.address = action.payload
         },
+        setPaymentMethod: (state, action) => {
+            state.paymentMethod = action.payload
+        },
         clearCoupon: (state) => {
             state.coupon = null
         },
         clearAddress: (state) => {
             state.address = null
+        },
+        clearPaymentMethod: (state) => {
+            state.paymentMethod = null
         },
     }
 })
@@ -27,8 +33,10 @@ export const paymentSlice = createSlice({
 export const {
     setCoupon,
     setAddress,
+    setPaymentMethod,
     clearCoupon,
-    clearAddress
+    clearAddress,
+    clearPaymentMethod
 } = paymentSlice.actions
 
 

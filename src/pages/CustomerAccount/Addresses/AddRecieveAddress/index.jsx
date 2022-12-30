@@ -12,7 +12,7 @@ import {
   InputBase,
 } from "@mui/material";
 import SelectBoxAddress from "../../../../components/SelectBoxAddress";
-import "./CreateAddress.scss";
+import "./AddRecieveAddress.scss";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import apiAddress from "../../../../apis/apiAddress";
@@ -21,8 +21,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddress } from "../../../../slices/paymentSlice";
+import SelectBoxAddressAddRecieve from "../../../../components/SelectBoxAddressAddRecieve";
 
-function CreateAddress(props) {
+function AddRecieveAddress(props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
@@ -37,44 +38,23 @@ function CreateAddress(props) {
   const params = useParams();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const loaddata = () => {
-      if (edit === true) {
-        apiAddress.getProfileUser()
-        .then((res) => {
-          const user = res.data;
-          if (user) {
-            setName(user.firstName + " " + user.lastName);
-            setPhone(user.phone);
-            setAddressDetail(user.detailLocation);
-            setWard(user.wardId);
-            setDistrict(user.districtId);
-            setCity(user.cityId);
-          } else {
-            navigate("/my-account/address/create");
-            toast.error("Địa chỉ này không tồn tại!");
-          }
-        });
-      }
-      setAddressid(params.id);
-    };
-    loaddata();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [edit]);
-
+  // Thay đổi biến
   const handleChangeCity = (value) => {
+    console.log(value);
     setCity(value);
   };
 
   const handleChangeDistrict = (value) => {
+    console.log(value);
     setDistrict(value);
   };
 
   const handleChangeWard = (value) => {
+    console.log(value);
     setWard(value);
   };
 
-  const handleSave = () => {
+  const handleAddAddressToPayment = () => {
     const params = {
       addressDetail: addressDetail,
       ward: ward,
@@ -83,37 +63,6 @@ function CreateAddress(props) {
       phone: phone,
       city: city,
     };
-    if (
-      !(
-        addressDetail &&
-        ward &&
-        district &&
-        name &&
-        phone &&
-        city
-      )
-    ) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return;
-    } else {
-      dispatch(setAddress(params));
-      toast.success("Cập nhật địa chỉ nhận hàng thành công");
-    }
-  };
-
-  const handleUpdate = () => {
-    const params = {
-      addressDetail: addressDetail,
-      ward: ward,
-      district: district,
-      name: name,
-      phone: phone,
-      city: city,
-    };
-    // Dữ liệu test
-    params.city = "01"
-    params.district = "001"
-    params.ward = "00001"
 
     if (
       !(
@@ -138,10 +87,7 @@ function CreateAddress(props) {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
-        <SelectBoxAddress
-          userCity={city}
-          userDistrict={district}
-          userWard={ward}
+        <SelectBoxAddressAddRecieve
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
@@ -201,7 +147,7 @@ function CreateAddress(props) {
         <Stack direction="row" justifyContent="flex-start">
           {/* <Typography className="create-address__label"></Typography> */}
           <Button
-            onClick={edit ? handleUpdate : handleSave}
+            onClick={handleAddAddressToPayment}
             className="btn__Update"
             variant="contained"
           >
@@ -234,4 +180,4 @@ const InputCustom = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default CreateAddress;
+export default AddRecieveAddress;

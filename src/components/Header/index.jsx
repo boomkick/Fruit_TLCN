@@ -16,6 +16,8 @@ import SignUp from "../SignUp";
 import { VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
 import img from "../../assets/img/logo.png"
+import { deleteAll } from "../../slices/cartSlice";
+import { clearAddress, clearCoupon, clearPaymentMethod } from "../../slices/paymentSlice";
 
 const privatePath = ["/my-account/", "/admin/", "/payment"];
 
@@ -36,6 +38,10 @@ function Header() {
   const user = useSelector((state) => state.auth.user); //get user from store
 
   const handleLogout = () => {
+    dispatch(deleteAll());
+    dispatch(clearAddress());
+    dispatch(clearCoupon());
+    dispatch(clearPaymentMethod());
     dispatch(logoutSuccess());
     // const isPrivate =
     //   privatePath.findIndex((e) => location.pathname.includes(e)) >= 0

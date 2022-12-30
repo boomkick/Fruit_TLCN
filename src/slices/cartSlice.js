@@ -41,10 +41,10 @@ export const cartSlice = createSlice({
         unchooseAll:(state,action)=>{
             state.items= state.items.map(item=>{return {...item,choose:false}})
         },
-        deleteAll:(state,action)=>{
+        deleteAll:(state)=>{
             state.items = []
         },
-        deleteItemsPayment:(state,action)=>{
+        deleteItemsPayment:(state)=>{
             state.items= state.items.filter(item=>!item.choose)
         }
 

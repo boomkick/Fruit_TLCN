@@ -49,7 +49,7 @@ function Addresses() {
 
   return (
     <Stack spacing={2} className="addresses">
-      <Typography className="heading">Địa chỉ nhận hàng</Typography>
+      <Typography className="heading">Địa chỉ của bạn</Typography>
       {isAddress(userAddress) ? (
         <Link to="/my-account/address/create">
           <Button className="new" variant="outlined" startIcon={<AddIcon />}>
@@ -63,6 +63,11 @@ function Addresses() {
               Chỉnh sửa
             </Button>
           </Link>
+          <Link to={`add`}>
+          <Button className="Modify" variant="text">
+            Thêm địa chỉ nhận hàng mới
+          </Button>
+        </Link>
         </Stack>
       )}
 

@@ -111,9 +111,12 @@ function CreateAddress(props) {
       city: city,
     };
     // Dữ liệu test
-    params.city = "01"
-    params.district = "001"
-    params.ward = "00001"
+    // params.city = "01"
+    // params.district = "001"
+    // params.ward = "00001"
+    console.log(params.city)
+    console.log(params.district)
+    console.log(params.ward)
 
     if (
       !(
@@ -146,6 +149,8 @@ function CreateAddress(props) {
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
         />
+        {/* Address - start */}
+        {/* Address - end */}
 
         <Stack direction="row">
           <Typography className="create-address__label">

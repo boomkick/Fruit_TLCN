@@ -9,6 +9,7 @@ import { axiosInstance } from './apis/axiosClient';
 import { loginSuccess, logoutSuccess } from './slices/authSlice';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollUp from './components/ScrollUp';
 
 function App() {
   // Lấy thông tin user
@@ -23,11 +24,12 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollUp>
           <ToastContainer />
           {isAdmin || isEmployee ? null : <Header />}
           <ConfigRoute />
           {isAdmin || isEmployee ? null : <Footer />}
-
+        </ScrollUp>
       </BrowserRouter>
     </div>
   );

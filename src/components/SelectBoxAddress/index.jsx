@@ -67,21 +67,21 @@ function SelectBoxAddress(props) {
 
     // Main ------------------start
     // Trong trường hợp selectedCity bị thay đổi thì
-    // const handleChangeCity = (item) => {
-    //   setSelectedCity(item)
-    // }
-    // useEffect(() => {
-    //   console.log("(selectedCity", selectedCity)
-    //   setListDistrict(selectedCity?.level2s)
-    // }, [selectedCity]);
+    const handleChangeCityList = (item) => {
+      setSelectedCity(item)
+    }
+    useEffect(() => {
+      console.log("(selectedCity", selectedCity)
+      setListDistrict(selectedCity?.level2s)
+    }, [selectedCity]);
 
-    // // Trong trường hợp selectedCity bị thay đổi thì
-    // const handleChangeDistrict = (item) => {
-    //   setSelectedCity(item)
-    // }
-    // useEffect(() => {
-    //   setListWard(selectedDistrict?.level3s)
-    // }, [selectedDistrict]);
+    // Trong trường hợp selectedCity bị thay đổi thì
+    const handleChangeDistrictList = (item) => {
+      setSelectedCity(item)
+    }
+    useEffect(() => {
+      setListWard(selectedDistrict?.level3s)
+    }, [selectedDistrict]);
     // // Main ------------------end
   
   return (

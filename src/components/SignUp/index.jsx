@@ -24,6 +24,7 @@ import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 import {toast} from 'react-toastify'
+import SelectBoxAddressAddRecieve from "../SelectBoxAddressAddRecieve";
 
 function SignUp(props) {
   const [showPass, setShowPass] = React.useState(false);
@@ -33,6 +34,10 @@ function SignUp(props) {
   const [isDiffPass, setIsDiffPass] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [isSuccess, setIsSuccess] = React.useState(false);
+  const [city, setCity] = React.useState(null);
+  const [district, setDistrict] = React.useState(null);
+  const [ward, setWard] = React.useState(null);
+
 
   const client_url = "http://localhost:3000/"
 
@@ -66,30 +71,45 @@ function SignUp(props) {
           email: watch("email"),
           firstName: watch("firstName"),
           lastName: watch("lastName"),
-          cityId: watch("cityId"),
-          districtId: watch("districtId"),
-          wardId: watch("wardId"),
+          cityId: city,
+          districtId: district,
+          wardId: ward,
           detailLocation: watch("detailLocation"),
         };
         apiAuth.postRegister(param)
         .then((res) => {
           if (res.status === 200){
             setIsSuccess(true)
-            console.log(isSuccess)
-          } else if (res.status === 400){
-            setIsSuccess(true)
-            console.log("state: ", isSuccess)
-            console.log("123")
-            // console.log(res)
-          }
+            toast.success("Đăng kí thành công")
+            toast.success("Vui lòng xác nhận tài khoản qua email")
+          } 
+          else if (res.status === 400){
+            setIsSuccess(false)
+            toast.error(res.message);
+        }
         })
         .catch((res) => {
           setIsSuccess(false)
-
+          toast.error(res.message);
         })
         .finally(()=>setLoading(false));
       }
     }
+  };
+  // Thay đổi gía trị địa chỉ
+  const handleChangeCity = (value) => {
+    console.log(value);
+    setCity(value);
+  };
+
+  const handleChangeDistrict = (value) => {
+    console.log(value);
+    setDistrict(value);
+  };
+
+  const handleChangeWard = (value) => {
+    console.log(value);
+    setWard(value);
   };
 
   return (
@@ -162,33 +182,15 @@ function SignUp(props) {
                 sx={{ flex: 1 }}
               />
             </Stack>
-
             <Stack width="100%">
-              <TextField
-                {...register("cityId")}
-                label="Thành phố"
-                variant="standard"
-                sx={{ flex: 1 }}
+              <SelectBoxAddressAddRecieve
+                onChangeCity={handleChangeCity}
+                onChangeDistrict={handleChangeDistrict}
+                onChangeWard={handleChangeWard}
+                helper={true}
               />
             </Stack>
-
-            <Stack width="100%">
-              <TextField
-                {...register("districtId")}
-                label="Quận"
-                variant="standard"
-                sx={{ flex: 1 }}
-              />
-            </Stack>
-
-            <Stack width="100%">
-              <TextField
-                {...register("wardId")}
-                label="Huyện"
-                variant="standard"
-                sx={{ flex: 1 }}
-              />
-            </Stack>
+            
 
             <Stack width="100%">
               <TextField
@@ -277,7 +279,7 @@ function SignUp(props) {
               Hoàn Tất
             </Button>
 
-            {isSuccess ? <SuccessRegister handleOpenLogin={props.handleOpenLogin} /> : <></>}
+            {isSuccess ? props.handleOpenLogin() : <></>}
           </Stack>
         </form>
 

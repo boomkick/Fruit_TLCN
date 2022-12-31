@@ -25,10 +25,9 @@ function SelectBoxAddressAddRecieve(props) {
     const [listDistrict, setListDistrict] = useState([])
     const [listWard, setListWard] = useState([])
 
-    const [selectedCity, setSelectedCity] = useState({})
-    const [selectedDistrict, setSelectedDistrict] = useState({})
-    const [selectedWard, setSelectedWard] = useState({})
-
+    const [selectedCity, setSelectedCity] = useState("")
+    const [selectedDistrict, setSelectedDistrict] = useState("")
+    const [selectedWard, setSelectedWard] = useState("")
     
     // Gán danh sách dữ liệu của thành phố -> quận -> phường
     useEffect(() => {
@@ -91,68 +90,118 @@ function SelectBoxAddressAddRecieve(props) {
       props.onChangeWard(event.target.value);
     }
 
-    return (
-      <>
-      <Stack direction="row">
-            <Typography className={props.classLabel||"create-address__label"}>
-              Tỉnh/Thành phố:
-            </Typography>
-            <FormControl className="create-address__input" sx={{flex:"1"}}>
+    if (!props.helper) 
+      return (
+        <>
+        <Stack direction="row">
+              <Typography className={props.classLabel||"create-address__label"}>
+                Tỉnh/Thành phố:
+              </Typography>
+              <FormControl className="create-address__input" sx={{flex:"1"}}>
+                <Select
+                  size="small"
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  // value={selectedCity ?? "123214"}
+                  value={selectedCity ? selectedCity : ""}
+                  label="Age"
+                  onChange={handleChangeCity}
+                  
+                  input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
+                >
+                  {listCity ? listCity.map(item => <MenuItem value={item.level1_id}>{item.name}</MenuItem>) : <></>}
+                </Select>
+              </FormControl>
+            </Stack>
+
+            <Stack direction="row">
+              <Typography  className={props.classLabel||"create-address__label"}>
+                Quận huyện:
+              </Typography>
+              <FormControl className="create-address__input" sx={{flex:"1"}}>
+                <InputLabel id="demo-simple-select-helper-label"></InputLabel>
+                <Select
+                  sx={{ flex: 0.65 }}
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={selectedDistrict ? selectedDistrict : ""}
+                  label="Age"
+                  onChange={handleChangeDistrict}
+                  input={<InputCustom placeholder="Chọn Quận/Huyện" />}
+                >
+                  {listDistrict ? listDistrict.map(item => <MenuItem value={item.level2_id}>{item.name}</MenuItem>) : <></>}
+                </Select>
+              </FormControl>
+            </Stack>
+
+            <Stack direction="row">
+              <Typography  className={props.classLabel||"create-address__label"}>
+                Phường xã:
+              </Typography>
+              <FormControl className="create-address__input" sx={{flex:"1"}}>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={selectedWard ? selectedWard : ""}
+                  label="Age"
+                  onChange={handleChangeWard}
+                  input={<InputCustom placeholder="Chọn Xã/Thị trấn" />}
+                >
+                  {listWard ? listWard.map(item => <MenuItem value={item.level3_id}>{item.name}</MenuItem>) : <></>}
+                </Select>
+              </FormControl>
+            </Stack>
+          </>
+    )
+
+
+    if (props.helper)
+        return (
+          <>
+          <Stack direction="row" style={{marginBottom: "20px"}}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Tỉnh/Thành phố</InputLabel>
               <Select
-                size="small"
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                // value={selectedCity ?? "123214"}
-                value={selectedCity ? selectedCity : ""}
-                label="Age"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedCity}
+                label="Tỉnh/Thành phố"
                 onChange={handleChangeCity}
-                
-                input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
               >
                 {listCity ? listCity.map(item => <MenuItem value={item.level1_id}>{item.name}</MenuItem>) : <></>}
               </Select>
             </FormControl>
           </Stack>
-
-          <Stack direction="row">
-            <Typography  className={props.classLabel||"create-address__label"}>
-              Quận huyện:
-            </Typography>
-            <FormControl className="create-address__input" sx={{flex:"1"}}>
-              <InputLabel id="demo-simple-select-helper-label"></InputLabel>
+          <Stack direction="row" style={{marginBottom: "20px"}}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Quận/Huyện</InputLabel>
               <Select
-                sx={{ flex: 0.65 }}
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                value={selectedDistrict ? selectedDistrict : ""}
-                label="Age"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedDistrict}
+                label="Quận/Huyện"
                 onChange={handleChangeDistrict}
-                input={<InputCustom placeholder="Chọn Quận/Huyện" />}
               >
                 {listDistrict ? listDistrict.map(item => <MenuItem value={item.level2_id}>{item.name}</MenuItem>) : <></>}
               </Select>
             </FormControl>
           </Stack>
-
-          <Stack direction="row">
-            <Typography  className={props.classLabel||"create-address__label"}>
-              Phường xã:
-            </Typography>
-            <FormControl className="create-address__input" sx={{flex:"1"}}>
+          <Stack direction="row" >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Phường/Xã</InputLabel>
               <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-select-helper"
-                value={selectedWard ? selectedWard : ""}
-                label="Age"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedWard}
+                label="Phường/Xã"
                 onChange={handleChangeWard}
-                input={<InputCustom placeholder="Chọn Xã/Thị trấn" />}
               >
                 {listWard ? listWard.map(item => <MenuItem value={item.level3_id}>{item.name}</MenuItem>) : <></>}
               </Select>
             </FormControl>
           </Stack>
-        </>
-    )
+          </>
+        )
 }
 
 

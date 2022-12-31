@@ -38,7 +38,7 @@ function AddRecieveAddress(props) {
   const params = useParams();
   const dispatch = useDispatch();
 
-  // Thay đổi biến
+  // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
     console.log(value);
     setCity(value);

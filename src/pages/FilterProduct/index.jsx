@@ -29,7 +29,7 @@ function FilterProduct(props) {
   const [orderBy, setOrderBy] = useState(1);
   const [minValue, setMinValue] = useState(null);
   const [maxValue, setMaxValue] = useState(null);
-  const [keyWord, setKeyWord] = useState("null");
+  const [keyWord, setKeyWord] = useState("");
   const [filter, setFilter] = useState(false);
   const [maxPage, setMaxPage] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -40,7 +40,7 @@ function FilterProduct(props) {
         page: currentPage,
         pageSize: 8,
       };
-      if (keyWord && keyWord !== "") {
+      if (keyWord != null && keyWord !== "") {
         param["keyword"] = keyWord
       }
       if (idCategory !== "") {

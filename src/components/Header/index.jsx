@@ -244,7 +244,7 @@ function Header() {
             <li>
               <div className="buttonSearch">
                 <Link
-                  to={`/product-category/${categories[0]?.id}`}
+                  to={`/product-category/`}
                   className="icon"
                   aria-label="Tìm Kiếm"
                   data-open="#search-lightbox"

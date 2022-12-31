@@ -64,6 +64,16 @@ const apiCart = {
         const res = await axiosClientWithToken.get(`/Cart/ProcessCart/${params.id}`)
         return res.data;
     },
+    // getProcessCartByFilter: async (params) => {
+    //     let search = ""
+    //     for (let item in params) {
+    //         search = search + item.toString() + "=" + params[item] + "&";
+    //     }
+    //     search = search.slice(0, -1);
+    //     console.log("search", search)
+    //     const res = await axiosClientWithToken.get(`/Cart/ProcessCart/`, params)
+    //     return res.data;
+    // },
     getCancelCart: async (id) => {
         const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;

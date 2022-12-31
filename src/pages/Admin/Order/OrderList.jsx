@@ -193,24 +193,44 @@ const orderByItems = [
      const size =6;
  
      useEffect(() => {
-         const getData = async () => {
-             let param = {
-                 page: currentPage,
-                 pageSize: 8,
-               };
-             if (selected != 3 ) {
-                 param["CartStatus"]=selected;
-             }
-             setOrders([])
-             apiCart.getAllOrders(param)
-                 .then(response=>{
-                 setOrders(response.data.carts);
-                 setMaxPage(response.data.maxPage);
-                 })
-                 .catch(setOrders([]))
-         };
-         getData();
-       }, [currentPage, selected]);
+        const getData = async () => {
+            let param = {
+                page: currentPage,
+                pageSize: 8,
+            };
+            if (selected != 3 ) {
+                param["CartStatus"]=selected;
+            }
+            setOrders([])
+            apiCart.getAllOrders(param)
+                .then(response=>{
+                setOrders(response.data.carts);
+                setMaxPage(response.data.maxPage);
+                })
+                .catch(setOrders([]))
+        };
+        getData();
+    }, [currentPage]);
+
+    useEffect(() => {
+        const getData = async () => {
+            let param = {
+                page: 1,
+                pageSize: 8,
+            };
+            if (selected != 3 ) {
+                param["CartStatus"]=selected;
+            }
+            setOrders([])
+            apiCart.getAllOrders(param)
+                .then(response=>{
+                setOrders(response.data.carts);
+                setMaxPage(response.data.maxPage);
+                })
+                .catch(setOrders([]))
+        };
+        getData();
+    }, [selected]);
  
      const handleDate = (stringDate) => {
          let date = stringDate ? stringDate.slice(0, 10) : "Không tồn tại"
@@ -234,7 +254,7 @@ const orderByItems = [
         }
         const getData = async () => {
             let param = {
-                page: currentPage,
+                page: 1,
                 pageSize: 8,
               };
             if (selected != 3 ) {
@@ -252,6 +272,7 @@ const orderByItems = [
             if (selectedDistrict && selectedDistrict !== "" ) {
                 param["DistrictId"]=selectedDistrict;
             }
+
             if (selectedWard && selectedWard !== "" ) {
                 param["WardId"]=selectedWard;
             }
@@ -526,9 +547,9 @@ const orderByItems = [
                      ))}
                  </TableBody>
              </Table>
-             {maxPage > 1 ? <Stack spacing={2} mt="10px">
-                 <Pagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
-             </Stack > : <></>}
+             {/* {maxPage > 1 ? <Stack spacing={2} mt="10px"> */}
+            <Pagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
+             {/* </Stack > : <></>} */}
          </Stack>
          <Routes>
              <Route path='detail' element={<DetailOrder />} />

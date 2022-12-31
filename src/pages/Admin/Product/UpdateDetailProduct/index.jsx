@@ -26,14 +26,18 @@ import apiProduct from "../../../../apis/apiProduct"
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-class ProductImageEdit {
-  constructor(id, url, editStatus, file) {
-    this.id = id,
-    this.url = url,
-    this.editStatus = editStatus,
-    this.file = file
-  }
-}
+// class ProductImageEdit {
+//   constructor(id, url, editStatus, file) {
+//     this.id = id,
+//     this.url = url,
+//     this.editStatus = editStatus,
+//     this.file = file
+//   }
+
+//   setStatus(status) {
+//     this.editStatus = status
+//   }
+// }
 
 function UpdateDetailProduct() {
   const {id} = useParams()
@@ -53,6 +57,17 @@ function UpdateDetailProduct() {
 
   // Xử lí phần danh sách hình ảnh hiển thị ban đầu
   const [filesEdit, setFilesEdit] = useState([])
+  const [filesStatus, setFilesStatus] = useState([])
+  // Hiển thị button xóa sau khi ấn
+
+  // Tạo file status
+  function createStatusFiles (n){
+    let listStatus = []
+    for(let i = 0; i < n; i++){
+      listStatus.push("NONE");
+    }
+    return listStatus
+  }
 
   // Get all categories
   useEffect(() => {
@@ -73,10 +88,16 @@ function UpdateDetailProduct() {
   // Change value of select box
 
   const onChangeImg = (e) => {
+    if (filesStatus.filter((item) => item === "EDIT").length < 1) {
+      toast.info("Bạn không chỉnh sửa ảnh nào")
+    }
+    console.log("length", filesStatus.filter((item) => item === "EDIT").length);
+    
     if (e.target.files.length > 0) {
       if (files.length === 4) {
         toast.info("Số hình ảnh tối đa cho 1 sản phẩm là 4")
       } else {
+        console.log("1");
         let filesState = [...files, e.target.files[0]]
         setFiles(filesState)
         let reviewsState = [...review, URL.createObjectURL(e.target.files[0])]
@@ -89,28 +110,72 @@ function UpdateDetailProduct() {
   }
 
   // handle update product
-  const handleUpdate = () => {
-    const params = {
-      "Name": name,
-      "CategoryId": category,
-      "Quantity": quantity,
-      "Price": price,
-      "Unit": unit,
-      "MinPurchase": minPurchase,
-      "Description": description,
-      "Status": status,
+  const handleUpdate = async() => {
+    if (files.length !== filesStatus.filter((item) => item === "EDIT").length) {
+      let text = ''
+      filesStatus.filter((item) => item === "EDIT").forEach((item, index) => {
+        if (item === "EDIT") {
+          text = text + (index + 1) + ', '
+        }
+      })
+      toast.info("Vui lòng chọn đúng số ảnh, bạn chỉ chỉnh sửa ảnh " + text.slice(0, -2))
+      return
     }
-    if(!(name && category && price && quantity && unit && minPurchase && description && status)) {
+    // Xử lí tham số tình trạng ảnh chỉnh sửa
+    // let text_status = ''
+    console.log("fileStateInsert: ", files);
+    let unitString = unit == 0 ? "WEIGHT" : "UNIT"
+    let statusString = status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK"
+    let params = new FormData(); 
+    const product = {
+        Name: name,
+        CategoryId: category,
+        Quantity: quantity,
+        Price: price,
+        Unit: unitString,
+        MinPurchase: minPurchase,
+        Description: description,
+        Status: statusString,
+        EditImageStatus : filesStatus
+    }
+
+    params.append('editProduct', JSON.stringify(product));
+    files.forEach((item) => {
+      params.append('files', item);
+    })
+    for (var pair of params.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    }
+    if(!(name && category && price && quantity && unitString && minPurchase && description && statusString)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
     else{
-    apiProduct.insertProduct(params,idProduct)
+    await apiProduct.putProduct(params, id)
       .then(res => {
-        toast.success("Sửa sản phẩm thành công")
+        if (res.status === 200) {
+          toast.success("Cập nhật sản phẩm thành công")
+          const product = res.data
+          setName(product?.name)
+          setCategory(product?.category?.id)
+          setQuantity(product?.quantity)
+          setPrice(product?.price)
+          setUnit(product?.unit)
+          setMinPurchase(product?.minPurchase)
+          setDescription(product?.description)
+          setStatus(product?.status)
+          // old image
+          setFilesEdit(product?.productImages)
+          setFilesStatus(createStatusFiles(product?.productImages?.length))
+          // new image
+          setFiles([])
+          setReview([])
+        } else {
+          toast.error("Cập nhật sản phẩm thất bại!")
+        }
       })
       .catch(error => {
-        toast.error("Sửa sản phẩm thất bại!")
+        toast.error("Cập nhật sản phẩm thất bại!")
       })
     }
   }
@@ -133,12 +198,8 @@ function UpdateDetailProduct() {
                 setDescription(product?.description)
                 setStatus(product?.status)
                 // old image
-                let listProductImageEdit = []
-                product?.productImages.forEach(item => {
-                  let productImageEdit = new ProductImageEdit(item.id, item.url, "None", null);
-                  listProductImageEdit.push(productImageEdit)
-                });
-                setFilesEdit(listProductImageEdit)
+                setFilesEdit(product?.productImages)
+                setFilesStatus(createStatusFiles(product?.productImages?.length))
                 // new image
                 setFiles([])
                 setReview([])
@@ -149,17 +210,40 @@ function UpdateDetailProduct() {
               }
           })
     }
+
     loaddata()
   }, [])
 
   // Xử lí xóa hình ảnh
-  const handleDeleteImage = (index) => {
-    let oldFile = filesEdit
-    let newItem = oldFile.pop(index)
-    newItem.editStatus = "DELETE"
-    console.log("filesEdit", filesEdit)
-    console.log("newItem", newItem)
-    setFilesEdit([...oldFile, newItem]);
+  const handleDeleteImage = (event, item, index) => {
+    if (filesStatus[index] !== "DELETE"){
+      let newFileStatus = filesStatus;
+      newFileStatus[index] = "DELETE";
+      setFilesStatus(newFileStatus);
+      toast.success(`Bạn đã chọn ảnh sản phẩm số ${index + 1} để xóa`)
+    } else {
+      let newFileStatus = filesStatus;
+      newFileStatus[index] = "NONE";
+      setFilesStatus(newFileStatus);
+      toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`)
+    }
+    console.log(filesStatus);
+  }
+
+  // Xử lí thay đổi hình ảnh
+  const handleEditImage = (event, item, index) => {
+    if (filesStatus[index] !== "EDIT"){
+      let newFileStatus = filesStatus;
+      newFileStatus[index] = "EDIT";
+      setFilesStatus(newFileStatus);
+      toast.success(`Bạn đã chọn ảnh sản phẩm số ${index + 1} để chỉnh sửa`)
+    } else {
+      let newFileStatus = filesStatus;
+      newFileStatus[index] = "NONE";
+      setFilesStatus(newFileStatus);
+      toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`)
+    }
+    console.log(filesStatus);
   }
 
   return (
@@ -259,35 +343,55 @@ function UpdateDetailProduct() {
           <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Ảnh sản phẩm:</Typography>
           <Stack >
             <div style={{display: "flex", marginBottom: "5px"}}>
-              {filesEdit.map((item, index) => {
+              {filesEdit?.map((item, index) => {
+                console.log("result: ", filesStatus[index] === "DELETE");
                   return (<>
                     <img src={item?.url} width="180px" height="180px" style={{marginRight: "10px"}} alt="" />
                     <Stack spacing={1} justifyContent="center" py={1} style={{display: "flex", flexDirection: "row", borderRight: "1px solid #ccc", marginRight: "2px"}}>
                         <EditIcon 
                         style={{cursor: "pointer"}} 
                         sx={{
-                          "&:hover": { color: "#FFFFFF", backgroundColor: "green" }, 
+                          "&:hover": { color: "green" }, 
                           transition: "ease 0.2s",
                           borderRadius: "5px"
                         }}
-                        onClick={() => toast.error("Bạn đã xác nhận edit sản phẩm này")}
+                        onClick={(event) => handleEditImage(event, item, index)}
                         />
-                      {/* <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
-                        Xóa
-                      </Button> */}
-                      <DeleteIcon onClick={handleDeleteImage(item)} variant="outlined" style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}} 
+                      {filesStatus[index] === "DELETE" ? 
+                      <DeleteIcon 
+                      onClick={(event) => handleDeleteImage(event, item, index)}
+                      variant="outlined" 
+                      style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px", color: "red"}}
                       sx={{
-                        "&:hover": { color: "#FFFFFF", backgroundColor: "red" }, 
-                        transition: "ease 1s",
+                        "&:hover": { color: "red" }, 
+                        transition: "ease 0.2s",
+                        borderRadius: "5px",
+                      }}/> :
+                      <DeleteIcon 
+                      onClick={(event) => handleDeleteImage(event, item, index)}
+                      variant="outlined" 
+                      style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}}
+                      sx={{
+                        "&:hover": { color: "red" }, 
+                        transition: "ease 0.2s",
                         borderRadius: "5px",
                       }}/>
+                      }
                     </Stack>
                   </>)
               })}
             </div>
-            <input type="file" id="myfile" name="myfile" onChange={onChangeImg}></input>
+            {/* <input type="file" id="myfile" name="myfile" onChange={onChangeImg}></input> */}
           </Stack>
         </Stack>
+        {/* <Stack direction="row" >
+          <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Tình trạng ảnh</Typography>
+          <Stack style={{display: "flex", flexDirection: "row" }} sx={{ flex: "1" }}>
+            {filesStatus.map((item) => {return <>
+              <Typography className="cruBrand__label">{item}</Typography>
+            </>})}
+          </Stack>
+        </Stack> */}
         <Stack direction="row" p={2}>
           <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Thêm ảnh chỉnh sửa:</Typography>
           <Stack >

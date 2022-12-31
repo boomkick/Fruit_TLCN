@@ -44,6 +44,14 @@ const apiProduct = {
         const res = await axiosAdmin.post(`/Product`, params);
         return res.data;
     },
+    putProduct: async (params, id) => {
+        const res = await axiosAdmin.put(`/Product/${id}/`, params);
+        return res.data;
+    },
+    deleteProduct: async (params) => {
+        const res = await axiosAdmin.delete(`/Product/${params.id}/`);
+        return res.data;
+    },
     
 }
 export default apiProduct;

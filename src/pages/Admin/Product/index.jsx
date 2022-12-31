@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import apiProduct from '../../../apis/apiProduct';
+import { toast } from 'react-toastify';
 
 function Product() {
     const [modalDelete, setModalDelete] = React.useState(false);
@@ -31,9 +32,32 @@ function Product() {
     const [products, setProducts] = React.useState([]);
     const [page, setPage] = React.useState(1);
     const [totalPage, setTotalPage] = React.useState(1);
+    const [itemdelete, setItemdelete] = React.useState(null);
 
-    const openModalDelete = () => setModalDelete(true);
+    const openModalDelete = (row) => {
+        setItemdelete(row)
+        setModalDelete(true);
+    }
     const closeModalDelete = () => setModalDelete(false);
+    const handleDelete = () => {
+        closeModalDelete()
+        console.log("itemdelete: ", itemdelete);
+        apiProduct.deleteProduct({ id: itemdelete.id })
+          .then(res => {
+            if (res.status === 200) {
+                toast.success("Xóa sản phẩm thành công")
+                const newProducts = products.filter(item => {
+                    return itemdelete.id !== item.id
+                  })
+                setProducts(newProducts)
+            } else  {
+                toast.error("Xóa sản phẩm không thành công")
+            }
+          })
+          .catch(error => {
+            toast.error("Xóa sản phẩm không thành công!")
+          })
+      }
 
     const handleChangeCategory = (event) => {
         setCategory(event.target.value)
@@ -65,7 +89,7 @@ function Product() {
         <>
             <Box className="productAdmin">
                 <Stack direction="row" mb={1} justifyContent="space-between" alignItems="center" sx={{ backgroundColor: "#FFF", height: "80px" }} px={2}>
-                    <Typography >Quản lý sản phẩm</Typography>
+                    <Typography fontSize="26px">Quản lý sản phẩm</Typography>
                     <Link to='/admin/product/create'>
                         <Button variant="outlined" pr={2}>Tạo sản phẩm</Button>
                     </Link>
@@ -189,7 +213,7 @@ function Product() {
                                             <Link to={`/admin/product/detail/${row.id}`} style={{flex:1}}>
                                                 <Button variant="contained">Sửa</Button>
                                             </Link>
-                                            <Button onClick={openModalDelete} variant="outlined" color="error">
+                                            <Button onClick={() => openModalDelete(row)} variant="contained" color="error" style={{flex:1, width: "64px", alignItems: "center", marginLeft: "40px"}}>
                                                 Xóa
                                             </Button>
                                         </Stack>
@@ -206,7 +230,7 @@ function Product() {
                         open={modalDelete}
                         onClose={closeModalDelete}
                     >
-                        <Stack className="modal-info" direction="row" spacing={2} justifyContent='center' width='26rem' >
+                        <Stack className="modal-info" direction="row" spacing={2} justifyContent='center' width='28rem' >
                             <Stack>
                                 <InfoOutlinedIcon color="primary" />
                             </Stack>
@@ -214,13 +238,13 @@ function Product() {
                             <Stack spacing={3}>
                                 <Stack>
                                     <Typography fontWeight="bold">
-                                        Bạn có chắc muốn xoá sản phẩm?
+                                        {`Bạn có chắc muốn xoá sản phẩm ${itemdelete?.name}?`}   
                                     </Typography>
                                 </Stack>
 
                                 <Stack direction="row" justifyContent="flex-end" spacing={1}>
                                     <Button onClick={closeModalDelete} variant="outlined">Hủy</Button>
-                                    <Button variant="contained">Xóa bỏ</Button>
+                                    <Button variant="contained" onClick={handleDelete}>Xóa bỏ</Button>
                                 </Stack>
                             </Stack>
                         </Stack>

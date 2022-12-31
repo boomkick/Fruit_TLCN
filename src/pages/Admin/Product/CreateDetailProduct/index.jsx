@@ -89,11 +89,9 @@ function CreateDetailProduct(props) {
         CategoryId: category,
         Quantity: quantity,
         Price: price,
-        // Unit: unit,
         Unit: unitString,
         MinPurchase: minPurchase,
         Description: description,
-        // Status: status,
         Status: statusString,
     }
 

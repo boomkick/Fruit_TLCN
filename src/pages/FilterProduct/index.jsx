@@ -29,6 +29,7 @@ function FilterProduct(props) {
   const [orderBy, setOrderBy] = useState(1);
   const [minValue, setMinValue] = useState(null);
   const [maxValue, setMaxValue] = useState(null);
+  const [keyWord, setKeyWord] = useState("null");
   const [filter, setFilter] = useState(false);
   const [maxPage, setMaxPage] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -39,6 +40,9 @@ function FilterProduct(props) {
         page: currentPage,
         pageSize: 8,
       };
+      if (keyWord && keyWord !== "") {
+        param["keyword"] = keyWord
+      }
       if (idCategory !== "") {
         param["categoryId"] = idCategory
       }
@@ -89,7 +93,7 @@ function FilterProduct(props) {
 
     };
     getData();
-  }, [idCategory, filter, orderBy, currentPage]);
+  }, [idCategory, filter, orderBy, currentPage, keyWord]);
 
   // Lấy dữ liệu category
   useEffect(() => {
@@ -111,11 +115,18 @@ function FilterProduct(props) {
     getCategories();
   }, []);
 
+  // Tìm kiếm theo keyword
+  const handleChangeKeyWord = (value) => {
+    console.log("key", value);
+    setKeyWord(value)
+  }
+
+  // Sắp xếp
   const handleChangeOrderBy = (event) => {
     setOrderBy(Number(event.target.value));
   };
 
-
+  // Lọc sản phẩm theo khoảng giá
   const handleMinMaxPrice = () => {
     if (!filter && parseInt(maxValue) < parseInt(minValue)) {
       toast.error("Nhập giá trị sau lớn hơn")
@@ -172,7 +183,7 @@ function FilterProduct(props) {
             }}
           />
           <Box>
-            <SearchBar />
+            <SearchBar onChangeKeyWord={handleChangeKeyWord}/>
           </Box>
         </Box>
         <Box className="filterProduct__form">

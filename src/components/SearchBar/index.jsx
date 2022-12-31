@@ -12,6 +12,7 @@ function SearchBar(props) {
   const handleInput = (e) => {
     const text = e.target.value;
     setSearchText(text);
+    props?.onChangeKeyWord(text);
   };
 
   const handleEnterKeyPressed = (e) => {

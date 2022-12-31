@@ -21,7 +21,7 @@ export default function BasicDateRangePicker(props) {
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
-      localeText={{ start: 'Check-in', end: 'Check-out' }}
+      localeText={{ start: 'Từ ngày', end: 'Đến ngày' }}
     >
       <DateRangePicker
         value={value}

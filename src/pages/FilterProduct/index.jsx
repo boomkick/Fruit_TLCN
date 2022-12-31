@@ -1,74 +1,57 @@
-import { useState, useEffect, useCallback } from "react";
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import React from "react";
 import {
   Stack,
   Box,
   Button,
   Typography,
-  Checkbox,
-  FormGroup,
   Grid,
-  Rating,
-  Tab,
-  RadioGroup,
-  Tabs,
-  Radio,
-  Slider,
   FormControl,
-  NativeSelect,
+  Select,
+  MenuItem,
+  TextField,
 } from "@mui/material";
 import "./FilterProduct.scss";
-import StarIcon from "@mui/icons-material/Star";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { numWithCommas } from "../../constraints/Util";
 import CardProduct from "../../components/CardProduct";
 import apiProduct from "../../apis/apiProduct";
 import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useParams } from "react-router-dom";
 import { Pagination as MuiPagination } from "@mui/material";
 import SearchBar from "../../components/SearchBar";
-import { fontSize } from "@mui/system";
 
 function FilterProduct(props) {
-  const idCategory = useParams().id;
+  const idParam = useParams().id
+  const [idCategory, setIdCategory] = useState(idParam || "");
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [value, setValue] = useState(1);
-  const [filter, setFilter] = useState({});
-  const [filterPrice, setFilterPrice] = useState({
-    minPrice: "",
-    maxPrice: "",
-    apply: false,
-    value: "",
-  });
+  const [orderBy, setOrderBy] = useState(1);
+  const [minValue, setMinValue] = useState(null);
+  const [maxValue, setMaxValue] = useState(null);
+  const [filter, setFilter] = useState(false);
   const [maxPage, setMaxPage] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-
-  //Filter change price
-  const [valueFilterPrice, setValueFilterPrice] = React.useState([
-    0, 1000000,
-  ]);
 
   useEffect(() => {
     const getData = async () => {
       let param = {
-        categoryId: idCategory,
         page: currentPage,
         pageSize: 8,
       };
-
-      if (filterPrice.apply) {
-        param["minPrice"] = filterPrice.minPrice
-        param["maxPrice"] = filterPrice.maxPrice
+      if (idCategory !== "") {
+        param["categoryId"] = idCategory
       }
 
-      switch (value) {
+      if (minValue ) {
+        param["minPrice"] = minValue
+      }
+
+      if (maxValue ) {
+        param["maxPrice"] = maxValue
+      }
+
+      switch (orderBy) {
         case 1: {
           break;
         }
@@ -106,7 +89,7 @@ function FilterProduct(props) {
 
     };
     getData();
-  }, [idCategory, filter, filterPrice.apply, value, currentPage]);
+  }, [idCategory, filter, orderBy, currentPage]);
 
   // Lấy dữ liệu category
   useEffect(() => {
@@ -127,28 +110,18 @@ function FilterProduct(props) {
 
     getCategories();
   }, []);
-  
-  useEffect(() => {
-    setCategory(category)
-  }, [idCategory])
 
-  const handleChangeFilterPrice = (event, newValue) => {
-    setValueFilterPrice(newValue);
-    setFilterPrice({
-      ...filterPrice,
-      minPrice: newValue[0],
-      maxPrice: newValue[1],
-    });
+  const handleChangeOrderBy = (event) => {
+    setOrderBy(Number(event.target.value));
   };
 
-  const handleChange = (event) => {
-    setValue(Number(event.target.value));
-  };
 
-  const handleApplyFilterPrice = () => {
-    setFilterPrice((pre) => {
-      return { ...pre, apply: !pre.apply };
-    });
+  const handleMinMaxPrice = () => {
+    if (!filter && parseInt(maxValue) < parseInt(minValue)) {
+      toast.error("Nhập giá trị sau lớn hơn")
+    } else {
+      setFilter(filter ? false : true);
+    }
   };
 
   // Xử lí phân trang
@@ -156,12 +129,38 @@ function FilterProduct(props) {
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   }
+
+  // Lọc sản phẩm theo category
+  const handleChangeCategory = (event) => {
+    setIdCategory(event.target.value)
+  }
+
+  // Lọc sản phẩm theo khoảng giá
+  function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+  const handleChangeMinValue = (event) => {
+    if (isNumber(event.target.value) || event.target.value === "" || !event.target.value){
+      setMinValue(event.target.value)
+    }else {
+      setMinValue("")
+      toast.info("Vui lòng nhập chữ số nguyên")
+    }
+  }
+
+  const handleChangeMaxValue = (event) => {
+    if (isNumber(event.target.value) || event.target.value === "" || !event.target.value){
+      setMaxValue(event.target.value)
+    }else {
+      setMaxValue("")
+      toast.info("Vui lòng nhập chữ số nguyên")
+    }
+  }
+  
   
   return (
     <Stack className="filterProduct container" direction="row" spacing={1}>
       <Stack className="filterProduct__sidebar" direction="column">
         <Box className="filterProduct__form">
-          <Typography className="filterProduct__title">TÌM KIẾM</Typography>
+          <Typography className="filterProduct__title" style={{textTransform: "uppercase"}}>TÌM KIẾM</Typography>
           <Box
             sx={{
               backgroundColor: "#3D8B91",
@@ -178,45 +177,60 @@ function FilterProduct(props) {
         </Box>
         <Box className="filterProduct__form">
           <Typography className="filterProduct__title">
-            DANH MỤC SẢN PHẨM
+            Danh mục sản phẩm
           </Typography>
-          <Box
-            sx={{
-              backgroundColor: "#3D8B91",
-              border: 0,
-              height: "3px",
-              margin: "7px 0",
-              maxWidth: "30px",
-              width: "100%",
-            }}
-          />
-          <FormGroup sx={{textOverflow: "ellipsis", overflow: "hidden" }}>
-            {categories.map((item) => (
-              <Box
-                key={item.id}
-                onClick={() => refreshPage()}
-                sx={{ padding: "6px"}}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
-            ))}
-          </FormGroup>
+          <FormControl sx={{ minWidth: 120 , width: "100%"}}>
+            <Select
+              value={idCategory}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+              onChange={handleChangeCategory}
+            >
+              <MenuItem value={""}>
+                <em>Mặc định</em>
+              </MenuItem>
+              {categories ? categories.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box className="filterProduct__form">
+          <Typography className="filterProduct__title">
+            Sắp xếp theo
+          </Typography>
+          <FormControl sx={{ minWidth: 120 , width: "100%"}}>
+            <Select
+              value={orderBy}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+              onChange={handleChangeOrderBy}
+            >
+              {tabs ? tabs.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box className="filterProduct__form">
+          <Typography className="filterProduct__title">
+            Tùy chọn khoảng giá mong muốn
+          </Typography>
+          <TextField
+                value={minValue}
+                label="Giá từ"
+                variant="standard"
+                sx={{ flex: 1 }}
+                onChange={handleChangeMinValue}
+                disabled={filter ? true : false}
+              />
+            <TextField
+                value={maxValue}
+                label="Đến"
+                variant="standard"
+                sx={{ flex: 1 }}
+                disabled={filter ? true : false}
+                onChange={handleChangeMaxValue}
+              />
         </Box>
         <Box className="filterProduct__form">
           <Box sx={{ width: "100%" }}>
-            <Box sx={{ width: "100%" }}>
-              <Slider
-                value={valueFilterPrice}
-                onChange={handleChangeFilterPrice}
-                // valueLabelDisplay="auto"
-                min={0}
-                max={1000000}
-                sx={{ color: "#666" }}
-                disabled={filterPrice.apply}
-              />
-            </Box>
             <Box>
               <Button
                 variant="contained"
@@ -226,43 +240,14 @@ function FilterProduct(props) {
                   backgroundColor: "#666",
                   color: "white",
                 }}
-                onClick={handleApplyFilterPrice}
+                onClick={handleMinMaxPrice}
               >
-                {filterPrice.apply ? "Huỷ" : "Lọc sản phẩm"}
+                {filter ? "Huỷ" : "Lọc sản phẩm"}
               </Button>
-              <Typography sx={{ fontSize: "12px" }}>
-                Giá: {numWithCommas(valueFilterPrice[0])} đ -{" "}
-                {numWithCommas(valueFilterPrice[1])} đ
-              </Typography>
             </Box>
           </Box>
         </Box>
-          <Box className="filterProduct__form">
-            <Typography className="filterProduct__title">THƯƠNG HIỆU</Typography>
-          <Box
-            sx={{
-              backgroundColor: "#3D8B91",
-              border: 0,
-              height: "3px",
-              margin: "7px 0",
-              maxWidth: "30px",
-              width: "100%",
-            }}
-          />
-          <FormGroup>
-            {/* {categories.map((item) => (
-              <Box
-                key={item.id}
-                onClick={() => refreshPage()}
-                sx={{ padding: "6px" }}
-              >
-                <Link to={`/product-category/${item.id}`}>
-                  <Box fontSize="14px">{item.name}</Box>
-                </Link>
-              </Box>
-            ))} */}
-          </FormGroup>
-        </Box>
+        
       </Stack>
       <Box sx={{ flex: 1 }}>
         {/* <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -301,25 +286,8 @@ function FilterProduct(props) {
                 textTransform: "uppercase",
               }}
             >
-              {category?.name ? category?.name : "Category"}
+              {category?.name ? category?.name : "Toàn bộ sản phẩm đã lọc"}
             </Typography>
-          </Box>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <NativeSelect
-                value={value}
-                onChange={handleChange}
-                inputProps={{
-                  name: "tabs",
-                }}
-              >
-                {tabs.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </NativeSelect>
-            </FormControl>
           </Box>
         </Stack>
         <Box>
@@ -341,9 +309,6 @@ function FilterProduct(props) {
   );
 }
 
-const refreshPage = () => {
-  window.location.reload();
-};
 const tabs = [
   {
     id: 1,

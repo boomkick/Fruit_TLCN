@@ -36,6 +36,7 @@ function ConfigRoute() {
 
       <Route path="product-detail/:id" element={<ProductDetail />} />
       <Route path="product-category/:id" element={<FilterProduct />} />
+      <Route path="product-category/" element={<FilterProduct />} />
     </Routes>
   );
 }

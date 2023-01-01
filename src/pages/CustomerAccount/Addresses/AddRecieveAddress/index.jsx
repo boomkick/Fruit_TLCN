@@ -40,17 +40,14 @@ function AddRecieveAddress(props) {
 
   // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
-    console.log(value);
     setCity(value);
   };
 
   const handleChangeDistrict = (value) => {
-    console.log(value);
     setDistrict(value);
   };
 
   const handleChangeWard = (value) => {
-    console.log(value);
     setWard(value);
   };
 
@@ -92,8 +89,6 @@ function AddRecieveAddress(props) {
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
         />
-        {/* Address - start */}
-        {/* Address - end */}
 
         <Stack direction="row">
           <Typography className="create-address__label">

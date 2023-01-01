@@ -29,26 +29,14 @@ import {
   Route,
   Link,
   useLocation,
-  useNavigate,
 } from "react-router-dom";
-
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ImageUploading from "react-images-uploading";
-import CloseIcon from "@mui/icons-material/Close";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
 import OverView from "./OverView/index";
 import Info from "./Info";
 import Addresses from "./Addresses";
 import CreateAddress from "./Addresses/CreateAddress";
 import AddRecieveAddress from "./Addresses/AddRecieveAddress";
-import PhoneNumber from "./Info/PhoneNumber";
 import Password from "./Info/Password";
-import Email from "./Info/Email";
 import Orders from "./Orders"
 import DetailOrder from "./Orders/DetailOrder";
 
@@ -198,21 +186,11 @@ function CustomerAccount() {
                 element={
                   <Routes>
                     <Route index element={<Info />} />
-                    <Route path="phone" element={<PhoneNumber />} />
-                    <Route path="email" element={<Email />} />
-                    <Route path="pass" element={<Password />} />
+                    <Route path="password" element={<Password />} />
                   </Routes>
                 }
               />
-
-              {/* <Route
-                path="logout"
-                element={
-                  <Routes>
-                    <Route index element={<OverView />} />
-                  </Routes>
-                }
-              /> */}
+              
             </Routes>
           </Box>
         </Box>

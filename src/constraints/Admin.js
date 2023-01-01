@@ -1,12 +1,11 @@
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import LaptopChromebookOutlinedIcon from '@mui/icons-material/LaptopChromebookOutlined';
 import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import WarehouseOutlinedIcon from '@mui/icons-material/WarehouseOutlined';
-
+import AppleIcon from '@mui/icons-material/Apple';
 
 export const sidebar = [
     {
@@ -24,7 +23,7 @@ export const sidebar = [
     {
         id: 3,
         text: 'Sản phẩm',
-        icon: LaptopChromebookOutlinedIcon,
+        icon: AppleIcon,
         link: '/admin/product'
     },
     {

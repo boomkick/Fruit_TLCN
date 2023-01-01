@@ -37,8 +37,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockIcon from "@mui/icons-material/Lock";
-import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
-import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import WallpaperIcon from "@mui/icons-material/Wallpaper";
@@ -48,35 +46,26 @@ import { useSelector } from "react-redux";
 
 import apiProfile from "../../../apis/apiProfile";
 import Loading from "../../../components/Loading";
+import SelectBoxAddress from "../../../components/SelectBoxAddress";
 
 
 
 function Info() {
-
-
-
   const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
-
-
-
   const [image, setImage] = useState([]);
-  const [gender, setGender] = useState(user.gender)
   const [firstName, setFirstName] = useState(user.firstName)
   const [lastName, setLastName] = useState(user.lastName)
   const [phone, setPhone] = useState(user.phone)
   const [email, setEmail] = useState(user.email)
   const [modalDeleteAvatar, setModalDeleteAvatar] = useState(false);
   const [modalViewAvatar, setModalViewAvatar] = useState(false);
-  const [modalNational, setModalNational] = useState(false);
   const [modalUploadAvatar, setModalUploadAvatar] = useState(false);
   const [openAvatar, setOpenAvatar] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
 
-  const openModalNational = () => setModalNational(true);
-  const closeModalNational = () => setModalNational(false);
-
+  // Xử lí hình ảnh
   const openModalViewAvatar = () => setModalViewAvatar(true);
   const closeModalViewAvatar = () => setModalViewAvatar(false);
 
@@ -139,19 +128,7 @@ function Info() {
       setModalDeleteAvatar(false);
   }
 
-  
-
-  const maxDayofmonth = (month, year) => {
-    if (month === 2) {
-      if ((year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 === 0)) {
-        return 29;
-      }
-      else return 28;
-    }
-    else if ([4, 6, 9, 11].includes(month))
-      return 30;
-    else return 31;
-  }
+  // Xử lí Tên, số điện thoại, email
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
   }
@@ -164,9 +141,31 @@ function Info() {
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
   }
+
+  // Xử lí phần địa chỉ
+  const [city, setCity] = useState(user.cityId);
+  const [district, setDistrict] = useState(user.districtId);
+  const [ward, setWard] = useState(user.wardId);
+  const [addressDetail, setAddressDetail] = useState(user.detailLocation);
+
+  const handleChangeCity = (value) => {
+    setCity(value);
+  };
+
+  const handleChangeDistrict = (value) => {
+    setDistrict(value);
+  };
+
+  const handleChangeWard = (value) => {
+    setWard(value);
+  };
+
+  const handleChangeAddressDetail = (event) => {
+    setAddressDetail(event.target.value);
+  };
   
   const onSaveChange = () => {
-    if (!(firstName && lastName && phone && email)) {
+    if (!(firstName && lastName && phone && email && city && district && ward && addressDetail)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return
     }
@@ -174,6 +173,10 @@ function Info() {
       firstName: firstName,
       lastName: lastName,
       phone: phone,
+      cityId: city,
+      districtId: district,
+      wardId: ward,
+      detailLocation: addressDetail,
     };
     setUpdating(true)
     apiProfile
@@ -188,6 +191,7 @@ function Info() {
       })
       .finally(()=>setUpdating(false))
   };
+
   const getUserProfile = () => {
     apiProfile.getUserProfile()
       .then((res) => {
@@ -275,63 +279,32 @@ function Info() {
               </Stack>
             </Stack>
           </Stack>
-
-          <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
-            onClick={onSaveChange}
-          >
-            {/* style={{backgroundColor: "#3D8B91"}} */}
-            {updating&&<Loading color="#fff"/>}Lưu thay đổi
-          </Button>
-        </Stack>
-
-        <Divider orientation="vertical" flexItem />
-
-        <Stack spacing={4}>
           <Typography>Số điện thoại và Email</Typography>
-
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            {/* <Stack direction="row" spacing={1}>
-              <LocalPhoneOutlinedIcon color="disabled" />
-              <ListItemText primary="Số điện thoại" secondary={user.phone} />
-            </Stack> */}
-            <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
-              <TextField
-                  id="outlined-basic"
-                  value={phone}
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  size="small"
-                  onChange={onChangePhone}
-              />
-              <span className="order__iconSearch">
-                  <LocalPhoneOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
-              </span>
-          </Stack>
-            {/* <Link to="/my-account/edit-account/phone">
-              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
-                Cập nhật
-              </Button>
-            </Link> */}
-          </Stack>
-
-          <Stack
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
+                <TextField
+                    id="outlined-basic"
+                    value={phone}
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    size="small"
+                    onChange={onChangePhone}
+                />
+                <span className="order__iconSearch">
+                    <LocalPhoneOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
+                </span>
+              </Stack>
+            </Stack>
+            <Stack
             direction="row"
             spacing={15}
             alignItems="center"
             justifyContent="space-between"
           >
-            {/* <Stack direction="row" spacing={1}>
-              <EmailOutlinedIcon color="disabled" />
-
-              <ListItemText
-                primary="Địa chỉ email"
-                secondary={user.email}
-              />
-            </Stack> */}
             <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
               <TextField
                   id="outlined-basic"
@@ -347,29 +320,73 @@ function Info() {
               </span>
           </Stack>
 
-            {/* <Link to="/my-account/edit-account/email">
-              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
-                Cập nhật
-              </Button>
-            </Link> */}
           </Stack>
-
-          <Typography>Bảo mật</Typography>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Stack direction="row" spacing={1}>
-              <LockIcon color="disabled" />
-              <ListItemText primary="Mật khẩu của bạn" />
+          
+          <Stack style={{backgroundColor: "#f7f7f7", padding: "10px"}}>
+            <Typography>Bảo mật</Typography>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              style={{marginTop: "20px"}}
+            >
+              <Stack direction="row" spacing={1}>
+                <LockIcon color="disabled" />
+                <ListItemText primary="Mật khẩu của bạn" />
+              </Stack>
+              <Link to="/my-account/edit-account/password">
+                <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
+                  Quên mật khẩu
+                </Button>
+              </Link>
             </Stack>
-            <Link to="/my-account/edit-account/pass">
-              <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
-                Quên mật khẩu
-              </Button>
-            </Link>
           </Stack>
+        </Stack>
+
+        <Divider orientation="vertical" flexItem />
+
+        <Stack spacing={4} style={{width: "100%"}}>
+          
+          <Stack
+              direction="row"
+              spacing={15}
+              alignItems="center"
+              justifyContent="space-between"
+              style={{width: "100%"}}
+            >
+            <Stack spacing={4}  style={{width: "100%"}}>
+              <Typography>Địa chỉ tài khoản</Typography>
+              <SelectBoxAddress
+                city={city}
+                district={district}
+                ward={ward}
+                onChangeCity={handleChangeCity}
+                onChangeDistrict={handleChangeDistrict}
+                onChangeWard={handleChangeWard}
+              />
+            </Stack>
+          </Stack>
+          <Stack direction="row">
+          <Typography className="create-address__label">
+            Địa chỉ chi tiết
+          </Typography>
+          <Stack className="create-address__input">
+            <TextField
+                  id="outlined-basic"
+                  value={addressDetail}
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  size="small"
+                  onChange={handleChangeAddressDetail}
+              />
+            </Stack>
+          </Stack>
+          <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
+            onClick={onSaveChange}
+          >
+            {updating&&<Loading color="#fff"/>}Lưu thay đổi
+          </Button>
+          
         </Stack>
       </Stack>
 
@@ -529,7 +546,7 @@ function Info() {
                 Bạn có chắc muốn xoá ảnh đại diện ?
               </Typography>
               <Typography>
-                Hình ảnh đại diện sẽ quay về mặc định của Tiki
+                Bạn không thể xóa ảnh đại diện
               </Typography>
             </Stack>
 

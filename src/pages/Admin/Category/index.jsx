@@ -64,7 +64,7 @@ function Category() {
     <Stack direction="row" bgcolor="#fff" p={3}>
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="space-between">
-          <Typography>Danh sách danh mục sản phẩm</Typography>
+          <Typography fontSize="26px">Danh sách danh mục sản phẩm</Typography>
           <Link to="/admin/category/create">
             <Button variant="contained">Thêm danh mục</Button>
           </Link>

@@ -41,18 +41,14 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-// import AdminLogin from "./Login";
 import Category from "./Category";
 import CreateCategory from "./Category/CruCategory/index";
-// import Dashboard from "./Dashboard";
 import Order from "./Order";
 import Product from "./Product";
+import User from "./User";
+import UpdateRoleUser from "./User/UpdateRoleUser";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
 import logo_shop from "../../assets/img/logo.png"
-// import DetailProduct from "./Product/DetailProduct";
-// import Review from "./Review";
-// import User from "./User";
-// import DetailUser from "./User/DetailUser";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../slices/authSlice";
@@ -498,17 +494,17 @@ function Admin() {
             }
           />
 
-          {/* <Route
+          <Route
             path="user/*"
             element={
               <Routes>
                 <Route index element={<User />} />
-                <Route path="detail/:id" element={<DetailUser />} />
+                <Route path="update-role/" element={<UpdateRoleUser />} />
               </Routes>
             }
           />
 
-          <Route path="review" element={<Review />} /> */}
+          {/* <Route path="review" element={<Review />} /> */}
         </Routes>
       </Box>
 

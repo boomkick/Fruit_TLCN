@@ -154,39 +154,6 @@ function CreateDetailProduct(props) {
     }
   }
 
-  // get data for a particular product
-
-
-  // Set thông tin cho product detail
-  // useEffect(() => {
-  //   const loaddata = () => {
-  //     if (edit === true) {
-  //       apiProduct.getProductDetail({id: id})
-  //         .then(res => {
-  //           const product = res.data
-  //           console.log(product)
-  //             if (product) {
-  //               setName("")
-  //               setCategory("")
-  //               setQuantity("")
-  //               setPrice("")
-  //               setUnit("")
-  //               setMinPurchase("")
-  //               setDescription("")
-  //               setStatus("")
-  //               setFiles([])
-  //               setReview([rev])
-  //             }
-  //             else {
-  //               navigate("/admin/brand/create")
-  //               toast.error("Địa chỉ này không tồn tại!")
-  //             }
-  //         })
-  //     }
-  //   }
-  //   loaddata()
-  // }, [edit])
-
   return (
     <Box width={'100%'} bgcolor='#fff'>
       <Stack className="cruBrand" p={3} justifyContent="center" width="700px" spacing={2} bgcolor='#fff'>
@@ -211,7 +178,7 @@ function CreateDetailProduct(props) {
               size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
         </Stack>
         <Stack direction="row">
-        <Typography className="cruBrand__label">
+          <Typography className="cruBrand__label">
             Loại sản phẩm:
           </Typography>
           <FormControl className="create-address__input" sx={{flex:"1"}}>
@@ -231,11 +198,6 @@ function CreateDetailProduct(props) {
             </Select>
           </FormControl>
         </Stack>
-        {/* {edit == true ? <Stack direction="row">
-          <Typography className="cruBrand__label">Số lượng</Typography>
-          <TextField value={name} onChange={(event) => { setQuantity(event.target.value) }}
-              size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
-        </Stack> : <></>} */}
 
         <Stack direction="row" >
           <Typography className="cruBrand__label">Mô Tả</Typography>

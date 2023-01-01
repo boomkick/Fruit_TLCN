@@ -1,12 +1,9 @@
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LaptopChromebookOutlinedIcon from '@mui/icons-material/LaptopChromebookOutlined';
 import LeaderboardOutlinedIcon from '@mui/icons-material/LeaderboardOutlined';
-import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined';
-import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined';
 import CalculateOutlinedIcon from '@mui/icons-material/CalculateOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
-import CardTravelOutlinedIcon from '@mui/icons-material/CardTravelOutlined';
 import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 import WarehouseOutlinedIcon from '@mui/icons-material/WarehouseOutlined';
 
@@ -38,7 +35,7 @@ export const sidebar = [
     },
     {
         id: 5,
-        text: 'Quản lý người dùng',
+        text: 'Cập nhật quyền',
         icon: GroupOutlinedIcon,
         link: '/admin/user'
     },

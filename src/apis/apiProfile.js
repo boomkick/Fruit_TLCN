@@ -33,12 +33,10 @@ const apiProfile = {
         const res = await axiosClientWithToken.put('/account/profile/changePhone', params)
         return res.data;
     },
-
-    getAllUser: async (params) => {
-        const res = await axiosClientWithToken.get('admin/account/all', params)
+    putUpdateRole: async (params) => {
+        const res = await axiosClientWithToken.put('/account/updateRole', params)
         return res.data;
     },
-
     
 
 }

@@ -23,20 +23,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAddress } from "../../../../slices/paymentSlice";
 import SelectBoxAddressAddRecieve from "../../../../components/SelectBoxAddressAddRecieve";
 
-function AddRecieveAddress(props) {
+function AddRecieveAddress() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  // const [addressType, setAddressType] = useState("");
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
   const paymentAddress = useSelector((state) => state.payment.address);
-  const [addressid, setAddressid] = useState("");
-  const [edit, setEdit] = useState(props.edit);
-  const [city, setCity] = React.useState("");
-  const [district, setDistrict] = React.useState("");
-  const [ward, setWard] = React.useState("");
+  // const [isAddressPayment, setIsAddressPayment] = useState(false);
+  // const [isCartItems, setIsCartItems] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
+
+  // Hiển thị lại phần địa chỉ nhận hàng đã lưu
+  // useEffect(() => {
+  //   const getPaymentAddress = async () => {
+  //     setIsAddressPayment(paymentAddress ? true : false)
+  //     if (isAddressPayment) {
+  //       await setCity(paymentAddress.city);
+  //       setDistrict(paymentAddress.district);
+  //       setWard(paymentAddress.ward);
+  //       setName(paymentAddress.name);
+  //       setPhone(paymentAddress.phone);
+  //       setAddressDetail(paymentAddress.addressDetail);
+  //     }
+  //   }
+
+  //   getPaymentAddress()
+  //   console.log("city", city);
+  // }, [])
 
   // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
@@ -84,6 +101,22 @@ function AddRecieveAddress(props) {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
+        {/* {isAddressPayment ? 
+        <SelectBoxAddress
+          city={city}
+          district={district}
+          ward={ward}
+          onChangeCity={handleChangeCity}
+          onChangeDistrict={handleChangeDistrict}
+          onChangeWard={handleChangeWard}
+        />
+        : 
+        <SelectBoxAddressAddRecieve
+          onChangeCity={handleChangeCity}
+          onChangeDistrict={handleChangeDistrict}
+          onChangeWard={handleChangeWard}
+        />
+        } */}
         <SelectBoxAddressAddRecieve
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}

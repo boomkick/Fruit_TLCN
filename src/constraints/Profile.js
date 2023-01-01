@@ -12,8 +12,8 @@ export const sidebarTab = [
     },
     {
         id: 3,
-        name: 'Địa chỉ',
-        link: '/my-account/address'
+        name: 'Địa chỉ nhận hàng',
+        link: '/my-account/address/add'
     },
     {
         id: 4,

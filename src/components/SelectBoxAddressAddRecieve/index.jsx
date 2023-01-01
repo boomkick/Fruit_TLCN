@@ -102,7 +102,6 @@ function SelectBoxAddressAddRecieve(props) {
                   size="small"
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  // value={selectedCity ?? "123214"}
                   value={selectedCity ? selectedCity : ""}
                   label="Age"
                   onChange={handleChangeCity}

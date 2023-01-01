@@ -17,8 +17,6 @@ import { Link, useNavigate } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
 import { deleteAll } from "../../slices/cartSlice";
-
-// import apiNotify from '../../apis/apiNotify'
 import Loading from "../../components/Loading";
 
 function Payment() {
@@ -59,6 +57,10 @@ function Payment() {
   useEffect(() => {
     const getAddresses = () => {
       console.log("paymentAddress:", paymentAddress);
+      if(!CartItems || CartItems.length < 1) {
+        navigate("/");
+        toast.warning("Hãy thêm sản phẩm vào giỏ hàng trước");
+      }
       if(!paymentAddress) {
           navigate("/my-account/address/add");
           toast.warning("Vui lòng thêm địa chỉ nhận hàng");
@@ -413,7 +415,6 @@ function Payment() {
           </Grid>
         </Grid>
       </Box>
-      {/* <ChooseCoupon handleOpen={handleOpen} handleClose={handleClose} open={open} /> */}
       <ChooseAddress
         handleOpen={handleOpenAddress}
         handleClose={handleCloseAddress}

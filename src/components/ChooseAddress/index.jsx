@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import './ChooseAddress.scss'
 import { Button, Modal, Box, Stack, Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
-import apiAddress from '../../apis/apiAddress'
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddress } from '../../slices/paymentSlice';
@@ -22,9 +21,8 @@ function ChooseAddress(props) {
     }, [])
 
     const chooseAddressShip = (address)=>{
-        // props.handleClose()
-        // dispatch(setAddress(address))
-        console.log(address);
+        props.handleClose()
+        dispatch(setAddress(address))
     }
 
     return (

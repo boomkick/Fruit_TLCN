@@ -35,18 +35,7 @@ function Addresses() {
     }
     return true
   }
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     apiAddress.getProfileUser().then((res) => {
-  //       setAddresses(res.data.user.address);
-  //       console.log(res.data.user.address);
-  //     });
-  //   };
-  //   getData();
-  // }, []);
-
-
+  
   return (
     <Stack spacing={2} className="addresses">
       <Typography className="heading">Địa chỉ của bạn</Typography>

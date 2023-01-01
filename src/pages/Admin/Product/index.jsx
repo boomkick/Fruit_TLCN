@@ -18,11 +18,12 @@ import {
 } from '@mui/material';
 import "./Product.scss"
 import { Link } from 'react-router-dom';
-import EditIcon from '@mui/icons-material/Edit';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import apiProduct from '../../../apis/apiProduct';
 import { toast } from 'react-toastify';
 import apiCategory from '../../../apis/apiCategory';
+import { productStatus } from '../../../constraints/Product';
 
 const sortByItems = [
     {id: 0, label: 'NONE', name: 'Mặc định'},
@@ -91,11 +92,11 @@ function Product() {
     }
 
     // Sắp xếp loại
-    const [sortBy, setSortBy] = useState([0])
+    const [sortBy, setSortBy] = useState(0)
     const handleChangeSortBy = (event) => {
         setSortBy(event.target.value);
     };
-    const [order, setOrder] = useState([0])
+    const [order, setOrder] = useState(0)
     const handleChangeOrder = (event) => {
         if( !sortBy || sortBy == 0 ) {
             toast.error("Vui lòng chọn sắp xếp theo loại trước")
@@ -363,7 +364,7 @@ function Product() {
                                     <TableCell>
                                         <Stack direction="row" justifyContent="center">
                                             <Typography sx={{ margin: "auto 0" }}>{row.price}</Typography>
-                                            <EditIcon sx={{ width: "12px" }} />
+                                            <AttachMoneyIcon sx={{ width: "12px" }} />
                                         </Stack>
                                     </TableCell>
                                     <TableCell align='center'>
@@ -373,14 +374,14 @@ function Product() {
                                         <Typography>{row.quantity}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
-                                        <Typography>{row.status}</Typography>
+                                        <Typography>{productStatus.find((item) => item.id == row.status)?.text}</Typography>
                                     </TableCell>
                                     <TableCell align='center'>
                                         <Stack spacing={1} justifyContent="center" py={1}>
                                             <Link to={`/admin/product/detail/${row.id}`} style={{flex:1}}>
                                                 <Button variant="contained">Sửa</Button>
                                             </Link>
-                                            <Button onClick={() => openModalDelete(row)} variant="contained" color="error" style={{flex:1, width: "64px", alignItems: "center", marginLeft: "40px"}}>
+                                            <Button onClick={() => openModalDelete(row)} variant="contained" color="error" style={{flex:1, width: "64px", alignItems: "center", marginLeft: "42px"}}>
                                                 Xóa
                                             </Button>
                                         </Stack>

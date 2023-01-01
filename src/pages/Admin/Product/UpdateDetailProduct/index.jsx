@@ -88,8 +88,8 @@ function UpdateDetailProduct() {
   // Change value of select box
 
   const onChangeImg = (e) => {
-    if (filesStatus.filter((item) => item === "EDIT").length < 1) {
-      toast.info("Bạn không chỉnh sửa ảnh nào")
+    if (filesStatus.filter((item) => item === "EDIT").length < files.length) {
+      toast.info("Bạn đang thêm ảnh vào sản phẩm")
     }
     console.log("length", filesStatus.filter((item) => item === "EDIT").length);
     
@@ -111,7 +111,7 @@ function UpdateDetailProduct() {
 
   // handle update product
   const handleUpdate = async() => {
-    if (files.length !== filesStatus.filter((item) => item === "EDIT").length) {
+    if (files.length < filesStatus.filter((item) => item === "EDIT").length) {
       let text = ''
       filesStatus.filter((item) => item === "EDIT").forEach((item, index) => {
         if (item === "EDIT") {
@@ -120,6 +120,14 @@ function UpdateDetailProduct() {
       })
       toast.info("Vui lòng chọn đúng số ảnh, bạn chỉ chỉnh sửa ảnh " + text.slice(0, -2))
       return
+    }
+    if (files.length > filesStatus.filter((item) => item === "EDIT").length) {
+      let countFile = filesStatus.filter((item) => item === "NONE").length + files.length
+      if (countFile > 4) {
+        toast.info("Tối đã mỗi sản phẩm chỉ chứa 4 ảnh");
+        return
+      }
+      
     }
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''

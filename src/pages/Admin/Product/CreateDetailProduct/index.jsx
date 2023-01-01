@@ -77,7 +77,6 @@ function CreateDetailProduct(props) {
   }
 
   // handle Add product
-
   const handleInsert = () => {
     console.log("fileStateInsert: ", files);
     // {"CategoryId": 3, "name": "Lê Hàn Quốc", "Price": 500000, "Quantity": 80, "Unit": "UNIT", "MinPurchase":1, "Description": "aaaa", "status":"SELLING"}
@@ -101,7 +100,7 @@ function CreateDetailProduct(props) {
     })
     for (var pair of params.entries()) {
       console.log(pair[0]+ ', ' + pair[1]); 
-  }
+    }
     if(!(name && category && price && quantity && unitString && minPurchase && description && statusString)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return

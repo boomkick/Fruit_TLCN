@@ -190,15 +190,72 @@ const orderByItems = [
     };
 
      const size =6;
- 
+    
+     // Sau khi chỉnh page thì sẽ giữ nguyên giá trị bộ lọc
      useEffect(() => {
+        // const getData = async () => {
+        //     let param = {
+        //         page: currentPage,
+        //         pageSize: 8,
+        //     };
+        //     if (selected != 3 ) {
+        //         param["CartStatus"]=selected;
+        //     }
+        //     setOrders([])
+        //     apiCart.getAllOrders(param)
+        //         .then(response=>{
+        //         setOrders(response.data.carts);
+        //         setMaxPage(response.data.maxPage);
+        //         })
+        //         .catch(setOrders([]))
+        // };
+        // getData();
         const getData = async () => {
             let param = {
                 page: currentPage,
                 pageSize: 8,
-            };
+              };
             if (selected != 3 ) {
                 param["CartStatus"]=selected;
+            }
+            if (keyWordType !== 0 ) {
+                param["KeyWordType"]=keyWordType == 1 ? "PHONE" : "NAME";
+            }
+            if (keyWord && keyWord!=="") {
+                param["keyWord"]=keyWord;
+            }
+            if (selectedCity && selectedCity !== "" ) {
+                param["CityId"]=selectedCity;
+            }
+            if (selectedDistrict && selectedDistrict !== "" ) {
+                param["DistrictId"]=selectedDistrict;
+            }
+
+            if (selectedWard && selectedWard !== "" ) {
+                param["WardId"]=selectedWard;
+            }
+            if (createdDate[0] && createdDate[0] !== null) {
+                param["FromCreatedDate"]=createdDate[0].format('YYYY-MM-DD');
+            }
+            if (createdDate[1] && createdDate[1] !== null) {
+                param["ToCreatedDate"]=createdDate[1].format('YYYY-MM-DD');
+            }
+            if (minValue ) {
+                param["FromTotal"] = minValue
+            }
+            if (maxValue ) {
+                param["ToTotal"] = maxValue
+            }
+            if (paymentMethod !== 0) {
+                // Nếu pttt là 1 trên FE -> CASH, còn 2 thì là MOMO
+                // Ở dưới BE 0 -> CASH, 1 -> MOMO
+                param["PaymentMethod"] = paymentMethod == 1 ? 0 : 1
+            }
+            if (sortBy !== 0) {
+                param["SortBy"] = sortBy == 1 ? "CREATEDDATE" : "TOTAL"
+            }
+            if (order !== 0) {
+                param["order"] = order == 1 ? "ASC" : "DESC"
             }
             setOrders([])
             apiCart.getAllOrders(param)
@@ -211,10 +268,13 @@ const orderByItems = [
         getData();
     }, [currentPage]);
 
+    // Sau khi chuyển trạng thái đơn hàng thì reset bộ lọc, get all orders theo trạng thái mới, chuyển trang hiện tại về 1
     useEffect(() => {
+        handleReset()
+        setCurrentPage(1)
         const getData = async () => {
             let param = {
-                page: 1,
+                page: currentPage,
                 pageSize: 8,
             };
             if (selected != 3 ) {
@@ -253,7 +313,7 @@ const orderByItems = [
         }
         const getData = async () => {
             let param = {
-                page: 1,
+                page: currentPage,
                 pageSize: 8,
               };
             if (selected != 3 ) {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Box,
     Typography,
@@ -20,20 +20,92 @@ import "./Product.scss"
 import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import SearchIcon from "@mui/icons-material/Search";
 import apiProduct from '../../../apis/apiProduct';
 import { toast } from 'react-toastify';
+import apiCategory from '../../../apis/apiCategory';
+
+const sortByItems = [
+    {id: 0, label: 'NONE', name: 'Mặc định'},
+    {id: 1, label: 'ID ', name: 'Ngày tạo'},
+    {id: 2, label: 'PRICE', name: 'Giá sản phẩm'},
+ ]
+
+const orderByItems = [
+    {id: 0, label: 'NONE', name: 'Mặc định'},
+    {id: 1, label: 'ASC', name: 'Tăng dần'},
+    {id: 2, label: 'DESC', name: 'Giảm dần'},
+ ]
 
 function Product() {
-    const [modalDelete, setModalDelete] = React.useState(false);
-    const [category, setCategory] = React.useState(1);
-    const [price, setPrice] = React.useState(1);
-    const [quantity, setQuantity] = React.useState(1);
-    const [products, setProducts] = React.useState([]);
-    const [page, setPage] = React.useState(1);
-    const [totalPage, setTotalPage] = React.useState(1);
-    const [itemdelete, setItemdelete] = React.useState(null);
+    const [modalDelete, setModalDelete] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState(1);
+    const [itemdelete, setItemdelete] = useState(null);
 
+    // Khai báo bộ lọc
+    // Theo nội dung keyword
+    const [keyWord, setKeyWord] = useState("")
+    const handleChangeKeyWord = (event) => {
+        setKeyWord(event.target.value);
+    };
+
+    // Theo danh mục
+    const [category, setCategory] = useState("");
+    const [categories, setCategories] = useState([]);
+    // Lấy dữ liệu category
+    useEffect(() => {
+        const getCategories = async () => {
+        await apiCategory.showAllCategory()
+            .then((res) => {
+                setCategories(res.data);
+            })
+            .catch((error) => {
+                setCategories([]);
+            });
+        };
+
+        getCategories();
+    }, []);
+
+    // Theo giá trị sản phẩm
+    const [minValue, setMinValue] = useState(null)
+    const [maxValue, setMaxValue] = useState(null)
+    function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+    const handleChangeMinValue = (event) => {
+        if (isNumber(event.target.value) || event.target.value === "" || !event.target.value){
+        setMinValue(event.target.value)
+        }else {
+        setMinValue("")
+        toast.info("Vui lòng nhập chữ số nguyên")
+        }
+    }
+
+    const handleChangeMaxValue = (event) => {
+        if (isNumber(event.target.value) || event.target.value === "" || !event.target.value){
+        setMaxValue(event.target.value)
+        }else {
+        setMaxValue("")
+        toast.info("Vui lòng nhập chữ số nguyên")
+        }
+    }
+
+    // Sắp xếp loại
+    const [sortBy, setSortBy] = useState([0])
+    const handleChangeSortBy = (event) => {
+        setSortBy(event.target.value);
+    };
+    const [order, setOrder] = useState([0])
+    const handleChangeOrder = (event) => {
+        if( !sortBy || sortBy == 0 ) {
+            toast.error("Vui lòng chọn sắp xếp theo loại trước")
+            return
+        }
+        setOrder(event.target.value);
+    };
+
+
+    // Xử lí xóa sản phẩm
     const openModalDelete = (row) => {
         setItemdelete(row)
         setModalDelete(true);
@@ -62,29 +134,96 @@ function Product() {
     const handleChangeCategory = (event) => {
         setCategory(event.target.value)
     }
-    const handleChangePrice = (event) => {
-        setPrice(event.target.value)
-    }
-    const handleChangeQuantity = (event) => {
-        setQuantity(event.target.value)
-    }
     const handleChangePage = (event, newValue) => {
         setPage(newValue);
       };
 
     React.useEffect(() => {
         const getData = async () => {
-            apiProduct.getProducts(page)
-                .then(response=>{
-                setProducts(response.data.products);
-                setTotalPage(response.data.maxPage);     
+            let param = {
+                page: page,
+                pageSize: 8,
+              };
+            if (keyWord && keyWord!=="") {
+                param["keyWord"]=keyWord;
+            }
+            if (minValue ) {
+                param["minPrice"] = minValue
+            }
+            if (maxValue ) {
+                param["maxPrice"] = maxValue
+            }
+            if (sortBy !== 0) {
+                param["OrderBy"] = sortBy == 1 ? "ID" : "PRICE"
+            }
+            if (order !== 0) {
+                param["order"] = order == 1 ? "ASC" : "DESC"
+            }
+            if (category !== "") {
+                param["categoryId"] = category
+            }
+            setProducts([]);
+            apiProduct.getProductsByCategory(param)
+                .then((res) => {
+                setProducts(res.data.products);
+                setTotalPage(res.data.maxPage);
                 })
-                .catch(setProducts([]))
+                .catch((error) => {
+                setProducts([]);
+                });
         };
         getData();
       }, [page]);
 
-    console.log(page);
+
+    // Thực hiện lọc
+    const handleFilter = () => {
+        const getData = async () => {
+            let param = {
+                page: page,
+                pageSize: 8,
+              };
+            if (keyWord && keyWord!=="") {
+                param["keyWord"]=keyWord;
+            }
+            if (minValue ) {
+                param["minPrice"] = minValue
+            }
+            if (maxValue ) {
+                param["maxPrice"] = maxValue
+            }
+            if (sortBy !== 0) {
+                param["OrderBy"] = sortBy == 1 ? "ID" : "PRICE"
+            }
+            if (order !== 0) {
+                param["order"] = order == 1 ? "ASC" : "DESC"
+            }
+            if (category !== "") {
+                param["categoryId"] = category
+            }
+            setProducts([]);
+            apiProduct.getProductsByCategory(param)
+                .then((res) => {
+                setProducts(res.data.products);
+                setTotalPage(res.data.maxPage);
+                })
+                .catch((error) => {
+                setProducts([]);
+                });
+        };
+        getData();
+    }
+
+    // Xử lí reset bộ lọc
+    const handleReset = () => {
+        setKeyWord("")
+        setMinValue("")
+        setMaxValue("")
+        setCategory("")
+        setSortBy(0)
+        setOrder(0)
+    }
+
     return (
         <>
             <Box className="productAdmin">
@@ -96,78 +235,106 @@ function Product() {
                 </Stack>
                 
 
-                <Box sx={{ backgroundColor: "#fff" }} p={2}>
-                    <Stack direction="column" sx={{}}>
-                        <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                            <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Danh mục sản phẩm:</Typography>
-                            <Select
-                                value={category}
-                                onChange={handleChangeCategory}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                cursor="pointer"
-                                sx={{ minWidth: 400}}
-                            >
-                                <MenuItem value={""}>
-                                    Loại sản phẩm
-                                </MenuItem>
-                                <MenuItem value={1}>Trái cây ta</MenuItem>
-                                <MenuItem value={2}>Trái cây nhập khẩu</MenuItem>
-                                <MenuItem value={3}>Giỏ Quà Lễ Hội</MenuItem>
-                                <MenuItem value={4}>Giỏ Quà Sinh Nhật</MenuItem>
-                                <MenuItem value={5} disabled>Giỏ Trái Cây + Hoa Tươi</MenuItem>
-                            </Select>
-                        </FormControl>
-                        
-                        <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                            <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Sắp xếp giá bán:</Typography>
-                            <Select
-                                value={price}
-                                onChange={handleChangePrice}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                cursor="pointer"
-                                sx={{ minWidth: 400}}
-                            >
-                                <MenuItem value={""}>
-                                    Giá bán
-                                </MenuItem>
-                                <MenuItem value={1}>Thấp lên cao</MenuItem>
-                                <MenuItem value={2}>Cao xuống thấp</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Stack>
-                    <Stack direction="row" alignItems="center" spacing={2} pb={2}>
-                        <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, width: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-                            <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Sắp xếp số lượng:</Typography>
-                            <Select
-                                value={quantity}
-                                onChange={handleChangeQuantity}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                cursor="pointer"
-                                sx={{ minWidth: 400}}
-                            >
-                                <MenuItem value={""}>
-                                    Số lượng
-                                </MenuItem>
-                                <MenuItem value={1}>Thấp lên cao</MenuItem>
-                                <MenuItem value={2}>Cao xuống thấp</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <Stack direction="row" sx={{ width: "500px", position: "relative" }}>
-                            <TextField
+                <Box style={{backgroundColor: "#fff", p: 2, m: 1}}>
+                    <Stack direction="row" alignItems="center" spacing={1} style={{flexWrap: "wrap", justifyContent: "space-between"}}>
+                        <Stack direction="column" sx={{width: "45%", marginLeft: "8px"}}>
+                            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Nội dung tìm kiếm:</Typography>
+                                <TextField
                                 id="outlined-basic"
-                                label="Search"
+                                label="Nội dung"
+                                value={keyWord}
+                                onChange={handleChangeKeyWord}
                                 variant="outlined"
-                                sx={{ width: "100%" }}
+                                sx={{ width: "70%" }}
                                 size="small"
                             />
-                            <span className="order__iconSearch">
-                                <SearchIcon sx={{ fontSize: "28px" }} />
-                            </span>
+                            </FormControl>
+                        </Stack>
+                        <Stack direction="column" sx={{width: "45%", marginLeft:"8px"}}>
+                            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Danh mục:</Typography>
+                                <Select
+                                    value={category}
+                                    onChange={handleChangeCategory}
+                                    displayEmpty
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    cursor="pointer"
+                                    sx={{ minWidth: 300, width: "70%"}}
+                                >
+                                    <MenuItem value={""}>
+                                        <em>Mặc định</em>
+                                    </MenuItem>
+                                    {categories ? categories.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                        <Stack direction="column" sx={{width: "45%"}}>
+                            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Giá sản phẩm:</Typography>
+                                <Stack direction="row" width="70%" style={{display: "flex", }}>
+                                    <TextField
+                                    id="outlined-basic"
+                                    label="Giá từ"
+                                    value={minValue}
+                                    onChange={handleChangeMinValue}
+                                    variant="outlined"
+                                    sx={{ width: "40%" }}
+                                    size="small"
+                                    />
+                                    <Typography sx={{ fontSize: "16px", padding: "7px 10px 0px 10px" }}>Đến:</Typography>
+                                    <TextField
+                                    id="outlined-basic"
+                                    label="Đến"
+                                    value={maxValue}
+                                    onChange={handleChangeMaxValue}
+                                    variant="outlined"
+                                    sx={{ width: "40%" }}
+                                    size="small"
+                                    />
+                                </Stack>
+                            </FormControl>
+                        </Stack>
+                        <Stack direction="column" sx={{width: "45%"}}>
+                            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Sắp xếp loại:</Typography>
+                                <Select
+                                    value={sortBy}
+                                    onChange={handleChangeSortBy}
+                                    displayEmpty
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    cursor="pointer"
+                                    sx={{ minWidth: 300, width: "70%"}}
+                                >
+                                    {sortByItems ? sortByItems.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                        <Stack direction="column" sx={{width: "45%"}}>
+                            <FormControl sx={{ m: 1, minWidth: 120, maxWidth: 600, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>Sắp xếp theo:</Typography>
+                                <Select
+                                    value={order}
+                                    onChange={handleChangeOrder}
+                                    displayEmpty
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                    cursor="pointer"
+                                    sx={{ minWidth: 300, width: "70%"}}
+                                >
+                                    {orderByItems ? orderByItems.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+                                </Select>
+                            </FormControl>
                         </Stack>
                     </Stack>
+                    <Stack direction="row" alignItems="center" spacing={1} style={{flexWrap: "wrap", justifyContent: "space-between", margin: "0px 10px 10px 10px"}}>
+                        <Stack width="130px">
+                            <Button variant="contained" style={{padding: "7px 10px"}} onClick={handleFilter}>Bộ lọc</Button>
+                        </Stack>
+                        <Stack width="130px">
+                            <Button variant="contained" style={{padding: "7px 10px"}} onClick={handleReset}>Làm mới</Button>
+                        </Stack>
+                    </Stack>
+                        
                     <Table className="productTable" sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead>
                             <TableRow>

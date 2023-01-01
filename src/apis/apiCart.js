@@ -46,6 +46,16 @@ const apiCart = {
         const res = await axiosClientWithToken.get('/Cart/Carthistory')
         return res.data;
     },
+    getOrdersFilterOfUser: async (params) => {
+        let search = ""
+        for (let item in params) {
+            search = search + item.toString() + "=" + params[item] + "&";
+        }
+        search = search.slice(0, -1);
+        console.log("search", search)
+        const res = await axiosClientWithToken.get(`/Cart/Carthistory?${search}`)
+        return res.data;
+    },
     getAllOrders: async (params) => {
         let search = ""
         for (let item in params) {

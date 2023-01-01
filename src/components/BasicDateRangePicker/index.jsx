@@ -18,22 +18,42 @@ export default function BasicDateRangePicker(props) {
     props.onChangeCreatedDate(newValue)
   }
 
-  return (
-    <LocalizationProvider
-      dateAdapter={AdapterDayjs}
-      localeText={{ start: 'Từ ngày', end: 'Đến ngày' }}
-    >
-      <DateRangePicker
-        value={value}
-        onChange={(newValue) => {handleChangeDateRange(newValue)}}
-        renderInput={(startProps, endProps) => (
-          <React.Fragment>
-            <TextField {...startProps} />
-            <Box sx={{ mx: 2 }}> to </Box>
-            <TextField {...endProps} />
-          </React.Fragment>
-        )}
-      />
-    </LocalizationProvider>
-  );
+  if (props.status && props.status === "ClientOrderFilter")
+    return (
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        localeText={{ start: 'Từ ngày', end: 'Đến ngày' }}
+      >
+        <DateRangePicker
+          value={value}
+          onChange={(newValue) => {handleChangeDateRange(newValue)}}
+          renderInput={(startProps, endProps) => (
+            <React.Fragment>
+              <TextField {...startProps} size="small"/>
+              <Box sx={{ mx: 2 }}> to </Box>
+              <TextField {...endProps} size="small"/>
+            </React.Fragment>
+          )}
+        />
+      </LocalizationProvider>
+    );
+  else 
+    return (
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        localeText={{ start: 'Từ ngày', end: 'Đến ngày' }}
+      >
+        <DateRangePicker
+          value={value}
+          onChange={(newValue) => {handleChangeDateRange(newValue)}}
+          renderInput={(startProps, endProps) => (
+            <React.Fragment>
+              <TextField {...startProps} />
+              <Box sx={{ mx: 2 }}> to </Box>
+              <TextField {...endProps} />
+            </React.Fragment>
+          )}
+        />
+      </LocalizationProvider>
+    );
 }

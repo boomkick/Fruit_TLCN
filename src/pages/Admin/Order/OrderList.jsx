@@ -29,6 +29,8 @@
 import MaterialUIPickers from "../../../components/DatePicker";
 import BasicDateRangePicker from "../../../components/BasicDateRangePicker";
 import { toast } from "react-toastify";
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import RotateLeftIcon from '@mui/icons-material/RotateLeft';
  
  const items = [
      { id: 0, label: 'Đang xử lý'},
@@ -193,23 +195,6 @@ const orderByItems = [
     
      // Sau khi chỉnh page thì sẽ giữ nguyên giá trị bộ lọc
      useEffect(() => {
-        // const getData = async () => {
-        //     let param = {
-        //         page: currentPage,
-        //         pageSize: 8,
-        //     };
-        //     if (selected != 3 ) {
-        //         param["CartStatus"]=selected;
-        //     }
-        //     setOrders([])
-        //     apiCart.getAllOrders(param)
-        //         .then(response=>{
-        //         setOrders(response.data.carts);
-        //         setMaxPage(response.data.maxPage);
-        //         })
-        //         .catch(setOrders([]))
-        // };
-        // getData();
         const getData = async () => {
             let param = {
                 page: currentPage,
@@ -557,10 +542,10 @@ const orderByItems = [
              </Stack>
              <Stack direction="row" alignItems="center" spacing={1} style={{flexWrap: "wrap", justifyContent: "space-between"}}>
                 <Stack width="130px">
-                     <Button variant="contained" style={{padding: "7px 10px"}} onClick={handleFilter}>Bộ lọc</Button>
+                     <Button variant="contained" startIcon={<FilterAltIcon/>} style={{padding: "7px 10px"}} onClick={handleFilter}>Bộ lọc</Button>
                  </Stack>
                  <Stack width="130px">
-                     <Button variant="contained" style={{padding: "7px 10px"}} onClick={handleReset}>Làm mới</Button>
+                     <Button variant="contained" endIcon={<RotateLeftIcon/>} style={{padding: "7px 10px"}} onClick={handleReset}>Làm mới</Button>
                  </Stack>
              </Stack>
  

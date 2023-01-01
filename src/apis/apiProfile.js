@@ -1,7 +1,6 @@
 import {  axiosClientWithToken} from "./axiosClient";
 
 const apiProfile = {
-
     ///authentication
     putChangeEmail: async (params) => {
         const res = await axiosClientWithToken.put('/account/changeEmail', params)

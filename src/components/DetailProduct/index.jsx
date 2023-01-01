@@ -1,10 +1,8 @@
 import React from "react";
 import "./DetailProduct.scss";
-import { Link } from "react-router-dom";
 import {
-  Box,
+  Box, Rating,
 } from "@mui/material";
-import StarIcon from '@mui/icons-material/Star';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import InfoIcon from '@mui/icons-material/Info';
 import BookIcon from '@mui/icons-material/Book';
@@ -15,7 +13,6 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 //import img
-import imgProduct from "../../assets/img/product_le_han_quoc.jpg";
 import apiCart from "../../apis/apiCart";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -30,7 +27,12 @@ function DetailProduct({ data }) {
     const user = useSelector((state) => state.auth.user);
     const [productImage, setProductImage] = useState("");
     const status = productStatus.find((item) => item.id == data?.status)
-    const [quantity, setQuantity] = React.useState(1);
+    const [quantity, setQuantity] = useState(1);
+    const [ratingStars, setRatingStars] = useState(5);
+
+    useEffect(() => {
+        setRatingStars(data?.rating);
+    }, [data])
 
   async function handleClickAddItem() {
     let param = {
@@ -106,32 +108,9 @@ function DetailProduct({ data }) {
                                 </div>
                             )}
                         <div className="detailProduct__info-rate">
-                            <div className="detailProduct__info-rate-star">
-                                <StarIcon sx={{ fontSize: 18 }}/>
-                                <StarIcon sx={{ fontSize: 18 }}/>
-                                <StarIcon sx={{ fontSize: 18 }}/>
-                                <StarIcon sx={{ fontSize: 18 }}/>
-                                <StarIcon sx={{ fontSize: 18 }}/>
-                            </div>
-                            <p> ({data?.rate} đánh giá)</p>
+                            <Rating name="half-rating" value={ratingStars || 5} precision={0.5} readOnly />
+                            <p style={{marginTop: "3px"}}> ({(ratingStars === 0 || !ratingStars) ? "Chưa có " : ratingStars} điểm đánh giá)</p>
                         </div>
-                        {/* <div className="detailProduct__info-shipping">
-                            <p>
-                                <LocalShippingIcon sx={{ fontSize: 20}}/>
-                                <span> Bạn muốn vận chuyển đến?</span>
-                            </p>
-                            <Autocomplete
-                                disablePortal
-                                id="combo-box-demo"
-                                options={list_cities()}
-                                sx={{
-                                    width: 220,
-                                    fontSize: 18,
-                                    my: 2
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Chọn Tỉnh/ Thành phố" />}
-                                />
-                        </div> */}
                         <div className="detailProduct__info-general">
                             <div>
                                 <p className="detailProduct__info-general-text">Số lượng:</p>
@@ -160,16 +139,6 @@ function DetailProduct({ data }) {
                                     onClick={handleClickAddItem}
                                 >THÊM VÀO GIỎ HÀNG</button>
                             </>}
-                            {/* <ButtonGroup size="small" aria-label="small outlined button group" className="quantity-buttons" style={{height: "40px"}}>
-                                <Button onClick={() => {(quantity > 0) ? setQuantity(quantity - 1) : setQuantity(0)}}>-</Button>
-                                <Button >{quantity}</Button>
-                                <Button onClick={() => {setQuantity(quantity + 1)}}>+</Button>
-                            </ButtonGroup>
-                            <button 
-                                className="detailProduct__add-to-cart" 
-                                style={{ fontWeight: 600, cursor: "pointer"}}
-                                onClick={handleClickAddItem}
-                            >THÊM VÀO GIỎ HÀNG</button> */}
                             <div className="detailProduct__status-info">
                                 {handleStatusProduct(status)}
                             </div>

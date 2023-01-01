@@ -1,44 +1,64 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import imgDefault from '../../assets/img/img_default.jpg'
+import { useSelector } from "react-redux";
 
 import {
   Rating,
   Button,
-  Grid,
   Box,
-  Stack,
-  Typography,
-  Modal,
-  FormControlLabel,
-  IconButton,
-  Tooltip,
-  Skeleton,
+  TextareaAutosize,
 
 } from "@mui/material";
 import "./ProductDetail.scss";
-import StarIcon from '@mui/icons-material/Star';
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../../components/CardProduct";
 // styles swiper
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import apiMain from "../../apis/apiMain";
 // import required modules
-import { Pagination, Navigation, Autoplay } from "swiper";
+import { Pagination, Navigation } from "swiper";
 import DetailProduct from "../../components/DetailProduct"
 import Comment from "../../components/Comment"
 import apiProduct from "../../apis/apiProduct";
+import { toast } from "react-toastify";
+import { Pagination as MuiPagination } from "@mui/material";
+import apiReview from "../../apis/apiReview";
 
 function ProductDetail() {
     const user = useSelector((state) => state.auth.user);
     const [product, setProduct] = useState();
-    const [reviews, setReviews] = useState([]);
+    const [listReviews, setListReviews] = useState([]);
     const [top8Product, setTop8Product] = useState([]);
     const { id } = useParams();
-    
+    // Phân trang
+    const [maxPage, setMaxPage] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const handleChangeCurrentPage = (event) => {
+      setCurrentPage(event.target.value);
+    }
+
+    useEffect(() => {
+      const getReviews = async () => {
+        const params = {
+          page: currentPage,
+          pageSize: 5
+        }
+        await apiReview.getReviewsByProduct(params, id)
+          .then(res => {
+            setListReviews(res.data.reviews);
+            setMaxPage(res.data.maxPage);
+          })
+          .catch(error => {
+            toast.error(error)
+          })
+      }
+      getReviews();
+    }, [currentPage])
+
+    // Bình chọn sản phẩm
+    const [ratingStars, setRatingStars] = useState(5);
+    const [contentComment, setContentComment] = useState("");
 
     // Lấy dữ liệu top 8 sản phẩm và dữ liệu chi tiết sản phẩm
     useEffect(() => {
@@ -58,24 +78,54 @@ function ProductDetail() {
       };
       getProductDetail();
 
+      const getReviews = async () => {
+        const params = {
+          page: 1,
+          pageSize: 5
+        }
+        await apiReview.getReviewsByProduct(params, id)
+          .then(res => {
+            setListReviews(res.data.reviews);
+            setMaxPage(res.data.maxPage);
+          })
+          .catch(error => {
+            toast.error(error)
+          })
+      }
+      getReviews();
+
     }, []);
 
-    let list_comment = [
-      {
-        id:1,
-        userName: "lethuyen",
-        content: "Hồi xưa cũng đặt online mà hàng về là không thấy màu xanh giờ đặt của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
-        rating: 5,
-        post_date: "05/11/2022"
-      },
-      {
-        id:2,
-        userName: "lethuyen",
-        content: "Hồi xưa cũng đặt online mà hàng về là không thấy màu xanh giờ đặt của shop là thấy khác hẳn, đảm bảo xịn luôn. Shop hỗ trợ nhiệt tình, 10đ 😀",
-        rating: 5,
-        post_date: "05/11/2022"
+    const handleSubmitComment = () => {
+      if (!user) {
+        toast.warning("Vui lòng đăng nhập trước khi gửi bình luận")
+        return
       }
-    ]
+      if(ratingStars && contentComment) {
+        const params = {
+          content: contentComment,
+          rating: ratingStars
+        }
+        apiReview.postReview(params, id)
+          .then(res => {
+            console.log(res);
+            if (res.status === 200) {
+              toast.success("Bạn đã thêm bình luận vào sản phẩm");
+              setRatingStars(5);
+              setContentComment("");
+            } else {
+              toast.error(res.message);
+            }
+          })
+          .catch(error => {
+            toast.error(error)
+          })
+      }
+    }
+
+    const handleChangeContentComment = (event) => {
+      setContentComment(event.target.value);
+    }
 
     return (
         <Box className= "container" style={{ backgroundColor: "#fff"}}>
@@ -111,38 +161,28 @@ function ProductDetail() {
               ))}
               </Swiper>
             </Box>
-            <Comment data={list_comment}/>
+            <Comment data={listReviews}/>
+            {maxPage > 1 ? 
+              <MuiPagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
+            : null}
+            
             <Box className="textComment">
                 <p>Đánh giá của bạn về sản phẩm </p>
-                <Box className="textComment__stars">
-                  <Box className="textComment__stars-one">
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                  </Box>
-                  <Box className="textComment__stars-two">
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                  </Box>
-                  <Box className="textComment__stars-three">
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                  </Box>
-                  <Box className="textComment__stars-four">
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                  </Box>
-                  <Box className="textComment__stars-five">
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                    <StarIcon sx={{ fontSize: 18 }}/>
-                  </Box>
-                </Box>
-                <textarea className="textComment__textarea"/>
-                <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}}>GỬI</Button>
+                <Rating
+                  name="simple-controlled"
+                  value={ratingStars}
+                  onChange={(event, newValue) => {
+                    setRatingStars(newValue);
+                  }}
+                />
+                <TextareaAutosize
+                  className="textComment__textarea"
+                  aria-label="empty textarea"
+                  placeholder="Hãy gửi ý kiến của bạn về sản phẩm cho shop, để shop cải thiện hơn, cám ơn bạn rất nhiều!"
+                  value={contentComment}
+                  onChange={handleChangeContentComment}
+                />
+                <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}} onClick={handleSubmitComment}>GỬI</Button>
             </Box>
 
         </Box>

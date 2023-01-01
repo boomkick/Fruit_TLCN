@@ -22,15 +22,15 @@ const apiCategory = {
         return res.data;
     },
     getCityById: async (params) => {
-        const res = await axiosClient.get(`/Location/${params.cityId}`, )
+        const res = await axiosClient.get(`/Location/city/${params.cityId}`, )
         return res.data;
     },
-    getDistrictById: async (params) => {
-        const res = await axiosClient.get(`/Location/${params.districtId}`, )
+    getDistrictByCityIdDistrictId: async (params) => {
+        const res = await axiosClient.get(`/Location/district/${params.cityId}/${params.districtId}`)
         return res.data;
     },
-    getWardById: async (params) => {
-        const res = await axiosClient.get(`/Location/${params.wardId}`, )
+    getWardByIdCityIdDistrictIdWardId: async (params) => {
+        const res = await axiosClient.get(`/Location/ward/${params.cityId}/${params.districtId}/${params.wardId}`, )
         return res.data;
     }
 }

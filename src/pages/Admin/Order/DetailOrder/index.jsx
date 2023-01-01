@@ -6,8 +6,7 @@ import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
 import { numWithCommas } from "../../../../constraints/Util";
 import { paymentMethod } from "../../../../constraints/PaymentMethod";
-import { orderTabs } from "../../../../constraints/OrderItem";
-import apiNotify from "../../../../apis/apiNotify";
+import apiLocation from '../../../../apis/apiLocation'
 
 
 function DetailOrder() {
@@ -72,6 +71,36 @@ function DetailOrder() {
       });
   };
 
+  // Lấy dữ liệu dịa chỉ
+  const [city, setCity] = useState("")
+  const [district, setDistrict] = useState("")
+  const [ward, setWard] = useState("")
+
+  useEffect(() => {
+      const getLocation = () => {
+          const params = {
+              cityId: order?.cityId,
+              districtId: order?.districtId,
+              wardId: order?.wardId
+          }
+          apiLocation.getCityById(params)
+          .then(res => {
+              setCity(res.data);
+          })
+          apiLocation.getDistrictByCityIdDistrictId(params)
+          .then(res => {
+              setDistrict(res.data);
+          })
+          apiLocation.getWardByIdCityIdDistrictIdWardId(params)
+          .then(res => {
+              setWard(res.data);
+          })
+      }
+      if (order?.cityId && order?.districtId && order?.wardId){
+          getLocation()
+      }
+  }, [order])
+
   return (
     <Box>
       <Stack bgcolor="white" p={2}>
@@ -98,8 +127,8 @@ function DetailOrder() {
             </Typography>
             <Typography>
               Địa chỉ:{" "}
-              {`${order?.cityId}, ${order?.districtId},
-                                  ${order?.wardId},
+              {`${city.name}, ${district.name},
+                                  ${ward.name},
                                   ${order?.detailLocation}`}
             </Typography>
             <Typography>Điện thoại: {order?.phone}</Typography>

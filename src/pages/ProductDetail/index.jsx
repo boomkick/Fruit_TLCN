@@ -56,6 +56,9 @@ function ProductDetail() {
       getReviews();
     }, [currentPage])
 
+    // Thay đổi hoặc chỉnh sửa bình luận của mình
+    const [myReview, setMyReview] = useState(null);
+
     // Bình chọn sản phẩm
     const [ratingStars, setRatingStars] = useState(5);
     const [contentComment, setContentComment] = useState("");
@@ -87,6 +90,14 @@ function ProductDetail() {
           .then(res => {
             setListReviews(res.data.reviews);
             setMaxPage(res.data.maxPage);
+            if (user){
+              let newReview = res.data.reviews?.find(item => item?.account?.id === user.id)
+              setMyReview(newReview);
+              if (newReview) {
+                setRatingStars(newReview?.rating);
+                setContentComment(newReview?.content);
+              }
+            }
           })
           .catch(error => {
             toast.error(error)
@@ -96,7 +107,8 @@ function ProductDetail() {
 
     }, []);
 
-    const handleSubmitComment = () => {
+    // Lấy reviews sản phẩm, cùng với render lại review khi thêm bình luận mới
+    const handleSubmitComment = async () => {
       if (!user) {
         toast.warning("Vui lòng đăng nhập trước khi gửi bình luận")
         return
@@ -106,7 +118,7 @@ function ProductDetail() {
           content: contentComment,
           rating: ratingStars
         }
-        apiReview.postReview(params, id)
+        await apiReview.postReview(params, id)
           .then(res => {
             console.log(res);
             if (res.status === 200) {
@@ -120,11 +132,124 @@ function ProductDetail() {
           .catch(error => {
             toast.error(error)
           })
+        
+        const getReviews = async () => {
+          const params = {
+            page: 1,
+            pageSize: 5
+          }
+          await apiReview.getReviewsByProduct(params, id)
+            .then(res => {
+              setListReviews(res.data.reviews);
+              setMaxPage(res.data.maxPage);
+              if (user){
+                let newReview = res.data.reviews?.find(item => item?.account?.id === user.id)
+                setMyReview(newReview);
+                if (newReview) {
+                  setRatingStars(newReview?.rating);
+                  setContentComment(newReview?.content);
+                }
+              }
+            })
+            .catch(error => {
+              toast.error(error)
+            })
+        }
+        getReviews();
       }
     }
 
     const handleChangeContentComment = (event) => {
       setContentComment(event.target.value);
+    }
+
+    // Xử lí cập nhật bình luận nếu có của người dùng
+    const handleUpdateComment = async () => {
+      if (!user) {
+        toast.warning("Vui lòng đăng nhập trước khi chỉnh sửa bình luận")
+        return
+      }
+      if(ratingStars && contentComment) {
+        const params = {
+          content: contentComment,
+          rating: ratingStars
+        }
+        await apiReview.putReviewsByProduct(params, myReview.id)
+          .then(res => {
+            console.log("res: ", res);
+            if (res.status === 200) {
+              toast.success("Bạn đã chỉnh sửa bình luận");
+              setRatingStars(5);
+              setContentComment("");
+            } else {
+              toast.error(res.message);
+            }
+          })
+          .catch(error => {
+            toast.error(error)
+          })
+        
+        const getReviews = async () => {
+          const params = {
+            page: 1,
+            pageSize: 5
+          }
+          await apiReview.getReviewsByProduct(params, id)
+            .then(res => {
+              setListReviews(res.data.reviews);
+              setMaxPage(res.data.maxPage);
+              if (user){
+                let newReview = res.data.reviews?.find(item => item?.account?.id === user.id)
+                setMyReview(newReview);
+                if (newReview) {
+                  setRatingStars(newReview?.rating);
+                  setContentComment(newReview?.content);
+                }
+              }
+            })
+            .catch(error => {
+              toast.error(error)
+            })
+          }
+        getReviews();
+      }
+    }
+    // Xử lí xóa bình luận
+    const handleDeleteComment = async () => {
+      if (!user) {
+        toast.warning("Vui lòng đăng nhập trước khi chỉnh sửa bình luận")
+        return
+      }
+      await apiReview.deleteReviewsByProduct({id: myReview.id})
+        .then(res => {
+          if(res.status === 200) {
+            toast.success("xóa bình luận thành công")
+            setMyReview(null)
+            setRatingStars(5)
+            setContentComment("")
+          }
+          else {
+            toast.error("Xóa bình luận không thành công")
+          }
+        })
+        .catch(error => {
+          toast.error(error)
+        })
+        const getReviews = async () => {
+          const params = {
+            page: 1,
+            pageSize: 5
+          }
+          await apiReview.getReviewsByProduct(params, id)
+            .then(res => {
+              setListReviews(res.data.reviews);
+              setMaxPage(res.data.maxPage);
+            })
+            .catch(error => {
+              toast.error(error)
+            })
+          }
+        getReviews();
     }
 
     return (
@@ -165,7 +290,28 @@ function ProductDetail() {
             {maxPage > 1 ? 
               <MuiPagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
             : null}
-            
+
+            {myReview ? 
+            <Box className="textComment">
+              <p>Đánh giá của bạn về sản phẩm </p>
+              <Rating
+                name="simple-controlled"
+                value={ratingStars}
+                onChange={(event, newValue) => {
+                  setRatingStars(newValue);
+                }}
+              />
+              <TextareaAutosize
+                className="textComment__textarea"
+                aria-label="empty textarea"
+                placeholder="Hãy gửi ý kiến của bạn về sản phẩm cho shop, để shop cải thiện hơn, cám ơn bạn rất nhiều!"
+                value={contentComment}
+                onChange={handleChangeContentComment}
+              />
+              <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400", marginRight: "10px"}} onClick={handleUpdateComment}>Chỉnh sửa</Button>
+              <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}} onClick={handleDeleteComment}>Xóa</Button>
+          </Box>
+            : 
             <Box className="textComment">
                 <p>Đánh giá của bạn về sản phẩm </p>
                 <Rating
@@ -184,6 +330,9 @@ function ProductDetail() {
                 />
                 <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}} onClick={handleSubmitComment}>GỬI</Button>
             </Box>
+            }
+            
+            
 
         </Box>
     );

@@ -12,6 +12,9 @@ export const authSlice = createSlice({
         logoutSuccess: (state, action) => {
             state.user = null
         },
+        tokenTimeOut: (state, action) => {
+            state.user = action.payload
+        },
     }
 })
 

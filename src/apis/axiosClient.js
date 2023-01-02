@@ -1,6 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import jwt_decode from 'jwt-decode';
+import { logoutSuccess } from '../slices/authSlice';
 // const baseURL='https://playerhostedapitest.herokuapp.com/api/'
 //const baseURL='http://localhost:5000/api'
 const baseURL='https://localhost:7039'
@@ -29,35 +30,18 @@ export const axiosClientWithToken = axios.create({
 });
 
 var myInterceptor = null;
-export const axiosInstance = (user, dispatch, stateSuccess,stateFail) => {
+export const axiosInstance = (user, dispatch, stateSuccess, stateFail) => {
     axiosClientWithToken.interceptors.request.eject(myInterceptor)
     myInterceptor = axiosClientWithToken.interceptors.request.use(
         async (config) => {
-            // let date = new Date();
             if(!(user && user.accessToken)){
                 return config;
             }
-            // const decodeToken = jwt_decode(user?.accessToken);
-            // console.log("decode", decodeToken);
-            
-            // if (decodeToken.exp < date.getTime() / 1000) {
-            //     try{
-            //         const newAccessToken = await refreshToken(user);
-
-            //         const newUser = {
-            //             ...user,
-            //             accessToken: newAccessToken.data.accessToken,
-            //             refreshToken: newAccessToken.data.refreshToken
-            //         }
-            //         dispatch(stateSuccess(newUser))
-            //         config.headers['Authorization'] = `Bearer ${newAccessToken.accessToken}`;
-            //     }
-            //     catch(err){
-            //         dispatch(stateFail(null))
-            //     }
-            // }else{
-            //     config.headers['Authorization'] = `Bearer ${user.accessToken}`;
-            // }
+            const decodeToken = jwt_decode(user?.accessToken);
+            let dateNow = new Date();
+            console.log("decode", decodeToken);
+            console.log(dateNow.getTime());
+            console.log(dateNow.getTime()/1000);
             config.headers['Authorization'] = `Bearer ${user.accessToken}`;
             return config;
         },

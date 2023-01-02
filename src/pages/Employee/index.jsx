@@ -352,7 +352,7 @@ function Employee() {
                         <Button
                           variant="text"
                           startIcon={<HomeOutlinedIcon />}
-                          onClick={() => replacePage("/")}
+                          onClick={() => navigate("/")}
                           sx={{ color: "#333" }}
                         >
                           Trang bán hàng
@@ -461,9 +461,5 @@ function Employee() {
     </Stack>
     );
 }
-
-const replacePage = (param) => {
-  window.location.replace(param);
-};
 
 export default Employee;

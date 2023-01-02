@@ -1,5 +1,5 @@
 
-import { axiosClient, axiosClientWithToken } from "./axiosClient";
+import { axiosClientWithToken } from "./axiosClient";
 
 const apiAddress = {
     getProfileUser: async (params) => {

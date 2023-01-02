@@ -1,11 +1,15 @@
 import "./Footer.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 
 const { Stack } = require("@mui/system");
 
 function Header() {
+  const location = useLocation();
+  if (location.pathname.includes("employee") || location.pathname.includes("admin")) {
+    return null;
+  }
   return (
     <header id="footer" className="footer">
       <Stack

@@ -26,6 +26,8 @@ function Header() {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  
+
   const [modalLogin, setModalLogin] = useState(false);
   const openModalLogin = () => setModalLogin(true);
 
@@ -84,6 +86,10 @@ function Header() {
     };
     getData();
   }, []);
+
+  if (location.pathname.includes("employee") || location.pathname.includes("admin")) {
+    return null;
+  }
 
   return (
     <header id="header" className="header">
@@ -198,7 +204,6 @@ function Header() {
                     {user?.role == 1 ? (<>
                       <Link
                       to={"/employee"}
-                      onClick={() => replacePage("/employee")}
                       style={{ padding: "8px 20px" }}
                     >
                       Trang nhân viên
@@ -206,7 +211,6 @@ function Header() {
                     </>) : user.role == 2 ?  (<>
                       <Link
                       to={"/admin"}
-                      onClick={() => replacePage("/admin")}
                       style={{ padding: "8px 20px" }}
                     >
                       Trang quản trị viên
@@ -293,8 +297,5 @@ function Header() {
     </header>
   );
 }
-const replacePage = (param) => {
-  window.location.replace(param);
-};
 
 export default Header;

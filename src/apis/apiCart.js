@@ -1,25 +1,4 @@
-import axios from 'axios';
-import { axiosAdmin, axiosClient, axiosClientWithToken } from "./axiosClient";
-import queryString from 'query-string';
-const baseURL='https://localhost:7039'
-
-// export const axiosClient = axios.create({
-//     baseURL: baseURL,
-//     headers: {
-//         "Content-Type": "application/json"
-//     },
-//     withCredentials: false,
-//     paramsSerializer: (params) => queryString.stringify(params)
-// });
-
-export const axiosClientWithPayment = axios.create({
-    baseURL: 'https://mypayment-momo.herokuapp.com/api',
-    headers: {
-        "Content-Type": "application/json"
-    },
-    withCredentials: true,
-    paramsSerializer: (params) => queryString.stringify(params)
-});
+import { axiosClientWithToken } from "./axiosClient";
 
 const apiCart = {
     getCart: async (params) => {
@@ -74,16 +53,6 @@ const apiCart = {
         const res = await axiosClientWithToken.get(`/Cart/ProcessCart/${params.id}`)
         return res.data;
     },
-    // getProcessCartByFilter: async (params) => {
-    //     let search = ""
-    //     for (let item in params) {
-    //         search = search + item.toString() + "=" + params[item] + "&";
-    //     }
-    //     search = search.slice(0, -1);
-    //     console.log("search", search)
-    //     const res = await axiosClientWithToken.get(`/Cart/ProcessCart/`, params)
-    //     return res.data;
-    // },
     getCancelCart: async (id) => {
         const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;

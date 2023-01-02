@@ -366,7 +366,7 @@ function Admin() {
                         <Button
                           variant="text"
                           startIcon={<HomeOutlinedIcon />}
-                          onClick={() => replacePage("/")}
+                          onClick={() => navigate("/")}
                           sx={{ color: "#333" }}
                         >
                           Trang bán hàng
@@ -513,8 +513,5 @@ function Admin() {
     </Stack>
     );
 }
-const replacePage = (param) => {
-  window.location.replace(param);
-};
 
 export default Admin;

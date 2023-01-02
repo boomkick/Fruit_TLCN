@@ -6,7 +6,7 @@ import './app/style/App.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { axiosInstance } from './apis/axiosClient';
 import { loginSuccess, logoutSuccess } from './slices/authSlice';
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ScrollUp from './components/ScrollUp';
 
@@ -17,17 +17,15 @@ function App() {
   if (user) {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
   }
-  const isAdmin = window.location.href.includes("admin");
-  const isEmployee = window.location.href.includes("employee");
 
   return (
     <div className="App">
       <BrowserRouter>
         <ScrollUp>
           <ToastContainer />
-          {isAdmin || isEmployee ? null : <Header />}
+          <Header />
           <ConfigRoute />
-          {isAdmin || isEmployee ? null : <Footer />}
+          <Footer />
         </ScrollUp>
       </BrowserRouter>
     </div>

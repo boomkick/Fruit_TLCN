@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import {role} from '../../constraints/Role'
 
 //Component tạo một định tuyến an toàn, khi muốn truy cập các đường dẫn cần có xác thực thì phải đi qua route này
-const PrivateRoute = ({
+const 
+PrivateRoute = ({
     roles,
 }) => {
     const [auth, setAuth] = useState(null)
@@ -16,27 +17,15 @@ const PrivateRoute = ({
     const dispatch = useDispatch()
     useEffect(() => {
         const verify = async () => {
-            console.log("user: ", user);
             if (user) {
-                /*const veri = await apiMain.verifyToken(user, dispatch, loginSuccess)
-                if (veri?.status !== 200) {
-                    toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại", { autoClose: 1000, pauseOnHover: false, hideProgressBar: true })
-                    setAuth(false);
-                }*/
-                // if(!user.refreshToken){
-                //     toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại")
-                //     setAuth(false);
-                //     dispatch(logoutSuccess())
-                //     return
-                // }
-                // const tokenDecode = jwt_decode(user?.refreshToken)
-                // let date = new Date();
-                // if (tokenDecode.exp < date.getTime() / 1000) {
-                //     toast.warning("Phiên làm việc của bạn đã hết. Vui lòng đăng nhập lại")
-                //     setAuth(false);
-                //     dispatch(logoutSuccess())
-                //     return
-                // }
+                const decodeToken = jwt_decode(user?.accessToken);
+                let dateNow = new Date();
+                if (decodeToken.exp < dateNow.getTime()/1000) {
+                    toast.warning("Token đã hết hạn bạn vui lòng đăng nhập lại để sử dụng tính năng", { autoClose: 1000, pauseOnHover: false })
+                    setAuth(false)
+                    dispatch(logoutSuccess())
+                    return
+                }
                 let user_role = role.find((item) => item.id === user.role)
                 const userHasRequiredRole = roles.includes(user_role.value) ? true : false
                 if (!userHasRequiredRole) {

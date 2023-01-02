@@ -15,17 +15,20 @@ export const axiosClient = axios.create({
     paramsSerializer: (params) => queryString.stringify(params)
 });
 
-const refreshToken = async (user) => {
-    const res = await axiosClient.post('/auth/refreshtoken', { refreshToken: user.refreshToken  }, { headers: { Authorization: `Bearer ${user.accessToken}` }, })
-    return res.data
-}
-
 export const axiosClientWithToken = axios.create({
     baseURL: baseURL,
     headers: {
         "Content-Type": "application/json"
     },
     withCredentials: false,
+    paramsSerializer: (params) => queryString.stringify(params)
+});
+
+export const axiosAdmin = axios.create({
+    baseURL: apiURL,
+    headers: {
+        "Content-Type": "application/json"
+    },
     paramsSerializer: (params) => queryString.stringify(params)
 });
 
@@ -50,11 +53,3 @@ export const axiosInstance = (user, dispatch, stateSuccess, stateFail) => {
         }
     );
 }
-
-export const axiosAdmin = axios.create({
-    baseURL: apiURL,
-    headers: {
-        "Content-Type": "application/json"
-    },
-    paramsSerializer: (params) => queryString.stringify(params)
-});

@@ -18,12 +18,10 @@ function DetailOrder() {
     const navigate = useNavigate()
     const [order, setOrder] = useState(null)
     useEffect(() => {
-        const getData = () => {
-            let listOrder = []
-            apiCart.getOrders()
+        const getData = async () => {
+            await apiCart.getProcessCart({id: id})
                 .then(res => {
-                    listOrder = res.data.carts
-                    setOrder(listOrder.find(item => item.id == id))
+                    setOrder(res.data)
                 })
                 .catch(error => {
                     setOrder(null)

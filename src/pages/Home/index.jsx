@@ -184,6 +184,10 @@ function SlideHome() {
     };
     getTop8Product();
 
+  }, []);
+
+  // Xử lí khi thay đổi
+  useEffect(() => {
     // get all sản phẩm theo page và pageSize = 8
     const getAllProduct = async () => {
       const response = await apiProduct.getProductsByPage(currentPage, 8);
@@ -194,7 +198,7 @@ function SlideHome() {
       console.log("all: ", allProducts);
     };
     getAllProduct();
-  }, [currentPage]);
+  }, [currentPage])
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);

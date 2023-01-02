@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import {Box, Typography} from "@mui/material";
+import {Box, Rating, Typography} from "@mui/material";
 import {Pagination} from "@mui/material";
 
 
@@ -20,6 +20,7 @@ function Comment (props) {
                                 <img src="https://secure.gravatar.com/avatar/f7c6b77bf377de274f6a06b9cf79fa95?s=60&d=mm&r=g" alt="" />
                                 <div className="detailProduct__comment-card-user-info">
                                 <h3>{item?.account?.firstName + " " + item?.account?.lastName}</h3>
+                                <Rating name="read-only" value={item?.rating} readOnly size="small"/>
                                 <h4>{item?.postDate}</h4>
                                 <p>{item?.content}</p>
                                 </div>

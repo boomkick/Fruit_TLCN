@@ -6,8 +6,6 @@ import { loginSuccess } from '../../../slices/authSlice'
 import { useDispatch } from 'react-redux';
 
 import "./Info.scss";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import avatar from "../../../assets/img/logo.png"
 
 import {
   Avatar,
@@ -15,7 +13,6 @@ import {
   Stack,
   ListItemText,
   Button,
-  MenuItem,
   Modal,
   Box,
   IconButton,
@@ -30,9 +27,6 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import LockIcon from "@mui/icons-material/Lock";
 import CloseIcon from "@mui/icons-material/Close";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import WallpaperIcon from "@mui/icons-material/Wallpaper";
-import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { useSelector } from "react-redux";
 
 import apiProfile from "../../../apis/apiProfile";
@@ -49,28 +43,19 @@ function Info() {
   const [lastName, setLastName] = useState(user.lastName)
   const [phone, setPhone] = useState(user.phone)
   const [email, setEmail] = useState(user.email)
-  const [modalDeleteAvatar, setModalDeleteAvatar] = useState(false);
-  const [modalViewAvatar, setModalViewAvatar] = useState(false);
   const [modalUploadAvatar, setModalUploadAvatar] = useState(false);
-  const [openAvatar, setOpenAvatar] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
 
   // Xử lí hình ảnh
-  const openModalViewAvatar = () => setModalViewAvatar(true);
-  const closeModalViewAvatar = () => setModalViewAvatar(false);
-
   const openModalUploadAvatar = () => setModalUploadAvatar(true);
   const closeModalUploadAvatar = () => setModalUploadAvatar(false);
 
-  const openModalDeleteAvatar = () => setModalDeleteAvatar(true);
-  const closeModalDeleteAvatar = () => setModalDeleteAvatar(false);
-
   const handleClickAvatar = () => {
-    setOpenAvatar((prev) => !prev);
+    openModalUploadAvatar();
   };
   const handleClickAwayAvatar = () => {
-    setOpenAvatar(false);
+    closeModalUploadAvatar();
   };
   const onChange = (imageList, addUpdateIndex) => {
     setImage(imageList);
@@ -87,8 +72,9 @@ function Info() {
       return
     }
     setUploading(true)
-    let param = { file: image[0].file }
-    apiProfile.putUploadAvatar(param)
+    let params = new FormData(); 
+    params.append('photo', image[0].file);
+    apiProfile.postUploadAvatar(params)
       .then(res => {
         toast.success("Cập nhật ảnh đại diện thành công")
         getUserProfile()
@@ -100,23 +86,6 @@ function Info() {
         setModalUploadAvatar(false);
         setUploading(false)
       })
-  }
-
-  const handleDeleteAvatar = ()=>{
-    let imgDefault = {data_url:avatar,
-      file:new File([avatar], "avatar", {
-      type: 'image/png'})}
-
-      let param = { file: imgDefault.file }
-    apiProfile.putUploadAvatar(param)
-      .then(res => {
-        toast.success("Xoá ảnh đại diện thành công")
-        getUserProfile()
-      })
-      .catch(error => {
-        toast.error("Xoá ảnh đại diện thất bại")
-      })
-      setModalDeleteAvatar(false);
   }
 
   // Xử lí Tên, số điện thoại, email
@@ -210,32 +179,10 @@ function Info() {
                       height: 110,
                       border: "3px solid aquamarine",
                     }}
-                    src={image.length === 0 ? user.img : image[0].data_url}
+                    src={image.length === 0 ? user.photoUrl : image[0].data_url}
                   />
                 </Badge>
-                {openAvatar ? (
-                  <Stack className="avatar-control">
-                    <Stack autofocusitem={openAvatar.toString()}>
-                      <MenuItem onClick={openModalViewAvatar}>
-                        <WallpaperIcon sx={{ mr: 2 }} color="disabled" />
-                        Xem ảnh đại diện
-                      </MenuItem>
-
-                      <MenuItem onClick={openModalUploadAvatar}>
-                        <VisibilityOutlinedIcon
-                          sx={{ mr: 2 }}
-                          color="disabled"
-                        />
-                        Cập nhật ảnh đại diện
-                      </MenuItem>
-
-                      <MenuItem onClick={openModalDeleteAvatar}>
-                        <DeleteIcon sx={{ mr: 2 }} color="disabled" />
-                        Xóa ảnh đại diện hiện tại
-                      </MenuItem>
-                    </Stack>
-                  </Stack>
-                ) : null}
+                
               </Box>
             </ClickAwayListener>
 
@@ -381,32 +328,6 @@ function Info() {
         </Stack>
       </Stack>
 
-
-      {/* Modal view avatar */}
-      <Modal
-        sx={{ overflowY: "scroll" }}
-        open={modalViewAvatar}
-        onClose={closeModalViewAvatar}
-      >
-        <Stack className="modal-info" spacing={2}>
-          <Stack direction="row" justifyContent="space-between">
-            <Typography variant="h6" component="h2">
-              Xem ảnh đại diện
-            </Typography>
-            <IconButton onClick={closeModalViewAvatar}>
-              <CloseIcon />
-            </IconButton>
-          </Stack>
-          <Divider />
-          <img
-            style={{ width: "24rem", height: "24rem", alignSelf: "center" }}
-            src={user.img}
-            alt="ảnh đại diện"
-          />
-        </Stack>
-      </Modal>
-
-      {/* Modal upload avatar */}
       <Modal
         sx={{ overflowY: "scroll" }}
         open={modalUploadAvatar}
@@ -440,7 +361,6 @@ function Info() {
                 isDragging,
                 dragProps,
               }) => (
-                // write your building UI
                 <Box className="upload__image-wrapper">
                   {imageList.length === 0 ? (
                     <Stack
@@ -514,42 +434,6 @@ function Info() {
         </Stack>
       </Modal>
 
-      {/* Modal delete avatar */}
-      <Modal
-        sx={{ overflowY: "scroll" }}
-        open={modalDeleteAvatar}
-        onClose={closeModalDeleteAvatar}
-      >
-        <Stack
-          className="modal-info"
-          direction="row"
-          spacing={2}
-          justifyContent="center"
-          width="26rem"
-        >
-          <Stack>
-            <InfoOutlinedIcon color="primary" />
-          </Stack>
-
-          <Stack spacing={3}>
-            <Stack>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Bạn có chắc muốn xoá ảnh đại diện ?
-              </Typography>
-              <Typography>
-                Bạn không thể xóa ảnh đại diện
-              </Typography>
-            </Stack>
-
-            <Stack direction="row" justifyContent="flex-end" spacing={1}>
-              <Button onClick={closeModalDeleteAvatar} variant="outlined">
-                Hủy
-              </Button>
-              <Button onClick={handleDeleteAvatar} variant="contained">Xóa bỏ</Button>
-            </Stack>
-          </Stack>
-        </Stack>
-      </Modal>
     </Stack>
   );
 }

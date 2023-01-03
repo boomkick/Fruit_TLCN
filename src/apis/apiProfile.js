@@ -10,10 +10,8 @@ const apiProfile = {
         const res = await axiosClientWithToken.post('/account/changePassword', params)
         return res.data;
     },
-    putUploadAvatar: async (params) => {
-        const res = await axiosClientWithToken.post('/account/uploadAvatar', params,{headers: {
-            'Content-Type': 'multipart/form-data'
-          }})
+    postUploadAvatar: async (params) => {
+        const res = await axiosClientWithToken.post('/account/uploadPhoto', params)
         return res.data;
     },
     putUpdateProfile: async (params) => {

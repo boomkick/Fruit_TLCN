@@ -28,7 +28,6 @@ import apiProfile from "../../apis/apiProfile";
 
 function Login(props) {
   const dispatch = useDispatch();
-  const client_url = "https://localhost:3000/"
 
   const {
     register,
@@ -184,7 +183,7 @@ function Login(props) {
           alignItems="center"
           spacing={2}
         >
-          <a href={`https://nhom3-tiki.herokuapp.com/oauth2/authorization/facebook?redirect_uri=${client_url}oauth2/redirect`} className="hre">
+          <a href="https://www.facebook.com/" className="hre">
             <FacebookRoundedIcon
               sx={{
                 cursor: 'pointer',
@@ -193,7 +192,7 @@ function Login(props) {
               }} />
           </a>
 
-          <a href={`https://nhom3-tiki.herokuapp.com/oauth2/authorization/google?redirect_uri=${client_url}oauth2/redirect`} className="hre">
+          <a href="https://www.google.com/" className="hre">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
               width="48" height="48"
               viewBox="0 0 48 48"

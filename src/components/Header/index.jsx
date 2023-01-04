@@ -186,13 +186,6 @@ function Header() {
                       Đơn hàng của tôi
                     </Link>
 
-                    {/* <Link
-                      to={"/my-account/wishlist"}
-                      style={{ padding: "8px 20px" }}
-                    >
-                      Sản phẩm yêu thích
-                    </Link> */}
-
 
                     <Link
                       to={"/my-account"}

@@ -20,11 +20,9 @@ function Password() {
   const [showPass, setShowPass] = React.useState(false);
   const [confirmPassword, setconfirmPassword] = React.useState("");
   const [newPassword, setnewPassword] = React.useState("");
-  // const [oldPassword, setoldPassword] = React.useState("");
   const [message, setMessage] = React.useState("*");
   const [newMessage, setNewMessage] = React.useState("*")
   const [fontSizeMessage, setFontSizeMessage] = React.useState("")
-  //const [valid, setValid] = React.useState({ new: false, cf: false });
   const navigate = useNavigate()
   
   const Rcolor = "#2196f3"
@@ -34,21 +32,15 @@ function Password() {
   
   const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");//regex kiểm tra mật khẩu hợp lệ
   
-  // const onChangeoldPassword = (event) => {
-  //     setoldPassword(event.target.value)
-  // }
-  
   const onChangenewPassword = (event) => {
     setnewPassword(event.target.value)
     if (strongRegex.test(event.target.value)) {
       setColor(Rcolor)
       setNewMessage("*Mật khẩu hợp lệ")
-      //setValid(pre => { return { ...pre, new: true } })
     }
     else {
       setColor(Fcolor)
       setNewMessage("*Mật khẩu phải có ít nhất 8 kí tự. Chứa kí tự thường, kí tự hoa và số")
-      //setValid(pre => { return { ...pre, new: false } })
     }
   }
   
@@ -58,17 +50,14 @@ function Password() {
       setFontSizeMessage("13px")
       setNColor(Rcolor)
       setMessage("*Trùng khớp")
-      //setValid(pre => { return { ...pre, cf: true } })
     }
     else {
       setFontSizeMessage("14px")
       setNColor(Fcolor)
       setMessage("*Mật khẩu không trùng khớp!")
-      //setValid(pre => { return { ...pre, cf: false } })
     }
   }
   const handleChangePassword = () => {
-    //if (valid.new && valid.cf){
       const params = {
         "email": user.email,
         "password": confirmPassword,
@@ -83,7 +72,6 @@ function Password() {
           setNColor(Fcolor)
         setMessage("Thay đổi không thành công!")
       })
-    //}   
   }
 
   const passwordInput = (placeHolder, value, onChange) => {

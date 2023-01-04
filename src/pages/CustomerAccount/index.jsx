@@ -1,22 +1,8 @@
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import {
-  Avatar,
-  Stack,
   Box,
-  Button,
-  Typography,
-  FormGroup,
-  Grid,
-  Rating,
   Tab,
   Tabs,
-  ClickAwayListener,
-  Badge,
-  MenuItem,
-  Modal,
-  Divider,
-  IconButton,
 } from "@mui/material";
 
 import { useSelector } from "react-redux";

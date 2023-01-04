@@ -105,8 +105,6 @@ function ShoppingCart() {
     }
   };
 
-
-  console.log("ci",cart)
   return (
     <>
       <Box className="container">

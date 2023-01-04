@@ -29,7 +29,6 @@ function DetailOrder() {
                 })
         }
         getData()
-        console.log("dung roif");
     }, [id])
 
     // Chuyển trang về sản phẩm để thêm nhận xét
@@ -71,7 +70,6 @@ function DetailOrder() {
         <>
             <Box>
                 <Typography mt={2.5} fontSize="19px" fontWeight={300}>Chi tiết đơn hàng #{order?.id} 
-                {/* - <span style={{ fontWeight: 500 }}>Huỷ</span> */}
                 </Typography>
                 <Typography fontSize="13px" textAlign="end">Ngày đặt hàng: {order?.createdDate}</Typography>
                 <Stack direction="row" mt={1.25} mb={2.5} className="detailOrder" justifyContent="space-between">

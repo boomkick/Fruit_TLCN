@@ -146,8 +146,6 @@ function CreateAddress(props) {
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
         />
-        {/* Address - start */}
-        {/* Address - end */}
 
         <Stack direction="row">
           <Typography className="create-address__label">

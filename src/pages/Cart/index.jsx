@@ -40,10 +40,10 @@ function ShoppingCart() {
   // get cart by user
   useEffect(() => {
     // title web
-    const loadTitle = () => {
-      document.title = "Giỏ hàng";
-    };
-    loadTitle();
+    // const loadTitle = () => {
+    //   document.title = "Giỏ hàng";
+    // };
+    // loadTitle();
 
     apiCart.getCart()
       .then((res) => {

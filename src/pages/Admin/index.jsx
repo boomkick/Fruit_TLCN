@@ -122,9 +122,9 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Admin() {
-  React.useEffect(() => {
-    document.title = "Quản trị viên"
-  }, []);
+  // React.useEffect(() => {
+  //   document.title = "Quản trị viên"
+  // }, []);
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);

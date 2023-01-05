@@ -88,10 +88,10 @@ function Payment() {
   // }, [coupon, totalPrice]);
 
   useEffect(() => {
-    const loadTitle = () => {
-      document.title = "Đơn hàng của tôi";
-    };
-    loadTitle();
+    // const loadTitle = () => {
+    //   document.title = "Đơn hàng của tôi";
+    // };
+    // loadTitle();
   }, []);
 
   const handleChangeTypePayment = (event) => {

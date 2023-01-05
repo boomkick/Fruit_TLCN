@@ -70,7 +70,7 @@ function Login(props) {
       })
       .catch((error) => {
         console.log(error.response.data.message);
-        if (error.response.data.message === "No account found") {
+        if (error.response.data.message === "Không tìm thấy tài khoản") {
           setIsNoAccount(true);
           setWrongPass(false);
         } else {

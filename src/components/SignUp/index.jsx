@@ -98,17 +98,14 @@ function SignUp(props) {
   };
   // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
-    console.log(value);
     setCity(value);
   };
 
   const handleChangeDistrict = (value) => {
-    console.log(value);
     setDistrict(value);
   };
 
   const handleChangeWard = (value) => {
-    console.log(value);
     setWard(value);
   };
 

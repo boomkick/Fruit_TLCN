@@ -35,6 +35,10 @@ function DetailProduct({ data }) {
     }, [data])
 
   async function handleClickAddItem() {
+    if (quantity < 1) {
+        toast.error("Vui lòng chọn số lượng sản phẩm lớn hơn 0")
+        return
+    }
     let param = {
         productId: data?.id,
         quantity: quantity

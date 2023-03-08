@@ -6,7 +6,6 @@
   top: 0;
 }
 
-
 .header {
   height: 70px;
   width: 100%;
@@ -16,7 +15,6 @@
   background-position: 50% 0;
   background-color: #ffffff;
   display: block;
-
 
   &__account {
     position: relative;
@@ -33,7 +31,9 @@
     background-color: #fff;
     right: -140%;
     border-radius: 4px;
-    box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
+    box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px,
+      rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px,
+      rgb(0 0 0 / 9%) 0px -3px 5px;
 
     &::before {
       position: absolute;
@@ -59,8 +59,7 @@
       transform: translateX(-50%);
     }
 
-
-    &>div {
+    & > div {
       cursor: pointer;
       font-size: 12px;
       color: #333;
@@ -94,7 +93,6 @@
     display: block;
   }
 
-
   &__logo {
     // vertical-align:middle;
     width: 80px;
@@ -102,6 +100,7 @@
     margin-left: 0;
     margin-right: 30px;
     line-height: 1;
+    font-family: 'Roboto', sans-serif;
   }
 
   .element {
@@ -110,11 +109,14 @@
 
   &__leftElement {
     margin-right: auto;
-    &-item:hover &-main{
-        color: white;
-        background-color: $client-main-color-hover;
-        border-radius: 5px;
-        transition: ease 0.2s;
+    // &-item:hover {
+    //   transition: ease 0.2s;
+    //   border-color: $client-main-color-hover;
+    // }
+    &-item:hover &-main {
+      color: $client-main-color-hover;
+      transition: ease 0.2s;
+      border-color: $client-main-color-hover;
     }
   }
 
@@ -169,7 +171,7 @@
     // text-align: center;
   }
 
-  >li>a {
+  > li > a {
     color: black;
   }
 
@@ -183,7 +185,9 @@
     }
 
     &__dropdown {
-      box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
+      box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px,
+        rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px,
+        rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
       font-size: 100%;
       padding: 0;
       min-width: 230px;
@@ -198,7 +202,6 @@
       height: 0;
     }
   }
-
 
   .buttonSearch {
     display: inline-block;

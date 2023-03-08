@@ -13,20 +13,19 @@ import { logoutSuccess } from "../../slices/authSlice";
 
 import Login from "../Login";
 import SignUp from "../SignUp";
-import { VerticalAlignCenter } from "@mui/icons-material";
 import apiCategory from "../../apis/apiCategory";
-import img from "../../assets/img/logo.png"
+import img from "../../assets/img/logo.png";
 import { deleteAll } from "../../slices/cartSlice";
-import { clearAddress, clearCoupon, clearPaymentMethod } from "../../slices/paymentSlice";
-
-const privatePath = ["/my-account/", "/admin/", "/payment"];
+import {
+  clearAddress,
+  clearCoupon,
+  clearPaymentMethod,
+} from "../../slices/paymentSlice";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
-  
 
   const [modalLogin, setModalLogin] = useState(false);
   const openModalLogin = () => setModalLogin(true);
@@ -87,7 +86,10 @@ function Header() {
     getData();
   }, []);
 
-  if (location.pathname.includes("employee") || location.pathname.includes("admin")) {
+  if (
+    location.pathname.includes("employee") ||
+    location.pathname.includes("admin")
+  ) {
     return null;
   }
 
@@ -108,7 +110,7 @@ function Header() {
         <Link className="header__logo" to={"/"}>
           <img
             alt=""
-            style={{ width: "100%", height: "100%",objectFit:"cover" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
             src={img}
           />
         </Link>
@@ -117,30 +119,45 @@ function Header() {
         <div className="element header__leftElement">
           <ul className="navbar">
             <li className="header__leftElement-item">
-              <Link
-                to={"/"}
-              >
-                <Typography className="header__leftElement-main" sx={{ fontSize: "14px", fontWeight: "700", position: "relative", padding: "5px 30px 5px 10px"  }} >
+              <Link to={"/"}>
+                <Typography
+                className="header__leftElement-main"
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    position: "relative",
+                    paddingBottom: "5px",
+                    borderBottom: "3px solid transparent"
+                  }}
+                >
                   Danh mục trái cây
-                  <ArrowDropDownOutlinedIcon sx={{position: "absolute", top: "2px"}}/>
                 </Typography>
-                {/* <FontAwesomeIcon icon="fa-light fa-chevron-down" /> */}
               </Link>
               <ul className="subnav subnav__dropdown">
                 {categories.map((item) => {
                   return (
                     <li>
-                      <Link to={`/product-category/${item?.id}`}>{item?.name}</Link>
-                    </li>    
-                  )
+                      <Link to={`/product-category/${item?.id}`}>
+                        {item?.name}
+                      </Link>
+                    </li>
+                  );
                 })}
               </ul>
             </li>
             <li className="header__leftElement-item">
               <Link to={"/"}>
-                <Typography className="header__leftElement-main" sx={{ fontSize: "14px", fontWeight: "700", position: "relative", padding: "5px 30px 5px 10px" }} >
+                <Typography
+                  className="header__leftElement-main"
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    position: "relative",
+                    paddingBottom: "5px",
+                    borderBottom: "3px solid transparent"
+                  }}
+                >
                   Hỗ Trợ Khách Hàng
-                  <ArrowDropDownOutlinedIcon sx={{ position: "absolute", top: "2px" }}/>
                 </Typography>
               </Link>
               <ul className="subnav subnav__dropdown">
@@ -161,7 +178,7 @@ function Header() {
                 <>
                   <Stack>
                     <Button
-                      sx={{ color: "#3D8B91", padding: "6px 0"}}
+                      sx={{ color: "#3D8B91", padding: "6px 0" }}
                       endIcon={<ArrowDropDownOutlinedIcon />}
                     >
                       <Typography
@@ -186,29 +203,25 @@ function Header() {
                       Đơn hàng của tôi
                     </Link>
 
-
-                    <Link
-                      to={"/my-account"}
-                      style={{ padding: "8px 20px" }}
-                    >
+                    <Link to={"/my-account"} style={{ padding: "8px 20px" }}>
                       Tài khoản của tôi
                     </Link>
 
-                    {user?.role == 1 ? (<>
-                      <Link
-                      to={"/employee"}
-                      style={{ padding: "8px 20px" }}
-                    >
-                      Trang nhân viên
-                    </Link>
-                    </>) : user.role == 2 ?  (<>
-                      <Link
-                      to={"/admin"}
-                      style={{ padding: "8px 20px" }}
-                    >
-                      Trang quản trị viên
-                    </Link>
-                    </>) : <></>}
+                    {user?.role == 1 ? (
+                      <>
+                        <Link to={"/employee"} style={{ padding: "8px 20px" }}>
+                          Trang nhân viên
+                        </Link>
+                      </>
+                    ) : user.role == 2 ? (
+                      <>
+                        <Link to={"/admin"} style={{ padding: "8px 20px" }}>
+                          Trang quản trị viên
+                        </Link>
+                      </>
+                    ) : (
+                      <></>
+                    )}
 
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản
@@ -217,10 +230,8 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Button onClick={openModalLogin} sx={{color: "#3D8B91"}}>
-                    <Typography sx={{ fontSize: "14px" }}>
-                      Đăng nhập
-                    </Typography>
+                  <Button onClick={openModalLogin} sx={{ color: "#3D8B91" }}>
+                    <Typography sx={{ fontSize: "14px" }}>Đăng nhập</Typography>
                   </Button>
                 </>
               )}
@@ -230,7 +241,12 @@ function Header() {
 
             <li>
               <Link to="/cart">
-                <Badge color="warning" badgeContent={cart.length} invisible={cart.length===0} showZero>
+                <Badge
+                  color="warning"
+                  badgeContent={cart.length}
+                  invisible={cart.length === 0}
+                  showZero
+                >
                   <ShoppingBagIcon sx={{ fontSize: "25px" }} />
                 </Badge>
               </Link>

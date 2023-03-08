@@ -15,6 +15,8 @@ import Login from "../Login";
 import SignUp from "../SignUp";
 import apiCategory from "../../apis/apiCategory";
 import img from "../../assets/img/logo.png";
+import imgCategoryPear from "../../assets/img/category_pear.jpg";
+import imgCategorySalad from "../../assets/img/category_salad.jfif";
 import { deleteAll } from "../../slices/cartSlice";
 import {
   clearAddress,
@@ -133,7 +135,8 @@ function Header() {
                   Danh mục trái cây
                 </Typography>
               </Link>
-              <ul className="subnav subnav__dropdown">
+              <div className="subnav subnav__dropdown">
+              <ul >
                 {categories.map((item) => {
                   return (
                     <li>
@@ -144,6 +147,8 @@ function Header() {
                   );
                 })}
               </ul>
+              <img className="subnav__dropdown-img" src={imgCategorySalad} alt="" />
+              </div>
             </li>
             <li className="header__leftElement-item">
               <Link to={"/"}>

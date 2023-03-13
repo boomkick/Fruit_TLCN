@@ -1,14 +1,8 @@
-
-
-/* eslint-disable jsx-a11y/anchor-has-content */
-/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { sidebar } from "../../constraints/Admin";
 import { Notifies } from "../../constraints/AdminNotify";
 import { styled } from "@mui/material/styles";
-import "./Admin.scss";
-
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import "./Admin.scss";
@@ -29,15 +23,16 @@ import {
   ListItemText,
   ListItem,
   ListItemButton,
+  Collapse,
 } from "@mui/material";
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import DriveFileRenameOutlineOutlinedIcon from "@mui/icons-material/DriveFileRenameOutlineOutlined";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from "@mui/icons-material/Logout";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
@@ -48,11 +43,16 @@ import Product from "./Product";
 import User from "./User";
 import UpdateRoleUser from "./User/UpdateRoleUser";
 import CreateDetailProduct from "./Product/CreateDetailProduct";
-import logo_shop from "../../assets/img/logo.png"
+import logo_shop from "../../assets/img/logo.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutSuccess } from "../../slices/authSlice";
 import UpdateDetailProduct from "./Product/UpdateDetailProduct";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import StatisticCart from "./Statistic/Cart";
+import StatisticProfit from "./Statistic/Profit";
+import StatisticProduct from "./Statistic/Product";
+import StatisticBill from "./Statistic/Bill";
 
 const drawerWidth = 240;
 
@@ -122,9 +122,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function Admin() {
-  // React.useEffect(() => {
-  //   document.title = "Quản trị viên"
-  // }, []);
   const [openAccount, setOpenAccount] = React.useState(false);
 
   const user = useSelector((state) => state.auth.user);
@@ -194,6 +191,7 @@ function Admin() {
                     <img
                       style={{ borderRadius: "8px" }}
                       src="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+                      alt=""
                     />
                   </Stack>
                   <Stack sx={{ overflow: "auto" }}>
@@ -252,6 +250,14 @@ function Admin() {
     navigate("/");
   };
 
+  // Sidebar: statistic component
+  const [openStatistic, setOpenStatistic] = React.useState(true);
+
+  const handleClickOpenStatistic = (item) => {
+    setOpenStatistic(!openStatistic);
+    setSelectedTabId(item?.childs.id);
+  };
+
   return (
     <Stack direction="row">
       <CssBaseline />
@@ -275,7 +281,6 @@ function Admin() {
               edge="start"
               sx={{
                 marginRight: 5,
-                // ...(open && { display: "none" }),
               }}
             >
               <MenuIcon />
@@ -406,11 +411,7 @@ function Admin() {
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            <img
-              src={logo_shop}
-              alt=""
-              style={{width: "50px"}}
-            />
+            <img src={logo_shop} alt="" style={{ width: "50px" }} />
           </IconButton>
 
           <Typography sx={{ ml: "1rem", fontWeight: "bold" }} variant="h6">
@@ -428,37 +429,91 @@ function Admin() {
                 disablePadding
                 sx={{ display: "block" }}
                 selected={selectedTabId === item.id}
-                onClick={() => setSelectedTabId(item.id)}
+                onClick={() => item?.childs ? null : setSelectedTabId(item.id)}
               >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+                {item?.childs ? (
+                  <>
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                      onClick={() => handleClickOpenStatistic(item)}
+                      selected={selectedTabId === item?.childs.id}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.icon ? <item.icon /> : null}
+                      </ListItemIcon>
+
+                      <ListItemText
+                        primary={item.text}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                      {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={openStatistic} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {item?.childs.map((element) => {
+                          return (
+                            <Link to={element.link}>
+                            <ListItemButton sx={{ pl: 4 }}>
+                              <ListItemIcon
+                                sx={{
+                                  minWidth: 0,
+                                  mr: open ? 3 : "auto",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                {element.icon ? <element.icon /> : null}
+                              </ListItemIcon>
+                              <ListItemText
+                                primary={element.text}
+                                sx={{ opacity: open ? 1 : 0 }}
+                              />
+                            </ListItemButton>
+                            </Link>
+                          );
+                        })}
+                      </List>
+                    </Collapse>
+                  </>
+                ) : (
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
                     }}
                   >
-                    {<item.icon />}
-                  </ListItemIcon>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {item.icon ? <item.icon /> : null}
+                    </ListItemIcon>
 
-                  <ListItemText
-                    primary={item.text}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
+                    <ListItemText
+                      primary={item.text}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                )}
               </ListItem>
             </Link>
           ))}
         </List>
       </Drawer>
 
-        
       <Box
         component="main"
         flexGrow={1}
@@ -506,12 +561,21 @@ function Admin() {
             }
           />
 
-          {/* <Route path="review" element={<Review />} /> */}
+          <Route
+            path="statistic/*"
+            element={
+              <Routes>
+                <Route path="cart/" element={<StatisticCart />} />
+                <Route path="profit/" element={<StatisticProfit />} />
+                <Route path="product/" element={<StatisticProduct />} />
+                <Route path="bill/" element={<StatisticBill />} />
+              </Routes>
+            }
+          />
         </Routes>
       </Box>
-
     </Stack>
-    );
+  );
 }
 
 export default Admin;

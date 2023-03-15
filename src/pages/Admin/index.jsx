@@ -251,7 +251,7 @@ function Admin() {
   };
 
   // Sidebar: statistic component
-  const [openStatistic, setOpenStatistic] = React.useState(true);
+  const [openStatistic, setOpenStatistic] = React.useState(false);
 
   const handleClickOpenStatistic = (item) => {
     setOpenStatistic(!openStatistic);
@@ -456,7 +456,7 @@ function Admin() {
                         primary={item.text}
                         sx={{ opacity: open ? 1 : 0 }}
                       />
-                      {open ? <ExpandLess /> : <ExpandMore />}
+                      {openStatistic ? <ExpandLess /> : <ExpandMore />}
                     </ListItemButton>
                     <Collapse in={openStatistic} timeout="auto" unmountOnExit>
                       <List component="div" disablePadding>

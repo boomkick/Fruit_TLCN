@@ -31,7 +31,6 @@ const apiCart = {
             search = search + item.toString() + "=" + params[item] + "&";
         }
         search = search.slice(0, -1);
-        console.log("search", search)
         const res = await axiosClientWithToken.get(`/Cart/Carthistory?${search}`)
         return res.data;
     },
@@ -41,7 +40,6 @@ const apiCart = {
             search = search + item.toString() + "=" + params[item] + "&";
         }
         search = search.slice(0, -1);
-        console.log("search", search)
         const res = await axiosClientWithToken.get(`/Cart/processCart?${search}`)
         return res.data;
     },

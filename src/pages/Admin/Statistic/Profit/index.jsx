@@ -1,9 +1,20 @@
-import { Box } from "@mui/material";
+import React, { useState } from "react";
+import { Container } from "react-bootstrap";
+import StatisticProfitSearchForm from "../../../../forms/StatisticProfitSearchForm";
+import StatisticProfitTable from "../../../../tables/StatisticProfitTable";
 
 export default function StatisticProfit() {
-    return(
-        <Box sx={{height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
-            <h1>This feature have not been avaliable for this version yet ...</h1>
-        </Box>
-    )
+    const [data, setData] = useState(0)
+  const handleSetData = React.useCallback((value) => {
+    setData(value)
+  }, [])
+  
+  return (
+    <>
+      <Container class="bg-white" style={{padding: "24px", backgroundColor: "#fff"}}>
+        <StatisticProfitSearchForm handleSetData={handleSetData}/>
+        <StatisticProfitTable data={data}/>
+      </Container>
+    </>
+  );
 }

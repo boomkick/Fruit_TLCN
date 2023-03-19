@@ -10,6 +10,14 @@ const apiStatistics = {
         const res = await axiosClientWithToken.get(`/Statistics/profit?${getSearchParams(params)}`)
         return res.data;
     },
+    getProduct: async (params) => {
+        const res = await axiosClientWithToken.get(`/Statistics/product?${getSearchParams(params)}`)
+        return res.data;
+    },
+    getBill: async (params) => {
+        const res = await axiosClientWithToken.get(`/Statistics/bill?${getSearchParams(params)}`)
+        return res.data;
+    },
 }
 export default apiStatistics;
 

@@ -228,7 +228,8 @@ function Info() {
                     id="outlined-basic"
                     value={phone}
                     variant="outlined"
-                    sx={{ width: "100%" }}
+                    sx={{ width: "100%", shrink: false }}
+                    
                     size="small"
                     onChange={onChangePhone}
                 />

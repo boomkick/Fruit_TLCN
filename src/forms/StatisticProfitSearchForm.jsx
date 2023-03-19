@@ -1,12 +1,10 @@
-import { Button, FormControl, Stack, Typography } from "@mui/material";
-import { Col, Row } from "react-bootstrap";
+import { Grid, FormControl, Stack, Typography } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import apiStatistics from "../apis/apiStatistic";
-import "bootstrap/dist/css/bootstrap.min.css"
+import FilterButton from "../components/Button/FilterButton";
+import ClearButton from "../components/Button/ClearButton";
 
 StatisticProfitSearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
@@ -43,11 +41,16 @@ export default function StatisticProfitSearchForm(props) {
 
   return (
     <>
-      <Row >
+      <Grid container mb={2}>
         <Typography fontSize="26px">Thống kê lợi nhuận</Typography>
-      </Row>
-      <Row className="mt-3">
-        <Col>
+      </Grid>
+      <Grid
+        container
+        rowSpacing={1}
+        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+        mb={2}
+      >
+        <Grid item xs={6}>
           <FormControl
             sx={{
               m: 1,
@@ -68,30 +71,27 @@ export default function StatisticProfitSearchForm(props) {
               value={createdDate}
             />
           </FormControl>
-        </Col>
-      </Row>
-      <Row className="mt-3 mb-3 justify-content-between">
-        <Stack width="130px">
-          <Button
-            variant="contained"
-            startIcon={<FilterAltIcon />}
-            style={{ padding: "7px 10px" }}
-            onClick={handleFilter}
-          >
-            Bộ lọc
-          </Button>
-        </Stack>
-        <Stack width="130px">
-          <Button
-            variant="contained"
-            endIcon={<RotateLeftIcon />}
-            style={{ padding: "7px 10px" }}
-            onClick={handleReset}
-          >
-            Làm mới
-          </Button>
-        </Stack>
-      </Row>
+        </Grid>
+      </Grid>
+      <Grid
+        container
+        rowSpacing={1}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Grid item xs={1}>
+          <Stack width={"100%"}>
+            <FilterButton handleFilter={handleFilter} />
+          </Stack>
+        </Grid>
+        <Grid item xs={1}>
+          <Stack width={"100%"}>
+            <ClearButton handleReset={handleReset} />
+          </Stack>
+        </Grid>
+      </Grid>
     </>
   );
 }

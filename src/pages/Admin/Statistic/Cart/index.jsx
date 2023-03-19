@@ -1,5 +1,5 @@
+import { Grid } from "@mui/material";
 import React, { useState } from "react";
-import { Container } from "react-bootstrap";
 import StatisticCartSearchForm from "../../../../forms/StatisticCartSearchForm";
 import StatisticCartTable from "../../../../tables/StatisticCartTable";
 
@@ -11,10 +11,10 @@ export default function StatisticCart() {
   
   return (
     <>
-      <Container class="bg-white" style={{padding: "24px", backgroundColor: "#fff"}}>
+      <Grid container style={{padding: "24px", backgroundColor: "#fff"}}>
         <StatisticCartSearchForm handleSetData={handleSetData}/>
         <StatisticCartTable data={data}/>
-      </Container>
+      </Grid>
     </>
   );
 }

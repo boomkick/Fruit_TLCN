@@ -1,5 +1,5 @@
+import { Grid } from "@mui/material";
 import React, { useState } from "react";
-import { Container } from "react-bootstrap";
 import StatisticProfitSearchForm from "../../../../forms/StatisticProfitSearchForm";
 import StatisticProfitTable from "../../../../tables/StatisticProfitTable";
 
@@ -11,10 +11,10 @@ export default function StatisticProfit() {
   
   return (
     <>
-      <Container class="bg-white" style={{padding: "24px", backgroundColor: "#fff"}}>
+      <Grid container style={{padding: "24px", backgroundColor: "#fff"}}>
         <StatisticProfitSearchForm handleSetData={handleSetData}/>
         <StatisticProfitTable data={data}/>
-      </Container>
+      </Grid>
     </>
   );
 }

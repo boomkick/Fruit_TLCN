@@ -10,11 +10,9 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import StarIcon from "@mui/icons-material/Star";
 import DoneIcon from "@mui/icons-material/Done";
-import CardProduct from "../../components/CardProduct";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import apiProduct from "../../apis/apiProduct";
 import { useDispatch, useSelector } from "react-redux";
 import apiAddress from "../../apis/apiAddress";
 import { setAddress } from "../../slices/addressSlice";
@@ -33,7 +31,6 @@ function Home() {
     if (address === null) {
       apiAddress.getVietNamLocations().then((res) => {
         dispatch(setAddress(res.data));
-        console.log("address: ", address);
       });
     }
   }, []);

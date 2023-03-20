@@ -53,6 +53,7 @@ import StatisticCart from "./Statistic/Cart";
 import StatisticProfit from "./Statistic/Profit";
 import StatisticProduct from "./Statistic/Product";
 import StatisticBill from "./Statistic/Bill";
+import Dashboard from "./Dashboard"
 
 const drawerWidth = 240;
 
@@ -523,7 +524,7 @@ function Admin() {
       >
         <DrawerHeader />
         <Routes>
-          {/* <Route index element={<Dashboard />} /> */}
+          <Route index element={<Dashboard />} />
           {/* <Route path="login" element={<AdminLogin />} /> */}
           <Route path="order/*" element={<Order />} />
           <Route

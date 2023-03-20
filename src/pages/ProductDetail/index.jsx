@@ -10,26 +10,24 @@ import {
 
 } from "@mui/material";
 import "./ProductDetail.scss";
-import { Swiper, SwiperSlide } from "swiper/react";
-import CardProduct from "../../components/CardProduct";
-// styles swiper
+
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-// import required modules
-import { Pagination, Navigation } from "swiper";
+
 import DetailProduct from "../../components/DetailProduct"
 import Comment from "../../components/Comment"
 import apiProduct from "../../apis/apiProduct";
 import { toast } from "react-toastify";
 import { Pagination as MuiPagination } from "@mui/material";
 import apiReview from "../../apis/apiReview";
+import GetTop8ProductProvider from "../../providers/GetTop8ProductProvider";
+import GetTop8ProductConsumer from "../../consumers/GetTop8ProductConsumer";
 
 function ProductDetail() {
     const user = useSelector((state) => state.auth.user);
     const [product, setProduct] = useState();
     const [listReviews, setListReviews] = useState([]);
-    const [top8Product, setTop8Product] = useState([]);
     const { id } = useParams();
     // Phân trang
     const [maxPage, setMaxPage] = useState([])
@@ -65,14 +63,6 @@ function ProductDetail() {
 
     // Lấy dữ liệu top 8 sản phẩm và dữ liệu chi tiết sản phẩm
     useEffect(() => {
-      const getTop8Product = async () => {
-        const response = await apiProduct.getTop8Product();
-        if (response) {
-          setTop8Product(response.data);
-        }
-      };
-      getTop8Product();
-
       const getProductDetail = async () => {
         const response = await apiProduct.getProductDetail(id);
         if (response) {
@@ -120,7 +110,6 @@ function ProductDetail() {
         }
         await apiReview.postReview(params, id)
           .then(res => {
-            console.log(res);
             if (res.status === 200) {
               toast.success("Bạn đã thêm bình luận vào sản phẩm");
               setRatingStars(5);
@@ -176,7 +165,6 @@ function ProductDetail() {
         }
         await apiReview.putReviewsByProduct(params, myReview.id)
           .then(res => {
-            console.log("res: ", res);
             if (res.status === 200) {
               toast.success("Bạn đã chỉnh sửa bình luận");
               setRatingStars(5);
@@ -253,6 +241,7 @@ function ProductDetail() {
     }
 
     return (
+      <GetTop8ProductProvider>
         <Box className= "container" style={{ backgroundColor: "#fff"}}>
             <DetailProduct data={product} />
 
@@ -266,25 +255,7 @@ function ProductDetail() {
                       {"Top sản phẩm bán chạy"}
                   </h2>
                 </Box>
-              <Swiper
-                slidesPerView={4}
-                spaceBetween={0}
-                slidesPerGroup={4}
-                loop={true}
-                loopFillGroupWithBlank={true}
-                pagination={{
-                  clickable: true,
-                }}
-                navigation={true}
-                modules={[Pagination, Navigation]}
-                className="mySwiper"
-              >
-                {top8Product.map((item) => (
-                <SwiperSlide>
-                  <CardProduct data={item}/>
-                </SwiperSlide>
-              ))}
-              </Swiper>
+                <GetTop8ProductConsumer />
             </Box>
             <Comment data={listReviews}/>
             {maxPage > 1 ? 
@@ -331,10 +302,8 @@ function ProductDetail() {
                 <Button variant="contained" sx={{ backgroundColor: "black", textTransform: "uppercase", fontWeight: "400"}} onClick={handleSubmitComment}>GỬI</Button>
             </Box>
             }
-            
-            
-
         </Box>
+        </GetTop8ProductProvider>
     );
 }
 export default ProductDetail;

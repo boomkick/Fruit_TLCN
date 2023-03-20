@@ -17,7 +17,9 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import {numWithCommas} from "../../../constraints/Util"
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+import { numWithCommas } from "../../../constraints/Util";
+import { Grid } from "@mui/material";
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +29,30 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 const labels = ["January", "February", "March", "April", "May", "June", "July"];
+
+// Data test Pie Chart
+const data01 = [
+  { name: "Group A", value: 400 },
+  { name: "Group B", value: 300 },
+  { name: "Group C", value: 300 },
+  { name: "Group D", value: 200 },
+];
+const data02 = [
+  { name: "A1", value: 100 },
+  { name: "A2", value: 300 },
+  { name: "B1", value: 100 },
+  { name: "B2", value: 80 },
+  { name: "B3", value: 40 },
+  { name: "B4", value: 30 },
+  { name: "B5", value: 50 },
+  { name: "C1", value: 100 },
+  { name: "C2", value: 200 },
+  { name: "D1", value: 150 },
+  { name: "D2", value: 50 },
+];
+
 export const options = {
   responsive: true,
   plugins: {
@@ -40,6 +65,7 @@ export const options = {
     },
   },
 };
+
 export const data = {
   labels,
   datasets: [
@@ -56,40 +82,128 @@ export const data = {
   ],
 };
 
-function Dashboard() {
+export default function Dashboard() {
   return (
-    <Box>
-      <Stack spacing={3} pl="5rem" mt="2rem">
-        <Stack direction="row" spacing={4}>
-          {
-            items.map(item => {
-              let iconColor = item.iconColor
-              return (
-                <Stack className="dashboard__item" key={item.id} direction="row" >
-                  <Stack className="dashboard__icon" bgcolor={item.bgcolor}>
-                    <GroupsIcon sx={{ fontSize: 40, color: iconColor }} />
-                  </Stack>
-                  <Stack alignItems="center" justifyContent="center">
-                    <Typography className="dashboard__title">
-                      {item.title}
-                    </Typography>
-                    <Typography color="#2a2a2a" fontWeight={500}>
-                      {`${numWithCommas(item.value)} ${item.unit}`}
-                    </Typography>
-                  </Stack>
-                </Stack>
-              )
-            })
-          }
-        </Stack>
-        <Box width="65%" height="65%">
-          <Stack alignItems="center" justifyContent="center">
-            <Typography sx={{ fontSize: "18px", fontWeight: "500" }}>Thống kê doanh thu</Typography>
+    <Grid container rowSpacing={2} columnSpacing={2} p={6}>
+      {/* Thống kê số liệu tổng quan */}
+      <Grid
+        container
+        sx={{ display: "flex", justifyContent: "space-between" }}
+        m={2}
+        mb={5}
+      >
+        {items.map((item) => {
+          let iconColor = item.iconColor;
+          return (
+            <Stack className="dashboard__item" key={item.id} direction="row">
+              <Stack className="dashboard__icon" bgcolor={item.bgcolor}>
+                <GroupsIcon sx={{ fontSize: 40, color: iconColor }} />
+              </Stack>
+              <Stack alignItems="center" justifyContent="center">
+                <Typography className="dashboard__title">
+                  {item.title}
+                </Typography>
+                <Typography color="#2a2a2a" fontWeight={500}>
+                  {`${numWithCommas(item.value)} ${item.unit}`}
+                </Typography>
+              </Stack>
+            </Stack>
+          );
+        })}
+      </Grid>
+
+      {/* Thống kê số liệu biểu đồ */}
+      <Grid container columnSpacing={2}>
+        <Grid
+          item
+          xs={8}
+          backgroundColor={"#fff"}
+          p={2}
+          borderRadius={"0.375rem"}
+        >
+          <Stack alignItems="start" justifyContent="center">
+            <Typography sx={{ fontSize: "18px", fontWeight: "500" }}>
+              Thống kê doanh thu
+            </Typography>
           </Stack>
           <Bar options={options} data={data} />
-        </Box>
-      </Stack>
-    </Box>
+        </Grid>
+        <Grid item
+          xs={4 }
+          backgroundColor={"#fff"}
+          p={2}
+          borderRadius={"0.375rem"}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data01}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={60}
+                fill="#8884d8"
+              />
+              <Pie
+                data={data02}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={90}
+                fill="#82ca9d"
+                label
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </Grid>
+      </Grid>
+
+      {/* Thống kê số liệu biểu đồ */}
+      <Grid container columnSpacing={2}>
+        <Grid
+          item
+          xs={8}
+          backgroundColor={"#fff"}
+          p={2}
+          borderRadius={"0.375rem"}
+        >
+          <Stack alignItems="start" justifyContent="center">
+            <Typography sx={{ fontSize: "18px", fontWeight: "500" }}>
+              Thống kê doanh thu
+            </Typography>
+          </Stack>
+          <Bar options={options} data={data} />
+        </Grid>
+        <Grid item
+          xs={4 }
+          backgroundColor={"#fff"}
+          p={2}
+          borderRadius={"0.375rem"}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart width={400} height={400}>
+              <Pie
+                data={data01}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={60}
+                fill="#8884d8"
+              />
+              <Pie
+                data={data02}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={90}
+                fill="#82ca9d"
+                label
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }
 
@@ -101,7 +215,7 @@ const items = [
     unit: "Khách hàng",
     icon: GroupsIcon,
     iconColor: "#22ad56",
-    bgcolor: "#b9ffd3"
+    bgcolor: "#b9ffd3",
   },
   {
     id: 2,
@@ -110,7 +224,7 @@ const items = [
     unit: "Sản phẩm",
     icon: InventoryIcon,
     iconColor: "#1d5aab",
-    bgcolor: "#adcbf3"
+    bgcolor: "#adcbf3",
   },
   {
     id: 1,
@@ -119,7 +233,7 @@ const items = [
     unit: "Đơn hàng",
     icon: DescriptionIcon,
     iconColor: "#ff8b07",
-    bgcolor: "#fde1c3"
+    bgcolor: "#fde1c3",
   },
   {
     id: 1,
@@ -128,8 +242,6 @@ const items = [
     unit: "đ",
     icon: PaidIcon,
     iconColor: "#de2222",
-    bgcolor: "#f9baba"
+    bgcolor: "#f9baba",
   },
-]
-
-export default Dashboard;
+];

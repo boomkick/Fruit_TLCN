@@ -1,7 +1,7 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorInput, ErrorAfterSubmit } from "../ErrorHelper";
-import { loginSuccess} from "../../slices/authSlice";
+import { loginSuccess } from "../../slices/authSlice";
 import { useDispatch } from "react-redux";
 import apiAuth from "../../apis/apiAuth";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
@@ -24,7 +24,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CloseIcon from "@mui/icons-material/Close";
 import Loading from "../Loading";
 import { toast } from "react-toastify";
-import apiProfile from "../../apis/apiProfile";
+import LoginGoogle from "./LoginByGoogle/LoginByGoogle";
 
 function Login(props) {
   const dispatch = useDispatch();
@@ -43,7 +43,12 @@ function Login(props) {
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data) => {
+  const submitType = {
+    NORMAL: 1,
+    GOOGLE: 2,
+  };
+
+  const onSubmit = React.useCallback((data, type) => {
     if (loading) {
       toast.warning(
         "Thao tác đang thực hiện. Vui lòng không thao tác quá nhanh"
@@ -51,25 +56,33 @@ function Login(props) {
       return;
     }
     setLoading(true);
-    let params = {
-      password: data.pass,
-      email: data.email,
-    };
 
-    apiAuth
-      .postLogin(params)
+    let params =
+      type === submitType.NORMAL
+        ? {
+            password: data.pass,
+            email: data.email,
+          }
+        : {
+            token: data.token,
+          };
+
+    if (type === submitType.NORMAL) {
+      apiAuth
+      .postLoginGoogle(params)
       .then((res) => {
         let { accessToken, user } = res.data;
         Object.assign(user, {
-          fullName: user.firstName + " " + user.lastName
-        })
-        let refreshToken = ""
+          fullName: user.firstName + " " + user.lastName,
+        });
+        let refreshToken = "";
         dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
-        toast.success(`Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`)
+        toast.success(
+          `Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`
+        );
         props.closeModalLogin();
       })
       .catch((error) => {
-        console.log(error.response.data.message);
         if (error.response.data.message === "Không tìm thấy tài khoản") {
           setIsNoAccount(true);
           setWrongPass(false);
@@ -81,9 +94,37 @@ function Login(props) {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-
+    } else {
+      console.log("params: ", params)
+      // apiAuth
+      // .postLogin(params)
+      // .then((res) => {
+      //   let { accessToken, user } = res.data;
+      //   Object.assign(user, {
+      //     fullName: user.firstName + " " + user.lastName,
+      //   });
+      //   let refreshToken = "";
+      //   dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
+      //   toast.success(
+      //     `Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`
+      //   );
+      //   props.closeModalLogin();
+      // })
+      // .catch((error) => {
+      //   if (error.response.data.message === "Không tìm thấy tài khoản") {
+      //     setIsNoAccount(true);
+      //     setWrongPass(false);
+      //   } else {
+      //     setIsNoAccount(false);
+      //     setWrongPass(true);
+      //   }
+      // })
+      // .finally(() => {
+      //   setLoading(false);
+      // });
+    }
+    
+  }, []);
 
   return (
     <Stack direction="row">
@@ -105,9 +146,7 @@ function Login(props) {
                 label="Email"
                 variant="standard"
               />
-              {errors.email && (
-                <ErrorInput message={errors.email.message} />
-              )}
+              {errors.email && <ErrorInput message={errors.email.message} />}
             </Stack>
 
             <FormControl sx={{ width: "100%" }} variant="standard">
@@ -148,7 +187,9 @@ function Login(props) {
             <Button
               variant="contained"
               color="error"
-              onClick={handleSubmit(onSubmit)}
+              onClick={handleSubmit((data) =>
+                onSubmit(data, submitType.NORMAL)
+              )}
             >
               {loading && <Loading color="#fff" />}
               Đăng nhập
@@ -183,28 +224,29 @@ function Login(props) {
           alignItems="center"
           spacing={2}
         >
-          <a href="https://www.facebook.com/" className="hre">
+          {/* <a href="https://www.facebook.com/" className="hre">
             <FacebookRoundedIcon
               sx={{
-                cursor: 'pointer',
+                cursor: "pointer",
                 color: "#4267b2",
-                fontSize: "3rem"
-              }} />
-          </a>
+                fontSize: "3rem",
+              }}
+            />
+          </a> */}
 
-          <a href="https://www.google.com/" className="hre">
+          {/* <a onClick={} className="hre">
             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
               width="48" height="48"
               viewBox="0 0 48 48"
               style={{fill:"#000000"}}><path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path><path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path><path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path><path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path></svg>
-          </a>
+          </a> */}
+          <LoginGoogle onSubmit={onSubmit}/>
         </Stack>
         <p style={{ textAlign: "center" }}>
           Bằng việc tiếp tục, bạn đã chấp nhận{" "}
           <a href="/">điều khoản sử dụng</a>
         </p>
       </Stack>
-
 
       <span style={{ position: "absolute", top: 0, right: 0 }}>
         <IconButton onClick={props.closeModalLogin}>

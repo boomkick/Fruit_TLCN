@@ -69,7 +69,7 @@ function Login(props) {
 
     if (type === submitType.NORMAL) {
       apiAuth
-        .postLoginGoogle(params)
+        .postLogin(params)
         .then((res) => {
           let { accessToken, user } = res.data;
           Object.assign(user, {

@@ -6,6 +6,10 @@ const apiAuth = {
         const myLogin = await axiosClient.post('/account/login', params)
         return myLogin.data;
     },
+    postGoogleLogin: async (params) => {
+        const myLogin = await axiosClient.post('/googleaccount/login', params)
+        return myLogin.data;
+    },
     postRegister: async (params) => {
         const register = await axiosClient.post('/account/user/register', params)
         return register.data

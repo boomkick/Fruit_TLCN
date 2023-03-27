@@ -21,7 +21,6 @@ function LoginGoogle(props) {
       them: "filled_blue",
       size: "large",
     });
-    google.accounts.id.prompt()
   }, []);
 
   return (

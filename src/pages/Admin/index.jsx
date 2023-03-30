@@ -54,6 +54,7 @@ import StatisticProfit from "./Statistic/Profit";
 import StatisticProduct from "./Statistic/Product";
 import StatisticBill from "./Statistic/Bill";
 import Dashboard from "./Dashboard"
+import Inventory from "./Inventory";
 
 const drawerWidth = 240;
 
@@ -558,6 +559,16 @@ function Admin() {
               <Routes>
                 <Route index element={<User />} />
                 <Route path="update-role/" element={<UpdateRoleUser />} />
+              </Routes>
+            }
+          />
+          <Route
+            path="inventory/*"
+            element={
+              <Routes>
+                <Route index element={<Inventory />} />
+                {/* <Route path="create" element={<CreateDetailProduct />} /> */}
+                {/* <Route path="detail/:id" element={<UpdateDetailProduct />} /> */}
               </Routes>
             }
           />

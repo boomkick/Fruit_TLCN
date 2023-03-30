@@ -12,7 +12,7 @@ export default function ClearButton(props) {
   <Button
     variant="contained"
     endIcon={<RotateLeftIcon />}
-    style={{ padding: "7px 10px", backgroundColor: "#8388A4" }}
+    style={{ padding: "7px 10px", backgroundColor: "#74768B" }}
     onClick={props.handleReset}
   >
     Xóa

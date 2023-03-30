@@ -1,9 +1,9 @@
-import {useState} from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
-import { toast } from 'react-toastify';
-import { loginSuccess } from '../../../slices/authSlice'
-import { useDispatch } from 'react-redux';
+import { toast } from "react-toastify";
+import { loginSuccess } from "../../../slices/authSlice";
+import { useDispatch } from "react-redux";
 
 import "./Info.scss";
 
@@ -33,16 +33,14 @@ import apiProfile from "../../../apis/apiProfile";
 import Loading from "../../../components/Loading";
 import SelectBoxAddress from "../../../components/SelectBoxAddress";
 
-
-
 function Info() {
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const [image, setImage] = useState([]);
-  const [firstName, setFirstName] = useState(user.firstName)
-  const [lastName, setLastName] = useState(user.lastName)
-  const [phone, setPhone] = useState(user.phone)
-  const [email, setEmail] = useState(user.email)
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [phone, setPhone] = useState(user.phone);
+  const [email, setEmail] = useState(user.email);
   const [modalUploadAvatar, setModalUploadAvatar] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -61,46 +59,48 @@ function Info() {
     setImage(imageList);
   };
 
-
-  const handleUploadAvatar = ()=>{
+  const handleUploadAvatar = () => {
     if (image.length === 0) {
-      toast.warning("Vui lòng chọn ảnh")
-      return
+      toast.warning("Vui lòng chọn ảnh");
+      return;
     }
-    if(uploading){
-      toast.warning("Hình ảnh đang được cập nhật, vui lòng không thao tác quá nhiều lần")
-      return
+    if (uploading) {
+      toast.warning(
+        "Hình ảnh đang được cập nhật, vui lòng không thao tác quá nhiều lần"
+      );
+      return;
     }
-    setUploading(true)
-    let params = new FormData(); 
-    params.append('photo', image[0].file);
-    apiProfile.postUploadAvatar(params)
-      .then(res => {
-        toast.success("Cập nhật ảnh đại diện thành công")
-        getUserProfile()
+    setUploading(true);
+    let params = new FormData();
+    params.append("photo", image[0].file);
+    apiProfile
+      .postUploadAvatar(params)
+      .then((res) => {
+        toast.success("Cập nhật ảnh đại diện thành công");
+        getUserProfile();
       })
-      .catch(error => {
-        toast.error("Cập nhật ảnh đại diện thất bại")
+      .catch((error) => {
+        toast.error("Cập nhật ảnh đại diện thất bại");
       })
       .finally(() => {
         setModalUploadAvatar(false);
-        setUploading(false)
-      })
-  }
+        setUploading(false);
+      });
+  };
 
   // Xử lí Tên, số điện thoại, email
   const onChangeFirstName = (event) => {
     setFirstName(event.target.value);
-  }
+  };
   const onChangeLastName = (event) => {
     setLastName(event.target.value);
-  }
+  };
   const onChangePhone = (event) => {
     setPhone(event.target.value);
-  }
+  };
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
-  }
+  };
 
   // Xử lí phần địa chỉ
   const [city, setCity] = useState(user.cityId);
@@ -123,11 +123,22 @@ function Info() {
   const handleChangeAddressDetail = (event) => {
     setAddressDetail(event.target.value);
   };
-  
+
   const onSaveChange = () => {
-    if (!(firstName && lastName && phone && email && city && district && ward && addressDetail)) {
+    if (
+      !(
+        firstName &&
+        lastName &&
+        phone &&
+        email &&
+        city &&
+        district &&
+        ward &&
+        addressDetail
+      )
+    ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return
+      return;
     }
     const params = {
       firstName: firstName,
@@ -138,7 +149,7 @@ function Info() {
       wardId: ward,
       detailLocation: addressDetail,
     };
-    setUpdating(true)
+    setUpdating(true);
     apiProfile
       .putUpdateProfile(params)
       .then((response) => {
@@ -147,18 +158,17 @@ function Info() {
       })
       .catch((error) => {
         toast.error("Thay đổi không thành công");
-        console.log(error)
+        console.log(error);
       })
-      .finally(()=>setUpdating(false))
+      .finally(() => setUpdating(false));
   };
 
   const getUserProfile = () => {
-    apiProfile.getUserProfile()
-      .then((res) => {
-        let newUser = res.data
-        dispatch(loginSuccess({ ...user, ...newUser }))
-      })
-  }
+    apiProfile.getUserProfile().then((res) => {
+      let newUser = res.data;
+      dispatch(loginSuccess({ ...user, ...newUser }));
+    });
+  };
   return (
     <Stack className="customer-info" spacing={3}>
       <Typography variant="h6">Thông tin tài khoản</Typography>
@@ -182,7 +192,6 @@ function Info() {
                     src={image.length === 0 ? user.photoUrl : image[0].data_url}
                   />
                 </Badge>
-                
               </Box>
             </ClickAwayListener>
 
@@ -194,7 +203,10 @@ function Info() {
                 justifyContent="space-between"
               >
                 <label>Họ</label>
-                <input id="input-name" placeholder="Thêm họ" type="text"
+                <input
+                  id="input-name"
+                  placeholder="Thêm họ"
+                  type="text"
                   value={firstName}
                   onChange={onChangeFirstName}
                 />
@@ -218,63 +230,74 @@ function Info() {
             </Stack>
           </Stack>
           <Typography>Số điện thoại và Email</Typography>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Stack
               direction="row"
-              alignItems="center"
-              justifyContent="space-between"
+              sx={{ width: "350px", position: "relative" }}
             >
-              <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
-                <TextField
-                    id="outlined-basic"
-                    value={phone}
-                    variant="outlined"
-                    sx={{ width: "100%", shrink: false }}
-                    
-                    size="small"
-                    onChange={onChangePhone}
+              <TextField
+                id="outlined-basic"
+                value={phone}
+                variant="outlined"
+                sx={{ width: "100%", shrink: false }}
+                size="small"
+                onChange={onChangePhone}
+              />
+              <span className="order__iconSearch">
+                <LocalPhoneOutlinedIcon
+                  sx={{ fontSize: "28px" }}
+                  color="disabled"
                 />
-                <span className="order__iconSearch">
-                    <LocalPhoneOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
-                </span>
-              </Stack>
+              </span>
             </Stack>
-            <Stack
+          </Stack>
+          <Stack
             direction="row"
             spacing={15}
             alignItems="center"
             justifyContent="space-between"
           >
-            <Stack direction="row" sx={{ width: "350px", position: "relative" }}>
+            <Stack
+              direction="row"
+              sx={{ width: "350px", position: "relative" }}
+            >
               <TextField
-                  id="outlined-basic"
-                  value={email}
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  size="small"
-                  onChange={onChangeEmail}
-                  disabled
+                id="outlined-basic"
+                value={email}
+                variant="outlined"
+                sx={{ width: "100%" }}
+                size="small"
+                onChange={onChangeEmail}
+                disabled
               />
               <span className="order__iconSearch">
-                  <EmailOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
+                <EmailOutlinedIcon sx={{ fontSize: "28px" }} color="disabled" />
               </span>
+            </Stack>
           </Stack>
 
-          </Stack>
-          
-          <Stack style={{backgroundColor: "#f7f7f7", padding: "10px"}}>
+          <Stack style={{ backgroundColor: "#f7f7f7", padding: "10px" }}>
             <Typography>Bảo mật</Typography>
             <Stack
               direction="row"
               alignItems="center"
               justifyContent="space-between"
-              style={{marginTop: "20px"}}
+              style={{ marginTop: "20px" }}
             >
               <Stack direction="row" spacing={1}>
                 <LockIcon color="disabled" />
                 <ListItemText primary="Mật khẩu của bạn" />
               </Stack>
               <Link to="/my-account/edit-account/password">
-                <Button size="small" variant="outlined" style={{color: "#3D8B91", border: "1px solid #3D8B91"}}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  style={{ color: "#3D8B91", border: "1px solid #3D8B91" }}
+                >
                   Quên mật khẩu
                 </Button>
               </Link>
@@ -284,16 +307,15 @@ function Info() {
 
         <Divider orientation="vertical" flexItem />
 
-        <Stack spacing={4} style={{width: "100%"}}>
-          
+        <Stack spacing={4} style={{ width: "100%" }}>
           <Stack
-              direction="row"
-              spacing={15}
-              alignItems="center"
-              justifyContent="space-between"
-              style={{width: "100%"}}
-            >
-            <Stack spacing={4}  style={{width: "100%"}}>
+            direction="row"
+            spacing={15}
+            alignItems="center"
+            justifyContent="space-between"
+            style={{ width: "100%" }}
+          >
+            <Stack spacing={4} style={{ width: "100%" }}>
               <Typography>Địa chỉ tài khoản</Typography>
               <SelectBoxAddress
                 city={city}
@@ -306,26 +328,32 @@ function Info() {
             </Stack>
           </Stack>
           <Stack direction="row">
-          <Typography className="create-address__label">
-            Địa chỉ chi tiết
-          </Typography>
-          <Stack className="create-address__input">
-            <TextField
-                  id="outlined-basic"
-                  value={addressDetail}
-                  variant="outlined"
-                  sx={{ width: "100%" }}
-                  size="small"
-                  onChange={handleChangeAddressDetail}
+            <Typography className="create-address__label">
+              Địa chỉ chi tiết
+            </Typography>
+            <Stack className="create-address__input">
+              <TextField
+                id="outlined-basic"
+                value={addressDetail}
+                variant="outlined"
+                sx={{ width: "100%" }}
+                size="small"
+                onChange={handleChangeAddressDetail}
               />
             </Stack>
           </Stack>
-          <Button variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}
+          <Button
+            variant="contained"
+            sx={{
+              width: 200,
+              alignSelf: "center",
+              backgroundColor: "#3D8B91",
+              "&:hover": { backgroundColor: "#3D8B91" },
+            }}
             onClick={onSaveChange}
           >
-            {updating&&<Loading color="#fff"/>}Lưu thay đổi
+            {updating && <Loading color="#fff" />}Lưu thay đổi
           </Button>
-          
         </Stack>
       </Stack>
 
@@ -385,7 +413,7 @@ function Info() {
                     </Stack>
                   ) : null}
 
-                  {imageList.map((image,i) => (
+                  {imageList.map((image, i) => (
                     <Stack
                       key={i}
                       sx={{
@@ -423,7 +451,7 @@ function Info() {
                           variant="contained"
                           onClick={handleUploadAvatar}
                         >
-                         {uploading&&<Loading color="#fff"/>} Lưu thay đổi
+                          {uploading && <Loading color="#fff" />} Lưu thay đổi
                         </Button>
                       </Stack>
                     </Stack>
@@ -434,7 +462,6 @@ function Info() {
           </Box>
         </Stack>
       </Modal>
-
     </Stack>
   );
 }

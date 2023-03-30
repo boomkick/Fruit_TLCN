@@ -12,7 +12,7 @@ export default function FilterButton(props) {
   <Button
     variant="contained"
     startIcon={<FilterAltIcon />}
-    style={{ padding: "7px 10px", backgroundColor: "#82CA9D" }}
+    style={{ padding: "7px 10px", backgroundColor: "#2EAA51" }}
     onClick={props.handleFilter}
   >
     Bộ lọc

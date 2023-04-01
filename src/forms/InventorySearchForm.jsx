@@ -1,5 +1,4 @@
 import {
-  Grid,
   Button,
   FormControl,
   Stack,
@@ -8,13 +7,6 @@ import {
   TextField,
   Select,
   MenuItem,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Pagination,
-  Modal,
 } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
 import PropTypes from "prop-types";
@@ -24,9 +16,6 @@ import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-// import { Button } from "bootstrap";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 
 InventorySearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
@@ -568,25 +557,9 @@ export default function InventorySearchForm(props) {
             }}
           >
             <Stack width="130px">
-              {/* <Button
-                variant="contained"
-                startIcon={<FilterAltIcon />}
-                style={{ padding: "7px 10px" }}
-                onClick={handleFilter}
-              >
-                Bộ lọc
-              </Button> */}
               <FilterButton handleFilter={handleFilter}/>
             </Stack>
             <Stack width="130px">
-              {/* <Button
-                variant="contained"
-                endIcon={<RotateLeftIcon />}
-                style={{ padding: "7px 10px" }}
-                onClick={handleReset}
-              >
-                Làm mới
-              </Button> */}
               <ClearButton handleReset={handleReset}/>
             </Stack>
           </Stack>

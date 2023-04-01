@@ -154,6 +154,7 @@ export default function InventoryTable(props) {
       {props.data.maxPage >= 1 ? (
         <Stack
           spacing={2}
+          width={"100%"}
           mt="10px"
           display={"flex"}
           alignItems={"center"}

@@ -10,11 +10,11 @@ const apiStatistics = {
         const res = await axiosClientWithToken.get(`/Inventory?${getSearchParams(params)}`)
         return res.data;
     },
-    postProduct: async (params) => {
+    postInventory: async (params) => {
         const res = await axiosClientWithToken.post(`/Inventory`, params);
         return res.data;
     },
-    putProduct: async (params, id) => {
+    putInventory: async (params, id) => {
         const res = await axiosClientWithToken.put(`/Inventory/${id}/`, params);
         return res.data;
     },

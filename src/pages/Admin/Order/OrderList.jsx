@@ -590,7 +590,17 @@ const orderByItems = [
                      ))}
                  </TableBody>
              </Table>
-            <Pagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
+             <Stack
+                spacing={2}
+                width={"100%"}
+                mt="10px"
+                display={"flex"}
+                alignItems={"center"}
+                m={2}
+                pb={2}
+            >
+                <Pagination count={maxPage} page={currentPage} onChange={handleChangeCurrentPage} color="primary"/>
+            </Stack>
          </Stack>
          <Routes>
              <Route path='detail' element={<DetailOrder />} />

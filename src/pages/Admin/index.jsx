@@ -55,6 +55,7 @@ import StatisticProduct from "./Statistic/Product";
 import StatisticBill from "./Statistic/Bill";
 import Dashboard from "./Dashboard"
 import Inventory from "./Inventory";
+import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
 
 const drawerWidth = 240;
 
@@ -567,8 +568,8 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Inventory />} />
-                {/* <Route path="create" element={<CreateDetailProduct />} /> */}
-                {/* <Route path="detail/:id" element={<UpdateDetailProduct />} /> */}
+                <Route path="create" element={<CreateUpdateInventory edit={false} />} />
+                <Route path="detail/:id" element={<CreateUpdateInventory edit={true}/>} />
               </Routes>
             }
           />

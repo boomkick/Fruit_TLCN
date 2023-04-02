@@ -11,7 +11,6 @@ const apiReview = {
             search = search + item.toString() + "=" + params[item] + "&";
         }
         search = search.slice(0, -1);
-        console.log("search", search)
         const res = await axiosClient.get(`/review/product/${id}?${search}`)
         return res.data;
     },

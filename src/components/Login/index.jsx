@@ -95,7 +95,6 @@ function Login(props) {
           setLoading(false);
         });
     } else {
-      console.log("params: ", params);
       apiAuth
         .postGoogleLogin(params)
         .then((res) => {

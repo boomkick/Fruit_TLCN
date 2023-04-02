@@ -14,7 +14,6 @@ const GetAllProductConsumer = (props) => {
     const MaxPageAllProduct = React.useContext(GetMaxPageAllProduct)
     const AllProductDataLoading = React.useContext(GetAllProductLoading)
     const onChangePage = React.useCallback((event, value) => {
-      console.log("event: ", value)
       props?.handleChangePage(value)
     }, [])
     return (

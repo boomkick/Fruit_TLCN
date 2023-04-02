@@ -26,13 +26,14 @@ CreateUpdateInventory.propTypes = {
 };
 
 const unitByItems = [
-    { id: 0, label: "NONE", name: "Mặc định" },
-    { id: 1, label: "WEIGHT", name: "Trọng lượng" },
-    { id: 2, label: "UNIT", name: "Đơn vị" },
-  ];
+  { id: 0, label: "NONE", name: "Mặc định" },
+  { id: 1, label: "WEIGHT", name: "Trọng lượng" },
+  { id: 2, label: "UNIT", name: "Đơn vị" },
+];
 
 function CreateUpdateInventory(props) {
   const [id, setId] = useState("");
+  const [edit, setEdit] = useState(props.edit);
   const [inventory, setInventory] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
@@ -60,11 +61,11 @@ function CreateUpdateInventory(props) {
         .getInventoryById(id)
         .then((res) => {
           setInventory(res.data);
-          setProductId(res.data.productId);
+          setProductId(res.data.product.id);
           setQuantity(res.data.quantity);
           setImportPrice(res.data.importPrice);
           setDescription(res.data.description);
-          setSupplierId(res.data.supplierId);
+          setSupplierId(res.data.supplier.id);
           setUnit(res.data.unit);
           setDeliveryDate(res.data.deliveryDate);
           setExpireDate(res.data.expireDate);
@@ -73,23 +74,33 @@ function CreateUpdateInventory(props) {
           setInventory({});
         });
     };
-    if (props.edit) {
-      setId(params?.id);
+    if (edit === true && id) {
       loaddata();
     }
-  }, [props.edit]);
+  }, [id]);
+
+  useEffect(() => {
+    if (props.edit) {
+      setEdit(true);
+      setId(params?.id);
+    }
+  }, []);
 
   const handleUpdate = () => {
     const params = {
-        "productId": Number(productId),
-        "quantity": Number(quantity),
-        "importPrice": Number(importPrice),
-        "description": description,
-        "supplierId": Number(supplierId),
-        "unit": unit === 1 ? 1 : 0,
-        "deliveryDate": deliveryDate.format("YYYY-MM-DD"),
-        "expireDate": expireDate.format("YYYY-MM-DD"),
+      productId: Number(productId),
+      quantity: Number(quantity),
+      importPrice: Number(importPrice),
+      description: description,
+      supplierId: Number(supplierId),
+      unit: unit === 1 ? 1 : 0,
+      deliveryDate: deliveryDate.toString("YYYY-MM-DD"),
+      expireDate: expireDate.toString("YYYY-MM-DD"),
     };
+    if (!unit) {
+      toast.warning("Gía trị đơn vị không được để mặc định");
+      return;
+    }
     if (
       !(
         productId &&
@@ -104,29 +115,29 @@ function CreateUpdateInventory(props) {
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return;
+    } else {
+      apiInventory
+        .putInventory(params, id)
+        .then((res) => {
+          toast.success("Cập nhật thành công");
+          navigate("/admin/inventory");
+        })
+        .catch((error) => {
+          toast.error("Cập nhật không thành công, đã có sự cố!");
+        });
     }
-    apiInventory
-      .putInventory(params, id)
-      .then((res) => {
-        toast.success("Cập nhật thành công");
-        navigate("/admin/inventory");
-      })
-      .catch((error) => {
-        toast.error("Cập nhật không thành công, đã có sự cố!");
-      });
   };
 
   const handleSave = () => {
     const params = {
-      "productId": Number(productId),
-      "quantity": Number(quantity),
-      "importPrice": Number(importPrice),
-      "description": description,
-      "supplierId": Number(supplierId),
-      "unit": unit === 1 ? 1 : 0,
-      "deliveryDate": deliveryDate.format("YYYY-MM-DD"),
-      "expireDate": expireDate.format("YYYY-MM-DD"),
+      productId: Number(productId),
+      quantity: Number(quantity),
+      importPrice: Number(importPrice),
+      description: description,
+      supplierId: Number(supplierId),
+      unit: unit === 1 ? 1 : 0,
+      deliveryDate: deliveryDate.format("YYYY-MM-DD"),
+      expireDate: expireDate.format("YYYY-MM-DD"),
     };
     if (
       !(
@@ -146,19 +157,19 @@ function CreateUpdateInventory(props) {
       apiInventory
         .postInventory(params)
         .then((res) => {
-            if(res.status === 200) {
-                toast.success("Nhập hàng vào kho thành công");
-                navigate("/admin/inventory")
-            }
-            else {
-                toast.error("Nhập hàng không thành công, đã xảy ra sự cố !");
-            }
+          if (res.status === 200) {
+            toast.success("Nhập hàng vào kho thành công");
+            navigate("/admin/inventory");
+          } else {
+            toast.error("Nhập hàng không thành công, đã xảy ra sự cố !");
+          }
         })
         .catch((error) => {
           toast.error("Nhập hàng không thành công, đã xảy ra sự cố !");
         });
     }
   };
+
   return (
     <Box width={"100%"} bgcolor="#fff">
       <Stack
@@ -251,23 +262,23 @@ function CreateUpdateInventory(props) {
         <Stack direction="row">
           <Typography sx={{ width: "200px" }}>Đơn vị</Typography>
           <Select
-                  value={unit}
-                  onChange={(event) => {
-                    setUnit(event.target.value);
-                  }}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Without label" }}
-                  cursor="pointer"
-                  sx={{ minWidth: 300, width: "70%" }}
-                >
-                  {unitByItems ? (
-                    unitByItems.map((item) => (
-                      <MenuItem value={item.id}>{item.name}</MenuItem>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </Select>
+            value={unit}
+            onChange={(event) => {
+              setUnit(event.target.value);
+            }}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+            cursor="pointer"
+            sx={{ minWidth: 300, width: "70%" }}
+          >
+            {unitByItems ? (
+              unitByItems.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))
+            ) : (
+              <></>
+            )}
+          </Select>
         </Stack>
         <Stack justifyContent="center" alignItems="center">
           <Button

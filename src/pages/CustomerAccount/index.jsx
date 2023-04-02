@@ -30,10 +30,6 @@ function CustomerAccount() {
   // const navigate = useNavigate();
   const location = useLocation();
   const tab = sidebarTab.find((item) => location.pathname === item.link);
-  console.log("location.pathname: ", location.pathname);
-
-  console.log("tab: ", tab);
-
   const user = useSelector((state) => state.auth.user);
 
   const [value, setValue] = useState(0);
@@ -46,7 +42,6 @@ function CustomerAccount() {
   useEffect(() => {
     const handleChangePath = () => {
       const tab = sidebarTab.find((item) => location.pathname === item.link);
-      console.log(tab);
       if (tab) setSelectedTab(tab?.id || 1);
     };
 

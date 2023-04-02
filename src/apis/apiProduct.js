@@ -36,7 +36,6 @@ const apiProduct = {
             search = search + item.toString() + "=" + params[item] + "&";
         }
         search = search.slice(0, -1);
-        console.log("search", search)
         const res = await axiosAdmin.get(`/Product?${search}`)
         return res.data;
     },

@@ -41,7 +41,6 @@ function Payment() {
       );
       setTotalPrice(total);
     };
-    console.log(CartItems)
     calcPrice();
   }, [CartItems]);
 
@@ -56,7 +55,6 @@ function Payment() {
 
   useEffect(() => {
     const getAddresses = () => {
-      console.log("paymentAddress:", paymentAddress);
       if(!CartItems || CartItems.length < 1) {
         navigate("/");
         toast.warning("Hãy thêm sản phẩm vào giỏ hàng trước");

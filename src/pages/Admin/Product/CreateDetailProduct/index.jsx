@@ -65,7 +65,6 @@ function CreateDetailProduct(props) {
       } else {
         let filesState = [...files, e.target.files[0]];
         setFiles(filesState);
-        console.log("filesState", filesState);
         let reviewsState = [...review, URL.createObjectURL(e.target.files[0])];
         if (review[0] === rev) {
           reviewsState = [URL.createObjectURL(e.target.files[0])];
@@ -77,8 +76,6 @@ function CreateDetailProduct(props) {
 
   // handle Add product
   const handleInsert = () => {
-    console.log("fileStateInsert: ", files);
-    // {"CategoryId": 3, "name": "Lê Hàn Quốc", "Price": 500000, "Quantity": 80, "Unit": "UNIT", "MinPurchase":1, "Description": "aaaa", "status":"SELLING"}
     let unitString = unit == 0 ? "WEIGHT" : "UNIT";
     let statusString =
       status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK";

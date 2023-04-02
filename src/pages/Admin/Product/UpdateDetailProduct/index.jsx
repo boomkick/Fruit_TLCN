@@ -78,13 +78,10 @@ function UpdateDetailProduct() {
     if (filesStatus.filter((item) => item === "EDIT").length < files.length) {
       toast.info("Bạn đang thêm ảnh vào sản phẩm");
     }
-    console.log("length", filesStatus.filter((item) => item === "EDIT").length);
-
     if (e.target.files.length > 0) {
       if (files.length === 4) {
         toast.info("Số hình ảnh tối đa cho 1 sản phẩm là 4");
       } else {
-        console.log("1");
         let filesState = [...files, e.target.files[0]];
         setFiles(filesState);
         let reviewsState = [...review, URL.createObjectURL(e.target.files[0])];
@@ -122,7 +119,6 @@ function UpdateDetailProduct() {
     }
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''
-    console.log("fileStateInsert: ", files);
     let unitString = unit == 0 ? "WEIGHT" : "UNIT";
     let statusString =
       status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK";
@@ -195,7 +191,6 @@ function UpdateDetailProduct() {
   // Set thông tin cho product detail
   useEffect(() => {
     const loaddata = async () => {
-      console.log(id);
       await apiProduct.getProductDetail(id).then((res) => {
         const product = res.data;
         if (product) {
@@ -236,7 +231,6 @@ function UpdateDetailProduct() {
       setFilesStatus(newFileStatus);
       toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`);
     }
-    console.log(filesStatus);
   };
 
   // Xử lí thay đổi hình ảnh
@@ -252,7 +246,6 @@ function UpdateDetailProduct() {
       setFilesStatus(newFileStatus);
       toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`);
     }
-    console.log(filesStatus);
   };
 
   return (
@@ -396,7 +389,6 @@ function UpdateDetailProduct() {
           <Stack>
             <div style={{ display: "flex", marginBottom: "5px" }}>
               {filesEdit?.map((item, index) => {
-                console.log("result: ", filesStatus[index] === "DELETE");
                 return (
                   <>
                     <img

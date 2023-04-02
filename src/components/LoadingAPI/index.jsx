@@ -3,8 +3,6 @@ import React from "react";
 import HashLoader from "react-spinners/HashLoader";
 
 const LoadingAPI = (props) => {
-  console.log("props: ", props);
-  console.log("props children: ", props?.children);
   return (
     <>
       {props?.loading ? (

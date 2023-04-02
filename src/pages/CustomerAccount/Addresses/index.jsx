@@ -17,7 +17,6 @@ function Addresses() {
 
   useEffect(() => {
     // Gán userAddress
-    console.log(user)
     if (user){
       setUserAddress({
         cityId: user.cityId,

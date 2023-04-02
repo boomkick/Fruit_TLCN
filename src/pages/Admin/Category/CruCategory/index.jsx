@@ -41,10 +41,7 @@ function CrudCategory(props) {
 
             if (edit === true) {
                 setId(params?.id)
-                console.log("listCategory: ", listCategory);
                 setCategory(listCategory.find((item) => item.id == id))
-                console.log("category: ", category);
-                console.log("params: ", params);
             }
         }
         loaddata()

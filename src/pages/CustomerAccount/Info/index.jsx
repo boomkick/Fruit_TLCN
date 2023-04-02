@@ -158,7 +158,6 @@ function Info() {
       })
       .catch((error) => {
         toast.error("Thay đổi không thành công");
-        console.log(error);
       })
       .finally(() => setUpdating(false));
   };

@@ -18,6 +18,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { green, red } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 InventoryTable.propTypes = {
   data: PropTypes.array.isRequired,
@@ -30,7 +31,8 @@ export default function InventoryTable(props) {
   //   const [page, setPage] = useState(1);
   //   const [totalPage, setTotalPage] = useState(1);
   const [itemdelete, setItemdelete] = useState(null);
-  console.log("props.data: ", props.data)
+  const navigate = useNavigate();
+
 
   // Xử lí xóa sản phẩm
   const openModalDelete = (row) => {
@@ -40,7 +42,6 @@ export default function InventoryTable(props) {
   const closeModalDelete = () => setModalDelete(false);
   const handleDelete = () => {
     closeModalDelete();
-    console.log("itemdelete: ", itemdelete);
     // apiProduct
     //   .deleteProduct({ id: itemdelete.id })
     //   .then((res) => {
@@ -124,17 +125,16 @@ export default function InventoryTable(props) {
                     alignItems={"center"}
                   >
                     <Stack p={1}>
-                      <Link
-                        to={`/admin/inventory/detail/${row.id}`}
-                      >
                         <EditOutlinedIcon
                           variant="Outlined"
                           cursor="pointer"
                           sx={{ color: green[600], "& :hover": green[800] }}
+                          onClick={() => {
+                            navigate(`/admin/inventory/detail/${row.id}`)
+                          }}
                         />
-                      </Link>
                     </Stack>
-                    <Stack p={1} pb={"13px"}>
+                    <Stack p={1}>
                       <DeleteOutlinedIcon
                         variant="Outlined"
                         onClick={() => openModalDelete(row)}

@@ -117,7 +117,6 @@ function FilterProduct(props) {
 
   // Tìm kiếm theo keyword
   const handleChangeKeyWord = (value) => {
-    console.log("key", value);
     setKeyWord(value)
   }
 

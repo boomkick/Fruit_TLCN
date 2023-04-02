@@ -129,7 +129,6 @@ function Product() {
   const closeModalDelete = () => setModalDelete(false);
   const handleDelete = () => {
     closeModalDelete();
-    console.log("itemdelete: ", itemdelete);
     apiProduct
       .deleteProduct({ id: itemdelete.id })
       .then((res) => {

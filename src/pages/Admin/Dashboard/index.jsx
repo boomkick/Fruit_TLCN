@@ -17,10 +17,13 @@ import {
 } from "chart.js";
 import { PieChart, Pie } from "recharts";
 import { Grid } from "@mui/material";
-import Card from "../../../components/Card";
-import SimpleLineChart from "../../../components/Chart/SimpleLineChart";
 import SimpleBarChart from "../../../components/Chart/SimpleBarChart";
-import CustomActiveShapePieChart from "../../../components/Chart/CustomActiveShapePieChart";
+import GetStatisticGeneralConsumer from "../../../consumers/GetStatisticGeneralConsumer";
+import GetStatisticGeneralProvider from "../../../providers/GetStatisticGeneralProvider";
+import GetProfitIn7DaysProvider from "../../../providers/GetProfit7InDaysProvider";
+import GetProfitIn7DaysConsumer from "../../../consumers/GetProfit7InDaysConsumer";
+import GetStatisticCategoryProvider from "../../../providers/GetStatisticCategoryProvider";
+import GetStatisticCategoryConsumer from "../../../consumers/GetStatisticCategoryConsumer";
 
 ChartJS.register(
   CategoryScale,
@@ -85,142 +88,146 @@ export const data = {
 
 export default function Dashboard() {
   return (
-    <Grid container rowSpacing={2} columnSpacing={2} p={6}>
-      {/* Thống kê số liệu tổng quan */}
-      <Grid
-        container
-        sx={{ display: "flex", justifyContent: "space-between" }}
-        m={2}
-        mb={5}
-      >
-        {items.map((item) => (
+    <GetStatisticGeneralProvider>
+      <GetProfitIn7DaysProvider>
+        <GetStatisticCategoryProvider>
+      <Grid container rowSpacing={2} columnSpacing={2} p={6}>
+        {/* Thống kê số liệu tổng quan */}
+        <Grid
+          container
+          sx={{ display: "flex", justifyContent: "space-between" }}
+          m={2}
+          mb={5}
+        >
+          {/* {items.map((item) => (
           <Card item={item} />
-        ))}
-      </Grid>
-
-      {/* Thống kê số liệu biểu đồ */}
-      <Grid container justifyContent={"space-between"} mb={5}>
-        <Grid
-          item
-          xs={7.5}
-          backgroundColor={"#fff"}
-          p={2}
-          sx={{ border: "2px solid transparent" }}
-          borderRadius={"0.375rem"}
-        >
-          <Stack alignItems="start" justifyContent="center">
-            <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
-              Kết quả kinh doanh
-            </Typography>
-          </Stack>
-          {/* <Bar options={options} data={data} /> */}
-          <SimpleLineChart/>
+        ))} */}
+          <GetStatisticGeneralConsumer />
         </Grid>
-        <Grid
-          item
-          xs={4}
-          backgroundColor={"#fff"}
-          p={2}
-          borderRadius={"0.375rem"}
-        >
-          <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
-            Thống kê doanh thu
-          </Typography>
-          <CustomActiveShapePieChart/>
-          <Stack
-            sx={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+        {/* Thống kê số liệu biểu đồ */}
+        <Grid container justifyContent={"space-between"} mb={5}>
+          <Grid
+            item
+            xs={7.5}
+            backgroundColor={"#fff"}
+            p={2}
+            sx={{ border: "2px solid transparent" }}
+            borderRadius={"0.375rem"}
           >
-            <Typography
-              sx={{
-                fontSize: "18px",
-                fontWeight: "500",
-                color: "rgba(0, 0, 0, 0.6)",
-              }}
-            >
-              Biểu đồ doanh thu
-            </Typography>
-          </Stack>
-        </Grid>
-      </Grid>
-
-      {/* Thống kê số liệu biểu đồ */}
-      <Grid container justifyContent={"space-between"} mb={5}>
-        <Grid
-          item
-          xs={7.5}
-          backgroundColor={"#fff"}
-          p={2}
-          sx={{ border: "2px solid transparent" }}
-          borderRadius={"0.375rem"}
-        >
-          <Stack alignItems="start" justifyContent="center">
+            <Stack alignItems="start" justifyContent="center">
+              <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
+                Kết quả kinh doanh
+              </Typography>
+            </Stack>
+            <GetProfitIn7DaysConsumer/>
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            backgroundColor={"#fff"}
+            p={2}
+            borderRadius={"0.375rem"}
+          >
             <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
               Thống kê doanh thu
             </Typography>
-          </Stack>
-          {/* <Bar options={options} data={data} /> */}
-          <SimpleBarChart/>
-        </Grid>
-        <Grid
-          item
-          xs={4}
-          backgroundColor={"#fff"}
-          p={2}
-          borderRadius={"0.375rem"}
-        >
-          <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
-            Thống kê doanh thu
-          </Typography>
-          <PieChart width={400} height={350}>
-            <Pie
-              data={data01}
-              dataKey="value"
-              cx="50%"
-              cy="50%"
-              outerRadius={60}
-              fill="#8884d8"
-            />
-            <Pie
-              data={data02}
-              dataKey="value"
-              cx="50%"
-              cy="50%"
-              innerRadius={70}
-              outerRadius={90}
-              fill="#82ca9d"
-              label
-            />
-          </PieChart>
-          <Stack
-            sx={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
+            <GetStatisticCategoryConsumer/>
+            <Stack
               sx={{
-                fontSize: "18px",
-                fontWeight: "500",
-                color: "rgba(0, 0, 0, 0.6)",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              Biểu đồ doanh thu
-            </Typography>
-          </Stack>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: "500",
+                  color: "rgba(0, 0, 0, 0.6)",
+                }}
+              >
+                Biểu đồ doanh thu theo danh mục
+              </Typography>
+            </Stack>
+          </Grid>
         </Grid>
-      </Grid>
 
-      {/* Thống kê số liệu biểu đồ */}
-      <Grid container columnSpacing={2}>
+        {/* Thống kê số liệu biểu đồ */}
+        <Grid container justifyContent={"space-between"} mb={5}>
+          <Grid
+            item
+            xs={7.5}
+            backgroundColor={"#fff"}
+            p={2}
+            sx={{ border: "2px solid transparent" }}
+            borderRadius={"0.375rem"}
+          >
+            <Stack alignItems="start" justifyContent="center">
+              <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
+                Thống kê doanh thu
+              </Typography>
+            </Stack>
+            {/* <Bar options={options} data={data} /> */}
+            <SimpleBarChart />
+          </Grid>
+          <Grid
+            item
+            xs={4}
+            backgroundColor={"#fff"}
+            p={2}
+            borderRadius={"0.375rem"}
+          >
+            <Typography sx={{ fontSize: "18px", fontWeight: "700" }}>
+              Thống kê doanh thu
+            </Typography>
+            <PieChart width={400} height={350}>
+              <Pie
+                data={data01}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                outerRadius={60}
+                fill="#8884d8"
+              />
+              <Pie
+                data={data02}
+                dataKey="value"
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={90}
+                fill="#82ca9d"
+                label
+              />
+            </PieChart>
+            <Stack
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: "500",
+                  color: "rgba(0, 0, 0, 0.6)",
+                }}
+              >
+                Biểu đồ doanh thu
+              </Typography>
+            </Stack>
+          </Grid>
+        </Grid>
+
+        {/* Thống kê số liệu biểu đồ */}
+        <Grid container columnSpacing={2}></Grid>
       </Grid>
-    </Grid>
+      </GetStatisticCategoryProvider>
+      </GetProfitIn7DaysProvider>
+    </GetStatisticGeneralProvider>
   );
 }
 

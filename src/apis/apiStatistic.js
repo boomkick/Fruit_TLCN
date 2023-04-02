@@ -18,6 +18,22 @@ const apiStatistics = {
         const res = await axiosClientWithToken.get(`/Statistics/bill?${getSearchParams(params)}`)
         return res.data;
     },
+    getCountAllUser: async () => {
+        const res = await axiosClientWithToken.get(`/Statistics/countAllUser`)
+        return res.data;
+    },
+    getCountAllProduct: async () => {
+        const res = await axiosClientWithToken.get(`/Statistics/countAllProduct`)
+        return res.data;
+    },
+    getProfitIn7Days: async () => {
+        const res = await axiosClientWithToken.get(`/Statistics/profitin7days`)
+        return res.data;
+    },
+    getByCategory: async () => {
+        const res = await axiosClientWithToken.get(`/Statistics/category`)
+        return res.data;
+    },
 }
 export default apiStatistics;
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import { axiosClient } from './axiosClient';
+import { axiosClientWithToken } from './axiosClient';
+
 const apiURL='https://localhost:7039/'
 export const axiosAdmin = axios.create({
     baseURL: apiURL,
@@ -19,11 +20,11 @@ const apiProduct = {
         return res.data;
     },
     getTop8Product: async () => {
-        const res = await axiosClient.get('Product/gettop8product/')
+        const res = await axiosClientWithToken.get('Product/gettop8product/')
         return res.data;
     },
     getProductDetail: async (id) => {
-        const res = await axiosClient.get(`Product/${id}/`)
+        const res = await axiosClientWithToken.get(`Product/${id}/`)
         return res.data;
     },
     getProductsByPage: async (page, pageSize) => {
@@ -36,7 +37,7 @@ const apiProduct = {
             search = search + item.toString() + "=" + params[item] + "&";
         }
         search = search.slice(0, -1);
-        const res = await axiosAdmin.get(`/Product?${search}`)
+        const res = await axiosClientWithToken.get(`/Product?${search}`)
         return res.data;
     },
     postProduct: async (params) => {

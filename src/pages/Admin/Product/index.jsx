@@ -42,6 +42,12 @@ const orderByItems = [
   { id: 2, label: "DESC", name: "Giảm dần" },
 ];
 
+const deleteByItems = [
+  { id: 0, label: "NONE", name: "Mặc định" },
+  { id: 1, label: "true", name: "Đã xóa" },
+  { id: 2, label: "false", name: "Chưa xóa" },
+];
+
 function Product() {
   const [modalDelete, setModalDelete] = useState(false);
   const [products, setProducts] = useState([]);
@@ -119,6 +125,12 @@ function Product() {
       return;
     }
     setOrder(event.target.value);
+  };
+
+  // soft delete
+  const [softDelete, setSoftDelete] = useState(0);
+  const handleChangeSoftDelete = (event) => {
+    setSoftDelete(event.target.value);
   };
 
   // Xử lí xóa sản phẩm
@@ -214,6 +226,9 @@ function Product() {
       if (order !== 0) {
         param["order"] = order == 1 ? "ASC" : "DESC";
       }
+      if (softDelete !== 0) {
+        param["isDeleted"] = softDelete == 1 ? "true" : "false";
+      }
       if (category !== "") {
         param["categoryId"] = category;
       }
@@ -239,6 +254,7 @@ function Product() {
     setCategory("");
     setSortBy(0);
     setOrder(0);
+    setSoftDelete(0);
   };
 
   return (
@@ -424,6 +440,38 @@ function Product() {
                 >
                   {orderByItems ? (
                     orderByItems.map((item) => (
+                      <MenuItem value={item.id}>{item.name}</MenuItem>
+                    ))
+                  ) : (
+                    <></>
+                  )}
+                </Select>
+              </FormControl>
+            </Stack>
+            <Stack direction="column" sx={{ width: "45%" }}>
+              <FormControl
+                sx={{
+                  m: 1,
+                  minWidth: 120,
+                  maxWidth: 600,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
+                  Sản phẩm xóa:
+                </Typography>
+                <Select
+                  value={softDelete}
+                  onChange={handleChangeSoftDelete}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Without label" }}
+                  cursor="pointer"
+                  sx={{ minWidth: 300, width: "70%" }}
+                >
+                  {deleteByItems ? (
+                    deleteByItems.map((item) => (
                       <MenuItem value={item.id}>{item.name}</MenuItem>
                     ))
                   ) : (

@@ -10,7 +10,7 @@ export default function Inventory() {
   }, []);
 
   const [page, setPage] = useState(1);
-  const handleSetPage = React.useCallback((value) => {
+  const handleSetPage = React.useCallback((event, value) => {
     setPage(value);
   }, []);
 

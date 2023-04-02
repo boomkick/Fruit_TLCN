@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiInventory from "../apis/apiInventory";
 import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
@@ -150,6 +150,66 @@ export default function InventorySearchForm(props) {
   const handleChangeOrder = (event) => {
     setOrder(event.target.value);
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      let param = {
+        page: props.page,
+        pageSize: 8,
+      };
+      if (keyWord && keyWord !== "") {
+        param["keyWord"] = keyWord;
+      }
+      if (productId && productId !== "") {
+        param["productId"] = productId;
+      }
+      if (deliveryDate[0] && deliveryDate[0] !== null) {
+        param["fromDeliveryDate"] = deliveryDate[0].format("YYYY-MM-DD");
+      }
+      if (deliveryDate[1] && deliveryDate[1] !== null) {
+        param["toDeliveryDate"] = deliveryDate[1].format("YYYY-MM-DD");
+      }
+      if (expireDate[0] && expireDate[0] !== null) {
+        param["fromExpireDate"] = expireDate[0].format("YYYY-MM-DD");
+      }
+      if (expireDate[1] && expireDate[1] !== null) {
+        param["toExpireDate"] = expireDate[1].format("YYYY-MM-DD");
+      }
+      if (supplierId && supplierId !== "") {
+        param["supplierId"] = supplierId;
+      }
+      if (minQuantity) {
+        param["minQuantity"] = minQuantity;
+      }
+      if (maxQuantity) {
+        param["maxQuantity"] = maxQuantity;
+      }
+      if (minImportPrice) {
+        param["minImportPrice"] = minImportPrice;
+      }
+      if (maxImportPrice) {
+        param["maxImportPrice"] = maxImportPrice;
+      }
+      if (unit !== 0) {
+        param["unit"] = unit === 1 ? "WEIGHT" : "UNIT";
+      }
+      if (orderBy !== 0) {
+        param["orderBy"] = orderByItems.find(
+          (item) => item.id === orderBy
+        ).label;
+      }
+      if (order !== 0) {
+        param["order"] = order === 1 ? "ASC" : "DESC";
+      }
+      apiInventory
+        .getInventory(param)
+        .then((response) => {
+          props.handleSetData(response.data.data);
+        })
+        .catch(props.handleSetData([]));
+    };
+    getData();
+  }, [props.page]);
 
   const handleFilter = () => {
     const getData = async () => {

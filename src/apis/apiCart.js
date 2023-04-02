@@ -51,6 +51,10 @@ const apiCart = {
         const res = await axiosClientWithToken.get(`/Cart/ProcessCart/${params.id}`)
         return res.data;
     },
+    getCartHistoryById: async (params) => {
+        const res = await axiosClientWithToken.get(`/Cart/CartHistory/${params.id}`)
+        return res.data;
+    },
     getCancelCart: async (id) => {
         const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;

@@ -19,7 +19,7 @@ function DetailOrder() {
     const [order, setOrder] = useState(null)
     useEffect(() => {
         const getData = async () => {
-            await apiCart.getProcessCart({id: id})
+            await apiCart.getCartHistoryById({id: id})
                 .then(res => {
                     setOrder(res.data)
                 })

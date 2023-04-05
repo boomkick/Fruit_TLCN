@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Stack, Button, Typography, Badge, Box, Modal } from "@mui/material";
 
 import { logoutSuccess } from "../../slices/authSlice";
-
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import Login from "../Login";
 import SignUp from "../SignUp";
 import apiCategory from "../../apis/apiCategory";
 import img from "../../assets/img/logo.png";
-import imgCategoryPear from "../../assets/img/category_pear.jpg";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import imgCategorySalad from "../../assets/img/category_salad.jfif";
 import { deleteAll } from "../../slices/cartSlice";
 import {
@@ -23,6 +23,22 @@ import {
   clearCoupon,
   clearPaymentMethod,
 } from "../../slices/paymentSlice";
+import apiNotification from "../../apis/apiNotification";
+
+const styles = theme => ({
+  '@global': {
+    '*::-webkit-scrollbar': {
+      width: '0.4em'
+    },
+    '*::-webkit-scrollbar-track': {
+      '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+    },
+    '*::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(0,0,0,.1)',
+      outline: '1px solid slategrey'
+    }
+  }
+});
 
 function Header() {
   const navigate = useNavigate();
@@ -40,6 +56,74 @@ function Header() {
   const cart = useSelector((state) => state.cart.items); // get cart from store
   const user = useSelector((state) => state.auth.user); //get user from store
 
+  // Hanlde notification
+  const [countNotifications, setCountNotifications] = useState(0);
+  const [remainNotifications, setRemainNotifications] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+
+  const handleGetMoreNotifications = React.useCallback(() => {
+    const params = {
+      "offset": notifications.length,
+      "size": 5
+    }
+    const getData = async () => {
+      await apiNotification.getNotification(params).then((res) => {
+        setNotifications((notifications) => [...notifications, ...res.data.notifications]);
+        setRemainNotifications(res.data.remainingNotification);
+      });
+    };
+    getData();
+  }, [notifications])
+
+  const handleResetNotification = React.useCallback(() => {
+    if (countNotifications !== 0) {
+      apiNotification.getResetNewNotification();
+      setCountNotifications(0);
+    }
+  }, [countNotifications]);
+
+  const handleShowNotifications = React.useCallback(() => {
+    const handleClick = (item) => {
+      apiNotification.putNotification({ id: item.id });
+      setNotifications(notifications.filter((noti) => noti.id !== item.id))
+      navigate("/" + item.url);
+    };  
+    console.log("notifications: ", notifications)
+    
+    handleResetNotification();
+    if (notifications.length > 0 && notifications.find((item) => item.isRead === false)) {
+      return notifications.map((item) => {
+        return (
+          <>
+            {item.isRead ? null : (
+              <Stack
+                onClick={() => handleClick(item)}
+                style={{ padding: "8px 20px", cursor: "pointer" }}
+              >
+                <Typography lineHeight={"1.3"}>{item.content}</Typography>
+                <Typography
+                  fontSize={"10px"}
+                  color={"#ccc"}
+                  paddingBottom={"3px"}
+                >
+                  {item.createdDate}
+                </Typography>
+              </Stack>
+            )}
+          </>
+        );
+      });
+    } else {
+      return (
+        <>
+          <Stack style={{ padding: "8px 20px", cursor: "pointer" }}>
+            <Typography>Bạn không có thông báo mới</Typography>
+          </Stack>
+        </>
+      );
+    }
+  }, [notifications]);
+
   const handleLogout = () => {
     dispatch(deleteAll());
     dispatch(clearAddress());
@@ -53,30 +137,26 @@ function Header() {
     setModalLogin(false);
     setIsLoginForm(true);
     setIsRegister(false);
-    // setIsForgetPwd(false);
   };
 
   const handleReturnLogin = useCallback(() => {
     setIsLoginForm(true);
-    // setIsForgetPwd(false);
     setIsRegister(false);
   }, []);
 
   const handleOpenSignup = useCallback(() => {
     setIsRegister(true);
-    // setIsForgetPwd(false);
     setIsLoginForm(false);
   }, []);
 
   const handleOpenLogin = useCallback(() => {
     setIsLoginForm(true);
     setIsRegister(false);
-    // setIsForgetPwd(false);
   }, []);
 
   useEffect(() => {
     const getData = async () => {
-      apiCategory
+      await apiCategory
         .showAllCategory()
         .then((res) => {
           setCategories(res.data);
@@ -84,8 +164,17 @@ function Header() {
         .catch((error) => {
           setCategories([]);
         });
+      await apiNotification.getCountNewNotification().then((res) => {
+        setCountNotifications(res.data);
+      });
+      await apiNotification.getNotification().then((res) => {
+        setNotifications(res.data.notifications);
+        setRemainNotifications(res.data.remainingNotification);
+      });
     };
     getData();
+    console.log("countNoti: ", countNotifications);
+    console.log("Notis: ", notifications);
   }, []);
 
   if (
@@ -123,31 +212,35 @@ function Header() {
             <li className="header__leftElement-item">
               <Link to={"/"}>
                 <Typography
-                className="header__leftElement-main"
+                  className="header__leftElement-main"
                   sx={{
                     fontSize: "14px",
                     fontWeight: "700",
                     position: "relative",
                     paddingBottom: "5px",
-                    borderBottom: "3px solid transparent"
+                    borderBottom: "3px solid transparent",
                   }}
                 >
                   Danh mục trái cây
                 </Typography>
               </Link>
               <div className="subnav subnav__dropdown">
-              <ul >
-                {categories.map((item) => {
-                  return (
-                    <li>
-                      <Link to={`/product-category/${item?.id}`}>
-                        {item?.name}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-              <img className="subnav__dropdown-img" src={imgCategorySalad} alt="" />
+                <ul>
+                  {categories.map((item) => {
+                    return (
+                      <li>
+                        <Link to={`/product-category/${item?.id}`}>
+                          {item?.name}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <img
+                  className="subnav__dropdown-img"
+                  src={imgCategorySalad}
+                  alt=""
+                />
               </div>
             </li>
             <li className="header__leftElement-item">
@@ -159,7 +252,7 @@ function Header() {
                     fontWeight: "700",
                     position: "relative",
                     paddingBottom: "5px",
-                    borderBottom: "3px solid transparent"
+                    borderBottom: "3px solid transparent",
                   }}
                 >
                   Hỗ Trợ Khách Hàng
@@ -241,21 +334,66 @@ function Header() {
                 </>
               )}
             </li>
+            
+            {user ? (
+              <>
+                <li className="divider"></li>
+                <li className="header__notification">
+                  <Stack>
+                    <Badge
+                      color="warning"
+                      badgeContent={countNotifications}
+                      invisible={countNotifications === 0}
+                      showZero
+                    >
+                      <NotificationsActiveIcon sx={{ fontSize: "25px" }} />
+                    </Badge>
+                  </Stack>
 
-            <li className="divider"></li>
-
-            <li>
-              <Link to="/cart">
-                <Badge
-                  color="warning"
-                  badgeContent={cart.length}
-                  invisible={cart.length === 0}
-                  showZero
-                >
-                  <ShoppingBagIcon sx={{ fontSize: "25px" }} />
-                </Badge>
-              </Link>
-            </li>
+                  <Box className="header__notification__dropdown">
+                    <Stack className="header__notification__dropdown__top">
+                      <Typography sx={{ fontWeight: "700" }}>
+                        Thông báo này bạn ơi !
+                      </Typography>
+                    </Stack>
+                    {notifications ? (
+                      handleShowNotifications()
+                    ) : (
+                      <>
+                        <Stack
+                          style={{ padding: "8px 20px", cursor: "pointer" }}
+                        >
+                          <Typography>Bạn không có thông báo mới</Typography>
+                        </Stack>
+                      </>
+                    )}
+                    {remainNotifications > 0 ? (
+                      <Stack display={"flex"} alignItems={"center"}>
+                        <Button startIcon={<AddBoxOutlinedIcon />} variant="outlined" color="success" onClick={() => handleGetMoreNotifications()}> Xem thêm</Button>
+                      </Stack>
+                    ) : null}
+                    
+                  </Box>
+                </li>
+              </>
+            ) : null}
+            {user ? (
+              <>
+                <li className="divider"></li>
+                <li>
+                  <Link to="/cart">
+                    <Badge
+                      color="warning"
+                      badgeContent={cart.length}
+                      invisible={cart.length === 0}
+                      showZero
+                    >
+                      <ShoppingBagIcon sx={{ fontSize: "25px" }} />
+                    </Badge>
+                  </Link>
+                </li>
+              </>
+            ) : null}
 
             <li className="divider"></li>
 
@@ -268,9 +406,7 @@ function Header() {
                   data-open="#search-lightbox"
                   data-focus="input.search-field"
                 >
-                  <SearchIcon
-                    sx={{ fontSize: "25px", margin: "1px", color: "#3D8B91" }}
-                  />
+                  <SearchIcon sx={{ fontSize: "25px" }} />
                 </Link>
               </div>
             </li>
@@ -289,7 +425,6 @@ function Header() {
             <Login
               handleOpenSignup={handleOpenSignup}
               closeModalLogin={closeModalLogin}
-              // handleOpenForgetPwd={handleOpenForgetPwd}
             />
           )}
 
@@ -299,13 +434,6 @@ function Header() {
               closeModalLogin={closeModalLogin}
             />
           )}
-
-          {/* {isForgetPwd && (
-            <ForgetPassword
-              closeModalForgetPWD={closeModalForgetPWD}
-              handleReturnLogin={handleReturnLogin}
-            />
-          )} */}
         </Box>
       </Modal>
     </header>

@@ -34,6 +34,7 @@
     box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px,
       rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px,
       rgb(0 0 0 / 9%) 0px -3px 5px;
+    
 
     &::before {
       position: absolute;
@@ -89,7 +90,84 @@
     }
   }
 
+  &__notification {
+    position: relative;
+    color: black;
+    cursor: pointer;
+
+    &__dropdown {
+      padding: 12px 0;
+      width: 300px;
+      z-index: 100;
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      left: -213%;
+      top: 153%;
+      border-radius: 4px;
+      box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px,
+        rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px,
+        rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
+
+      &::before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+        border-bottom: 12px solid #fff;
+        top: -12px;
+        left: 22%;
+        transform: translateX(-50%);
+      }
+
+      &::after {
+        position: absolute;
+        content: "";
+        width: 160px;
+        height: 25px;
+        top: -25px;
+        background-color: transparent;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      & > div{
+        cursor: default;
+        font-size: 12px;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        padding: 8px 20px;
+      }
+
+      & a {
+        cursor: pointer;
+        font-size: 12px;
+        color: #333;
+        display: block;
+        padding: 8px 20px;
+
+        &:hover {
+          background-color: #f1f1f1;
+        }
+
+        & div {
+          font-size: 12px;
+        }
+      }
+      &__top{
+        border-bottom: 1px solid #ccc;
+      }
+
+    }
+  }
+
   &__account:hover &__dropdown {
+    display: block;
+  }
+
+  &__notification:hover &__notification__dropdown {
     display: block;
   }
 
@@ -100,7 +178,7 @@
     margin-left: 0;
     margin-right: 30px;
     line-height: 1;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 
   .element {
@@ -195,7 +273,7 @@
       border-radius: 2px;
     }
 
-    &__dropdown-img{
+    &__dropdown-img {
       width: 46%;
       padding: 8px 0px 6px 0px;
       margin-left: 5px;

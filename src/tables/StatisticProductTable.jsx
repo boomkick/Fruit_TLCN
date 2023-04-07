@@ -40,12 +40,6 @@ export default function StatisticProductTable(props) {
                 align="center"
                 sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
-                Đơn vị&nbsp;
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ width: "20%", top: "64px", fontSize: "15px" }}
-              >
                 Lợi nhuận&nbsp;
               </TableCell>
               <TableCell
@@ -65,7 +59,6 @@ export default function StatisticProductTable(props) {
                     >
                       <TableCell align="center">{item.Id}</TableCell>
                       <TableCell align="center">{item.Name}</TableCell>
-                      <TableCell align="center">{item.Unit}</TableCell>
                       <TableCell align="center">{item.Profit}</TableCell>
                       <TableCell align="center">{item.Sale}</TableCell>
                     </TableRow>

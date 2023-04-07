@@ -34,25 +34,25 @@ export default function StatisticBillTable(props) {
                 align="center"
                 sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
-                Tên&nbsp;
+                Mã đơn hàng&nbsp;
               </TableCell>
               <TableCell
                 align="center"
                 sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
-                Đơn vị&nbsp;
+                Phương thức TT&nbsp;
               </TableCell>
               <TableCell
                 align="center"
                 sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
-                Lợi nhuận&nbsp;
+                Ngày thanh toán&nbsp;
               </TableCell>
               <TableCell
                 align="center"
                 sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
-                Số lượng bán&nbsp;
+                Tổng hóa đơn&nbsp;
               </TableCell>
             </TableRow>
           </TableHead>
@@ -63,11 +63,11 @@ export default function StatisticBillTable(props) {
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell align="center">{item.Id}</TableCell>
-                      <TableCell align="center">{item.Name}</TableCell>
-                      <TableCell align="center">{item.Unit}</TableCell>
-                      <TableCell align="center">{item.Profit}</TableCell>
-                      <TableCell align="center">{item.Sale}</TableCell>
+                      <TableCell align="center">{item.id}</TableCell>
+                      <TableCell align="center">{item.orderCode || 'N/A'}</TableCell>
+                      <TableCell align="center">{item.paymentMethod === 1 ? "Dịch vụ thanh toán MoMo" : "Tiền mặt"}</TableCell>
+                      <TableCell align="center">{item.purchaseDate || 'N/A'}</TableCell>
+                      <TableCell align="center">{item.total}</TableCell>
                     </TableRow>
                   );
                 })

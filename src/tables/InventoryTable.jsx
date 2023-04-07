@@ -75,7 +75,7 @@ export default function InventoryTable(props) {
             <TableCell>Số lượng</TableCell>
             <TableCell>Ngày nhập</TableCell>
             <TableCell>Ngày hết hạn</TableCell>
-            <TableCell>Nhà cấp</TableCell>
+            <TableCell>Mô tả</TableCell>
             <TableCell>Thao tác</TableCell>
           </TableRow>
         </TableHead>
@@ -115,7 +115,7 @@ export default function InventoryTable(props) {
                   <Typography>{row.expireDate}</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography>{row.supplier.name}</Typography>
+                  <Typography>{row.description}</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Stack

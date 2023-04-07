@@ -19,6 +19,7 @@
     "bootstrap": "^5.2.3",
     "chart.js": "^4.2.1",
     "dayjs": "^1.11.7",
+    "file-saver": "^2.0.5",
     "flickity": "^2.3.0",
     "jwt-decode": "^3.1.2",
     "query-string": "^7.1.1",
@@ -38,7 +39,8 @@
     "redux-persist": "^6.0.0",
     "sass": "^1.54.9",
     "swiper": "^8.3.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

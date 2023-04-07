@@ -14,8 +14,16 @@ const apiStatistics = {
         const res = await axiosClientWithToken.get(`/Statistics/product?${getSearchParams(params)}`)
         return res.data;
     },
+    getProductExport: async (params) => {
+        const res = await axiosClientWithToken.get(`/Statistics/product/export?${getSearchParams(params)}`)
+        return res.data;
+    },
     getBill: async (params) => {
         const res = await axiosClientWithToken.get(`/Statistics/bill?${getSearchParams(params)}`)
+        return res.data;
+    },
+    getBillExport: async (params) => {
+        const res = await axiosClientWithToken.get(`/Statistics/bill/export?${getSearchParams(params)}`)
         return res.data;
     },
     getCountAllUser: async () => {

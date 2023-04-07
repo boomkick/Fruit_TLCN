@@ -1,5 +1,5 @@
 
-import { axiosClientWithToken } from "./axiosClient";
+import { axiosClientWithToken, axiosAdminGetFile } from "./axiosClient";
 
 const apiStatistics = {
     getCart: async (params) => {
@@ -15,7 +15,7 @@ const apiStatistics = {
         return res.data;
     },
     getProductExport: async (params) => {
-        const res = await axiosClientWithToken.get(`/Statistics/product/export?${getSearchParams(params)}`)
+        const res = await axiosAdminGetFile.get(`/Statistics/product/export?${getSearchParams(params)}`)
         return res.data;
     },
     getBill: async (params) => {
@@ -23,7 +23,7 @@ const apiStatistics = {
         return res.data;
     },
     getBillExport: async (params) => {
-        const res = await axiosClientWithToken.get(`/Statistics/bill/export?${getSearchParams(params)}`)
+        const res = await axiosAdminGetFile.get(`/Statistics/bill/export?${getSearchParams(params)}`)
         return res.data;
     },
     getCountAllUser: async () => {

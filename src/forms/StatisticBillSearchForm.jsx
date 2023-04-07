@@ -15,10 +15,7 @@ import apiStatistics from "../apis/apiStatistic";
 import { toast } from "react-toastify";
 import ClearButton from "../components/Button/ClearButton";
 import FilterButton from "../components/Button/FilterButton";
-import { Link } from "react-router-dom";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import * as FileSaver from "file-saver";
-import * as XLSX from "xlsx";
 
 StatisticBillSearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
@@ -125,23 +122,6 @@ export default function StatisticBillSearchForm(props) {
     setMaxValue("");
   };
 
-  const fileType =
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-  const fileExtension = ".xlsx";
-
-  const exportToCSV = (apiData, fileName) => {
-    const ws = XLSX.utils.json_to_sheet(apiData);
-    console.log("ws", ws);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    console.log("wb", wb);
-
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    console.log("excelBuffer", excelBuffer);
-
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
-  };
-
   const handleExportFileExcel = React.useCallback(() => {
     const getData = async () => {
       let param = {};
@@ -166,8 +146,12 @@ export default function StatisticBillSearchForm(props) {
       apiStatistics
         .getBillExport(param)
         .then((response) => {
-          console.log("res", response);
-          exportToCSV(response, "StatisticBill")
+          const url = window.URL.createObjectURL(new Blob([response]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `StatisticBill.xlsx`);
+          document.body.appendChild(link);
+          link.click();
         });
     };
     getData();
@@ -185,7 +169,7 @@ export default function StatisticBillSearchForm(props) {
           sx={{ backgroundColor: "#FFF", height: "80px" }}
           px={2}
         >
-          <Typography fontSize="26px">Quản lý kho hàng</Typography>
+          <Typography fontSize="26px">Thống kê hóa đơn</Typography>
           <Button
             variant="contained"
             startIcon={<FileDownloadIcon />}

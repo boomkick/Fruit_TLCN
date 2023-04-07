@@ -6,13 +6,15 @@ import {
   TextField,
   Typography,
   Grid,
+  Button,
 } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import React, { useState } from "react";
 import apiStatistics from "../apis/apiStatistic";
 import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 StatisticProductSearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
@@ -89,10 +91,62 @@ export default function StatisticProductSearchForm(props) {
     setOrder(0);
   };
 
+  const handleExportFileExcel = React.useCallback(() => {
+    const getData = async () => {
+      let param = {};
+      if (keyWord && keyWord !== "") {
+        param["keyWord"] = keyWord;
+      }
+      if (createdDate[0] && createdDate[0] !== null) {
+        param["FromDate"] = createdDate[0].format("YYYY-MM-DD");
+      }
+      if (createdDate[1] && createdDate[1] !== null) {
+        param["ToDate"] = createdDate[1].format("YYYY-MM-DD");
+      }
+      if (sortBy !== 0) {
+        param["SortBy"] = sortByItems.find((item) => item.id === sortBy).label;
+      }
+      if (order !== 0) {
+        param["order"] = order == 1 ? "ASC" : "DESC";
+      }
+      apiStatistics
+        .getProductExport(param)
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `StatisticProduct.xlsx`);
+          document.body.appendChild(link);
+          console.log("url: ", url);
+          console.log("link: ", link);
+          link.click();
+        });
+    };
+    getData();
+  }, [])
+
   return (
     <>
       <Grid container mb={2}>
-        <Typography fontSize="26px">Thống kê sản phẩm</Typography>
+      <Stack
+          width={"100%"}
+          direction="row"
+          mb={1}
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ backgroundColor: "#FFF", height: "80px" }}
+          px={2}
+        >
+          <Typography fontSize="26px">Thống kê sản phẩm</Typography>
+          <Button
+            variant="contained"
+            startIcon={<FileDownloadIcon />}
+            pr={2}
+            onClick={handleExportFileExcel}
+          >
+            Xuất file Excel
+          </Button>
+        </Stack>
       </Grid>
       <Grid
         container

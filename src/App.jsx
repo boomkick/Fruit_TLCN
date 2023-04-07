@@ -4,7 +4,7 @@ import { BrowserRouter, } from "react-router-dom";
 import ConfigRoute from "./ConfigRoute";
 import './app/style/App.scss'
 import { useDispatch, useSelector } from 'react-redux';
-import { axiosInstance } from './apis/axiosClient';
+import { axiosInstance, axiosInstanceFile } from './apis/axiosClient';
 import { loginSuccess, logoutSuccess } from './slices/authSlice';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,6 +16,7 @@ function App() {
   const dispatch = useDispatch();
   if (user) {
     axiosInstance(user, dispatch, loginSuccess, logoutSuccess);
+    axiosInstanceFile(user, dispatch, loginSuccess, logoutSuccess);
   }
   
 

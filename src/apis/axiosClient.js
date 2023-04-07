@@ -24,6 +24,16 @@ export const axiosClientWithToken = axios.create({
     paramsSerializer: (params) => queryString.stringify(params)
 });
 
+export const axiosAdminGetFile = axios.create({
+    baseURL: baseURL,
+    responseType: 'arraybuffer',
+    headers: {
+        "Content-Type": "blob",
+    },
+    withCredentials: false,
+    paramsSerializer: (params) => queryString.stringify(params)
+});
+
 export const axiosAdmin = axios.create({
     baseURL: apiURL,
     headers: {
@@ -42,6 +52,23 @@ export const axiosInstance = (user, dispatch, stateSuccess, stateFail) => {
             }
             // const decodeToken = jwt_decode(user?.accessToken);
             // let dateNow = new Date();
+            config.headers['Authorization'] = `Bearer ${user.accessToken}`;
+            return config;
+        },
+        err => {
+            return Promise.reject(err)
+        }
+    );
+}
+
+
+export const axiosInstanceFile = (user, dispatch, stateSuccess, stateFail) => {
+    axiosAdminGetFile.interceptors.request.eject(myInterceptor)
+    myInterceptor = axiosAdminGetFile.interceptors.request.use(
+        async (config) => {
+            if(!(user && user.accessToken)){
+                return config;
+            }
             config.headers['Authorization'] = `Bearer ${user.accessToken}`;
             return config;
         },

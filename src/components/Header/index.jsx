@@ -26,21 +26,6 @@ import {
 import apiNotification from "../../apis/apiNotification";
 import LoadingAPI from "../LoadingAPI";
 
-const styles = (theme) => ({
-  "@global": {
-    "*::-webkit-scrollbar": {
-      width: "0.4em",
-    },
-    "*::-webkit-scrollbar-track": {
-      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)",
-    },
-    "*::-webkit-scrollbar-thumb": {
-      backgroundColor: "rgba(0,0,0,.1)",
-      outline: "1px solid slategrey",
-    },
-  },
-});
-
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,9 +92,10 @@ function Header() {
               <>
               <Stack
                 onClick={() => handleClick(item)}
-                style={{ padding: "8px 20px", cursor: "pointer" }}
+                style={{cursor: "pointer" }}
+                paddingTop={'3px'}
               >
-                <Typography lineHeight={"1.3"}>{item.content}</Typography>
+                <Typography lineHeight={"1.3"}fontSize={'15px'} fontWeight={500}>{item.content}</Typography>
                 <Typography
                   fontSize={"10px"}
                   color={"#ccc"}
@@ -118,7 +104,7 @@ function Header() {
                   {item.createdDate}
                 </Typography>
               </Stack>
-              <Divider light />
+              <Divider light/>
               </>
             )}
           </>
@@ -367,7 +353,7 @@ function Header() {
                         Thông báo này bạn ơi !
                       </Typography>
                     </Stack>
-                    <Stack sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                    <Stack sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxHeight: '500px', overflowY: 'scroll'}}>
                     <LoadingAPI loading={loadingNotifications}>
                       {notifications ? (
                         handleShowNotifications()
@@ -382,12 +368,13 @@ function Header() {
                       )}
                     </LoadingAPI>
                     {remainNotifications > 0 ? (
-                      <Stack display={"flex"} alignItems={"center"}>
+                      <Stack display={"flex"} alignItems={"center"} paddingTop={'10px'}>
                         <Button
                           startIcon={<AddBoxOutlinedIcon />}
                           variant="outlined"
                           color="success"
                           onClick={() => handleGetMoreNotifications()}
+                          
                         >
                           {" "}
                           Xem thêm

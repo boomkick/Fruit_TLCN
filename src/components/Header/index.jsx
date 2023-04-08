@@ -68,11 +68,12 @@ function Header() {
   }, [notifications]);
 
   const handleResetNotification = React.useCallback(() => {
-    if (countNotifications !== 0) {
-      apiNotification.getResetNewNotification();
-      setCountNotifications(0);
+    if (countNotifications !== 0 && notifications.length > 0) {
+      apiNotification
+        .getResetNewNotification()
+        .then((res) => setCountNotifications(0));
     }
-  }, [countNotifications]);
+  }, [countNotifications, notifications]);
 
   const handleShowNotifications = React.useCallback(() => {
     const handleClick = (item) => {
@@ -80,7 +81,7 @@ function Header() {
       setNotifications(notifications.filter((noti) => noti.id !== item.id));
       navigate("/" + item.url);
     };
-    handleResetNotification();
+    
     if (
       notifications.length > 0 &&
       notifications.find((item) => item.isRead === false)
@@ -336,6 +337,7 @@ function Header() {
               <>
                 <li className="divider"></li>
                 <li className="header__notification">
+                    <div onMouseLeave={handleResetNotification}>
                   <Stack>
                     <Badge
                       color="warning"
@@ -343,9 +345,10 @@ function Header() {
                       invisible={countNotifications === 0}
                       showZero
                     >
-                      <NotificationsActiveIcon sx={{ fontSize: "25px" }} />
+                      <NotificationsActiveIcon sx={{ fontSize: "25px" }}/>
                     </Badge>
                   </Stack>
+                      </div>
 
                   <Box className="header__notification__dropdown">
                     <Stack className="header__notification__dropdown__top">

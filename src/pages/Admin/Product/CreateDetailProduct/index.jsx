@@ -1,7 +1,9 @@
 /* eslint-disable */
-import React from "react";
+import React, { Fragment, useCallback } from "react";
 import { useEffect, useState } from "react";
-// import apiBrand from "../../../../apis/apiBrand";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import "./CreateDetailProduct.scss";
 import {
   Stack,
@@ -12,23 +14,19 @@ import {
   MenuItem,
   FormControl,
   Select,
-  InputLabel,
   InputBase,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
-import rev from "../../../../assets/img/product_le_han_quoc.jpg";
-import SelectBoxAddress from "../../../../components/SelectBoxAddress";
 import { useParams, useNavigate } from "react-router-dom";
 import { productUnit, productStatus } from "../../../../constraints/Product";
 import apiCategory from "../../../../apis/apiCategory";
 import apiProduct from "../../../../apis/apiProduct";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function CreateDetailProduct(props) {
-  const [review, setReview] = React.useState([rev]);
-  const [files, setFiles] = React.useState([]);
-  const [edit, setEdit] = useState(props.edit);
-  const [product, setProduct] = useState({});
+function UpdateDetailProduct() {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [listCategory, setListCategory] = useState([]);
@@ -38,7 +36,14 @@ function CreateDetailProduct(props) {
   const [minPurchase, setMinPurchase] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [loadingUpdateProduct, setloadingUpdateProduct] = useState(false);
   const navigate = useNavigate();
+
+  // Xử lí hình ảnh
+  const [firstImage, setFirstImage] = useState(null);
+  const [secondImage, setSecondImage] = useState(null);
+  const [thirdImage, setThirdImage] = useState(null);
+  const [fourthImage, setFourthImage] = useState(null);
 
   // Get all categories
   useEffect(() => {
@@ -56,26 +61,11 @@ function CreateDetailProduct(props) {
     getData();
   }, []);
 
-  // Change value of select box
-
-  const onChangeImg = (e) => {
-    if (e.target.files.length > 0) {
-      if (files.length === 4) {
-        toast.info("Số hình ảnh tối đa cho 1 sản phẩm là 4");
-      } else {
-        let filesState = [...files, e.target.files[0]];
-        setFiles(filesState);
-        let reviewsState = [...review, URL.createObjectURL(e.target.files[0])];
-        if (review[0] === rev) {
-          reviewsState = [URL.createObjectURL(e.target.files[0])];
-        }
-        setReview(reviewsState);
-      }
-    }
-  };
-
-  // handle Add product
-  const handleInsert = () => {
+  // handle update product
+  const handleAdd = async () => {
+    setloadingUpdateProduct(true);
+    // Xử lí tham số tình trạng ảnh chỉnh sửa
+    // let text_status = ''
     let unitString = unit == 0 ? "WEIGHT" : "UNIT";
     let statusString =
       status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK";
@@ -92,9 +82,10 @@ function CreateDetailProduct(props) {
     };
 
     params.append("product", JSON.stringify(product));
-    files.forEach((item) => {
-      params.append("files", item);
+    [firstImage, secondImage, thirdImage, fourthImage].forEach((item) => {
+      if (item) params.append("files", item);
     });
+
     for (var pair of params.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
@@ -111,64 +102,31 @@ function CreateDetailProduct(props) {
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+      setloadingUpdateProduct(false);
       return;
     } else {
       apiProduct
         .postProduct(params)
         .then((res) => {
-          toast.success("Thêm sản phẩm thành công");
-          setName("");
-          setCategory("");
-          setQuantity("");
-          setPrice("");
-          setUnit("");
-          setMinPurchase("");
-          setDescription("");
-          setStatus("");
-          setFiles([]);
-          setReview([rev]);
+          if (res.status != 200) toast.success("Thêm sản phẩm thất bại");
+          else {
+            toast.success("Thêm sản phẩm thành công");
+            setName("");
+            setCategory("");
+            setQuantity("");
+            setPrice("");
+            setUnit("");
+            setMinPurchase("");
+            setDescription("");
+            setStatus("");
+            setFirstImage(null);
+            setSecondImage(null);
+            setThirdImage(null);
+            setFourthImage(null);
+          }
         })
         .catch((error) => {
           toast.error("Thêm sản phẩm thất bại!");
-        });
-    }
-  };
-
-  // handle update product
-
-  const handleUpdate = () => {
-    const params = {
-      Name: name,
-      CategoryId: category,
-      Quantity: quantity,
-      Price: price,
-      Unit: unit,
-      MinPurchase: minPurchase,
-      Description: description,
-      Status: status,
-    };
-    if (
-      !(
-        name &&
-        category &&
-        price &&
-        quantity &&
-        unit &&
-        minPurchase &&
-        description &&
-        status
-      )
-    ) {
-      toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      return;
-    } else {
-      apiProduct
-        .insertProduct(params, idProduct)
-        .then((res) => {
-          toast.success("Sửa sản phẩm thành công");
-        })
-        .catch((error) => {
-          toast.error("Sửa sản phẩm thất bại!");
         });
     }
   };
@@ -179,7 +137,7 @@ function CreateDetailProduct(props) {
         className="cruBrand"
         p={3}
         justifyContent="center"
-        width="700px"
+        width="1035px"
         spacing={2}
         bgcolor="#fff"
       >
@@ -307,53 +265,378 @@ function CreateDetailProduct(props) {
             </Select>
           </FormControl>
         </Stack>
-
-        {/* <Stack direction="row">
-          <Typography className="cruBrand__label">Liên hệ</Typography>
-          <TextField value={phone} onChange={(event) => { setPhone(event.target.value) }} size="small" id="outlined-multiline-flexible"
-            multiline
-            maxRows={4} variant="outlined" sx={{ flex: "1" }} />
-        </Stack>
-        <SelectBoxAddress province={province} district={district} commune={commune}
-          onChangeProvince={handleChangeProvince}
-          onChangeDistrict={handleChangeDistrict}
-          onChangeCommune={handleChangeCommune}
-          classLabel="cruBrand__label"
-        /> */}
         <Stack direction="row" p={2}>
           <Typography className="cruBrand__label" style={{ minWidth: "184px" }}>
-            Thêm ảnh:
+            Ảnh sản phẩm:
           </Typography>
-          <Stack>
-            <div style={{ display: "flex", marginBottom: "5px" }}>
-              {review.map((item) => {
-                return (
-                  <img
-                    src={item}
-                    width="180px"
-                    height="180px"
-                    style={{ marginRight: "10px" }}
-                    alt=""
-                  />
-                );
-              })}
-            </div>
-            <input
-              type="file"
-              id="myfile"
-              name="myfile"
-              onChange={onChangeImg}
-            ></input>
+          <Stack
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-between  "}
+            alignItem={"center"}
+            width={"100%"}
+          >
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={firstImage ? URL.createObjectURL(firstImage) : null}
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {firstImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setFirstImage(e.target.files[0]);
+                        }}
+                        id="icon-button-file1"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file1">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                          sx={{ marginTop: "0px !important" }}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setFirstImage(null);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setFirstImage(e.target.files[0]);
+                      }}
+                      id="icon-button-file1"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file1">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={secondImage ? URL.createObjectURL(secondImage) : null}
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {secondImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setSecondImage(e.target.files[0]);
+                        }}
+                        id="icon-button-file2"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file2">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setSecondImage(null);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setSecondImage(e.target.files[0]);
+                      }}
+                      id="icon-button-file2"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file2">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={thirdImage ? URL.createObjectURL(thirdImage) : null}
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {thirdImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setThirdImage(e.target.files[0]);
+                        }}
+                        id="icon-button-file3"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file3">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setThirdImage(null);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setThirdImage(e.target.files[0]);
+                      }}
+                      id="icon-button-file3"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file3">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={fourthImage ? URL.createObjectURL(fourthImage) : null}
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {fourthImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setFourthImage(e.target.files[0]);
+                        }}
+                        id="icon-button-file4"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file4">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setFourthImage(null);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setFourthImage(e.target.files[0]);
+                      }}
+                      id="icon-button-file4"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file4">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
           </Stack>
         </Stack>
-
-        <Stack justifyContent="center">
+        <Stack justifyContent="end" flexDirection={"row"}>
           <Button
-            width="450px"
             variant="contained"
-            onClick={edit ? handleUpdate : handleInsert}
+            onClick={handleAdd}
+            sx={{ marginRight: "10px", width: "120px" }}
+            startIcon={<SaveIcon />}
+            disable={loadingUpdateProduct}
           >
-            {edit ? "Cập nhật" : "Thêm"}
+            {"Thêm"}
+          </Button>
+          <Button
+            variant="contained"
+            color={"error"}
+            startIcon={<CancelIcon />}
+            onClick={() => navigate("/admin/product")}
+          >
+            {"Hủy bỏ"}
           </Button>
         </Stack>
       </Stack>
@@ -382,4 +665,4 @@ const InputCustom = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default CreateDetailProduct;
+export default UpdateDetailProduct;

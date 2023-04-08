@@ -7,10 +7,10 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Stack, Button, Typography, Badge, Box, Modal } from "@mui/material";
+import { Stack, Button, Typography, Badge, Box, Modal, Divider } from "@mui/material";
 
 import { logoutSuccess } from "../../slices/authSlice";
-import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import Login from "../Login";
 import SignUp from "../SignUp";
 import apiCategory from "../../apis/apiCategory";
@@ -24,20 +24,21 @@ import {
   clearPaymentMethod,
 } from "../../slices/paymentSlice";
 import apiNotification from "../../apis/apiNotification";
+import LoadingAPI from "../LoadingAPI";
 
-const styles = theme => ({
-  '@global': {
-    '*::-webkit-scrollbar': {
-      width: '0.4em'
+const styles = (theme) => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: "0.4em",
     },
-    '*::-webkit-scrollbar-track': {
-      '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+    "*::-webkit-scrollbar-track": {
+      "-webkit-box-shadow": "inset 0 0 6px rgba(0,0,0,0.00)",
     },
-    '*::-webkit-scrollbar-thumb': {
-      backgroundColor: 'rgba(0,0,0,.1)',
-      outline: '1px solid slategrey'
-    }
-  }
+    "*::-webkit-scrollbar-thumb": {
+      backgroundColor: "rgba(0,0,0,.1)",
+      outline: "1px solid slategrey",
+    },
+  },
 });
 
 function Header() {
@@ -60,20 +61,26 @@ function Header() {
   const [countNotifications, setCountNotifications] = useState(0);
   const [remainNotifications, setRemainNotifications] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [loadingNotifications, setLoadingNotifications] = useState(true);
 
   const handleGetMoreNotifications = React.useCallback(() => {
+    setLoadingNotifications(true);
     const params = {
-      "offset": notifications.length,
-      "size": 5
-    }
+      offset: notifications.length,
+      size: 5,
+    };
     const getData = async () => {
       await apiNotification.getNotification(params).then((res) => {
-        setNotifications((notifications) => [...notifications, ...res.data.notifications]);
+        setNotifications((notifications) => [
+          ...notifications,
+          ...res.data.notifications,
+        ]);
         setRemainNotifications(res.data.remainingNotification);
+        setLoadingNotifications(false);
       });
     };
     getData();
-  }, [notifications])
+  }, [notifications]);
 
   const handleResetNotification = React.useCallback(() => {
     if (countNotifications !== 0) {
@@ -85,17 +92,19 @@ function Header() {
   const handleShowNotifications = React.useCallback(() => {
     const handleClick = (item) => {
       apiNotification.putNotification({ id: item.id });
-      setNotifications(notifications.filter((noti) => noti.id !== item.id))
+      setNotifications(notifications.filter((noti) => noti.id !== item.id));
       navigate("/" + item.url);
-    };  
-    console.log("notifications: ", notifications)
-    
+    };
     handleResetNotification();
-    if (notifications.length > 0 && notifications.find((item) => item.isRead === false)) {
+    if (
+      notifications.length > 0 &&
+      notifications.find((item) => item.isRead === false)
+    ) {
       return notifications.map((item) => {
         return (
           <>
             {item.isRead ? null : (
+              <>
               <Stack
                 onClick={() => handleClick(item)}
                 style={{ padding: "8px 20px", cursor: "pointer" }}
@@ -109,6 +118,8 @@ function Header() {
                   {item.createdDate}
                 </Typography>
               </Stack>
+              <Divider light />
+              </>
             )}
           </>
         );
@@ -155,6 +166,7 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    setLoadingNotifications(true);
     const getData = async () => {
       await apiCategory
         .showAllCategory()
@@ -170,11 +182,10 @@ function Header() {
       await apiNotification.getNotification().then((res) => {
         setNotifications(res.data.notifications);
         setRemainNotifications(res.data.remainingNotification);
+        setLoadingNotifications(false);
       });
     };
     getData();
-    console.log("countNoti: ", countNotifications);
-    console.log("Notis: ", notifications);
   }, []);
 
   if (
@@ -334,7 +345,7 @@ function Header() {
                 </>
               )}
             </li>
-            
+
             {user ? (
               <>
                 <li className="divider"></li>
@@ -356,23 +367,34 @@ function Header() {
                         Thông báo này bạn ơi !
                       </Typography>
                     </Stack>
-                    {notifications ? (
-                      handleShowNotifications()
-                    ) : (
-                      <>
-                        <Stack
-                          style={{ padding: "8px 20px", cursor: "pointer" }}
-                        >
-                          <Typography>Bạn không có thông báo mới</Typography>
-                        </Stack>
-                      </>
-                    )}
+                    <Stack sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                    <LoadingAPI loading={loadingNotifications}>
+                      {notifications ? (
+                        handleShowNotifications()
+                      ) : (
+                        <>
+                          <Stack
+                            style={{ padding: "8px 20px", cursor: "pointer" }}
+                          >
+                            <Typography>Bạn không có thông báo mới</Typography>
+                          </Stack>
+                        </>
+                      )}
+                    </LoadingAPI>
                     {remainNotifications > 0 ? (
                       <Stack display={"flex"} alignItems={"center"}>
-                        <Button startIcon={<AddBoxOutlinedIcon />} variant="outlined" color="success" onClick={() => handleGetMoreNotifications()}> Xem thêm</Button>
+                        <Button
+                          startIcon={<AddBoxOutlinedIcon />}
+                          variant="outlined"
+                          color="success"
+                          onClick={() => handleGetMoreNotifications()}
+                        >
+                          {" "}
+                          Xem thêm
+                        </Button>
                       </Stack>
                     ) : null}
-                    
+                    </Stack>
                   </Box>
                 </li>
               </>

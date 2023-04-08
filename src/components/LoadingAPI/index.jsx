@@ -8,12 +8,12 @@ const LoadingAPI = (props) => {
       {props?.loading ? (
         // True -> load
         <Box
+        width={props?.width ? props?.width : "100%"}
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "rgb(138 138 138)",
-            width: "100%",
             height: "100%"
           }}
         >

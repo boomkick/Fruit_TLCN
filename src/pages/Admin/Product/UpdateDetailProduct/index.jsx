@@ -1,7 +1,9 @@
 /* eslint-disable */
-import React from "react";
+import React, { Fragment, useCallback } from "react";
 import { useEffect, useState } from "react";
-// import apiBrand from "../../../../apis/apiBrand";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import "./UpdateDetailProduct.scss";
 import {
   Stack,
@@ -12,25 +14,20 @@ import {
   MenuItem,
   FormControl,
   Select,
-  InputLabel,
   InputBase,
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { styled } from "@mui/material/styles";
-import rev from "../../../../assets/img/product_le_han_quoc.jpg";
-import SelectBoxAddress from "../../../../components/SelectBoxAddress";
 import { useParams, useNavigate } from "react-router-dom";
 import { productUnit, productStatus } from "../../../../constraints/Product";
 import apiCategory from "../../../../apis/apiCategory";
 import apiProduct from "../../../../apis/apiProduct";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 
 function UpdateDetailProduct() {
   const { id } = useParams();
-  const [review, setReview] = React.useState([rev]);
-  const [files, setFiles] = React.useState([]);
-  const [product, setProduct] = useState({});
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [listCategory, setListCategory] = useState([]);
@@ -40,18 +37,35 @@ function UpdateDetailProduct() {
   const [minPurchase, setMinPurchase] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [loadingUpdateProduct, setloadingUpdateProduct] = useState(false);
   const navigate = useNavigate();
+
+  // Xử lí hình ảnh
+  const [firstImage, setFirstImage] = useState(null);
+  const [secondImage, setSecondImage] = useState(null);
+  const [thirdImage, setThirdImage] = useState(null);
+  const [fourthImage, setFourthImage] = useState(null);
+
+  const handleChangeEditImage = useCallback((position, action) => {
+    if (filesStatus[position - 1] != "NA") {
+      setFilesStatus((filesStatus) =>
+        filesStatus.map((item, index) =>
+          index === position - 1 ? action : item
+        )
+      );
+    }
+  }, []);
 
   // Xử lí phần danh sách hình ảnh hiển thị ban đầu
   const [filesEdit, setFilesEdit] = useState([]);
   const [filesStatus, setFilesStatus] = useState([]);
-  // Hiển thị button xóa sau khi ấn
 
   // Tạo file status
   function createStatusFiles(n) {
     let listStatus = [];
-    for (let i = 0; i < n; i++) {
-      listStatus.push("NONE");
+    for (let i = 0; i < 4; i++) {
+      if (i > n - 1) listStatus.push("NA");
+      else listStatus.push("NONE");
     }
     return listStatus;
   }
@@ -72,51 +86,9 @@ function UpdateDetailProduct() {
     getData();
   }, []);
 
-  // Change value of select box
-
-  const onChangeImg = (e) => {
-    if (filesStatus.filter((item) => item === "EDIT").length < files.length) {
-      toast.info("Bạn đang thêm ảnh vào sản phẩm");
-    }
-    if (e.target.files.length > 0) {
-      if (files.length === 4) {
-        toast.info("Số hình ảnh tối đa cho 1 sản phẩm là 4");
-      } else {
-        let filesState = [...files, e.target.files[0]];
-        setFiles(filesState);
-        let reviewsState = [...review, URL.createObjectURL(e.target.files[0])];
-        if (review[0] === rev) {
-          reviewsState = [URL.createObjectURL(e.target.files[0])];
-        }
-        setReview(reviewsState);
-      }
-    }
-  };
-
   // handle update product
   const handleUpdate = async () => {
-    if (files.length < filesStatus.filter((item) => item === "EDIT").length) {
-      let text = "";
-      filesStatus
-        .filter((item) => item === "EDIT")
-        .forEach((item, index) => {
-          if (item === "EDIT") {
-            text = text + (index + 1) + ", ";
-          }
-        });
-      toast.info(
-        "Vui lòng chọn đúng số ảnh, bạn chỉ chỉnh sửa ảnh " + text.slice(0, -2)
-      );
-      return;
-    }
-    if (files.length > filesStatus.filter((item) => item === "EDIT").length) {
-      let countFile =
-        filesStatus.filter((item) => item === "NONE").length + files.length;
-      if (countFile > 4) {
-        toast.info("Tối đã mỗi sản phẩm chỉ chứa 4 ảnh");
-        return;
-      }
-    }
+    setloadingUpdateProduct(true)
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''
     let unitString = unit == 0 ? "WEIGHT" : "UNIT";
@@ -132,13 +104,14 @@ function UpdateDetailProduct() {
       MinPurchase: minPurchase,
       Description: description,
       Status: statusString,
-      EditImageStatus: filesStatus,
+      EditImageStatus: filesStatus.filter((item) => item != "NA"),
     };
 
     params.append("editProduct", JSON.stringify(product));
-    files.forEach((item) => {
-      params.append("files", item);
+    [firstImage, secondImage, thirdImage, fourthImage].forEach((item) => {
+      if (item) params.append("files", item);
     });
+
     for (var pair of params.entries()) {
       console.log(pair[0] + ", " + pair[1]);
     }
@@ -155,6 +128,7 @@ function UpdateDetailProduct() {
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
+      setloadingUpdateProduct(false)
       return;
     } else {
       await apiProduct
@@ -171,25 +145,25 @@ function UpdateDetailProduct() {
             setMinPurchase(product?.minPurchase);
             setDescription(product?.description);
             setStatus(product?.status);
-            // old image
             setFilesEdit(product?.productImages);
             setFilesStatus(createStatusFiles(product?.productImages?.length));
-            // new image
-            setFiles([]);
-            setReview([]);
+            navigate("/admin/product/");
+            setloadingUpdateProduct(false)
           } else {
             toast.error("Cập nhật sản phẩm thất bại!");
+            setloadingUpdateProduct(false)
           }
         })
         .catch((error) => {
+          setloadingUpdateProduct(false)
           toast.error("Cập nhật sản phẩm thất bại!");
         });
     }
+    
   };
 
   // get data for a particular product
-  // Set thông tin cho product detail
-  useEffect(() => {
+  const getProduct = React.useCallback(() => {
     const loaddata = async () => {
       await apiProduct.getProductDetail(id).then((res) => {
         const product = res.data;
@@ -205,9 +179,6 @@ function UpdateDetailProduct() {
           // old image
           setFilesEdit(product?.productImages);
           setFilesStatus(createStatusFiles(product?.productImages?.length));
-          // new image
-          setFiles([]);
-          setReview([]);
         } else {
           navigate("/admin/product/");
           toast.error("Địa chỉ này không tồn tại!");
@@ -218,35 +189,29 @@ function UpdateDetailProduct() {
     loaddata();
   }, []);
 
-  // Xử lí xóa hình ảnh
-  const handleDeleteImage = (event, item, index) => {
-    if (filesStatus[index] !== "DELETE") {
-      let newFileStatus = filesStatus;
-      newFileStatus[index] = "DELETE";
-      setFilesStatus(newFileStatus);
-      toast.success(`Bạn đã chọn ảnh sản phẩm số ${index + 1} để xóa`);
-    } else {
-      let newFileStatus = filesStatus;
-      newFileStatus[index] = "NONE";
-      setFilesStatus(newFileStatus);
-      toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`);
-    }
-  };
+  // Set thông tin cho product detail
+  useEffect(() => {
+    getProduct();
+  }, []);
 
-  // Xử lí thay đổi hình ảnh
-  const handleEditImage = (event, item, index) => {
-    if (filesStatus[index] !== "EDIT") {
-      let newFileStatus = filesStatus;
-      newFileStatus[index] = "EDIT";
-      setFilesStatus(newFileStatus);
-      toast.success(`Bạn đã chọn ảnh sản phẩm số ${index + 1} để chỉnh sửa`);
-    } else {
-      let newFileStatus = filesStatus;
-      newFileStatus[index] = "NONE";
-      setFilesStatus(newFileStatus);
-      toast.success(`Ảnh sản phẩm số ${index + 1} sẽ không thay đổi`);
-    }
-  };
+  const handleReset = useCallback(() => {
+    setFirstImage(null);
+    setSecondImage(null);
+    setThirdImage(null);
+    setFourthImage(null);
+    setFilesEdit([]);
+    setFilesStatus([]);
+    getProduct();
+  }, []);
+
+  useEffect(() => {
+    filesEdit.forEach((item, index) => {
+      if (index === 0) setFirstImage(item);
+      else if (index === 1) setSecondImage(item);
+      else if (index === 2) setThirdImage(item);
+      else if (index === 3) setFourthImage(item);
+    });
+  }, [filesEdit]);
 
   return (
     <Box width={"100%"} bgcolor="#fff">
@@ -254,7 +219,7 @@ function UpdateDetailProduct() {
         className="cruBrand"
         p={3}
         justifyContent="center"
-        width="700px"
+        width="1035px"
         spacing={2}
         bgcolor="#fff"
       >
@@ -386,121 +351,424 @@ function UpdateDetailProduct() {
           <Typography className="cruBrand__label" style={{ minWidth: "184px" }}>
             Ảnh sản phẩm:
           </Typography>
-          <Stack>
-            <div style={{ display: "flex", marginBottom: "5px" }}>
-              {filesEdit?.map((item, index) => {
-                return (
+          <Stack
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-between  "}
+            alignItem={"center"}
+            width={"100%"}
+          >
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={
+                  firstImage
+                    ? firstImage?.url
+                      ? firstImage?.url
+                      : URL.createObjectURL(firstImage)
+                    : null
+                }
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {firstImage ? (
                   <>
-                    <img
-                      src={item?.url}
-                      width="180px"
-                      height="180px"
-                      style={{ marginRight: "10px" }}
-                      alt=""
-                    />
-                    <Stack
-                      spacing={1}
-                      justifyContent="center"
-                      py={1}
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        borderRight: "1px solid #ccc",
-                        marginRight: "2px",
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setFirstImage(e.target.files[0]);
+                          handleChangeEditImage(1, "EDIT");
+                        }}
+                        id="icon-button-file1"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file1">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                          sx={{ marginTop: "0px !important" }}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setFirstImage(null);
+                        handleChangeEditImage(1, "DELETE");
                       }}
                     >
-                      <EditIcon
-                        style={{ cursor: "pointer" }}
-                        sx={{
-                          "&:hover": { color: "green" },
-                          transition: "ease 0.2s",
-                          borderRadius: "5px",
-                        }}
-                        onClick={(event) => handleEditImage(event, item, index)}
-                      />
-                      {filesStatus[index] === "DELETE" ? (
-                        <DeleteIcon
-                          onClick={(event) =>
-                            handleDeleteImage(event, item, index)
-                          }
-                          variant="outlined"
-                          style={{
-                            cursor: "pointer",
-                            marginTop: "0px",
-                            marginLeft: "5px",
-                            color: "red",
-                          }}
-                          sx={{
-                            "&:hover": { color: "red" },
-                            transition: "ease 0.2s",
-                            borderRadius: "5px",
-                          }}
-                        />
-                      ) : (
-                        <DeleteIcon
-                          onClick={(event) =>
-                            handleDeleteImage(event, item, index)
-                          }
-                          variant="outlined"
-                          style={{
-                            cursor: "pointer",
-                            marginTop: "0px",
-                            marginLeft: "5px",
-                          }}
-                          sx={{
-                            "&:hover": { color: "red" },
-                            transition: "ease 0.2s",
-                            borderRadius: "5px",
-                          }}
-                        />
-                      )}
-                    </Stack>
+                      Delete
+                    </Button>
                   </>
-                );
-              })}
-            </div>
-            {/* <input type="file" id="myfile" name="myfile" onChange={onChangeImg}></input> */}
-          </Stack>
-        </Stack>
-        {/* <Stack direction="row" >
-          <Typography className="cruBrand__label" style={{minWidth: "184px"}}>Tình trạng ảnh</Typography>
-          <Stack style={{display: "flex", flexDirection: "row" }} sx={{ flex: "1" }}>
-            {filesStatus.map((item) => {return <>
-              <Typography className="cruBrand__label">{item}</Typography>
-            </>})}
-          </Stack>
-        </Stack> */}
-        <Stack direction="row" p={2}>
-          <Typography className="cruBrand__label" style={{ minWidth: "184px" }}>
-            Thêm ảnh chỉnh sửa:
-          </Typography>
-          <Stack>
-            <div style={{ display: "flex", marginBottom: "5px" }}>
-              {review.map((item) => {
-                return (
-                  <img
-                    src={item}
-                    width="180px"
-                    height="180px"
-                    style={{ marginRight: "10px" }}
-                    alt=""
-                  />
-                );
-              })}
-            </div>
-            <input
-              type="file"
-              id="myfile"
-              name="myfile"
-              onChange={onChangeImg}
-            ></input>
-          </Stack>
-        </Stack>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setFirstImage(e.target.files[0]);
+                        handleChangeEditImage(1, "EDIT");
+                      }}
+                      id="icon-button-file1"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file1">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={
+                  secondImage
+                    ? secondImage?.url
+                      ? secondImage?.url
+                      : URL.createObjectURL(secondImage)
+                    : null
+                }
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {secondImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setSecondImage(e.target.files[0]);
+                          handleChangeEditImage(2, "EDIT");
+                        }}
+                        id="icon-button-file2"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file2">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setSecondImage(null);
+                        handleChangeEditImage(2, "DELETE");
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setSecondImage(e.target.files[0]);
+                        handleChangeEditImage(2, "EDIT");
+                      }}
+                      id="icon-button-file2"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file2">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={
+                  thirdImage
+                    ? thirdImage?.url
+                      ? thirdImage?.url
+                      : URL.createObjectURL(thirdImage)
+                    : null
+                }
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {thirdImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setThirdImage(e.target.files[0]);
+                          handleChangeEditImage(3, "EDIT");
+                        }}
+                        id="icon-button-file3"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file3">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setThirdImage(null);
+                        handleChangeEditImage(3, "DELETE");
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setThirdImage(e.target.files[0]);
+                        handleChangeEditImage(3, "EDIT");
+                      }}
+                      id="icon-button-file3"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file3">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
 
-        <Stack justifyContent="center">
-          <Button width="450px" variant="contained" onClick={handleUpdate}>
-            {"Cập nhật"}
+            <Stack
+              display={"flex"}
+              flexDirection={"column"}
+              flex={"1"}
+              justifyContent={"center"}
+              alignItem={"center"}
+            >
+              <img
+                src={
+                  fourthImage
+                    ? fourthImage?.url
+                      ? fourthImage?.url
+                      : URL.createObjectURL(fourthImage)
+                    : null
+                }
+                width="180px"
+                height="180px"
+                style={{ marginRight: "10px" }}
+                alt=""
+              />
+              <Stack
+                spacing={1}
+                py={1}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginRight: "10px",
+                  justifyContent: "space-around",
+                }}
+              >
+                {fourthImage ? (
+                  <>
+                    <Fragment>
+                      <input
+                        color="primary"
+                        accept="image/*"
+                        type="file"
+                        onChange={(e) => {
+                          setFourthImage(e.target.files[0]);
+                          handleChangeEditImage(4, "EDIT");
+                        }}
+                        id="icon-button-file4"
+                        style={{ display: "none" }}
+                      />
+                      <label htmlFor="icon-button-file4">
+                        <Button
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          color="success"
+                          component={"span"}
+                        >
+                          Edit
+                        </Button>
+                      </label>
+                    </Fragment>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      color="error"
+                      onClick={() => {
+                        setFourthImage(null);
+                        handleChangeEditImage(4, "DELETE");
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <Fragment>
+                    <input
+                      color="primary"
+                      accept="image/*"
+                      type="file"
+                      onChange={(e) => {
+                        setFourthImage(e.target.files[0]);
+                        handleChangeEditImage(4, "EDIT");
+                      }}
+                      id="icon-button-file4"
+                      style={{ display: "none" }}
+                    />
+                    <label htmlFor="icon-button-file4">
+                      <Button
+                        variant="outlined"
+                        startIcon={<FileUploadIcon />}
+                        sx={{ marginTop: "0px !important" }}
+                        component={"span"}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Fragment>
+                )}
+              </Stack>
+            </Stack>
+          </Stack>
+        </Stack>
+        <Stack justifyContent="space-between" flexDirection={"row"}>
+          <Button
+            variant="contained"
+            onClick={handleReset}
+            sx={{ marginRight: "10px", width: "120px" }}
+            style={{ backgroundColor: "#74768B" }}
+            startIcon={<RotateLeftIcon />}
+          >
+            {"Reset"}
           </Button>
+
+          <Stack justifyContent="end" flexDirection={"row"}>
+            
+            <Button
+              variant="contained"
+              onClick={handleUpdate}
+              sx={{ marginRight: "10px", width: "120px" }}
+              startIcon={<SaveIcon />}
+              disable = {loadingUpdateProduct}
+            >
+              {"Cập nhật"}
+            </Button>
+            <Button
+              variant="contained"
+              color={"error"}
+              startIcon={<CancelIcon />}
+              onClick={() => navigate("/admin/product")}
+            >
+              {"Hủy bỏ"}
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
     </Box>

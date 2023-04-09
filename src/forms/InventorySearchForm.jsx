@@ -298,11 +298,18 @@ export default function InventorySearchForm(props) {
           px={2}
         >
           <Typography fontSize="26px">Quản lý kho hàng</Typography>
+          <Stack display={'flex'} flexDirection={'row'}>
+          <Link to="/admin/inventory/statistic">
+            <Button variant="outlined" pr={2} sx={{marginRight: '5px'}}>
+              Thống kê
+            </Button>
+          </Link>
           <Link to="/admin/inventory/create">
             <Button variant="outlined" pr={2}>
               Nhập hàng
             </Button>
           </Link>
+          </Stack>
         </Stack>
 
         <Box style={{ backgroundColor: "#fff", p: 2, m: 1 }}>

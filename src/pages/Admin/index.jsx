@@ -56,6 +56,7 @@ import StatisticBill from "./Statistic/Bill";
 import Dashboard from "./Dashboard"
 import Inventory from "./Inventory";
 import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
+import StatisticInventory from "./Inventory/StatisticInventory";
 
 const drawerWidth = 240;
 
@@ -298,7 +299,9 @@ function Admin() {
                 onClick={() => setOpenNotify(true)}
                 sx={{ border: "1px solid silver" }}
               >
-                <Badge color="info" badgeContent={6}>
+                <Badge color="info" 
+                // badgeContent={6}
+                >
                   <NotificationsNoneOutlinedIcon />
                 </Badge>
               </IconButton>
@@ -568,6 +571,7 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Inventory />} />
+                <Route path="statistic" element={<StatisticInventory />} />
                 <Route path="create" element={<CreateUpdateInventory edit={false} />} />
                 <Route path="detail/:id" element={<CreateUpdateInventory edit={true}/>} />
               </Routes>

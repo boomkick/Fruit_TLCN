@@ -1,7 +1,7 @@
 
 import { axiosClientWithToken } from "./axiosClient";
 
-const apiStatistics = {
+const apiInventory = {
     getInventoryById: async (params) => {
         const res = await axiosClientWithToken.get(`/Inventory/${params}`)
         return res.data;
@@ -18,8 +18,12 @@ const apiStatistics = {
         const res = await axiosClientWithToken.put(`/Inventory/${id}/`, params);
         return res.data;
     },
+    getNotificationInventory: async (params) => {
+        const res = await axiosClientWithToken.get(`/Inventory/notification?${getSearchParams(params)}`)
+        return res.data;
+    },
 }
-export default apiStatistics;
+export default apiInventory;
 
 function getSearchParams(params) {
     let search = ""

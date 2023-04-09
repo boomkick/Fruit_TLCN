@@ -52,6 +52,10 @@ const apiProduct = {
         const res = await axiosAdmin.delete(`/Product/${params.id}/`);
         return res.data;
     },
+    getProductSuggest: async (params) => {
+        const res = await axiosAdmin.get(`/Product/suggestion/`);
+        return res.data;
+    },
     
 }
 export default apiProduct;

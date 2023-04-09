@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 //  import "./CruCategory.scss";
 import apiInventory from "../../../../apis/apiInventory";
+import apiProduct from "../../../../apis/apiProduct";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -17,6 +18,7 @@ import {
   Button,
   InputBase,
   styled,
+  Autocomplete,
 } from "@mui/material";
 import MaterialUIPickers from "../../../../components/DatePicker";
 import PropTypes from "prop-types";
@@ -44,6 +46,7 @@ function CreateUpdateInventory(props) {
   const [description, setDescription] = useState(null);
   const [supplierId, setSupplierId] = useState(null);
   const [unit, setUnit] = useState(null);
+  const [productSuggests, setProductSuggests] = useState([]);
 
   const [deliveryDate, setDeliveryDate] = useState(null);
   const handleChangeDeliveryDate = React.useCallback((date) => {
@@ -56,12 +59,29 @@ function CreateUpdateInventory(props) {
   }, []);
 
   useEffect(() => {
+    const loadProductSuggest = async () => {
+      await apiProduct.getProductSuggest().then((res) => {
+        if (res.data.length > 0) {
+          const suggestProductOptions = res.data.map((item) => ({
+            label: `${item.name}`,
+            id: `${item.id}`,
+          }));
+          setProductSuggests(suggestProductOptions);
+        }
+      });
+    };
+    loadProductSuggest();
+  }, []);
+
+  useEffect(() => {
     const loaddata = async () => {
       await apiInventory
         .getInventoryById(id)
         .then((res) => {
           setInventory(res.data);
-          setProductId(res.data.product.id);
+          setProductId(
+            productSuggests.find((item) => item.id == res.data.product.id)
+          );
           setQuantity(res.data.quantity);
           setImportPrice(res.data.importPrice);
           setDescription(res.data.description);
@@ -77,7 +97,7 @@ function CreateUpdateInventory(props) {
     if (edit === true && id) {
       loaddata();
     }
-  }, [id]);
+  }, [id, productSuggests]);
 
   useEffect(() => {
     if (props.edit) {
@@ -88,7 +108,7 @@ function CreateUpdateInventory(props) {
 
   const handleUpdate = () => {
     const params = {
-      productId: Number(productId),
+      productId: Number(productId?.id),
       quantity: Number(quantity),
       importPrice: Number(importPrice),
       description: description,
@@ -130,7 +150,7 @@ function CreateUpdateInventory(props) {
 
   const handleSave = () => {
     const params = {
-      productId: Number(productId),
+      productId: Number(productId?.id),
       quantity: Number(quantity),
       importPrice: Number(importPrice),
       description: description,
@@ -182,15 +202,16 @@ function CreateUpdateInventory(props) {
       >
         <Stack direction="row">
           <Typography sx={{ width: "200px" }}>ID sản phẩm</Typography>
-          <TextField
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={productSuggests}
             value={productId}
-            onChange={(event) => {
-              setProductId(event.target.value);
+            onChange={(event, value) => {
+              setProductId(value);
             }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: 1 }}
+            sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
           />
         </Stack>
         <Stack direction="row">

@@ -16,7 +16,7 @@ import CardProduct from "../../components/CardProduct";
 import apiProduct from "../../apis/apiProduct";
 import apiCategory from "../../apis/apiCategory";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Pagination as MuiPagination } from "@mui/material";
 import SearchBar from "../../components/SearchBar";
 
@@ -33,6 +33,16 @@ function FilterProduct(props) {
   const [filter, setFilter] = useState(false);
   const [maxPage, setMaxPage] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+
+  // Re-render when change id
+  const { id } = useParams();
+  const location = useLocation();
+  const [, setRenderCount] = useState(0);
+
+  useEffect(() => {
+    setIdCategory(id)
+    setRenderCount(count => count + 1);
+  }, [location.pathname, id]);
 
   useEffect(() => {
     const getData = async () => {
@@ -93,7 +103,7 @@ function FilterProduct(props) {
 
     };
     getData();
-  }, [idCategory, filter, orderBy, currentPage, keyWord]);
+  }, [idCategory, filter, orderBy, currentPage, keyWord, idParam, id]);
 
   // Lấy dữ liệu category
   useEffect(() => {
@@ -302,7 +312,7 @@ function FilterProduct(props) {
         </Stack>
         <Box>
           <Grid container spacing={2}>
-            {(products)?.map((item) => (
+            {products?.map((item) => (
               <Grid key={item.id} item xs={3}>
                 <CardProduct data={item} />
               </Grid>

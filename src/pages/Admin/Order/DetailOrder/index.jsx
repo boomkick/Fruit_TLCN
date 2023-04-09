@@ -16,10 +16,10 @@ function DetailOrder() {
   const navigate = useNavigate()
 
   // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
-  const [weight, setWeight] = useState("");
-  const [length, setLength] = useState("");
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState(0);
+  const [length, setLength] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -45,7 +45,8 @@ function DetailOrder() {
       width: width,
       height: height
     };
-    if (weight && length && width && height) {
+    console.log("param: ", params);
+    if (weight > 0 && length > 0 && width > 0 && height > 0) {
       apiCart
       .putProcessCart(params, id)
       .then((res) => {
@@ -57,11 +58,19 @@ function DetailOrder() {
       });
     }
     else
-      toast.info("Vui lòng nhập đầy đủ thông tin.")
+      toast.info("Vui lòng nhập thông tin chính xác.")
   };
   const handleCancel = () => {
+    let params = {
+      processDescription: "",
+      status: 2,
+      weight: 1,
+      length: 1,
+      width: 1,
+      height: 1
+    };
     apiCart
-      .getCancelCart(id)
+      .putProcessCart(params, id)
       .then((res) => {
         toast.success("Hủy đơn thành công");
         navigate('/admin/order');

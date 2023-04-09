@@ -7,7 +7,15 @@ import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Stack, Button, Typography, Badge, Box, Modal, Divider } from "@mui/material";
+import {
+  Stack,
+  Button,
+  Typography,
+  Badge,
+  Box,
+  Modal,
+  Divider,
+} from "@mui/material";
 
 import { logoutSuccess } from "../../slices/authSlice";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
@@ -78,36 +86,31 @@ function Header() {
   const handleShowNotifications = React.useCallback(() => {
     const handleClick = (item) => {
       apiNotification.putNotification({ id: item.id });
-      setNotifications(notifications.filter((noti) => noti.id !== item.id));
+      // setNotifications(notifications.filter((noti) => noti.id !== item.id));
       navigate("/" + item.url);
     };
-    
-    if (
-      notifications.length > 0 &&
-      notifications.find((item) => item.isRead === false)
-    ) {
+
+    if (notifications.length > 0) {
       return notifications.map((item) => {
         return (
           <>
-            {item.isRead ? null : (
-              <>
-              <Stack
-                onClick={() => handleClick(item)}
-                style={{cursor: "pointer" }}
-                paddingTop={'3px'}
+            <Stack
+              onClick={() => handleClick(item)}
+              style={{ cursor: "pointer" }}
+              paddingTop={"3px"}
+            >
+              <Typography lineHeight={"1.3"} fontSize={"15px"} fontWeight={500}>
+                {item.content}
+              </Typography>
+              <Typography
+                fontSize={"10px"}
+                color={"#ccc"}
+                paddingBottom={"3px"}
               >
-                <Typography lineHeight={"1.3"}fontSize={'15px'} fontWeight={500}>{item.content}</Typography>
-                <Typography
-                  fontSize={"10px"}
-                  color={"#ccc"}
-                  paddingBottom={"3px"}
-                >
-                  {item.createdDate}
-                </Typography>
-              </Stack>
-              <Divider light/>
-              </>
-            )}
+                {item.createdDate}
+              </Typography>
+            </Stack>
+            <Divider light />
           </>
         );
       });
@@ -174,6 +177,21 @@ function Header() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    setLoadingNotifications(true);
+    const getData = async () => {
+      await apiNotification.getCountNewNotification().then((res) => {
+        setCountNotifications(res.data);
+      });
+      await apiNotification.getNotification().then((res) => {
+        setNotifications(res.data.notifications);
+        setRemainNotifications(res.data.remainingNotification);
+        setLoadingNotifications(false);
+      });
+    };
+    getData();
+  }, [user]);
 
   if (
     location.pathname.includes("employee") ||
@@ -337,18 +355,18 @@ function Header() {
               <>
                 <li className="divider"></li>
                 <li className="header__notification">
-                    <div onMouseLeave={handleResetNotification}>
-                  <Stack>
-                    <Badge
-                      color="warning"
-                      badgeContent={countNotifications}
-                      invisible={countNotifications === 0}
-                      showZero
-                    >
-                      <NotificationsActiveIcon sx={{ fontSize: "25px" }}/>
-                    </Badge>
-                  </Stack>
-                      </div>
+                  <div onMouseLeave={handleResetNotification}>
+                    <Stack>
+                      <Badge
+                        color="warning"
+                        badgeContent={countNotifications}
+                        invisible={countNotifications === 0}
+                        showZero
+                      >
+                        <NotificationsActiveIcon sx={{ fontSize: "25px" }} />
+                      </Badge>
+                    </Stack>
+                  </div>
 
                   <Box className="header__notification__dropdown">
                     <Stack className="header__notification__dropdown__top">
@@ -356,34 +374,48 @@ function Header() {
                         Thông báo này bạn ơi !
                       </Typography>
                     </Stack>
-                    <Stack sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxHeight: '500px', overflowY: 'scroll'}}>
-                    <LoadingAPI loading={loadingNotifications}>
-                      {notifications ? (
-                        handleShowNotifications()
-                      ) : (
-                        <>
-                          <Stack
-                            style={{ padding: "8px 20px", cursor: "pointer" }}
-                          >
-                            <Typography>Bạn không có thông báo mới</Typography>
-                          </Stack>
-                        </>
-                      )}
-                    </LoadingAPI>
-                    {remainNotifications > 0 ? (
-                      <Stack display={"flex"} alignItems={"center"} paddingTop={'10px'}>
-                        <Button
-                          startIcon={<AddBoxOutlinedIcon />}
-                          variant="outlined"
-                          color="success"
-                          onClick={() => handleGetMoreNotifications()}
-                          
+                    <Stack
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        maxHeight: "500px",
+                        overflowY: "scroll",
+                      }}
+                    >
+                      <LoadingAPI loading={loadingNotifications}>
+                        {notifications ? (
+                          handleShowNotifications()
+                        ) : (
+                          <>
+                            <Stack
+                              style={{ padding: "8px 20px", cursor: "pointer" }}
+                            >
+                              <Typography>
+                                Bạn không có thông báo mới
+                              </Typography>
+                            </Stack>
+                          </>
+                        )}
+                      </LoadingAPI>
+                      {remainNotifications > 0 ? (
+                        <Stack
+                          display={"flex"}
+                          alignItems={"center"}
+                          paddingTop={"10px"}
                         >
-                          {" "}
-                          Xem thêm
-                        </Button>
-                      </Stack>
-                    ) : null}
+                          <Button
+                            startIcon={<AddBoxOutlinedIcon />}
+                            variant="outlined"
+                            color="success"
+                            onClick={() => handleGetMoreNotifications()}
+                          >
+                            {" "}
+                            Xem thêm
+                          </Button>
+                        </Stack>
+                      ) : null}
                     </Stack>
                   </Box>
                 </li>

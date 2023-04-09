@@ -17,6 +17,7 @@ import {
   Modal,
 } from "@mui/material";
 import "./Product.scss";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Link } from "react-router-dom";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
@@ -145,9 +146,17 @@ function Product() {
       .deleteProduct({ id: itemdelete.id })
       .then((res) => {
         if (res.status === 200) {
-          toast.success("Xóa sản phẩm thành công");
-          const newProducts = products.filter((item) => {
-            return itemdelete.id !== item.id;
+          if (itemdelete.isDeleted) {
+            toast.success("Khôi phục sản phẩm thành công");
+          } else {
+            toast.success("xóa sản phẩm thành công");
+          }
+
+          const newProducts = products.map((item) => {
+            if (itemdelete.id === item.id) {
+              item.isDeleted = item.isDeleted ? false : true;
+            }
+            return item;
           });
           setProducts(newProducts);
         } else {
@@ -590,12 +599,21 @@ function Product() {
                           </Link>
                         </Stack>
                         <Stack p={1} pb={"13px"}>
-                          <DeleteOutlinedIcon
-                            variant="Outlined"
-                            onClick={() => openModalDelete(row)}
-                            sx={{ color: red[500], "& :hover": red[700] }}
-                            cursor="pointer"
-                          />
+                          {row.isDeleted ? (
+                            <DeleteForeverIcon
+                              variant="Outlined"
+                              onClick={() => openModalDelete(row)}
+                              sx={{ color: red[500], "& :hover": red[700] }}
+                              cursor="pointer"
+                            />
+                          ) : (
+                            <DeleteOutlinedIcon
+                              variant="Outlined"
+                              onClick={() => openModalDelete(row)}
+                              sx={{ color: red[500], "& :hover": red[700] }}
+                              cursor="pointer"
+                            />
+                          )}
                         </Stack>
                       </Stack>
                     </TableCell>
@@ -607,7 +625,14 @@ function Product() {
             </TableBody>
           </Table>
           {totalPage >= 1 ? (
-            <Stack spacing={2} mt="10px" display={"flex"} alignItems={"center"} m={2} pb={2}>
+            <Stack
+              spacing={2}
+              mt="10px"
+              display={"flex"}
+              alignItems={"center"}
+              m={2}
+              pb={2}
+            >
               <Pagination
                 count={totalPage}
                 page={page}

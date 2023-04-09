@@ -24,7 +24,7 @@ function ConfigRoute() {
         <Route path="payment" element={<Payment />} />
         <Route path="my-account/*" element={<CustomerAccount />} />
       </Route>
-      <Route path="product-detail/:id" element={<ProductDetail />} />
+      <Route path="product-detail/:id" element={<ProductDetail/>} />
       <Route path="product-category/:id" element={<FilterProduct />} />
       <Route path="product-category/" element={<FilterProduct />} />
     </Routes>

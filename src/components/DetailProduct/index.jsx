@@ -20,6 +20,7 @@ import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantity
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 function DetailProduct({ data }) {
   const user = useSelector((state) => state.auth.user);
@@ -27,6 +28,12 @@ function DetailProduct({ data }) {
   const status = productStatus.find((item) => item.id == data?.status);
   const [quantity, setQuantity] = useState(1);
   const [ratingStars, setRatingStars] = useState(5);
+  const { id } = useParams();
+
+  useEffect(() => {
+    setProductImage("")
+  }, [id])
+
 
   useEffect(() => {
     setRatingStars(data?.rating);

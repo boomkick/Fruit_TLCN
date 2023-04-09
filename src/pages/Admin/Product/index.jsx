@@ -662,7 +662,7 @@ function Product() {
               <Stack spacing={3}>
                 <Stack>
                   <Typography fontWeight="bold">
-                    {`Bạn có chắc muốn xoá sản phẩm ${itemdelete?.name}?`}
+                    {`Bạn có chắc muốn ${itemdelete?.isDeleted ? 'Khôi phục' : 'xóa'} sản phẩm ${itemdelete?.name}?`}
                   </Typography>
                 </Stack>
 

@@ -1,13 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import "./Payment.scss";
-import {
-  Grid,
-  Typography,
-  Box,
-  Stack,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
+import { Grid, Typography, Box, Stack, Radio, RadioGroup } from "@mui/material";
 
 import { numWithCommas } from "../../constraints/Util";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,10 +15,8 @@ import Loading from "../../components/Loading";
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
   const paymentAddress = useSelector((state) => state.payment.address);
-  const user = useSelector((state) => state.auth.user);
   const [totalPrice, setTotalPrice] = useState(0);
   const [payment, setPayment] = useState("1");
-  const [expandDetail, setExpandDetail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [addresses, setAddresses] = useState();
   const dispatch = useDispatch();
@@ -51,59 +42,27 @@ function Payment() {
   const [openAddress, setOpenAddress] = useState(false);
   const handleOpenAddress = useCallback(() => setOpenAddress(true), []);
   const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
-  const [linkMomo, setLinkMomo] = useState(null)
 
   useEffect(() => {
     const getAddresses = () => {
-      if(!CartItems || CartItems.length < 1) {
+      if (!CartItems || CartItems.length < 1) {
         navigate("/");
         toast.warning("Hãy thêm sản phẩm vào giỏ hàng trước");
       }
-      if(!paymentAddress) {
-          navigate("/my-account/address/add");
-          toast.warning("Vui lòng thêm địa chỉ nhận hàng");
+      if (!paymentAddress) {
+        navigate("/my-account/address/add");
+        toast.warning("Vui lòng thêm địa chỉ nhận hàng");
       }
     };
     getAddresses();
-  }, []);
-  
-  // Set coupon mã giảm giá [Chưa làm]
-  const [couponValue, setCouponValue] = useState(0);
-  // const coupon = useSelector((state) => state.payment.coupon);
-  // useEffect(() => {
-  //   const handle = () => {
-  //     if (coupon) {
-  //       let value = 0;
-  //       if (coupon.unit === "đ") {
-  //         value = coupon.value;
-  //       } else {
-  //         if (totalPrice > 0) value = (coupon.value * totalPrice) / 100;
-  //       }
-  //       setCouponValue(value);
-  //     }
-  //   };
-  //   handle();
-  // }, [coupon, totalPrice]);
-
-  useEffect(() => {
-    // const loadTitle = () => {
-    //   document.title = "Đơn hàng của tôi";
-    // };
-    // loadTitle();
   }, []);
 
   const handleChangeTypePayment = (event) => {
     setPayment(event.target.value);
   };
 
-  const handleExpand = () => {
-    setExpandDetail((pre) => !pre);
-  };
-
   const finalPrice = () => {
-    return totalPrice + feeShip - (couponValue || 0) > 0
-      ? Math.round(totalPrice + feeShip - (couponValue || 0))
-      : 0;
+    return totalPrice + feeShip > 0 ? Math.round(totalPrice + feeShip) : 0;
   };
 
   // Thanh toán
@@ -114,23 +73,23 @@ function Payment() {
       );
       return;
     }
-    let payload = {}
+    let payload = {};
     let listCartDetail = {
       listCartDetailId: CartItems.map((item) => {
-        return item.id
-      })
+        return item.id;
+      }),
     };
     payload = {
-      CityId: paymentAddress.city, 
-      DistrictId: paymentAddress.district, 
-      WardId: paymentAddress.ward, 
-      DetailLocation: paymentAddress.addressDetail, 
-      Name: paymentAddress.name, 
-      Phone: paymentAddress.phone, 
-      paymentMethod: 0, 
-      ...listCartDetail
-    }
-    
+      CityId: paymentAddress.city,
+      DistrictId: paymentAddress.district,
+      WardId: paymentAddress.ward,
+      DetailLocation: paymentAddress.addressDetail,
+      Name: paymentAddress.name,
+      Phone: paymentAddress.phone,
+      paymentMethod: 0,
+      ...listCartDetail,
+    };
+
     setLoading(true);
     if (payment == 1) {
       payload.paymentMethod = 1;
@@ -139,8 +98,14 @@ function Payment() {
         .then((res) => {
           toast.success("Đặt hàng thành công!");
           dispatch(deleteAll());
-          // navigate("/my-account/orders");
-          setLinkMomo(res?.data?.paymentUrl)
+          const url = res?.data?.paymentUrl;
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          document.body.appendChild(link);
+          link.click();
+          navigate("/my-account/orders");
         })
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");
@@ -148,7 +113,6 @@ function Payment() {
         .finally(() => {
           setLoading(false);
         });
-
     } else {
       apiCart
         .postPayment(payload)
@@ -165,9 +129,6 @@ function Payment() {
         });
     }
   };
-  const handleOnlickMomo = () => {
-    navigate("/my-account/orders");
-  }
 
   return (
     <>
@@ -231,7 +192,10 @@ function Payment() {
                           </Typography>
                         </Link>
                         <Typography fontSize="14px" color="#888">
-                          {numWithCommas(item?.quantity * item?.product?.price || 0)} đ
+                          {numWithCommas(
+                            item?.quantity * item?.product?.price || 0
+                          )}{" "}
+                          đ
                         </Typography>
                       </Stack>
                     </Stack>
@@ -317,34 +281,6 @@ function Payment() {
                 ))}
               </RadioGroup>
             </Box>
-
-            {/* <Box className='cart-coupon'>
-            <Box className="cart-coupon__title">
-              Tiki Khuyến mãi
-            </Box>
-            {
-              coupon &&
-              <Box className="cart-coupon__item">
-                <svg className="cart-coupon__bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 286 60"><g fill="none" fillRule="evenodd"><g stroke="#017FFF"><g><g><g><g><g><path fill="#E5F2FF" d="M 278 0.5 c 2.071 0 3.946 0.84 5.303 2.197 c 1.358 1.357 2.197 3.232 2.197 5.303 h 0 v 44 c 0 2.071 -0.84 3.946 -2.197 5.303 c -1.357 1.358 -3.232 2.197 -5.303 2.197 h 0 H 64.973 c -0.116 -1.043 -0.587 -1.978 -1.291 -2.682 c -0.814 -0.814 -1.94 -1.318 -3.182 -1.318 c -1.243 0 -2.368 0.504 -3.182 1.318 c -0.704 0.704 -1.175 1.64 -1.29 2.682 h 0 h -48.028 c -2.071 0 -3.946 -0.84 -5.303 -2.197 c -1.358 -1.357 -2.197 -3.232 -2.197 -5.303 h 0 V 8 c 0 -2.071 0.84 -3.946 2.197 -5.303 c 1.357 -1.358 3.232 -2.197 5.303 -2.197 h 48.027 c 0.116 1.043 0.587 1.978 1.291 2.682 c 0.814 0.814 1.94 1.318 3.182 1.318 c 1.243 0 2.368 -0.504 3.182 -1.318 c 0.704 -0.704 1.175 -1.64 1.29 -2.682 H 64.972 z" transform="translate(-1024 -2912) translate(80 2252) translate(0 460) translate(464) translate(480) translate(0 200)"></path><g strokeDasharray="2 4" strokeLinecap="square"><path d="M0.5 0L0.5 48" transform="translate(-1024 -2912) translate(80 2252) translate(0 460) translate(464) translate(480) translate(0 200) translate(60 8)"></path></g></g></g></g></g></g></g></g></svg>
-                <Box className="cart-coupon__content">
-                  <Box p={1}>
-                    <img src={coupon.img} alt="" />
-                  </Box>
-                  <Box className="cart-coupon__right">
-                    <Typography fontSize="13px" fontWeight="500">{`Giảm ${(couponValue || 0) / 1000}K`}</Typography>
-                    <Box>
-                      <InfoIcon sx={{ color: "#1890ff" }} />
-                      <Button onClick={unchooseCoupon} className="cart-coupon__unchoose" variant="contained">Bỏ chọn</Button>
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            }
-            <Box onClick={handleOpen} className="cart-coupon__showmore">
-              <DiscountIcon sx={{ height: "18px", color: "#0b74e5" }} /> Chọn hoặc nhập Mã Khuyến Mãi khác
-            </Box>
-          </Box> */}
-
             <Box>
               <Box className="cart-summary">
                 <Box py={1}>
@@ -359,7 +295,7 @@ function Payment() {
                   <Box className="cart-summary__price">
                     <span> Giảm giá</span>
                     <span style={{ color: "#00AB56" }}>
-                      {numWithCommas(-(couponValue || 0))} ₫
+                      {numWithCommas(-0)} ₫
                     </span>
                   </Box>
                   <Box className="cart-summary__divider"></Box>
@@ -372,18 +308,6 @@ function Payment() {
                   </Box>
                 </Box>
               </Box>
-              {/* <Button
-                variant="contained"
-                onClick={handleSubmitOrderFake}
-                sx={{
-                  width: "100%",
-                  height: "42px",
-                  backgroundColor: "#ff424e",
-                  "&:hover": { opacity: 0.8, backgroundColor: "#ff424e" },
-                }}
-              >
-                {loading && <Loading />} Mua hàng
-              </Button> */}
               <button
                 onClick={handleSubmit}
                 style={{
@@ -402,13 +326,6 @@ function Payment() {
               >
                 {loading && <Loading />} Mua hàng
               </button>
-              {linkMomo ? (
-                <Typography
-                  style={{ fontSize: "16px", fontWeight: 500, color: "black", marginBottom: "10px", backgroundColor: "#FFFFFF", padding: "5px", display: "flex" }}
-                >
-                  Vui lòng thành toán qua: <a href={linkMomo} onClick={handleOnlickMomo} target="_blank"  style={{color: "#3D8B91", fontWeight:"700", fontSize: "16px", paddingTop: "2px", marginLeft: "10px"}}>Link</a>
-                </Typography>
-              ): <></>}
             </Box>
           </Grid>
         </Grid>
@@ -434,8 +351,7 @@ const paymentMethods = [
     id: "1",
     display: "Thanh toán bằng Momo",
     value: "1",
-    image:
-      "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
+    image: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
   },
 ];
 

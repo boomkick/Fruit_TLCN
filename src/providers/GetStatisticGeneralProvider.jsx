@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import apiProduct from "../apis/apiProduct";
 import apiStatistics from "../apis/apiStatistic";
 
 export const GetStatisticGeneral = React.createContext();

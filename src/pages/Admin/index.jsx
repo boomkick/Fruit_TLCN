@@ -57,6 +57,7 @@ import Dashboard from "./Dashboard"
 import Inventory from "./Inventory";
 import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
 import StatisticInventory from "./Inventory/StatisticInventory";
+import Review from "./Review";
 
 const drawerWidth = 240;
 
@@ -563,6 +564,15 @@ function Admin() {
               <Routes>
                 <Route index element={<User />} />
                 <Route path="update-role/" element={<UpdateRoleUser />} />
+              </Routes>
+            }
+          />
+          <Route
+            path="review/*"
+            element={
+              <Routes>
+                <Route index element={<Review />} />
+                {/* <Route path="update-role/" element={<UpdateRoleUser />} /> */}
               </Routes>
             }
           />

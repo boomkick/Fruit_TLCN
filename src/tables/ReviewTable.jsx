@@ -117,8 +117,8 @@ export default function ReviewTable(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.data.reviews
-              ? props.data.reviews.map((item) => {
+            {props.data?.reviews
+              ? props.data?.reviews.map((item) => {
                   return (
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -173,7 +173,7 @@ export default function ReviewTable(props) {
               : null}
           </TableBody>
         </Table>
-        {props.data.maxPage >= 1 ? (
+        {props.data?.maxPage >= 1 ? (
           <Stack
             spacing={2}
             width={"100%"}
@@ -184,8 +184,8 @@ export default function ReviewTable(props) {
             pb={2}
           >
             <Pagination
-              count={props.data.maxPage}
-              page={props.data.currentPage}
+              count={props.data?.maxPage}
+              page={props.data?.currentPage}
               onChange={props.handleSetPage}
               color="primary"
             />

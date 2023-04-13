@@ -12,6 +12,7 @@ import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
 import apiProduct from "../apis/apiProduct";
 import apiReview from "../apis/apiReview";
+import { useParams } from "react-router-dom";
 
 ReviewSearchForm.propTypes = {
   page: PropTypes.number.isRequired,
@@ -26,7 +27,8 @@ export default function ReviewSearchForm(props) {
   };
 
   // Theo id sản phẩm
-  const [productId, setProductId] = useState(null);
+  const id = useParams().id;
+  const [productId, setProductId] = useState(id ? {id: id, label: ""} : null);
   const [productSuggests, setProductSuggests] = useState([]);
   useEffect(() => {
     const loadProductSuggest = async () => {
@@ -48,6 +50,9 @@ export default function ReviewSearchForm(props) {
       let param = {};
       if (props.page) {
         param["page"] = props.page;
+      }
+      if (productId) {
+        param["strProductId"] = productId.id;
       }
       apiReview
         .getReviewsByAdmin(param)

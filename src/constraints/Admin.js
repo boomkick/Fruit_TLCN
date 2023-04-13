@@ -39,7 +39,7 @@ export const sidebar = [
     },
     {
         id: 5,
-        text: 'Cập nhật quyền',
+        text: 'Người dùng',
         icon: GroupOutlinedIcon,
         link: '/admin/user'
     },

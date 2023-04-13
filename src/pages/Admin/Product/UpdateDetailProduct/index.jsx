@@ -25,6 +25,7 @@ import apiProduct from "../../../../apis/apiProduct";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 
 function UpdateDetailProduct() {
   const { id } = useParams();
@@ -750,7 +751,15 @@ function UpdateDetailProduct() {
           </Button>
 
           <Stack justifyContent="end" flexDirection={"row"}>
-            
+          <Button
+              variant="contained"
+              onClick={() => navigate(`/admin/review/${id}`)}
+              sx={{ marginRight: "10px", width: "120px" }}
+              startIcon={<RateReviewOutlinedIcon />}
+              disable = {loadingUpdateProduct}
+            >
+              {"Đánh giá"}
+            </Button>
             <Button
               variant="contained"
               onClick={handleUpdate}

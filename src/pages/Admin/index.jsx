@@ -583,6 +583,7 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Review />} />
+                <Route path=":id" element={<Review />} />
                 {/* <Route path="update-role/" element={<UpdateRoleUser />} /> */}
               </Routes>
             }

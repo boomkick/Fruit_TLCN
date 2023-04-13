@@ -6,9 +6,7 @@ import {
 import LoadingAPI from '../components/LoadingAPI';
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../components/CardProduct";
-import { Pagination, Navigation, Autoplay } from "swiper";
-import { Stack, Button, Box } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
+import { Pagination, Navigation } from "swiper";
 
 const GetTop8ProductConsumer = () => {
     const Top8ProductData = React.useContext(GetTop8Product)

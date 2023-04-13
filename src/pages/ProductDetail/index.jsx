@@ -14,6 +14,7 @@ import { Pagination as MuiPagination } from "@mui/material";
 import apiReview from "../../apis/apiReview";
 import GetTop8ProductProvider from "../../providers/GetTop8ProductProvider";
 import GetTop8ProductConsumer from "../../consumers/GetTop8ProductConsumer";
+import { numWithCommas } from "../../constraints/Util";
 
 function ProductDetail(props) {
   const user = useSelector((state) => state.auth.user);

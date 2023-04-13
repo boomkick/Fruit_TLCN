@@ -1,11 +1,8 @@
 import React from "react";
 import "./CardProduct.scss";
-import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
+import { Card, CardContent, CardMedia, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-
-//import img
-import img from "../../assets/img/product_nho_mau_don_han_quoc.jpg";
-
+import { numWithCommas } from "../../constraints/Util";
 function CardProduct({ data }) {
   return (
     <Link
@@ -49,7 +46,7 @@ function CardProduct({ data }) {
             <p className="card__content-name">{data?.name}</p>
             <p className="card__content-category">{data?.category?.name ? data?.category?.name : "Danh mục"}</p>
           </Box>
-          <p className="card__content-price" align="left">{data?.price}₫</p>
+          <p className="card__content-price" align="left">{numWithCommas(data?.price)}₫</p>
         </CardContent>
       </Card>
     </Link>

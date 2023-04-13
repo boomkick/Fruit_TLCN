@@ -21,6 +21,7 @@ import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { numWithCommas } from "../../constraints/Util";
 
 function DetailProduct({ data }) {
   const user = useSelector((state) => state.auth.user);
@@ -120,7 +121,7 @@ function DetailProduct({ data }) {
           {data?.discount ? (
             <div className="detailProduct__info-price">
               <h4 className="detailProduct__info-price-original">
-                {data?.price}đ
+                {data?.price ? numWithCommas(data?.price) : 0}đ
               </h4>
               <h4 className="detailProduct__info-price-sale">
                 {data?.discount}đ
@@ -128,7 +129,7 @@ function DetailProduct({ data }) {
             </div>
           ) : (
             <div className="detailProduct__info-price">
-              <h4 className="detailProduct__info-price-sale">{data?.price}đ</h4>
+              <h4 className="detailProduct__info-price-sale">{data?.price ? numWithCommas(data?.price) : 0}đ</h4>
             </div>
           )}
           <div className="detailProduct__info-rate">

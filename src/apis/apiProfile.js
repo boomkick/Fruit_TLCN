@@ -34,8 +34,27 @@ const apiProfile = {
         const res = await axiosClientWithToken.put('/account/updateRole', params)
         return res.data;
     },
-    
-
+    getUserByAdmin: async (params) => {
+        const res = await axiosClientWithToken.get(`/account/admin/manageUser?${getSearchParams(params)}`);
+        return res.data;
+    },
+    getEmployeeByAdmin: async (params) => {
+        const res = await axiosClientWithToken.get(`/account/admin/manageemployee?${getSearchParams(params)}`);
+        return res.data;
+    },
+    getEmployeeByAdminWithID: async (params) => {
+        const res = await axiosClientWithToken.get(`/account/admin/account/${params.id}`);
+        return res.data;
+    },
 }
     
 export default apiProfile;
+
+function getSearchParams(params) {
+    let search = "";
+    for (let item in params) {
+      search = search + item.toString() + "=" + params[item] + "&";
+    }
+    search = search.slice(0, -1);
+    return search;
+  }

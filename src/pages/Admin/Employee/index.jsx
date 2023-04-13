@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import UserSearchForm from "../../../forms/UserSearchForm";
-import UserTable from "../../../tables/UserTable";
+import EmployeeSearchForm from "../../../forms/EmployeeSearchForm";
+import EmployeeTable from "../../../tables/EmployeeTable";
 import { Grid } from "@mui/material";
-export default function User() {
+export default function Employee() {
   const [data, setData] = useState({});
   const handleSetData = React.useCallback((value) => {
     setData(value);
@@ -16,8 +16,8 @@ export default function User() {
   return (
     <>
       <Grid container style={{ padding: "24px", backgroundColor: "#fff" }}>
-        <UserSearchForm handleSetData={handleSetData} page={page} />
-        <UserTable
+        <EmployeeSearchForm handleSetData={handleSetData} page={page} />
+        <EmployeeTable
           data={data}
           handleSetPage={handleSetPage}
         />

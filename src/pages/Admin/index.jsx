@@ -58,6 +58,8 @@ import Inventory from "./Inventory";
 import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
 import StatisticInventory from "./Inventory/StatisticInventory";
 import Review from "./Review";
+import Employee from "./Employee";
+import UpdateRoleEmployee from "./Employee/UpdateRoleEmployee";
 
 const drawerWidth = 240;
 
@@ -563,7 +565,16 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<User />} />
-                <Route path="update-role/" element={<UpdateRoleUser />} />
+                <Route path="update-role/:id" element={<UpdateRoleUser />} />
+              </Routes>
+            }
+          />
+          <Route
+            path="employee/*"
+            element={
+              <Routes>
+                <Route index element={<Employee />} />
+                <Route path="update-role/:id" element={<UpdateRoleEmployee />} />
               </Routes>
             }
           />

@@ -132,7 +132,7 @@ function DetailOrder() {
                                 <Box>{numWithCommas(item.product.price || 0)}₫</Box>
                                 <Box>{numWithCommas(item.quantity || 0)}</Box>
                                 <Box>{numWithCommas(item.discount || 0)} ₫</Box>
-                                <Box>{numWithCommas(item.price|| 0)} ₫</Box>
+                                <Box>{numWithCommas((item.product.price * item.quantity) || 0)} ₫</Box>
                             </Stack>
                         )
                     }

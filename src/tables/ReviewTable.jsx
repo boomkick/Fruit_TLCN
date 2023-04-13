@@ -141,13 +141,13 @@ export default function ReviewTable(props) {
                             <InfoOutlinedIcon
                               variant="Outlined"
                               cursor="pointer"
-                              // sx={{"& :hover": green[800] }}
+                              sx={{color: green[600] }}
                               onClick={() => {
                                 navigate(`/admin/review/detail/${item.id}`);
                               }}
                             />
                           </Stack>
-                          <Stack p={1}>
+                          {/* <Stack p={1}>
                             <EditOutlinedIcon
                               variant="Outlined"
                               cursor="pointer"
@@ -156,7 +156,7 @@ export default function ReviewTable(props) {
                                 navigate(`/admin/inventory/detail/${item.id}`);
                               }}
                             />
-                          </Stack>
+                          </Stack> */}
                           <Stack p={1}>
                             <DeleteOutlinedIcon
                               variant="Outlined"

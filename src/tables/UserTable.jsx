@@ -154,27 +154,34 @@ export default function UserTable(props) {
                           alignItems={"center"}
                         >
                           <Stack p={1}>
-                            <Stack p={1}>
-                              {item?.status === 0 ? (
-                                <AccountCircleIcon
-                                  variant="Outlined"
-                                  onClick={() => openModalDelete(item)}
-                                  sx={{
-                                    color: green[500],
-                                    "& :hover": green[700],
-                                  }}
-                                  cursor="pointer"
-                                />
-                              ) : (
-                                <NoAccountsIcon
-                                  variant="Outlined"
-                                  onClick={() => openModalDelete(item)}
-                                  sx={{ color: red[500], "& :hover": red[700] }}
-                                  cursor="pointer"
-                                />
-                              )}
-                            </Stack>
+                            <InfoOutlinedIcon
+                              variant="Outlined"
+                              onClick={() => navigate(`${item.id}`)}
+                              sx={{ color: green[500], "& :hover": green[700] }}
+                              cursor="pointer"
+                            />
                           </Stack>
+                          <Stack p={1}>
+                            {item?.status === 0 ? (
+                              <AccountCircleIcon
+                                variant="Outlined"
+                                onClick={() => openModalDelete(item)}
+                                sx={{
+                                  color: green[500],
+                                  "& :hover": green[700],
+                                }}
+                                cursor="pointer"
+                              />
+                            ) : (
+                              <NoAccountsIcon
+                                variant="Outlined"
+                                onClick={() => openModalDelete(item)}
+                                sx={{ color: red[500], "& :hover": red[700] }}
+                                cursor="pointer"
+                              />
+                            )}
+                          </Stack>
+                          
                         </Stack>
                       </TableCell>
                     </TableRow>

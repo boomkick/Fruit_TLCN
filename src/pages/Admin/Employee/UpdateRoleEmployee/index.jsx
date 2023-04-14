@@ -15,7 +15,6 @@ function UpdateRoleEmployee() {
         apiProfile
         .getEmployeeByAdminWithID({id: id})
         .then((response) => {
-            console.log("response: ", response.data);
             setEmail(response.data.email)
             setEmployeeRole(response.data.role)
             setSalary(response.data.salary)

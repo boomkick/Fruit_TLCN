@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import "./Payment.scss";
 import { Grid, Typography, Box, Stack, Radio, RadioGroup } from "@mui/material";
-
 import { numWithCommas } from "../../constraints/Util";
 import { useDispatch, useSelector } from "react-redux";
-
 import ChooseAddress from "../../components/ChooseAddress";
 import { Link, useNavigate } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
@@ -23,7 +21,7 @@ function Payment() {
   const navigate = useNavigate();
 
   // Tính tổng giá tiền, phí vận chuyển, mã giảm giá nếu có
-  const feeShip = 15000;
+  const feeShip = 0;
   useEffect(() => {
     const calcPrice = () => {
       const total = CartItems.reduce(
@@ -288,10 +286,10 @@ function Payment() {
                     <span>Tạm tính</span>
                     <span>{numWithCommas(totalPrice)} ₫</span>
                   </Box>
-                  <Box className="cart-summary__price">
+                  {/* <Box className="cart-summary__price">
                     <span>Phí vận chuyển</span>
                     <span>{numWithCommas(feeShip)} ₫</span>
-                  </Box>
+                  </Box> */}
                   <Box className="cart-summary__price">
                     <span> Giảm giá</span>
                     <span style={{ color: "#00AB56" }}>

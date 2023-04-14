@@ -3,7 +3,6 @@ import {
   FormControl,
   Stack,
   Typography,
-  Autocomplete,
   TextField,
   Select,
   MenuItem,
@@ -13,7 +12,6 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
-import apiProduct from "../apis/apiProduct";
 import apiProfile from "../apis/apiProfile";
 import { Link } from "react-router-dom";
 
@@ -31,9 +29,8 @@ const keyWordTypeItems = [
 // Remember to subtract 1 unit when sent to BE
 const roleItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
-  { id: 1, label: "ROLE_USER", name: "Người dùng" },
-  { id: 2, label: "ROLE_EMPLOYEE", name: "Nhân viên" },
-  { id: 3, label: "ROLE_ADMIN", name: "Quản trị viên" },
+  { id: 1, label: "ROLE_EMPLOYEE", name: "Nhân viên" },
+  { id: 2, label: "ROLE_ADMIN", name: "Quản trị viên" },
 ];
 
 export default function EmployeeSearchForm(props) {
@@ -63,7 +60,7 @@ export default function EmployeeSearchForm(props) {
         param["keyWord"] = keyWord;
       }
       if (role !== 0) {
-        param["role"] = roleItems.find((item) => item.id === role).id - 1;
+        param["role"] = roleItems.find((item) => item.id === role).id;
       }
       if (props.page) {
         param["page"] = props.page;
@@ -89,7 +86,7 @@ export default function EmployeeSearchForm(props) {
         param["keyWord"] = keyWord;
       }
       if (role !== 0) {
-        param["role"] = roleItems.find((item) => item.id === role).id - 1;
+        param["role"] = roleItems.find((item) => item.id === role).id;
       }
       apiProfile
         .getEmployeeByAdmin(param)

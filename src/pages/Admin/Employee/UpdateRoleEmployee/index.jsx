@@ -35,7 +35,7 @@ function UpdateRoleEmployee() {
     }
 
     // Nhập email
-    const [salary, setSalary] = useState("")
+    const [salary, setSalary] = useState(null)
     const handleChangeSalary = (event) => {
         setSalary(event.target.value);
     }
@@ -44,7 +44,7 @@ function UpdateRoleEmployee() {
         const params = {
             "email": email,
             "role": employeeRole,
-            "salary": salary
+            "salary": Number(salary)
         }
         apiProfile.putUpdateRole(params)
             .then((res) => {

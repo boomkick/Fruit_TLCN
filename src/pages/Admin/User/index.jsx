@@ -20,6 +20,7 @@ export default function User() {
         <UserTable
           data={data}
           handleSetPage={handleSetPage}
+          handleSetData={handleSetData}
         />
       </Grid>
     </>

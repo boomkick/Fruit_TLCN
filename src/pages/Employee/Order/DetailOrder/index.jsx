@@ -12,7 +12,6 @@ import apiLocation from '../../../../apis/apiLocation'
 function DetailOrder() {
   const id = useParams().id;
   const [order, setOrder] = useState(null);
-  const [listOrder, setListOrder] = useState([]);
   const navigate = useNavigate()
 
   // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
@@ -192,17 +191,6 @@ function DetailOrder() {
                   >
                     Viết nhận xét
                   </Button>
-                  {/* <Button
-                    variant="outlined"
-                    sx={{
-                      fontSize: "12px",
-                      width: "71px",
-                      height: "30px",
-                      padding: 0,
-                    }}
-                  >
-                    Mua lại
-                  </Button> */}
                 </Stack>
               </Stack>
             </Stack>
@@ -243,7 +231,7 @@ function DetailOrder() {
               Phí vận chuyển
             </Typography>
             <Typography className="detailOrder__summary-value">
-              {numWithCommas(order?.feeShip || 15000)} ₫
+              {numWithCommas(order?.feeShip || 0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">

@@ -34,6 +34,10 @@ const apiProfile = {
         const res = await axiosClientWithToken.put('/account/updateRole', params)
         return res.data;
     },
+    updateUserStatus: async (params) => {
+        const res = await axiosClientWithToken.put('/account/admin/updateUserStatus', params)
+        return res.data;
+    },
     getUserByAdmin: async (params) => {
         const res = await axiosClientWithToken.get(`/account/admin/manageUser?${getSearchParams(params)}`);
         return res.data;

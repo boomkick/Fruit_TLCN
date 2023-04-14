@@ -155,7 +155,7 @@ function DetailOrder() {
                         </Stack>
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Phí vận chuyển</Typography>
-                            <Typography className="detailOrder__summary-value">{numWithCommas(order?.feeShip || 15000)} ₫</Typography>
+                            <Typography className="detailOrder__summary-value">{numWithCommas(order?.feeShip || 0)} ₫</Typography>
                         </Stack>
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Tổng cộng</Typography>

@@ -40,7 +40,7 @@ function FilterProduct(props) {
   const [, setRenderCount] = useState(0);
 
   useEffect(() => {
-    setIdCategory(id)
+    setIdCategory(id || "")
     setRenderCount(count => count + 1);
   }, [location.pathname, id]);
 

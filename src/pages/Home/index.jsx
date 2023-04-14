@@ -3,8 +3,7 @@ import { Stack, Button, Box } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate } from "react-router-dom";
-import { Pagination, Navigation, Autoplay } from "swiper";
-import { Pagination as MuiPagination } from "@mui/material";
+import { Pagination, Navigation, Autoplay, EffectCreative } from "swiper";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
@@ -63,7 +62,18 @@ function SlideBackGround() {
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
-        modules={[Autoplay, Navigation, Pagination]}
+        grabCursor={true}
+        effect={"creative"}
+        creativeEffect={{
+          prev: {
+            shadow: true,
+            translate: [0, 0, -400],
+          },
+          next: {
+            translate: ["100%", 0, 0],
+          },
+        }}
+        modules={[EffectCreative, Autoplay, Navigation, Pagination]}
         slidesPerView={1}
         id="slider-home"
         className="mySwiper "

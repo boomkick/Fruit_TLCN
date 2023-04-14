@@ -6,7 +6,7 @@ import {
 import LoadingAPI from '../components/LoadingAPI';
 import { Swiper, SwiperSlide } from "swiper/react";
 import CardProduct from "../components/CardProduct";
-import { Pagination, Navigation } from "swiper";
+import { Pagination } from "swiper";
 
 const GetTop8ProductConsumer = () => {
     const Top8ProductData = React.useContext(GetTop8Product)
@@ -22,8 +22,7 @@ const GetTop8ProductConsumer = () => {
                 pagination={{
                   clickable: true,
                 }}
-                // navigation={true}
-                modules={[Pagination, Navigation]}
+                modules={[Pagination]}
                 className="mySwiper"
               >
                 {Top8ProductData ? Top8ProductData.map((item) => (

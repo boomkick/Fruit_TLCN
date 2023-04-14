@@ -22,7 +22,7 @@ const GetTop8ProductConsumer = () => {
                 pagination={{
                   clickable: true,
                 }}
-                navigation={true}
+                // navigation={true}
                 modules={[Pagination, Navigation]}
                 className="mySwiper"
               >

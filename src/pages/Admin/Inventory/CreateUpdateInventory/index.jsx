@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React from "react";
 import { useEffect, useState } from "react";
-//  import "./CruCategory.scss";
 import apiInventory from "../../../../apis/apiInventory";
 import apiProduct from "../../../../apis/apiProduct";
 import { toast } from "react-toastify";
@@ -29,8 +28,8 @@ CreateUpdateInventory.propTypes = {
 
 const unitByItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
-  { id: 1, label: "WEIGHT", name: "Trọng lượng" },
-  { id: 2, label: "UNIT", name: "Đơn vị" },
+  { id: 1, label: "UNIT", name: "Đơn vị" },
+  { id: 2, label: "WEIGHT", name: "Trọng lượng" },
 ];
 
 function CreateUpdateInventory(props) {
@@ -44,8 +43,7 @@ function CreateUpdateInventory(props) {
   const [quantity, setQuantity] = useState(null);
   const [importPrice, setImportPrice] = useState(null);
   const [description, setDescription] = useState(null);
-  const [supplierId, setSupplierId] = useState(null);
-  const [unit, setUnit] = useState(null);
+  const [unit, setUnit] = useState(1);
   const [productSuggests, setProductSuggests] = useState([]);
 
   const [deliveryDate, setDeliveryDate] = useState(null);
@@ -85,8 +83,7 @@ function CreateUpdateInventory(props) {
           setQuantity(res.data.quantity);
           setImportPrice(res.data.importPrice);
           setDescription(res.data.description);
-          setSupplierId(res.data.supplier.id);
-          setUnit(res.data.unit);
+          setUnit(res.data.unit + 1);
           setDeliveryDate(res.data.deliveryDate);
           setExpireDate(res.data.expireDate);
         })
@@ -107,16 +104,6 @@ function CreateUpdateInventory(props) {
   }, []);
 
   const handleUpdate = () => {
-    const params = {
-      productId: Number(productId?.id),
-      quantity: Number(quantity),
-      importPrice: Number(importPrice),
-      description: description,
-      supplierId: Number(supplierId),
-      unit: unit === 1 ? 1 : 0,
-      deliveryDate: deliveryDate.toString("YYYY-MM-DD"),
-      expireDate: expireDate.toString("YYYY-MM-DD"),
-    };
     if (!unit) {
       toast.warning("Gía trị đơn vị không được để mặc định");
       return;
@@ -127,7 +114,6 @@ function CreateUpdateInventory(props) {
         quantity &&
         importPrice &&
         description &&
-        supplierId &&
         unit &&
         deliveryDate &&
         expireDate &&
@@ -136,6 +122,16 @@ function CreateUpdateInventory(props) {
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
     } else {
+      const params = {
+        productId: Number(productId?.id),
+        quantity: Number(quantity),
+        importPrice: Number(importPrice),
+        description: description,
+        // supplierId: Number(supplierId),
+        unit: unit === 1 ? 1 : 0,
+        deliveryDate: deliveryDate.format("YYYY-MM-DD"),
+        expireDate: expireDate.format("YYYY-MM-DD"),
+      };
       apiInventory
         .putInventory(params, id)
         .then((res) => {
@@ -149,23 +145,12 @@ function CreateUpdateInventory(props) {
   };
 
   const handleSave = () => {
-    const params = {
-      productId: Number(productId?.id),
-      quantity: Number(quantity),
-      importPrice: Number(importPrice),
-      description: description,
-      supplierId: Number(supplierId),
-      unit: unit === 1 ? 1 : 0,
-      deliveryDate: deliveryDate.format("YYYY-MM-DD"),
-      expireDate: expireDate.format("YYYY-MM-DD"),
-    };
     if (
       !(
         productId &&
         quantity &&
         importPrice &&
         description &&
-        supplierId &&
         unit &&
         deliveryDate &&
         expireDate
@@ -174,6 +159,16 @@ function CreateUpdateInventory(props) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return;
     } else {
+      const params = {
+        productId: Number(productId?.id),
+        quantity: Number(quantity),
+        importPrice: Number(importPrice),
+        description: description,
+        // supplierId: Number(supplierId),
+        unit: unit === 1 ? 1 : 0,
+        deliveryDate: deliveryDate.format("YYYY-MM-DD"),
+        expireDate: expireDate.format("YYYY-MM-DD"),
+      };
       apiInventory
         .postInventory(params)
         .then((res) => {
@@ -210,7 +205,7 @@ function CreateUpdateInventory(props) {
             onChange={(event, value) => {
               setProductId(value);
             }}
-            sx={{ width: 300 }}
+            sx={{ flex: 1 }}
             renderInput={(params) => <TextField {...params} label="Sản phẩm" />}
           />
         </Stack>
@@ -260,19 +255,6 @@ function CreateUpdateInventory(props) {
             value={description}
             onChange={(event) => {
               setDescription(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: 1 }}
-          />
-        </Stack>
-        <Stack direction="row">
-          <Typography sx={{ width: "200px" }}>Nhà cung cấp</Typography>
-          <TextField
-            value={supplierId}
-            onChange={(event) => {
-              setSupplierId(event.target.value);
             }}
             size="small"
             id="outlined-basic"

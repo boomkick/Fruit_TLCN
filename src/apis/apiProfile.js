@@ -50,14 +50,25 @@ const apiProfile = {
         const res = await axiosClientWithToken.get(`/account/admin/account/${params.id}`);
         return res.data;
     },
+    getUserDetailByAdmin: async (params) => {
+        const res = await axiosClientWithToken.get(`/account/admin/userDetail/${params.userId}?${getSearchParams(params, true)}`);
+        return res.data;
+    },
 }
     
 export default apiProfile;
 
-function getSearchParams(params) {
+function getSearchParams(params, isUserID) {
+    isUserID = isUserID || false
     let search = "";
     for (let item in params) {
-      search = search + item.toString() + "=" + params[item] + "&";
+        if (isUserID){
+            if (item !== 'userId'){
+                search = search + item.toString() + "=" + params[item] + "&";    
+            }
+        } else {
+            search = search + item.toString() + "=" + params[item] + "&";
+        }
     }
     search = search.slice(0, -1);
     return search;

@@ -7,8 +7,13 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { orderTabs } from "../constraints/OrderItem";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { green } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 UserDetailCartTable.propTypes = {
   data: PropTypes.object.isRequired,
@@ -16,8 +21,12 @@ UserDetailCartTable.propTypes = {
 };
 
 export default function UserDetailCartTable(props) {
+  const navigate = useNavigate();
   return (
     <>
+    <Grid container spacing={2} mb={3} ml={0.5}>
+      <Typography fontSize={'18px'} fontWeight={'600'}>Tổng giá trị các đơn hàng đã vận chuyển: {props.data.total}</Typography>
+    </Grid>
       <Grid container spacing={2}>
         <Table
           className="tableCategory"
@@ -35,7 +44,7 @@ export default function UserDetailCartTable(props) {
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ width: "20%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "15%", top: "64px", fontSize: "15px" }}
               >
                 Trạng thái
               </TableCell>
@@ -47,9 +56,15 @@ export default function UserDetailCartTable(props) {
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ width: "35%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "30%", top: "64px", fontSize: "15px" }}
               >
                 Mô tả
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ width: "10%", top: "64px", fontSize: "15px" }}
+              >
+                Chi tiết
               </TableCell>
             </TableRow>
           </TableHead>
@@ -64,10 +79,34 @@ export default function UserDetailCartTable(props) {
                       <TableCell align="center">
                         {item.detailLocation}
                       </TableCell>
-                      <TableCell align="center">{item.status}</TableCell>
+                      <TableCell align="center">
+                        {
+                          orderTabs.find((e) => e.id == item?.status)
+                            ?.type
+                        }
+                      </TableCell>
                       <TableCell align="center">{item.createdDate}</TableCell>
                       <TableCell align="center">
                         {item.processDescription}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Stack
+                          display="flex"
+                          flexDirection={"row"}
+                          justifyContent="center"
+                          alignItems={"center"}
+                        >
+                          <Stack>
+                            <InfoOutlinedIcon
+                              variant="Outlined"
+                              cursor="pointer"
+                              sx={{color: green[600] }}
+                              onClick={() => {
+                                navigate(`/admin/order/detail/${item.id}`);
+                              }}
+                            />
+                          </Stack>
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   );

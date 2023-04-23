@@ -428,8 +428,8 @@ function Header() {
                   <Link to="/cart">
                     <Badge
                       color="warning"
-                      badgeContent={cart.length}
-                      invisible={cart.length === 0}
+                      badgeContent={cart?.length}
+                      invisible={cart?.length === 0}
                       showZero
                     >
                       <ShoppingBagIcon sx={{ fontSize: "25px" }} />

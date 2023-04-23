@@ -29,7 +29,10 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { green, red } from "@mui/material/colors";
+import { blue, green, orange, red, yellow } from "@mui/material/colors";
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+
 
 const sortByItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
@@ -278,11 +281,18 @@ function Product() {
           px={2}
         >
           <Typography fontSize="26px">Quản lý sản phẩm</Typography>
-          <Link to="/admin/product/create">
-            <Button variant="outlined" pr={2}>
-              Tạo sản phẩm
-            </Button>
-          </Link>
+          <Stack display={'flex'} direction={'row'}>
+            <Link to="/admin/product/create">
+              <Button variant="outlined" pr={2}  sx={{marginRight: '5px'}}>
+                Tạo sản phẩm
+              </Button>
+            </Link>
+            <Link to="/admin/promotion/create">
+              <Button variant="outlined" pr={2}>
+                Tạo khuyến mãi
+              </Button>
+            </Link>
+          </Stack>
         </Stack>
 
         <Box style={{ backgroundColor: "#fff", p: 2, m: 1 }}>
@@ -614,6 +624,25 @@ function Product() {
                               cursor="pointer"
                             />
                           )}
+                        </Stack>
+                        <Stack p={1}>
+                          <Link
+                            to={`/admin/promotion/${row.id}`}
+                            height={"0px"}
+                          >
+                            {row?.promotion ? (
+                              <LocalOfferIcon
+                              variant="Outlined"
+                              sx={{ color: blue[600], "& :hover": blue[800] }}
+                            />
+                            ) : (
+                              <LocalOfferOutlinedIcon
+                              variant="Outlined"
+                              sx={{ color: blue[800], "& :hover": blue[800] }}
+                            />
+                            )}
+                            
+                          </Link>
                         </Stack>
                       </Stack>
                     </TableCell>

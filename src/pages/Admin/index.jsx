@@ -56,6 +56,7 @@ import StatisticBill from "./Statistic/Bill";
 import Dashboard from "./Dashboard"
 import Inventory from "./Inventory";
 import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
+import CreateUpdatePromotion from "./Promotion";
 import StatisticInventory from "./Inventory/StatisticInventory";
 import Review from "./Review";
 import Employee from "./Employee";
@@ -543,6 +544,15 @@ function Admin() {
                 <Route index element={<Product />} />
                 <Route path="create" element={<CreateDetailProduct />} />
                 <Route path="detail/:id" element={<UpdateDetailProduct />} />
+              </Routes>
+            }
+          />
+          <Route
+            path="promotion/*"
+            element={
+              <Routes>
+                <Route path="create" element={<CreateUpdatePromotion edit={false} />} />
+                <Route path=":id" element={<CreateUpdatePromotion edit={true}/>} />
               </Routes>
             }
           />

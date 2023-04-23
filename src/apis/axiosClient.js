@@ -1,9 +1,5 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import jwt_decode from 'jwt-decode';
-import { logoutSuccess } from '../slices/authSlice';
-// const baseURL='https://playerhostedapitest.herokuapp.com/api/'
-//const baseURL='http://localhost:5000/api'
 const baseURL='https://localhost:7039'
 const apiURL='https://localhost:7039'
 export const axiosClient = axios.create({

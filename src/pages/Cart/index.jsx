@@ -3,7 +3,6 @@ import "./ShoppingCart.scss";
 import {
   Grid,
   Typography,
-  Checkbox,
   Button,
   Stack,
   Box,
@@ -11,18 +10,18 @@ import {
 } from "@mui/material";
 import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-// import { cart } from "../../constraints/Cart"
-import InfoIcon from "@mui/icons-material/Info";
-import DiscountIcon from "@mui/icons-material/Discount";
 import { numWithCommas } from "../../constraints/Util";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCart } from "../../slices/cartSlice";
-
 import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { clearCoupon } from "../../slices/paymentSlice";
 import apiCart from "../../apis/apiCart";
+
+const PromotionTypeEnum = {
+  PRCIE: 0,
+  PERCENTAGE: 1,
+};
 
 function ShoppingCart() {
   const user = useSelector((state) => state.auth.user);
@@ -30,8 +29,6 @@ function ShoppingCart() {
   const [openAddress, setOpenAddress] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [checkAll, setCheckAll] = useState(false);
-  const [couponValue, setCouponValue] = useState(0);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const coupon = useSelector((state) => state.payment.coupon);
@@ -45,21 +42,36 @@ function ShoppingCart() {
     // };
     // loadTitle();
 
-    apiCart.getCart()
+    apiCart
+      .getCart()
       .then((res) => {
         dispatch(updateCart(res?.data));
       })
       .catch((error) => {
         toast.error(error.toString());
-      })
-  }, [])
+      });
+  }, []);
 
   // Caculate sum money
   useEffect(() => {
     const calcPrice = () => {
-      const total = cart.reduce(
-        (total, item) => total + item.quantity * item.product.price,
-        0
+      let total = 0
+      cart?.forEach(
+        (item) => {
+          let promotionPrice = null
+          if (item.product?.promotion) {
+            if (
+              Number(item.product?.promotion.type) ===
+              PromotionTypeEnum.PRCIE.valueOf()
+            ) {
+              promotionPrice = (item.product?.price - item.product?.promotion.value);
+            } else {
+              const percent = item.product?.promotion.value / 100;
+              promotionPrice = (item.product?.price - item.product?.price * percent);
+            }
+          }
+          total += item.quantity * (promotionPrice ? promotionPrice : item.product?.price)
+        }
       );
       setTotalPrice(total);
     };
@@ -90,18 +102,17 @@ function ShoppingCart() {
 
   const navigate = useNavigate();
   const handleBuy = () => {
-    if(cart.length > 0){
+    if (cart?.length > 0) {
       cart.forEach((item) => {
         let param = {
           productId: item.product.id,
-          quantity: item.quantity
-        }
-        apiCart.putCart(param)
-      })
+          quantity: item.quantity,
+        };
+        apiCart.putCart(param);
+      });
       navigate("/payment");
-    }
-    else {
-      toast.info("Hiện bạn chưa có sản phẩm nào trong giỏ cả")
+    } else {
+      toast.info("Hiện bạn chưa có sản phẩm nào trong giỏ cả");
     }
   };
 
@@ -121,9 +132,10 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${cart.length} sản phẩm)`}
+                  {`Sản phẩm (${cart?.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
+                <Stack>Gía giảm</Stack>
                 <Stack>Đơn vị</Stack>
                 <Stack>Giá trị tối thiểu</Stack>
                 <Stack>Số lượng</Stack>
@@ -135,7 +147,7 @@ function ShoppingCart() {
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {cart.map((item) => (
+                {cart?.map((item) => (
                   <CartItem key={item.id} data={item} />
                 ))}
               </Stack>
@@ -148,13 +160,13 @@ function ShoppingCart() {
                 <Box className="cart-summary__divider"></Box>
                 <Box className="cart-summary__price">
                   <span>Tạm tính</span>
-                  <span>{numWithCommas(totalPrice)} ₫</span>
+                  <span>{numWithCommas(totalPrice || 0)} ₫</span>
                 </Box>
                 <Box className="cart-summary__divider"></Box>
                 <Box className="cart-summary__price">
                   <span>Tổng tiền</span>
                   <Box className="cart-summary__valueprice">
-                    <span>{numWithCommas(totalPrice)} ₫</span>
+                    <span>{numWithCommas(totalPrice || 0)} ₫</span>
                     <span>(Đã bao gồm VAT nếu có)</span>
                   </Box>
                 </Box>

@@ -23,21 +23,34 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { numWithCommas } from "../../constraints/Util";
 
+const PromotionTypeEnum = {
+  PRCIE: 0,
+  PERCENTAGE: 1
+}
+
 function DetailProduct({ data }) {
   const user = useSelector((state) => state.auth.user);
   const [productImage, setProductImage] = useState("");
   const status = productStatus.find((item) => item.id == data?.status);
   const [quantity, setQuantity] = useState(1);
+  const [promotionPrice, setPromotionPrice] = useState(null);
   const [ratingStars, setRatingStars] = useState(5);
   const { id } = useParams();
 
   useEffect(() => {
-    setProductImage("")
-  }, [id])
-
+    setProductImage("");
+  }, [id]);
 
   useEffect(() => {
     setRatingStars(data?.rating);
+    if(data?.promotion){
+        if(Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()){
+        setPromotionPrice(data?.price - data?.promotion.value)
+      }else{
+        const percent = data?.promotion.value/100
+        setPromotionPrice(data?.price - data?.price * percent)
+      }
+    }
   }, [data]);
 
   async function handleClickAddItem() {
@@ -56,7 +69,11 @@ function DetailProduct({ data }) {
     await apiCart
       .postCart(param)
       .then((res) => {
-        toast.success("Đã thêm sản phẩm thành công");
+        if (res.status !== 200) {
+          toast.success(res?.message);
+        } else {
+          toast.success("Đã thêm sản phẩm thành công");
+        }
       })
       .catch((error) => {
         toast.error(error.toString());
@@ -118,18 +135,20 @@ function DetailProduct({ data }) {
         <div className="detailProduct__info">
           <h3>{data?.name}</h3>
           <div className="detailProduct__info-underline-title"></div>
-          {data?.discount ? (
+          {data?.promotion ? (
             <div className="detailProduct__info-price">
               <h4 className="detailProduct__info-price-original">
                 {data?.price ? numWithCommas(data?.price) : 0}đ
               </h4>
               <h4 className="detailProduct__info-price-sale">
-                {data?.discount}đ
+                {numWithCommas(promotionPrice || 0)}đ
               </h4>
             </div>
           ) : (
             <div className="detailProduct__info-price">
-              <h4 className="detailProduct__info-price-sale">{data?.price ? numWithCommas(data?.price) : 0}đ</h4>
+              <h4 className="detailProduct__info-price-sale">
+                {data?.price ? numWithCommas(data?.price) : 0}đ
+              </h4>
             </div>
           )}
           <div className="detailProduct__info-rate">

@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./CartItem.scss";
-import { Checkbox, Typography, Dialog, Button, Box, Stack } from "@mui/material";
+import {
+  Typography,
+  Dialog,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { numWithCommas } from "../../constraints/Util";
 import { productUnit } from "../../constraints/Product";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { removeItem, updateItem } from "../../slices/cartSlice";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
+
+const PromotionTypeEnum = {
+  PRCIE: 0,
+  PERCENTAGE: 1,
+};
 
 function CartItem(props) {
   const [data, setData] = useState(props.data);
   const [quantity, setQuantity] = useState(props.data.quantity);
+  const [promotionPrice, setPromotionPrice] = useState(null);
   const dispatch = useDispatch();
 
   // Xử lí button xóa sản phẩm
@@ -31,6 +43,18 @@ function CartItem(props) {
   useEffect(() => {
     setData(props.data);
     setQuantity(props.data.quantity);
+    if (data.product?.promotion) {
+      if (
+        Number(data.product?.promotion.type) ===
+        PromotionTypeEnum.PRCIE.valueOf()
+      ) {
+        setPromotionPrice(data.product?.price - data.product?.promotion.value);
+      } else {
+        const percent = data.product?.promotion.value / 100;
+        setPromotionPrice(data.product?.price - data.product?.price * percent);
+      }
+    }
+    console.log("promotion: ", promotionPrice);
   }, [props.data]);
 
   // Xử lí thêm và giảm số lượng sản phẩm
@@ -42,7 +66,7 @@ function CartItem(props) {
         dispatch(
           updateItem({
             ...data,
-            quantity: data.quantity - 1
+            quantity: data.quantity - 1,
           })
         );
       }
@@ -50,7 +74,7 @@ function CartItem(props) {
       dispatch(
         updateItem({
           ...data,
-          quantity: data.quantity + 1
+          quantity: data.quantity + 1,
         })
       );
     }
@@ -80,12 +104,20 @@ function CartItem(props) {
   return (
     <>
       <Box className="cart-item cart">
-        <Stack direction="row" alignItems="center" className="cart-item__cell cart-item__description">
+        <Stack
+          direction="row"
+          alignItems="center"
+          className="cart-item__cell cart-item__description"
+        >
           {/* <Checkbox checked={data?.choose} onChange={handleChangeChoose} className="cart__checkbox" /> */}
           <img src={data?.product?.image?.url} alt="" />
           <Stack className="cart-item__content">
             <Link to={`/product-detail/${data?.product?.id}`}>
-              <Typography fontSize="13px" className="text-overflow-2-lines" variant="h5">
+              <Typography
+                fontSize="13px"
+                className="text-overflow-2-lines"
+                variant="h5"
+              >
                 {data?.product?.name}
               </Typography>
             </Link>
@@ -95,10 +127,18 @@ function CartItem(props) {
           {numWithCommas(data?.product?.price || 0)} ₫
         </Box>
         <Box className="cart-item__cell cart-item__price">
-          {productUnit.find(item => item.id == data?.product?.unit)?.text}
+          {numWithCommas(
+            (data?.product?.promotion ? promotionPrice : data?.product?.price) || 0
+          )}
+          ₫
         </Box>
         <Box className="cart-item__cell cart-item__price">
-          {data?.product?.unit == 0 ? `${data?.product?.minPurchase} kilogram`: `${data?.product?.minPurchase} phần`}
+          {productUnit.find((item) => item.id == data?.product?.unit)?.text}
+        </Box>
+        <Box className="cart-item__cell cart-item__price">
+          {data?.product?.unit == 0
+            ? `${data?.product?.minPurchase} kilogram`
+            : `${data?.product?.minPurchase} phần`}
         </Box>
         <Box className="cart-item__cell">
           <Box className="cart-item__quantity">
@@ -120,7 +160,7 @@ function CartItem(props) {
           </Box>
         </Box>
         <Box className="cart-item__cell cart-item__total">
-          {numWithCommas(data?.quantity * data?.product?.price)} ₫
+          {numWithCommas(data?.quantity * ((data?.product?.promotion ? promotionPrice : data?.product?.price)))} ₫
         </Box>
         <Box className="cart-item__cell">
           <span style={{ cursor: "pointer" }} onClick={handleClickRemove}>

@@ -14,6 +14,10 @@ function DetailOrder() {
   const [order, setOrder] = useState(null);
   const navigate = useNavigate()
 
+  // Thông tin giá trị đơn hàng
+  const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0)
+  const [discount, SetDiscount] = useState(0)
+
   // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
   const [weight, setWeight] = useState(0);
   const [length, setLength] = useState(0);
@@ -26,6 +30,16 @@ function DetailOrder() {
         .getProcessCart({id: id})
         .then((res) => {
           setOrder(res.data)
+          if(res.data?.cartDetails){
+            let realBill = 0
+            let sumaryBill = 0
+            res.data?.cartDetails.forEach((item) => {
+                realBill += (item?.product?.price * item?.quantity)
+                sumaryBill += (item?.price * item?.quantity)
+            })
+            SetBillWithoutDiscount(realBill)
+            SetDiscount(realBill-sumaryBill)
+        }
         })
         .catch((error) => {
           setOrder(null);
@@ -235,7 +249,7 @@ function DetailOrder() {
               Tạm tính
             </Typography>
             <Typography className="detailOrder__summary-value">
-              {numWithCommas(order?.bill?.total || 0)} ₫
+            {numWithCommas(billWithoutDiscount || 0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">
@@ -243,7 +257,7 @@ function DetailOrder() {
               Giảm giá
             </Typography>
             <Typography className="detailOrder__summary-value">
-              {numWithCommas(order?.discount || 0)} ₫
+            {numWithCommas(discount || 0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">
@@ -251,7 +265,7 @@ function DetailOrder() {
               Phí vận chuyển
             </Typography>
             <Typography className="detailOrder__summary-value">
-              {numWithCommas(order?.feeShip || 0)} ₫
+              {numWithCommas(0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">

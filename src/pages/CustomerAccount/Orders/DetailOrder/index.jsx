@@ -13,15 +13,29 @@ import { numWithCommas } from '../../../../constraints/Util'
 import { paymentMethod } from '../../../../constraints/PaymentMethod'
 import apiLocation from '../../../../apis/apiLocation'
 
+
 function DetailOrder() {
     const id = useParams().id
     const navigate = useNavigate()
     const [order, setOrder] = useState(null)
+    const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0)
+    const [discount, SetDiscount] = useState(0)
+
     useEffect(() => {
         const getData = async () => {
             await apiCart.getCartHistoryById({id: id})
                 .then(res => {
                     setOrder(res.data)
+                    if(res.data?.cartDetails){
+                        let realBill = 0
+                        let sumaryBill = 0
+                        res.data?.cartDetails.forEach((item) => {
+                            realBill += (item?.product?.price * item?.quantity)
+                            sumaryBill += (item?.price * item?.quantity)
+                        })
+                        SetBillWithoutDiscount(realBill)
+                        SetDiscount(realBill-sumaryBill)
+                    }
                 })
                 .catch(error => {
                     setOrder(null)
@@ -131,8 +145,8 @@ function DetailOrder() {
                                 </Stack>
                                 <Box>{numWithCommas(item.product.price || 0)}₫</Box>
                                 <Box>{numWithCommas(item.quantity || 0)}</Box>
-                                <Box>{numWithCommas(item.discount || 0)} ₫</Box>
-                                <Box>{numWithCommas((item.product.price * item.quantity) || 0)} ₫</Box>
+                                <Box>{numWithCommas(((item.product.price - item.price) * item.quantity) || 0)} ₫</Box>
+                                <Box>{numWithCommas((item.price * item.quantity) || 0)} ₫</Box>
                             </Stack>
                         )
                     }
@@ -147,15 +161,15 @@ function DetailOrder() {
 
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Tạm tính</Typography>
-                            <Typography className="detailOrder__summary-value">{numWithCommas(order?.bill?.total || 0)} ₫</Typography>
+                            <Typography className="detailOrder__summary-value">{numWithCommas(billWithoutDiscount || 0)} ₫</Typography> 
                         </Stack>
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Giảm giá</Typography>
-                            <Typography className="detailOrder__summary-value">{numWithCommas(order?.discount || 0)} ₫</Typography>
+                            <Typography className="detailOrder__summary-value">{numWithCommas(discount || 0)} ₫</Typography>
                         </Stack>
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Phí vận chuyển</Typography>
-                            <Typography className="detailOrder__summary-value">{numWithCommas(order?.feeShip || 0)} ₫</Typography>
+                            <Typography className="detailOrder__summary-value">{0} ₫</Typography>
                         </Stack>
                         <Stack py={0.625} direction="row">
                             <Typography className="detailOrder__summary-label">Tổng cộng</Typography>

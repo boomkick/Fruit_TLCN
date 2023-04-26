@@ -36,7 +36,7 @@ function CardProduct({ data }) {
                 style={{
                   width: "36px",
                   height: "30px",
-                  background: "#F4BA36",
+                  background: "#FF0000",
                   padding: "2px",
                   display: "flex",
                   alignItems: "center",

@@ -384,37 +384,6 @@ function SlideHome() {
                 <GetBestProductConsumer/>
               </Box>
 
-
-              {/* top product
-              <Box
-                sx={{
-                  maxWidth: "1170px",
-                  width: "100%",
-                  margin: "0 175px",
-                  padding: "0px 15px 30px",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{
-                    marginBottom: "20px",
-                  }}
-                >
-                  <h2 className="section-title">
-                    <b></b>
-                    <span className="section-title-main">
-                      <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
-                      {"Trái cây được mua nhiều nhất"}
-                    </span>
-                    <b></b>
-                  </h2>
-                </Stack>
-                <GetTop8ProductConsumer />
-              </Box> */}
-
               {/* saleProduct */}
 
               <Box
@@ -440,7 +409,7 @@ function SlideHome() {
                       <CardGiftcardIcon
                         sx={{ marginRight: "12px" }}
                       ></CardGiftcardIcon>
-                      {"Khuyến mãi bùng nổ"}
+                      {"Những sản phẩm bán chạy"}
                     </span>
                     <b></b>
                   </h2>

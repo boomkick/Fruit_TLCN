@@ -11,12 +11,18 @@ const PromotionTypeEnum = {
 
 function CardProduct({ data }) {
   const [percentDiscount, setPercentDiscount] = useState(null);
+  const [promotionPrice, setPromotionPrice] = useState(null);
   useEffect(() => {
     if (data?.promotion) {
       if (Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()) {
-        setPercentDiscount(Math.round((data?.promotion.value / data?.price) * 100));
+        setPercentDiscount(
+          Math.round((data?.promotion.value / data?.price) * 100)
+        );
+        setPromotionPrice(Math.round(data?.price - data?.promotion.value));
       } else {
+        const percent = data?.promotion.value / 100;
         setPercentDiscount(Math.round(data?.promotion.value));
+        setPromotionPrice(Math.round(data?.price - data?.price * percent));
       }
     }
   }, [data]);
@@ -68,9 +74,24 @@ function CardProduct({ data }) {
               {data?.category?.name ? data?.category?.name : "Danh mục"}
             </p>
           </Box>
-          <p className="card__content-price" align="left">
-            {numWithCommas(data?.price)}₫
-          </p>
+          <Box display={"flex"}>
+            <p className="card__content-price" align="left">
+              {numWithCommas(promotionPrice ? promotionPrice : data?.price)}₫
+            </p>
+            {percentDiscount ? (
+              <p
+                style={{
+                  textDecoration: "line-through",
+                  opacity: "0.7",
+                  paddingLeft: "5px",
+                }}
+              >
+                {numWithCommas(data?.price)}₫
+              </p>
+            ) : (
+              <></>
+            )}
+          </Box>
         </CardContent>
       </Card>
     </Link>

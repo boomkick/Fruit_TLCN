@@ -50,6 +50,7 @@ function FilterProduct(props) {
         page: currentPage,
         pageSize: 8,
       };
+      param["isDeleted"] = false
       if (keyWord != null && keyWord !== "") {
         param["keyword"] = keyWord
       }

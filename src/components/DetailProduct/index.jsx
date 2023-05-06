@@ -45,10 +45,10 @@ function DetailProduct({ data }) {
     setRatingStars(data?.rating);
     if(data?.promotion){
         if(Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()){
-        setPromotionPrice(data?.price - data?.promotion.value)
+        setPromotionPrice(Math.round(data?.price - data?.promotion.value))
       }else{
         const percent = data?.promotion.value/100
-        setPromotionPrice(data?.price - data?.price * percent)
+        setPromotionPrice(Math.round(data?.price - data?.price * percent))
       }
     }
   }, [data]);

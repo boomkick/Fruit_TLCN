@@ -23,6 +23,10 @@ const apiProduct = {
         const res = await axiosClientWithToken.get('Product/gettop8product/')
         return res.data;
     },
+    getBestProduct: async () => {
+        const res = await axiosClientWithToken.get('Product/getbestproduct/')
+        return res.data;
+    },
     getProductDetail: async (id) => {
         const res = await axiosClientWithToken.get(`Product/${id}/`)
         return res.data;

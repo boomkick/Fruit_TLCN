@@ -62,10 +62,12 @@ function DetailProduct({ data }) {
       toast.error("Vui lòng chọn số lượng sản phẩm lớn hơn 0");
       return;
     }
+    
     let param = {
       productId: data?.id,
       quantity: quantity,
     };
+
     await apiCart
       .postCart(param)
       .then((res) => {

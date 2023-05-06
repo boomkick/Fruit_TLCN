@@ -19,6 +19,8 @@ import GetTop8ProductProvider from "../../providers/GetTop8ProductProvider";
 import GetAllProductProvider from "../../providers/GetAllProductProvider";
 import GetTop8ProductConsumer from "../../consumers/GetTop8ProductConsumer";
 import GetAllProductConsumer from "../../consumers/GetAllProductConsumer";
+import GetBestProductProvider from "../../providers/GetBestProductProvider";
+import GetBestProductConsumer from "../../consumers/GetBestProductConsumer";
 
 function Home() {
   const address = useSelector((state) => {
@@ -177,6 +179,7 @@ function SlideHome() {
     <>
       <GetAllProductProvider page={currentPage}>
         <GetTop8ProductProvider>
+          <GetBestProductProvider>
           <section className="section" id="section_1">
             <div className="section-content">
               {/* introduce */}
@@ -351,7 +354,38 @@ function SlideHome() {
                 </Box>
               </Stack>
 
-              {/* top product */}
+              {/* best product */}
+              <Box
+                sx={{
+                  maxWidth: "1170px",
+                  width: "100%",
+                  margin: "0 175px",
+                  padding: "0px 15px 30px",
+                }}
+              >
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                  sx={{
+                    marginBottom: "20px",
+                  }}
+                >
+                  <h2 className="section-title">
+                    <b></b>
+                    <span className="section-title-main">
+                      <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
+                      {"Trái cây được mua nhiều nhất"}
+                    </span>
+                    <b></b>
+                  </h2>
+                </Stack>
+                <GetBestProductConsumer/>
+              </Box>
+
+
+              {/* top product
               <Box
                 sx={{
                   maxWidth: "1170px",
@@ -379,7 +413,7 @@ function SlideHome() {
                   </h2>
                 </Stack>
                 <GetTop8ProductConsumer />
-              </Box>
+              </Box> */}
 
               {/* saleProduct */}
 
@@ -448,6 +482,7 @@ function SlideHome() {
               </Box>
             </div>
           </section>
+          </GetBestProductProvider>
         </GetTop8ProductProvider>
       </GetAllProductProvider>
     </>

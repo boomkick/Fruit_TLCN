@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import apiCart from "../apis/apiCart";
 import { numWithCommas } from "../constraints/Util";
-// import { numWithCommas } from "../../constraints/Util";
 
 const AddToCartButton = styled(Button)({
   background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -64,7 +63,7 @@ const GetBestProductConsumer = () => {
             {BestProductData.name}
           </Typography>
           <Typography variant="h5" gutterBottom sx={{ "margin-bottom": "5px" }}>
-            {numWithCommas(BestProductData.price)}₫
+            {numWithCommas(BestProductData.price ? BestProductData.price : 0)}₫
           </Typography>
           <Typography variant="body2" gutterBottom mb={3}>
             {BestProductData.description

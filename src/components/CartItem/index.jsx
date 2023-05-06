@@ -54,7 +54,6 @@ function CartItem(props) {
         setPromotionPrice(data.product?.price - data.product?.price * percent);
       }
     }
-    console.log("promotion: ", promotionPrice);
   }, [props.data]);
 
   // Xử lí thêm và giảm số lượng sản phẩm

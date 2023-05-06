@@ -13,7 +13,6 @@ import {
   TextField,
   MenuItem,
   Select,
-  FormControl,
   Button,
   InputBase,
   styled,
@@ -21,6 +20,7 @@ import {
 } from "@mui/material";
 import MaterialUIPickers from "../../../components/DatePicker";
 import PropTypes from "prop-types";
+import { formatDate } from "../../../constraints/Util";
 
 CreateUpdatePromotion.propTypes = {
   edit: PropTypes.bool.isRequired,
@@ -46,6 +46,7 @@ function CreateUpdatePromotion(props) {
   const [expireDate, setExpireDate] = useState(null);
   const handleChangeExpireDate = React.useCallback((date) => {
     setExpireDate(date);
+    console.log("type: ")
   }, []);
 
   useEffect(() => {
@@ -73,9 +74,9 @@ function CreateUpdatePromotion(props) {
           setValue(res.data.value);
           setType(res.data.type);
           setExpireDate(res.data.expireDate);
+          console.log("date source:", res.data.expireDate);
         })
         .catch((error) => {
-          setPromotion({});
         });
     };
     if (edit === true && id) {
@@ -91,18 +92,23 @@ function CreateUpdatePromotion(props) {
   }, []);
 
   const handleUpdate = React.useCallback(() => {
-    if (promotion && !promotion) {
+    console.log("promotion: ", promotion);
+    // console.log("condition: ", promotion !== Object({}));
+    console.log("condition: ", promotion ? "true" : "false");
+    if (promotion && (promotion != {})) {
+      console.log("yes");
       if (!(productId && value && expireDate)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       } else {
+        let expDate = new Date(expireDate)
         const params = {
           productId: Number(productId?.id),
           value: Number(value),
           type: type,
-          expireDate: expireDate.format("YYYY-MM-DD"),
+          expireDate: formatDate(expDate),
         };
         apiPromotion
-          .putProductPromotion(params, id)
+          .putProductPromotion(params, promotion?.id)
           .then((res) => {
             if (res?.status == 200) {
               toast.success("Cập nhật thành công");
@@ -114,6 +120,7 @@ function CreateUpdatePromotion(props) {
           });
       }
     } else {
+      console.log("no");
       if (!(productId && value && expireDate)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
@@ -144,7 +151,8 @@ function CreateUpdatePromotion(props) {
           });
       }
     }
-  }, [productId, value, expireDate]);
+      
+  }, [productId, value, expireDate, promotion]);
 
   const handleSave = React.useCallback(() => {
     if (!(productId && value && expireDate)) {

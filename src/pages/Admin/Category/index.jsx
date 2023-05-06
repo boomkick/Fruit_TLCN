@@ -101,7 +101,7 @@ function Category() {
             </TableRow>
           </TableHead>
           <TableBody>
-            { 
+            { category ?
               category.filter((category) => (category.name.toLowerCase().includes(query)) || (category.parent.toLowerCase().includes(query))).map((item, id) => (
                 <TableRow
                   key={item.id}
@@ -110,7 +110,6 @@ function Category() {
                   <TableCell component="th" scope="row">
                     {item.name}
                   </TableCell>
-                  {/* <TableCell align="left">{item.parent}</TableCell> */}
                   <TableCell >
                     <Stack spacing={1} justifyContent="center" py={1} style={{display: "flex", flexDirection: "row"}}>
                       <Link to={`edit/${item.id}`} >
@@ -122,9 +121,6 @@ function Category() {
                           borderRadius: "5px"
                         }}/>
                       </Link>
-                      {/* <Button onClick={() => openDialogDeleteAll(item)} variant="outlined" color="error">
-                        Xóa
-                      </Button> */}
                       <DeleteIcon onClick={() => openDialogDeleteAll(item)} variant="outlined" style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}} 
                       sx={{
                         "&:hover": { color: "#FFFFFF", backgroundColor: "red" }, 
@@ -134,7 +130,7 @@ function Category() {
                     </Stack>
                   </TableCell>
                 </TableRow>
-              ))
+              )) : null
             }
 
           </TableBody>

@@ -14,9 +14,9 @@ function CardProduct({ data }) {
   useEffect(() => {
     if (data?.promotion) {
       if (Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()) {
-        setPercentDiscount((data?.promotion.value / data?.price) * 100);
+        setPercentDiscount(Math.round((data?.promotion.value / data?.price) * 100));
       } else {
-        setPercentDiscount(data?.promotion.value);
+        setPercentDiscount(Math.round(data?.promotion.value));
       }
     }
   }, [data]);

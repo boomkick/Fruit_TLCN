@@ -31,6 +31,11 @@ const typeByItems = [
   { id: 1, label: "PERCENTAGE", name: "Phần trăm" },
 ];
 
+const enableByItems = [
+  { id: 0, label: "FALSE", name: "Không hiệu lực" },
+  { id: 1, label: "TRUE", name: "Có hiệu lực" },
+];
+
 function CreateUpdatePromotion(props) {
   const [id, setId] = useState("");
   const [edit, setEdit] = useState(props.edit);
@@ -42,11 +47,16 @@ function CreateUpdatePromotion(props) {
   const [productId, setProductId] = useState(null);
   const [value, setValue] = useState(null);
   const [type, setType] = useState(1);
+  const handleChangeType = React.useCallback((event) => {
+    setType(event.target.value);
+  }, []);
 
+  const [isEnable, setIsEnable] = useState(1);
+
+  // Ngày hết hạn
   const [expireDate, setExpireDate] = useState(null);
   const handleChangeExpireDate = React.useCallback((date) => {
     setExpireDate(date);
-    console.log("type: ")
   }, []);
 
   useEffect(() => {
@@ -74,10 +84,9 @@ function CreateUpdatePromotion(props) {
           setValue(res.data.value);
           setType(res.data.type);
           setExpireDate(res.data.expireDate);
-          console.log("date source:", res.data.expireDate);
+          setIsEnable(res.data.isEnable ? 1 : 0);
         })
-        .catch((error) => {
-        });
+        .catch((error) => {});
     };
     if (edit === true && id) {
       loaddata();
@@ -92,20 +101,17 @@ function CreateUpdatePromotion(props) {
   }, []);
 
   const handleUpdate = React.useCallback(() => {
-    console.log("promotion: ", promotion);
-    // console.log("condition: ", promotion !== Object({}));
-    console.log("condition: ", promotion ? "true" : "false");
-    if (promotion && (promotion != {})) {
-      console.log("yes");
+    if (promotion && promotion != {}) {
       if (!(productId && value && expireDate)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       } else {
-        let expDate = new Date(expireDate)
+        let expDate = new Date(expireDate);
         const params = {
           productId: Number(productId?.id),
           value: Number(value),
           type: type,
           expireDate: formatDate(expDate),
+          isEnable: isEnable == 1 ? true : false,
         };
         apiPromotion
           .putProductPromotion(params, promotion?.id)
@@ -120,7 +126,6 @@ function CreateUpdatePromotion(props) {
           });
       }
     } else {
-      console.log("no");
       if (!(productId && value && expireDate)) {
         toast.warning("Vui lòng nhập đầy đủ thông tin !!");
         return;
@@ -151,8 +156,7 @@ function CreateUpdatePromotion(props) {
           });
       }
     }
-      
-  }, [productId, value, expireDate, promotion]);
+  }, [productId, value, expireDate, promotion, type, isEnable]);
 
   const handleSave = React.useCallback(() => {
     if (!(productId && value && expireDate)) {
@@ -214,9 +218,7 @@ function CreateUpdatePromotion(props) {
           <Typography sx={{ width: "200px" }}>Loại</Typography>
           <Select
             value={type}
-            onChange={(event) => {
-              setType(event.target.value);
-            }}
+            onChange={(event) => handleChangeType(event)}
             displayEmpty
             inputProps={{ "aria-label": "Without label" }}
             cursor="pointer"
@@ -224,6 +226,28 @@ function CreateUpdatePromotion(props) {
           >
             {typeByItems ? (
               typeByItems.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))
+            ) : (
+              <></>
+            )}
+          </Select>
+        </Stack>
+        <Stack direction="row">
+          <Typography sx={{ width: "200px" }}>Hiệu lực</Typography>
+          <Select
+            value={isEnable}
+            onChange={(event) => {
+              setIsEnable(event.target.value);
+            }}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+            cursor="pointer"
+            sx={{ minWidth: 300, width: "70%" }}
+            disabled={promotion ? false : true}
+          >
+            {enableByItems ? (
+              enableByItems.map((item) => (
                 <MenuItem value={item.id}>{item.name}</MenuItem>
               ))
             ) : (

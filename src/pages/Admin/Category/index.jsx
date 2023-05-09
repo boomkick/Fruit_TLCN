@@ -102,7 +102,7 @@ function Category() {
           </TableHead>
           <TableBody>
             { category ?
-              category.filter((category) => (category.name.toLowerCase().includes(query)) || (category.parent.toLowerCase().includes(query))).map((item, id) => (
+              category.filter((category) => (category?.name.toLowerCase().includes(query))).map((item, id) => (
                 <TableRow
                   key={item.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

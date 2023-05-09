@@ -11,16 +11,21 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { green, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import apiReview from "../apis/apiReview";
+
+const ReviewResourceType = {
+  Image: 0,
+  Video: 1,
+};
+
 ReviewTable.propTypes = {
   data: PropTypes.object.isRequired,
   handleSetData: PropTypes.func.isRequired,
@@ -67,11 +72,32 @@ export default function ReviewTable(props) {
         toast.error("Xóa đánh giá không thành công!");
       });
   };
+
+  const getVideoReview = (item) => (
+    <video
+      width="180px"
+      height="180px"
+      controls
+      src={item?.url}
+      style={{ marginRight: "10px" }}
+    />
+  );
+
+  const getImageReview = (item) => (
+    <img
+      src={item?.url}
+      width="180px"
+      height="180px"
+      style={{ marginRight: "10px" }}
+      alt=""
+    />
+  );
+
   return (
     <>
       <Grid container spacing={2}>
         <Table
-          className="tableCategory"
+          className="table"
           sx={{ minWidth: "800px" }}
           stickyHeader
           size="medium"
@@ -80,7 +106,7 @@ export default function ReviewTable(props) {
             <TableRow>
               <TableCell
                 align="center"
-                sx={{ width: "10%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "5%", top: "64px", fontSize: "15px" }}
               >
                 STT
               </TableCell>
@@ -88,7 +114,7 @@ export default function ReviewTable(props) {
                 align="center"
                 sx={{ width: "10%", top: "64px", fontSize: "15px" }}
               >
-                ID sản phẩm
+                ID Sản phẩm
               </TableCell>
               <TableCell
                 align="center"
@@ -98,27 +124,45 @@ export default function ReviewTable(props) {
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ width: "40%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "20%", top: "64px", fontSize: "15px" }}
               >
                 Nội dung
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ width: "10%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "5%", top: "64px", fontSize: "15px" }}
               >
-                Đánh giá
+                Điểm
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ width: "20%", top: "64px", fontSize: "15px" }}
+              >
+                Hình
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ width: "20%", top: "64px", fontSize: "15px" }}
+              >
+                Video
               </TableCell>
               <TableCell
                 align="center"
                 sx={{ width: "10%", top: "64px", fontSize: "15px" }}
               >
-                Chi tiết
+                Xử lí
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {props.data?.reviews
               ? props.data?.reviews.map((item) => {
+                  let image = item.reviewResource.find(
+                    (item) => item.type === ReviewResourceType.Image.valueOf()
+                  );
+                  let video = item.reviewResource.find(
+                    (item) => item.type === ReviewResourceType.Video.valueOf()
+                  );
                   return (
                     <TableRow
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -131,13 +175,19 @@ export default function ReviewTable(props) {
                       <TableCell>{item.content}</TableCell>
                       <TableCell align="center">{item.rating}</TableCell>
                       <TableCell align="center">
+                        {image ? getImageReview(image) : ""}
+                      </TableCell>
+                      <TableCell align="center">
+                        {video ? getVideoReview(video) : ""}
+                      </TableCell>
+                      <TableCell align="center">
                         <Stack
                           display="flex"
                           flexDirection={"row"}
                           justifyContent="center"
                           alignItems={"center"}
                         >
-                          <Stack p={1}>
+                          {/* <Stack p={1}>
                             <InfoOutlinedIcon
                               variant="Outlined"
                               cursor="pointer"
@@ -146,7 +196,7 @@ export default function ReviewTable(props) {
                                 navigate(`/admin/review/detail/${item.id}`);
                               }}
                             />
-                          </Stack>
+                          </Stack> */}
                           {/* <Stack p={1}>
                             <EditOutlinedIcon
                               variant="Outlined"

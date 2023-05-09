@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ReviewSearchForm from "../../../forms/ReviewSearchForm";
 import ReviewTable from "../../../tables/ReviewTable";
 import { Grid } from "@mui/material";
+import "./Review.scss";
 export default function Review() {
   const [data, setData] = useState({});
   const handleSetData = React.useCallback((value) => {

@@ -769,20 +769,7 @@ function ProductDetail(props) {
             </Button>
           </Box>
         )}
-
-        <Box
-          sx={{
-            width: "100%",
-            padding: "0px 15px 30px",
-            borderTop: "1px solid #ECECEC",
-          }}
-        >
-          <Box className="detailProduct__title">
-            <h2>{"Top sản phẩm bán chạy"}</h2>
-          </Box>
-          <Typography>TEST</Typography>
-          <VideoInput width={400} height={300} />
-        </Box>
+        <Box height={"10px"} width={"100%"}></Box>
       </Box>
     </GetTop8ProductProvider>
   );

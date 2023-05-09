@@ -7,7 +7,7 @@ import apiProfile from "../../../../apis/apiProfile";
 import { role } from "../../../../constraints/Role"
 
 
-function ReviewDetail() {
+function ReviewsByProduct() {
     const id = useParams().id;
     const navigate = useNavigate();
 
@@ -98,4 +98,4 @@ function ReviewDetail() {
     </>)
 }
 
-export default ReviewDetail
+export default ReviewsByProduct

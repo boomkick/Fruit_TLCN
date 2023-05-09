@@ -59,6 +59,7 @@ import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
 import CreateUpdatePromotion from "./Promotion";
 import StatisticInventory from "./Inventory/StatisticInventory";
 import Review from "./Review";
+import ReviewsByProduct from "./Review/ReviewsByProduct";
 import Employee from "./Employee";
 import UpdateRoleEmployee from "./Employee/UpdateRoleEmployee";
 import DetailUser from "./User/DetailUser";
@@ -595,7 +596,7 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Review />} />
-                <Route path=":id" element={<Review />} />
+                <Route path="product/:id" element={<ReviewsByProduct />} />
                 {/* <Route path="update-role/" element={<UpdateRoleUser />} /> */}
               </Routes>
             }

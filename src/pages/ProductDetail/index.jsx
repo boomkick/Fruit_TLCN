@@ -1,14 +1,7 @@
-import React, { useState, useEffect, Fragment, useCallback } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  Rating,
-  Button,
-  Box,
-  TextareaAutosize,
-  Typography,
-  Stack,
-} from "@mui/material";
+import { Rating, Button, Box, TextareaAutosize, Stack } from "@mui/material";
 import "./ProductDetail.scss";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -22,8 +15,8 @@ import apiReview from "../../apis/apiReview";
 import GetTop8ProductProvider from "../../providers/GetTop8ProductProvider";
 import GetTop8ProductConsumer from "../../consumers/GetTop8ProductConsumer";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import VideoInput from "../../components/VideoInput";
 import EditIcon from "@mui/icons-material/Edit";
+import Loading from "../../components/Loading";
 
 function ProductDetail(props) {
   const user = useSelector((state) => state.auth.user);
@@ -52,6 +45,9 @@ function ProductDetail(props) {
   const location = useLocation();
   const [, setRenderCount] = useState(0);
 
+  // Loading
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setRenderCount((count) => count + 1);
   }, [location.pathname, id]);
@@ -77,7 +73,6 @@ function ProductDetail(props) {
 
   // Xử lí lấy review mới của người dùng
   const handleChangeMyReview = (newReview) => {
-    console.log("newReview: ", newReview);
     setMyReview(newReview);
     if (newReview) {
       setRatingStars(newReview?.rating);
@@ -85,7 +80,6 @@ function ProductDetail(props) {
       if (newReview?.reviewResource) {
         newReview?.reviewResource.forEach((item) => {
           if (item?.type === 0) {
-            console.log("anh: ", item);
             setImageComment(item);
           }
           if (item?.type === 1) setVideoComment(item);
@@ -141,6 +135,7 @@ function ProductDetail(props) {
       return;
     }
     if (ratingStars && contentComment) {
+      setLoading(true);
       let params = new FormData();
       const review = {
         content: contentComment,
@@ -165,6 +160,8 @@ function ProductDetail(props) {
         .catch((error) => {
           toast.error(error);
         });
+
+      setLoading(false);
 
       const getReviews = async () => {
         const params = {
@@ -202,6 +199,7 @@ function ProductDetail(props) {
       return;
     }
     if (ratingStars && contentComment) {
+      setLoading(true);
       let params = new FormData();
       const review = {
         content: contentComment,
@@ -228,6 +226,7 @@ function ProductDetail(props) {
         .catch((error) => {
           toast.error(error);
         });
+      setLoading(false);
 
       const getReviews = async () => {
         const params = {
@@ -537,6 +536,7 @@ function ProductDetail(props) {
               }}
               onClick={handleUpdateComment}
             >
+              {loading && <Loading color="#fff" />}
               Chỉnh sửa
             </Button>
             <Button
@@ -765,6 +765,7 @@ function ProductDetail(props) {
               }}
               onClick={handleSubmitComment}
             >
+              {loading && <Loading color="#fff" />}
               GỬI
             </Button>
           </Box>

@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import MaterialUIPickers from "../../../../components/DatePicker";
 import PropTypes from "prop-types";
+import { formatDate } from "../../../../constraints/Util";
 
 CreateUpdateInventory.propTypes = {
   edit: PropTypes.bool.isRequired,
@@ -122,15 +123,17 @@ function CreateUpdateInventory(props) {
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
     } else {
-      const params = {
+      if(typeof deliveryDate === "object"){}
+        let deliveryDateFormat = typeof deliveryDate === "object" ? deliveryDate.format("YYYY-MM-DD") : deliveryDate;
+        let expireDateFormat = typeof expireDate === "object" ? expireDate.format("YYYY-MM-DD") : expireDate;
+        const params = {
         productId: Number(productId?.id),
         quantity: Number(quantity),
         importPrice: Number(importPrice),
         description: description,
-        // supplierId: Number(supplierId),
         unit: unit === 1 ? 1 : 0,
-        deliveryDate: deliveryDate.format("YYYY-MM-DD"),
-        expireDate: expireDate.format("YYYY-MM-DD"),
+        deliveryDate: deliveryDateFormat,
+        expireDate: expireDateFormat,
       };
       apiInventory
         .putInventory(params, id)
@@ -164,7 +167,6 @@ function CreateUpdateInventory(props) {
         quantity: Number(quantity),
         importPrice: Number(importPrice),
         description: description,
-        // supplierId: Number(supplierId),
         unit: unit === 1 ? 1 : 0,
         deliveryDate: deliveryDate.format("YYYY-MM-DD"),
         expireDate: expireDate.format("YYYY-MM-DD"),

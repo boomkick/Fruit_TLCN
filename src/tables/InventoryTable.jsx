@@ -1,7 +1,5 @@
 import {
   Button,
-  Grid,
-  Link,
   Modal,
   Pagination,
   Stack,

@@ -24,18 +24,15 @@ function ShoppingCart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-  const [data, setData] = useState([]);
+  const [giftCartList, setGiftCartList] = useState([]);
 
   // get cart by user
   useEffect(() => {
     const handleGetData = async () => {
-      let cartDetailList = [];
-      let giftCartList = [];
       await apiCart
         .getCart()
         .then((res) => {
           dispatch(updateCart(res?.data));
-          cartDetailList = res?.data;
         })
         .catch((error) => {
           toast.error(error.toString());
@@ -44,19 +41,19 @@ function ShoppingCart() {
       await apiGiftCart
         .getCurrentGiftCart()
         .then((res) => {
-          giftCartList = res?.data;
+          setGiftCartList(res?.data);
         })
         .catch((error) => {
           toast.error(error.toString());
         });
 
-      setData(groupByGiftCart(giftCartList, cartDetailList));
+      // setData(groupByGiftCart(giftCartList, cart));
     };
     handleGetData();
   }, []);
 
-  const handleChangeData = (data) => {
-    setData(data);
+  const handleChangeGiftCartList = (dataGiftCarts) => {
+    setGiftCartList(dataGiftCarts);
   };
 
   // Caculate sum money
@@ -130,7 +127,7 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${data?.noGiftList?.length} sản phẩm)`}
+                  {`Sản phẩm (${groupByGiftCart(giftCartList, cart)?.noGiftList?.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
                 <Stack>Gía giảm</Stack>
@@ -139,22 +136,22 @@ function ShoppingCart() {
                 <Stack>Số lượng</Stack>
                 <Stack>Tạm tính</Stack>
                 <Stack>
-                  <span onClick={openDialogDeleteAll}>
+                  <span style={{ cursor: "pointer" }} onClick={openDialogDeleteAll}>
                     <DeleteOutlinedIcon />
                   </span>
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {data?.noGiftList?.map((item) => (
-                  <CartItem key={item.id} data={item} dataCart={data} changeData={handleChangeData}/>
+                {groupByGiftCart(giftCartList, cart)?.noGiftList?.map((item) => (
+                  <CartItem key={item.id} data={item}/>
                 ))}
               </Stack>
             </Box>
-            {data?.giftCartList?.map((item) => (
+            {groupByGiftCart(giftCartList, cart)?.giftCartList?.map((item) => (
               <GiftCart
                 data={item}
-                dataCart={data}
-                changeData={handleChangeData}
+                dataGiftCartList={giftCartList}
+                changeGiftCartList={handleChangeGiftCartList}
               />
             ))}
           </Grid>
@@ -202,7 +199,7 @@ function ShoppingCart() {
         <Dialog onClose={closeDialogDeleteAll} open={dialogDelete}>
           <Box className="dialog-removecart">
             <Box className="dialog-removecart__title">
-              <h4>Xoá sản phẩm</h4>
+              <h4>Xoá giỏ hàng</h4>
             </Box>
             <Box className="dialog-removecart__content">
               Bạn có muốn xóa tất cả sản phẩm trong giỏ hàng

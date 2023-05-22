@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./CartItem.scss";
-import { Typography, Dialog, Button, Box, Stack } from "@mui/material";
+import {
+  Typography,
+  Dialog,
+  Button,
+  Box,
+  Stack,
+} from "@mui/material";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { numWithCommas } from "../../constraints/Util";
 import { productUnit } from "../../constraints/Product";
@@ -31,30 +37,6 @@ function CartItem(props) {
   const handleRemoveItem = () => {
     dispatch(removeItem(data));
     apiCart.deleteCart(data.id);
-    if (data?.giftCart) {
-      props.changeData({
-        ...props.dataCart,
-        giftCartList: props.dataCart?.giftCartList.map((giftCart) =>
-          giftCart.cartDetails.filter((item) => item.id != data.id)
-        ),
-      });
-      // props.changeData({
-      //   noGiftList: props.dataCart?.noGiftList.filter(
-      //     (item) => item.id != data.id
-      //   ),
-      //   giftCartList: props.dataCart?.giftCartList.map((giftCart) => giftCart.cartDetails.filter(
-      //     (item) => item.id != data.id
-      //   )),
-      // });
-    } else {
-      props.changeData({
-        ...props.dataCart,
-        noGiftList: props.dataCart?.noGiftList.filter(
-          (item) => item.id != data.id
-        ),
-      });
-    }
-
     setOpen(false);
   };
 
@@ -145,9 +127,7 @@ function CartItem(props) {
         </Box>
         <Box className="cart-item__cell cart-item__price">
           {numWithCommas(
-            (data?.product?.promotion
-              ? promotionPrice
-              : data?.product?.price) || 0
+            (data?.product?.promotion ? promotionPrice : data?.product?.price) || 0
           )}
           ₫
         </Box>
@@ -179,11 +159,7 @@ function CartItem(props) {
           </Box>
         </Box>
         <Box className="cart-item__cell cart-item__total">
-          {numWithCommas(
-            data?.quantity *
-              (data?.product?.promotion ? promotionPrice : data?.product?.price)
-          )}{" "}
-          ₫
+          {numWithCommas(data?.quantity * ((data?.product?.promotion ? promotionPrice : data?.product?.price)))} ₫
         </Box>
         <Box className="cart-item__cell">
           <span style={{ cursor: "pointer" }} onClick={handleClickRemove}>

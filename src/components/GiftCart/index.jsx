@@ -2,19 +2,18 @@ import { Box, Button, Dialog, Stack } from "@mui/material";
 import PropTypes from "prop-types";
 import CartItem from "../CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import React, { useState } from "react";
+import React from "react";
 import { removeGiftCart } from "../../slices/cartSlice";
 import { useDispatch } from "react-redux";
 import apiGiftCart from "../../apis/apiGiftCart";
 
 GiftCart.propTypes = {
-  dataCart: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  changeData: PropTypes.func.isRequired,
+  dataGiftCartList: PropTypes.array.isRequired,
+  changeGiftCartList: PropTypes.func.isRequired,
 };
 
 export default function GiftCart(props) {
-  console.log("data của giftCart", props.data);
   // Xử lí button xóa sản phẩm
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -27,17 +26,15 @@ export default function GiftCart(props) {
   const handleRemoveGiftCart = () => {
     dispatch(removeGiftCart(props.data));
     apiGiftCart.deleteGiftCart(props.data.id);
-    props.changeData({
-      ...props.dataCart,
-      giftCartList: props.dataCart?.giftCartList.filter(
+    props.changeGiftCartList(props.dataGiftCartList.filter(
         (item) => item.id != props.data.id
       ),
-    });
+    );
     setOpen(false);
   };
 
   return (
-    <Box>
+    <Box style={{marginTop: "12px"}}>
       <Box className="cart__heading cart">
         <Stack direction="row">
           {`${props.data.name} (${props.data?.cartDetails?.length} sản phẩm)`}
@@ -49,7 +46,7 @@ export default function GiftCart(props) {
         <Stack>Số lượng</Stack>
         <Stack>Tạm tính</Stack>
         <Stack>
-          <span onClick={handleClickRemove}>
+          <span style={{ cursor: "pointer" }} onClick={handleClickRemove}>
             <DeleteOutlinedIcon />
           </span>
         </Stack>
@@ -66,10 +63,10 @@ export default function GiftCart(props) {
       <Dialog onClose={handleClose} open={open}>
         <Box className="dialog-removecart">
           <Box className="dialog-removecart__title">
-            <h4>Xoá sản phẩm</h4>
+            <h4>Xoá giỏ quà</h4>
           </Box>
           <Box className="dialog-removecart__content">
-            Bạn có muốn xóa sản phẩm đang chọn?
+            Bạn có muốn xóa giỏ quà đang chọn?
           </Box>
           <Box className="dialog-removecart__choose">
             <Button

@@ -1,6 +1,6 @@
 import React from "react";
 import "./DetailProduct.scss";
-import { Box, Rating } from "@mui/material";
+import { Box, Modal, Rating, Typography } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import InfoIcon from "@mui/icons-material/Info";
 import BookIcon from "@mui/icons-material/Book";
@@ -22,14 +22,23 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { numWithCommas } from "../../constraints/Util";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import HelpIcon from "@mui/icons-material/Help";
+import GiftListModal from "../GiftListModal";
 
 const PromotionTypeEnum = {
   PRCIE: 0,
-  PERCENTAGE: 1
-}
+  PERCENTAGE: 1,
+};
 
 function DetailProduct({ data }) {
   const user = useSelector((state) => state.auth.user);
+
+  // Cart
+  const [openGiftCartList, setOpenGiftCartList] = React.useState(false);
+  const handleOpenGiftCartList = () => setOpenGiftCartList(true);
+  const handleCloseGiftCartList = () => setOpenGiftCartList(false);
+
   const [productImage, setProductImage] = useState("");
   const status = productStatus.find((item) => item.id == data?.status);
   const [quantity, setQuantity] = useState(1);
@@ -43,12 +52,12 @@ function DetailProduct({ data }) {
 
   useEffect(() => {
     setRatingStars(data?.rating);
-    if(data?.promotion){
-        if(Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()){
-        setPromotionPrice(Math.round(data?.price - data?.promotion.value))
-      }else{
-        const percent = data?.promotion.value/100
-        setPromotionPrice(Math.round(data?.price - data?.price * percent))
+    if (data?.promotion) {
+      if (Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()) {
+        setPromotionPrice(Math.round(data?.price - data?.promotion.value));
+      } else {
+        const percent = data?.promotion.value / 100;
+        setPromotionPrice(Math.round(data?.price - data?.price * percent));
       }
     }
   }, [data]);
@@ -62,7 +71,7 @@ function DetailProduct({ data }) {
       toast.error("Vui lòng chọn số lượng sản phẩm lớn hơn 0");
       return;
     }
-    
+
     let param = {
       productId: data?.id,
       quantity: quantity,
@@ -87,21 +96,20 @@ function DetailProduct({ data }) {
       return (
         <>
           <AddShoppingCartIcon style={{ color: "#49A94D" }} />
-          <p>{status?.text}</p>
         </>
       );
     } else if (status?.id == 1) {
       return (
         <>
           <ProductionQuantityLimitsIcon style={{ color: "E40100" }} />
-          <p>{status?.text}</p>
+          {/* <p>{status?.text}</p> */}
         </>
       );
     } else {
       return (
         <>
           <RemoveShoppingCartIcon style={{ color: "E40100" }} />
-          <p>{status?.text}</p>
+          {/* <p>{status?.text}</p> */}
         </>
       );
     }
@@ -203,7 +211,7 @@ function DetailProduct({ data }) {
                   size="small"
                   aria-label="small outlined button group"
                   className="quantity-buttons"
-                  style={{ height: "40px" }}
+                  style={{ height: "38px" }}
                 >
                   <Button
                     onClick={() => {
@@ -230,6 +238,13 @@ function DetailProduct({ data }) {
                 </button>
               </>
             )}
+            <button
+              className="detailProduct__add-to-gift"
+              style={{ fontWeight: 600, cursor: "pointer" }}
+              onClick={handleOpenGiftCartList}
+            >
+              <CardGiftcardIcon />
+            </button>
             <div className="detailProduct__status-info">
               {handleStatusProduct(status)}
             </div>
@@ -238,7 +253,7 @@ function DetailProduct({ data }) {
             <div
               style={{ display: "flex", fontSize: "20px", lineHeight: "28px" }}
             >
-              <InfoIcon sx={{ fontSize: "20px", marginRight: "2px" }} />
+              <HelpIcon sx={{ fontSize: "20px", marginRight: "2px" }} />
               <p>Hướng dẫn cách đặt hàng trực tuyến</p>
             </div>
             <div
@@ -250,7 +265,7 @@ function DetailProduct({ data }) {
             <FacebookIcon
               sx={{
                 fontSize: "40px",
-                marginTop: "20px",
+                marginTop: "10px",
                 cursor: "pointer",
               }}
             />
@@ -315,6 +330,18 @@ function DetailProduct({ data }) {
           </div>
         </div>
       </Box>
+
+      {/* Gift */}
+      <Modal
+        open={openGiftCartList}
+        onClose={handleCloseGiftCartList}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal-gift">
+          <GiftListModal closeModalGiftCart={handleCloseGiftCartList} quantity={quantity}/>
+        </Box>
+      </Modal>
     </Box>
   );
 }

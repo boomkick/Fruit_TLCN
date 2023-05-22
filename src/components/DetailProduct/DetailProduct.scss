@@ -106,7 +106,7 @@
             width: 100%;
         }
         &-guide {
-            margin-top: 5px;
+            margin-top: 20px;
             margin-bottom: 20px;
             font-family: 'Roboto', sans-serif;
         }
@@ -128,7 +128,7 @@
         justify-content: space-around;
         align-items: center;
         &-info{
-            min-width: 100px;
+            min-width: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -139,9 +139,24 @@
         color: white;
         font-size: 1em;
         line-height: 38px;
-        // margin-bottom: 15px;
         padding: 0 18px;
         border: none;
+        border-radius: 2px;
+        &:hover {
+            background-color: black;
+            color: white;
+            transition: 1s ease;
+        }
+    }
+    &__add-to-gift {
+        background-color: $client-main-color;
+        color: white;
+        font-size: 19px;
+        padding: 8px;
+        border: none;
+        border-radius: 2px;
+        display: flex;
+        justify-content: center;
         &:hover {
             background-color: black;
             color: white;
@@ -174,4 +189,16 @@
             font-weight: 100;
         }
     }
+}
+
+.modal-gift {
+    position: absolute;
+    margin-top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 17rem;
+    background-color: white;
+    box-shadow: 24px;
+    padding: 18px;
+    border-radius: 15px;
 }

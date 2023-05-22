@@ -1,22 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import "./ShoppingCart.scss";
-import {
-  Grid,
-  Typography,
-  Button,
-  Stack,
-  Box,
-  Dialog,
-} from "@mui/material";
+import { Grid, Typography, Button, Stack, Box, Dialog } from "@mui/material";
 import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { numWithCommas } from "../../constraints/Util";
+import { groupByGiftCart, numWithCommas } from "../../constraints/Util";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCart } from "../../slices/cartSlice";
 import { deleteAll } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiCart from "../../apis/apiCart";
+import apiGiftCart from "../../apis/apiGiftCart";
+import GiftCart from "../../components/GiftCart";
 
 const PromotionTypeEnum = {
   PRCIE: 0,
@@ -25,54 +20,68 @@ const PromotionTypeEnum = {
 
 function ShoppingCart() {
   const user = useSelector((state) => state.auth.user);
-  const [open, setOpen] = useState(false);
-  const [openAddress, setOpenAddress] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
-  const coupon = useSelector((state) => state.payment.coupon);
-  const addressShip = useSelector((state) => state.payment.address);
+  const [data, setData] = useState([]);
 
   // get cart by user
   useEffect(() => {
-    // title web
-    // const loadTitle = () => {
-    //   document.title = "Giỏ hàng";
-    // };
-    // loadTitle();
+    const handleGetData = async () => {
+      let cartDetailList = [];
+      let giftCartList = [];
+      await apiCart
+        .getCart()
+        .then((res) => {
+          dispatch(updateCart(res?.data));
+          cartDetailList = res?.data;
+        })
+        .catch((error) => {
+          toast.error(error.toString());
+        });
 
-    apiCart
-      .getCart()
-      .then((res) => {
-        dispatch(updateCart(res?.data));
-      })
-      .catch((error) => {
-        toast.error(error.toString());
-      });
+      await apiGiftCart
+        .getCurrentGiftCart()
+        .then((res) => {
+          giftCartList = res?.data;
+        })
+        .catch((error) => {
+          toast.error(error.toString());
+        });
+
+      setData(groupByGiftCart(giftCartList, cartDetailList));
+    };
+    handleGetData();
   }, []);
+
+  const handleChangeData = (data) => {
+    setData(data);
+  };
 
   // Caculate sum money
   useEffect(() => {
     const calcPrice = () => {
-      let total = 0
-      cart?.forEach(
-        (item) => {
-          let promotionPrice = null
-          if (item.product?.promotion) {
-            if (
-              Number(item.product?.promotion.type) ===
-              PromotionTypeEnum.PRCIE.valueOf()
-            ) {
-              promotionPrice = (item.product?.price - item.product?.promotion.value);
-            } else {
-              const percent = item.product?.promotion.value / 100;
-              promotionPrice = (item.product?.price - item.product?.price * percent);
-            }
+      let total = 0;
+      cart?.forEach((item) => {
+        let promotionPrice = null;
+        if (item.product?.promotion) {
+          if (
+            Number(item.product?.promotion.type) ===
+            PromotionTypeEnum.PRCIE.valueOf()
+          ) {
+            promotionPrice =
+              item.product?.price - item.product?.promotion.value;
+          } else {
+            const percent = item.product?.promotion.value / 100;
+            promotionPrice =
+              item.product?.price - item.product?.price * percent;
           }
-          total += item.quantity * (promotionPrice ? promotionPrice : item.product?.price)
         }
-      );
+        total +=
+          item.quantity *
+          (promotionPrice ? promotionPrice : item.product?.price);
+      });
       setTotalPrice(total);
     };
     calcPrice();
@@ -88,24 +97,13 @@ function ShoppingCart() {
   const closeDialogDeleteAll = () => {
     setDialogDelete(false);
   };
-  const handleOpen = useCallback(() => setOpen(true), []);
-  const handleClose = useCallback(() => setOpen(false), []);
-
-  const handleOpenAddress = useCallback(() => {
-    if (user) {
-      setOpenAddress(true);
-    } else {
-      toast.warning("Vui lòng đăng nhập để chọn địa chỉ");
-    }
-  }, [user]);
-  const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
 
   const navigate = useNavigate();
   const handleBuy = () => {
     if (cart?.length > 0) {
       cart.forEach((item) => {
         let param = {
-          productId: item.product.id,
+          id: item.id,
           quantity: item.quantity,
         };
         apiCart.putCart(param);
@@ -132,7 +130,7 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${cart?.length} sản phẩm)`}
+                  {`Sản phẩm (${data?.noGiftList?.length} sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
                 <Stack>Gía giảm</Stack>
@@ -147,11 +145,18 @@ function ShoppingCart() {
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {cart?.map((item) => (
-                  <CartItem key={item.id} data={item} />
+                {data?.noGiftList?.map((item) => (
+                  <CartItem key={item.id} data={item} dataCart={data} changeData={handleChangeData}/>
                 ))}
               </Stack>
             </Box>
+            {data?.giftCartList?.map((item) => (
+              <GiftCart
+                data={item}
+                dataCart={data}
+                changeData={handleChangeData}
+              />
+            ))}
           </Grid>
           <Grid item lg={3} md={12} sm={12} xs={12}>
             <Box>

@@ -395,16 +395,6 @@ function ProductDetail(props) {
                           </Button>
                         </label>
                       </Fragment>
-                      {/* <Button
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        color="error"
-                        onClick={() => {
-                          setImageComment(null);
-                        }}
-                      >
-                        Delete
-                      </Button> */}
                     </>
                   ) : (
                     <Fragment>
@@ -487,16 +477,6 @@ function ProductDetail(props) {
                           </Button>
                         </label>
                       </Fragment>
-                      {/* <Button
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        color="error"
-                        onClick={() => {
-                          setVideoComment(null);
-                        }}
-                      >
-                        Delete
-                      </Button> */}
                     </>
                   ) : (
                     <Fragment>
@@ -717,16 +697,6 @@ function ProductDetail(props) {
                           </Button>
                         </label>
                       </Fragment>
-                      {/* <Button
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        color="error"
-                        onClick={() => {
-                          setVideoComment(null);
-                        }}
-                      >
-                        Delete
-                      </Button> */}
                     </>
                   ) : (
                     <Fragment>

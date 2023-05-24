@@ -9,7 +9,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom"
 import apiCart from '../../../../apis/apiCart'
 import { toast } from 'react-toastify'
-import { numWithCommas } from '../../../../constraints/Util'
+import { groupByGiftCartWithCartDetails, numWithCommas } from '../../../../constraints/Util'
 import { paymentMethod } from '../../../../constraints/PaymentMethod'
 import apiLocation from '../../../../apis/apiLocation'
 
@@ -36,6 +36,8 @@ function DetailOrder() {
                         SetBillWithoutDiscount(realBill)
                         SetDiscount(realBill-sumaryBill)
                     }
+                    console.log("groupBy: ", res.data?.cartDetails)
+                    console.log("groupBy: ", groupByGiftCartWithCartDetails(res.data?.cartDetails))
                 })
                 .catch(error => {
                     setOrder(null)
@@ -127,7 +129,7 @@ function DetailOrder() {
                         <Box>Tạm tính</Box>
                     </Stack>
                     {
-                        order?.cartDetails?.map(item =>
+                        order?.cartDetails?.map((item) =>
                             <Stack key={item} direction="row" className="detailOrder-Table__row">
                                 <Stack direction="row" className="orderDetail__item">
                                     <Box mr={1.875}>
@@ -150,8 +152,6 @@ function DetailOrder() {
                             </Stack>
                         )
                     }
-
-
                 </Stack>
                 {
                     order && <Stack direction="column"

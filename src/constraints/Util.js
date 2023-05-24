@@ -19,23 +19,54 @@ export const formatDate = (date) => {
 };
 
 export const groupByGiftCart = (giftCartList, cartDetailList) => {
-  let noGiftList = cartDetailList.filter(
-    (cartDetail) => !cartDetail.giftCart
-  )
-  let giftCartListAdded = []
-  console.log("noGiftList: ", noGiftList);
-  if (giftCartList.length > 0){
+  let noGiftList = cartDetailList.filter((cartDetail) => !cartDetail.giftCart);
+  let giftCartListAdded = [];
+  if (giftCartList.length > 0) {
     giftCartListAdded = giftCartList.map((giftCart) => ({
-        ...giftCart,
-        cartDetails: cartDetailList.filter(
-          (cartDetail) => cartDetail.giftCart?.id == giftCart.id
-        ),
-      }
-    ));
+      ...giftCart,
+      cartDetails: cartDetailList.filter(
+        (cartDetail) => cartDetail.giftCart?.id == giftCart.id
+      ),
+    }));
   }
   return {
     noGiftList: noGiftList,
-    giftCartList: giftCartListAdded
-  }
+    giftCartList: giftCartListAdded,
+  };
+};
 
+export const groupByGiftCartWithCartDetails = (cartDetailList) => {
+  let result = {
+    noGiftList: [],
+    giftCartList: null,
+  };
+  // let giftCartListAdded = []
+  cartDetailList.forEach((item) => {
+    console.log("item: ", item);
+    if (item?.giftCart == null) {
+      result.noGiftList.push(item);
+    } else {
+      let isGiftCartExist = false;
+      result.giftCartList = result.giftCartList.map((giftCart) => {
+        if (giftCart.id == item.giftCart.id) {
+          isGiftCartExist = true;
+          return {
+            ...giftCart,
+            cartDetails:
+              giftCart.cartDetails.length > 0
+                ? giftCart.cartDetails.push(item)
+                : [item],
+          };
+        }
+      });
+      if (!isGiftCartExist) {
+        let newGiftCart = {
+          ...item.giftCart,
+          cartDetails: [item],
+        };
+        result.giftCartList.push(newGiftCart);
+      }
+    }
+  });
+  return result;
 };

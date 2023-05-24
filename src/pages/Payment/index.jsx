@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import "./Payment.scss";
 import { Grid, Typography, Box, Stack, Radio, RadioGroup } from "@mui/material";
-import { numWithCommas } from "../../constraints/Util";
+import { groupByGiftCart, numWithCommas } from "../../constraints/Util";
 import { useDispatch, useSelector } from "react-redux";
 import ChooseAddress from "../../components/ChooseAddress";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,9 @@ import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
 import { deleteAll } from "../../slices/cartSlice";
 import Loading from "../../components/Loading";
+import PaymentItem from "../../components/PaymentItem";
+import PaymentGiftCart from "../../components/PaymentGiftCart";
+import apiGiftCart from "../../apis/apiGiftCart";
 
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
@@ -16,6 +19,7 @@ function Payment() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [payment, setPayment] = useState("1");
   const [loading, setLoading] = useState(false);
+  const [giftCartList, setGiftCartList] = useState([]);
   const [addresses, setAddresses] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +27,20 @@ function Payment() {
   // Tính tổng giá tiền, phí vận chuyển, mã giảm giá nếu có
   const feeShip = 0;
   useEffect(() => {
+    const handleGetData = async () => {
+      await apiGiftCart
+        .getCurrentGiftCart()
+        .then((res) => {
+          setGiftCartList(res?.data);
+        })
+        .catch((error) => {
+          toast.error(error.toString());
+        });
+
+      // setData(groupByGiftCart(giftCartList, cart));
+    };
+    handleGetData();
+
     const calcPrice = () => {
       const total = CartItems.reduce(
         (t, item) => t + item.product.price * item.quantity,
@@ -160,48 +178,21 @@ function Payment() {
                     paddingBottom: "20px",
                   }}
                 ></Box>
-                {/* Danh sách sản phẩm trong giỏ hàng [START] */}
                 <Stack className="payment__listItem">
-                  {CartItems.map((item) => (
-                    <Stack
-                      key={item?.id}
-                      direction="row"
-                      className="orderDetail__item"
-                      p={1}
-                    >
-                      <Box mr={1.875}>
-                        <img
-                          height="60px"
-                          width="60px"
-                          src={item?.product?.image?.url}
-                          alt=""
-                        />
-                      </Box>
-                      <Stack
-                        spacing={1.5}
-                        width="100%"
-                        direction={"row"}
-                        justifyContent={"space-between"}
-                        alignItems="center"
-                      >
-                        <Link to={"/"}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {item?.product?.name} x {item?.quantity}
-                          </Typography>
-                        </Link>
-                        <Typography fontSize="14px" color="#888">
-                          {numWithCommas(
-                            item?.quantity * item?.product?.price || 0
-                          )}{" "}
-                          đ
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  ))}
+                  {groupByGiftCart(giftCartList, CartItems)?.noGiftList?.map(
+                    (item) => (
+                      <PaymentItem data={item} />
+                    )
+                  )}
                 </Stack>
-                {/* Danh sách sản phẩm trong giỏ hàng [END] */}
               </Box>
             </Box>
+
+            {groupByGiftCart(giftCartList, CartItems)?.giftCartList?.map(
+              (item) => (
+                <PaymentGiftCart data={item} />
+              )
+            )}
           </Grid>
           <Grid item lg={4} md={12} sm={12} xs={12}>
             <Box className="cart__address">

@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import apiGHNAddress from "../../apis/apiGHNAddress";
 
 SelectBoxAddressAddRecieve.propTypes = {
   onChangeCity: PropTypes.func,
@@ -36,7 +37,7 @@ function SelectBoxAddressAddRecieve(props) {
   // Gán danh sách dữ liệu của thành phố -> quận -> phường
   useEffect(() => {
     const setDataCity = async () => {
-      apiLocation
+      await apiLocation
         .getListCity()
         .then((res) => {
           setListCity(res.data);
@@ -44,6 +45,11 @@ function SelectBoxAddressAddRecieve(props) {
         .catch((error) => {
           toast.error(error);
         });
+      
+      await apiGHNAddress
+        .getProvinces()
+        .then((res) => console.log("resGHN: ", res))
+        .catch((e) => console.log("errorGHN: ", e))
     };
 
     setDataCity();

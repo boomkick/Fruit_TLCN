@@ -31,29 +31,9 @@ function AddRecieveAddress() {
   const [district, setDistrict] = useState("");
   const [ward, setWard] = useState("");
   const paymentAddress = useSelector((state) => state.payment.address);
-  // const [isAddressPayment, setIsAddressPayment] = useState(false);
-  // const [isCartItems, setIsCartItems] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
-
-  // Hiển thị lại phần địa chỉ nhận hàng đã lưu
-  // useEffect(() => {
-  //   const getPaymentAddress = async () => {
-  //     setIsAddressPayment(paymentAddress ? true : false)
-  //     if (isAddressPayment) {
-  //       await setCity(paymentAddress.city);
-  //       setDistrict(paymentAddress.district);
-  //       setWard(paymentAddress.ward);
-  //       setName(paymentAddress.name);
-  //       setPhone(paymentAddress.phone);
-  //       setAddressDetail(paymentAddress.addressDetail);
-  //     }
-  //   }
-
-  //   getPaymentAddress()
-  //   console.log("city", city);
-  // }, [])
 
   // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
@@ -101,22 +81,6 @@ function AddRecieveAddress() {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
-        {/* {isAddressPayment ? 
-        <SelectBoxAddress
-          city={city}
-          district={district}
-          ward={ward}
-          onChangeCity={handleChangeCity}
-          onChangeDistrict={handleChangeDistrict}
-          onChangeWard={handleChangeWard}
-        />
-        : 
-        <SelectBoxAddressAddRecieve
-          onChangeCity={handleChangeCity}
-          onChangeDistrict={handleChangeDistrict}
-          onChangeWard={handleChangeWard}
-        />
-        } */}
         <SelectBoxAddressAddRecieve
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}

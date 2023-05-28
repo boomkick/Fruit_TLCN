@@ -38,25 +38,17 @@ export const groupByGiftCart = (giftCartList, cartDetailList) => {
 export const groupByGiftCartWithCartDetails = (cartDetailList) => {
   let result = {
     noGiftList: [],
-    giftCartList: null,
+    giftCartList: [],
   };
-  // let giftCartListAdded = []
   cartDetailList.forEach((item) => {
-    console.log("item: ", item);
     if (item?.giftCart == null) {
       result.noGiftList.push(item);
     } else {
       let isGiftCartExist = false;
-      result.giftCartList = result.giftCartList.map((giftCart) => {
+      result.giftCartList.forEach((giftCart) => {
         if (giftCart.id == item.giftCart.id) {
           isGiftCartExist = true;
-          return {
-            ...giftCart,
-            cartDetails:
-              giftCart.cartDetails.length > 0
-                ? giftCart.cartDetails.push(item)
-                : [item],
-          };
+          giftCart.cartDetails.push(item);
         }
       });
       if (!isGiftCartExist) {

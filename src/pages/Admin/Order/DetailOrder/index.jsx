@@ -4,19 +4,22 @@ import { Box, Stack, Typography, Button, TextField } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
-import { numWithCommas } from "../../../../constraints/Util";
+import {
+  groupByGiftCartWithCartDetails,
+  numWithCommas,
+} from "../../../../constraints/Util";
 import { paymentMethod } from "../../../../constraints/PaymentMethod";
-import apiLocation from '../../../../apis/apiLocation'
-
+import apiLocation from "../../../../apis/apiLocation";
 
 function DetailOrder() {
   const id = useParams().id;
   const [order, setOrder] = useState(null);
-  const navigate = useNavigate()
+  const [products, setProducts] = useState(null);
+  const navigate = useNavigate();
 
   // Thông tin giá trị đơn hàng
-  const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0)
-  const [discount, SetDiscount] = useState(0)
+  const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
+  const [discount, SetDiscount] = useState(0);
 
   // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
   const [weight, setWeight] = useState(0);
@@ -27,19 +30,20 @@ function DetailOrder() {
   useEffect(() => {
     const getData = async () => {
       await apiCart
-        .getProcessCart({id: id})
+        .getProcessCart({ id: id })
         .then((res) => {
-          setOrder(res.data)
-          if(res.data?.cartDetails){
-            let realBill = 0
-            let sumaryBill = 0
+          setOrder(res.data);
+          if (res.data?.cartDetails) {
+            let realBill = 0;
+            let sumaryBill = 0;
             res.data?.cartDetails.forEach((item) => {
-                realBill += (item?.product?.price * item?.quantity)
-                sumaryBill += (item?.price * item?.quantity)
-            })
-            SetBillWithoutDiscount(realBill)
-            SetDiscount(realBill-sumaryBill)
-        }
+              realBill += item?.product?.price * item?.quantity;
+              sumaryBill += item?.price * item?.quantity;
+            });
+            SetBillWithoutDiscount(realBill);
+            SetDiscount(realBill - sumaryBill);
+          }
+          setProducts(groupByGiftCartWithCartDetails(res.data?.cartDetails));
         })
         .catch((error) => {
           setOrder(null);
@@ -56,22 +60,20 @@ function DetailOrder() {
       weight: weight,
       length: length,
       width: width,
-      height: height
+      height: height,
     };
     console.log("param: ", params);
     if (weight > 0 && length > 0 && width > 0 && height > 0) {
       apiCart
-      .putProcessCart(params, id)
-      .then((res) => {
-        toast.success("Xác nhận thành công");
-        navigate('/admin/order');
-      })
-      .catch((error) => {
-        toast.error("Xác nhận không thành công");
-      });
-    }
-    else
-      toast.info("Vui lòng nhập thông tin chính xác.")
+        .putProcessCart(params, id)
+        .then((res) => {
+          toast.success("Xác nhận thành công");
+          navigate("/admin/order");
+        })
+        .catch((error) => {
+          toast.error("Xác nhận không thành công");
+        });
+    } else toast.info("Vui lòng nhập thông tin chính xác.");
   };
   const handleCancel = () => {
     let params = {
@@ -80,13 +82,13 @@ function DetailOrder() {
       weight: 1,
       length: 1,
       width: 1,
-      height: 1
+      height: 1,
     };
     apiCart
       .putProcessCart(params, id)
       .then((res) => {
         toast.success("Hủy đơn thành công");
-        navigate('/admin/order');
+        navigate("/admin/order");
       })
       .catch((error) => {
         toast.error("Hủy đơn không thành công");
@@ -94,34 +96,36 @@ function DetailOrder() {
   };
 
   // Lấy dữ liệu dịa chỉ
-  const [city, setCity] = useState("")
-  const [district, setDistrict] = useState("")
-  const [ward, setWard] = useState("")
+  const [city, setCity] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
 
   useEffect(() => {
-      const getLocation = () => {
-          const params = {
-              cityId: order?.cityId,
-              districtId: order?.districtId,
-              wardId: order?.wardId
-          }
-          apiLocation.getCityById(params)
-          .then(res => {
-              setCity(res.data);
-          })
-          apiLocation.getDistrictByCityIdDistrictId(params)
-          .then(res => {
-              setDistrict(res.data);
-          })
-          apiLocation.getWardByIdCityIdDistrictIdWardId(params)
-          .then(res => {
-              setWard(res.data);
-          })
-      }
-      if (order?.cityId && order?.districtId && order?.wardId){
-          getLocation()
-      }
-  }, [order])
+    const getLocation = () => {
+      const params = {
+        cityId: order?.cityId,
+        districtId: order?.districtId,
+        wardId: order?.wardId,
+      };
+      apiLocation.getCityById(params).then((res) => {
+        setCity(res.data);
+      });
+      apiLocation.getDistrictByCityIdDistrictId(params).then((res) => {
+        setDistrict(res.data);
+      });
+      apiLocation.getWardByIdCityIdDistrictIdWardId(params).then((res) => {
+        setWard(res.data);
+      });
+    };
+    if (order?.cityId && order?.districtId && order?.wardId) {
+      getLocation();
+    }
+  }, [order]);
+
+  // Chuyển trang về sản phẩm để thêm nhận xét
+  const handleWriteReview = (event, idProduct) => {
+    navigate(`/product-detail/${idProduct}`);
+  };
 
   return (
     <Box>
@@ -149,8 +153,8 @@ function DetailOrder() {
             </Typography>
             <Typography>
               Địa chỉ:{" "}
-              {`${city.name}, ${district.name},
-                                  ${ward.name},
+              {`${city?.name}, ${district?.name},
+                                  ${ward?.name},
                                   ${order?.detailLocation}`}
             </Typography>
             <Typography>Điện thoại: {order?.phone}</Typography>
@@ -167,23 +171,33 @@ function DetailOrder() {
                 src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Slogan-VN.png"
                 alt=""
               />
-              {order?.shipping ? order?.shipping : "Giao hàng nhanh"} 
+              {order?.shipping ? order?.shipping : "Giao hàng nhanh"}
             </Typography>
-            <Typography>Phí vận chuyển: {order?.feeShip ? order?.feeShip : "15000"}đ</Typography>
+            <Typography>
+              Phí vận chuyển: {order?.feeShip ? order?.feeShip : "15000"}đ
+            </Typography>
           </Box>
         </Stack>
         <Stack className="detailOrder__boxInfo">
           <Typography>HÌNH THỨC THANH TOÁN</Typography>
           <Box p={1.25} className="detailOrder__content">
-            <Typography>{paymentMethod.find((item) => item.id == order?.bill?.paymentMethod)?.text}</Typography>
+            <Typography>
+              {
+                paymentMethod.find(
+                  (item) => item.id == order?.bill?.paymentMethod
+                )?.text
+              }
+            </Typography>
             <Typography style={{ color: "#fda223" }}>
-              {order?.bill?.purchaseDate ? order?.bill?.purchaseDate : "Chưa thanh toán"}
+              {order?.bill?.purchaseDate
+                ? order?.bill?.purchaseDate
+                : "Chưa thanh toán"}
             </Typography>
           </Box>
         </Stack>
       </Stack>
 
-      <Stack bgcolor="#fff" mx={2}>
+      <Stack className="detailOrder-Table">
         <Stack direction="row" className="detailOrder-Table__heading">
           <Box>Sản phẩm</Box>
           <Box>Giá</Box>
@@ -191,17 +205,34 @@ function DetailOrder() {
           <Box>Giảm giá</Box>
           <Box>Tạm tính</Box>
         </Stack>
-        {order?.cartDetails?.map((cartDetail) => (
-          <Stack key={cartDetail} direction="row" className="detailOrder-Table__row">
+        {products?.noGiftList?.map((item) => (
+          <Stack
+            key={item?.id}
+            direction="row"
+            className="detailOrder-Table__row"
+          >
             <Stack direction="row" className="orderDetail__item">
               <Box mr={1.875}>
-                <img height="60px" width="60px" src={cartDetail?.product?.image?.url} alt="" />
+                <img
+                  height="60px"
+                  width="60px"
+                  src={item?.product?.image?.url}
+                  alt=""
+                />
               </Box>
               <Stack spacing={1.5}>
-                <Link to={"/"}>
-                  <Typography fontSize="14px">{cartDetail?.product?.name}</Typography>
+                <Link
+                  to={
+                    item?.product?.id
+                      ? `/product-detail/${item?.product?.id}`
+                      : ""
+                  }
+                >
+                  <Typography fontSize="14px">{item?.product?.name}</Typography>
                 </Link>
-                <Typography fontSize="13px">ID: {cartDetail?.id}</Typography>
+                <Typography fontSize="13px">
+                  ID product in bill: {item?.id}
+                </Typography>
                 <Stack direction="row" spacing={1}>
                   <Button
                     variant="outlined"
@@ -211,32 +242,98 @@ function DetailOrder() {
                       height: "30px",
                       padding: 0,
                     }}
+                    onClick={(event) => {
+                      handleWriteReview(event, item?.product?.id);
+                    }}
                   >
                     Viết nhận xét
                   </Button>
-                  {/* <Button
-                    variant="outlined"
-                    sx={{
-                      fontSize: "12px",
-                      width: "71px",
-                      height: "30px",
-                      padding: 0,
-                    }}
-                  >
-                    Mua lại
-                  </Button> */}
                 </Stack>
               </Stack>
             </Stack>
-            <Box>{numWithCommas(cartDetail?.product?.price || 0)}₫</Box>
-            <Box>{numWithCommas(cartDetail?.quantity || 0)}</Box>
-            <Box>{numWithCommas(cartDetail?.discount || 0)} ₫</Box>
+            <Box>{numWithCommas(item.product.price || 0)}₫</Box>
+            <Box>{numWithCommas(item.quantity || 0)}</Box>
             <Box>
-              {numWithCommas(cartDetail?.price * cartDetail?.quantity) || 0} ₫
+              {numWithCommas(
+                (item.product.price - item.price) * item.quantity || 0
+              )}{" "}
+              ₫
             </Box>
+            <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
           </Stack>
         ))}
       </Stack>
+      {/* Sản phẩm theo giỏ quà */}
+      {products?.giftCartList?.map((giftCart) => (
+        <Stack className="detailOrder-Table">
+          <Stack direction="row" className="detailOrder-Table__heading">
+            <Box>{giftCart?.name}</Box>
+            <Box></Box>
+            <Box></Box>
+            <Box></Box>
+            <Box></Box>
+          </Stack>
+          {giftCart?.cartDetails?.map((item) => (
+            <Stack
+              key={item?.id}
+              direction="row"
+              className="detailOrder-Table__row"
+            >
+              <Stack direction="row" className="orderDetail__item">
+                <Box mr={1.875}>
+                  <img
+                    height="60px"
+                    width="60px"
+                    src={item?.product?.image?.url}
+                    alt=""
+                  />
+                </Box>
+                <Stack spacing={1.5}>
+                  <Link
+                    to={
+                      item?.product?.id
+                        ? `/product-detail/${item?.product?.id}`
+                        : ""
+                    }
+                  >
+                    <Typography fontSize="14px">
+                      {item?.product?.name}
+                    </Typography>
+                  </Link>
+                  <Typography fontSize="13px">
+                    ID product in bill: {item?.id}
+                  </Typography>
+                  <Stack direction="row" spacing={1}>
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        fontSize: "12px",
+                        width: "102px",
+                        height: "30px",
+                        padding: 0,
+                      }}
+                      onClick={(event) => {
+                        handleWriteReview(event, item?.product?.id);
+                      }}
+                    >
+                      Viết nhận xét
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Stack>
+              <Box>{numWithCommas(item.product.price || 0)}₫</Box>
+              <Box>{numWithCommas(item.quantity || 0)}</Box>
+              <Box>
+                {numWithCommas(
+                  (item.product.price - item.price) * item.quantity || 0
+                )}{" "}
+                ₫
+              </Box>
+              <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
+            </Stack>
+          ))}
+        </Stack>
+      ))}
       {order && (
         <Stack
           direction="column"
@@ -249,7 +346,7 @@ function DetailOrder() {
               Tạm tính
             </Typography>
             <Typography className="detailOrder__summary-value">
-            {numWithCommas(billWithoutDiscount || 0)} ₫
+              {numWithCommas(billWithoutDiscount || 0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">
@@ -257,7 +354,7 @@ function DetailOrder() {
               Giảm giá
             </Typography>
             <Typography className="detailOrder__summary-value">
-            {numWithCommas(discount || 0)} ₫
+              {numWithCommas(discount || 0)} ₫
             </Typography>
           </Stack>
           <Stack py={0.625} direction="row">
@@ -273,45 +370,80 @@ function DetailOrder() {
               Phí tổng cộng
             </Typography>
             <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
-              {numWithCommas(order?.bill?.total + 0|| 0)}
-              ₫
+              {numWithCommas(order?.bill?.total + 0 || 0)}₫
             </Typography>
           </Stack>
-          {order?.status === 0 && (<>
-            <Stack py={0.625} direction="row">
-              <Typography className="detailOrder__summary-label" style={{paddingRight: "100px", borderTop: "1px solid #ccc"}}>
-                Cân đo đơn hàng
-              </Typography>
-            </Stack>
-            <Stack py={0.625} direction="row">
-              <Typography className="detailOrder__summary-label">
-                Trọng lượng
-              </Typography>
-              <TextField value={weight} onChange={(event) => { setWeight(event.target.value) }}
-                  size="small" id="outlined-basic" variant="outlined" style={{width: "160px", padding: "0px 20px"}}/>
-            </Stack>
-            <Stack py={0.625} direction="row">
-              <Typography className="detailOrder__summary-label">
-                Chiều cao
-              </Typography>
-              <TextField value={height} onChange={(event) => { setHeight(event.target.value) }}
-                  size="small" id="outlined-basic" variant="outlined" style={{width: "160px", padding: "0px 20px"}}/>
-            </Stack>
-            <Stack py={0.625} direction="row">
-              <Typography className="detailOrder__summary-label">
-                Chiều dài
-              </Typography>
-              <TextField value={length} onChange={(event) => { setLength(event.target.value) }}
-                  size="small" id="outlined-basic" variant="outlined" style={{width: "160px", padding: "0px 20px"}}/>
-            </Stack>
-            <Stack py={0.625} direction="row">
-              <Typography className="detailOrder__summary-label">
-                Chiều rộng
-              </Typography>
-              <TextField value={width} onChange={(event) => { setWidth(event.target.value) }}
-                  size="small" id="outlined-basic" variant="outlined" style={{width: "160px", padding: "0px 20px"}}/>
-            </Stack>
-          </>
+          {order?.status === 0 && (
+            <>
+              <Stack py={0.625} direction="row">
+                <Typography
+                  className="detailOrder__summary-label"
+                  style={{ paddingRight: "100px", borderTop: "1px solid #ccc" }}
+                >
+                  Cân đo đơn hàng
+                </Typography>
+              </Stack>
+              <Stack py={0.625} direction="row">
+                <Typography className="detailOrder__summary-label">
+                  Trọng lượng
+                </Typography>
+                <TextField
+                  value={weight}
+                  onChange={(event) => {
+                    setWeight(event.target.value);
+                  }}
+                  size="small"
+                  id="outlined-basic"
+                  variant="outlined"
+                  style={{ width: "160px", padding: "0px 20px" }}
+                />
+              </Stack>
+              <Stack py={0.625} direction="row">
+                <Typography className="detailOrder__summary-label">
+                  Chiều cao
+                </Typography>
+                <TextField
+                  value={height}
+                  onChange={(event) => {
+                    setHeight(event.target.value);
+                  }}
+                  size="small"
+                  id="outlined-basic"
+                  variant="outlined"
+                  style={{ width: "160px", padding: "0px 20px" }}
+                />
+              </Stack>
+              <Stack py={0.625} direction="row">
+                <Typography className="detailOrder__summary-label">
+                  Chiều dài
+                </Typography>
+                <TextField
+                  value={length}
+                  onChange={(event) => {
+                    setLength(event.target.value);
+                  }}
+                  size="small"
+                  id="outlined-basic"
+                  variant="outlined"
+                  style={{ width: "160px", padding: "0px 20px" }}
+                />
+              </Stack>
+              <Stack py={0.625} direction="row">
+                <Typography className="detailOrder__summary-label">
+                  Chiều rộng
+                </Typography>
+                <TextField
+                  value={width}
+                  onChange={(event) => {
+                    setWidth(event.target.value);
+                  }}
+                  size="small"
+                  id="outlined-basic"
+                  variant="outlined"
+                  style={{ width: "160px", padding: "0px 20px" }}
+                />
+              </Stack>
+            </>
           )}
         </Stack>
       )}

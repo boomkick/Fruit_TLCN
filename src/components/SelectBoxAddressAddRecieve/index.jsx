@@ -8,7 +8,6 @@ import {
   InputLabel,
   InputBase,
 } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import apiLocation from "../../apis/apiLocation";

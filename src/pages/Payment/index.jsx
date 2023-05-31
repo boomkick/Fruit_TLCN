@@ -277,10 +277,6 @@ function Payment() {
                     <span>Tạm tính</span>
                     <span>{numWithCommas(totalPrice)} ₫</span>
                   </Box>
-                  {/* <Box className="cart-summary__price">
-                    <span>Phí vận chuyển</span>
-                    <span>{numWithCommas(feeShip)} ₫</span>
-                  </Box> */}
                   <Box className="cart-summary__price">
                     <span> Giảm giá</span>
                     <span style={{ color: "#00AB56" }}>

@@ -1,8 +1,7 @@
 import React from "react";
 import "./DetailProduct.scss";
-import { Box, Modal, Rating, Typography } from "@mui/material";
+import { Box, Modal, Rating } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import InfoIcon from "@mui/icons-material/Info";
 import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";

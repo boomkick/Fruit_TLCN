@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddress } from "../../../../slices/paymentSlice";
 import SelectBoxAddressAddRecieve from "../../../../components/SelectBoxAddressAddRecieve";
+import SelectBoxAddressGHN from "../../../../components/SelectBoxAddressGHN";
 
 function AddRecieveAddress() {
   const [name, setName] = useState("");
@@ -81,7 +82,7 @@ function AddRecieveAddress() {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
-        <SelectBoxAddressAddRecieve
+        <SelectBoxAddressGHN
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}

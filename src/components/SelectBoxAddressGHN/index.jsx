@@ -61,7 +61,7 @@ function SelectBoxAddressGHN(props) {
             province_id: selectedCity
         };
         await apiGHNAddress
-        .getDistrictsBygetProvinceId(params)
+        .getDistrictsByProvinceId(params)
         .then((res) => {
           setListDistrict(res.data);
         })

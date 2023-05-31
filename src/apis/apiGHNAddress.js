@@ -18,7 +18,7 @@ const apiGHNAddress = {
         const res = await axiosGHN.get('/province')
         return res.data;
     },
-    getDistrictsBygetProvinceId: async (params) => {
+    getDistrictsByProvinceId: async (params) => {
         const res = await axiosGHN.post('/district', params)
         return res.data;
     },

@@ -102,6 +102,7 @@ function Payment() {
       DetailLocation: paymentAddress.addressDetail,
       Name: paymentAddress.name,
       Phone: paymentAddress.phone,
+      ServiceType: paymentAddress.serviceType,
       paymentMethod: 0,
       ...listCartDetail,
     };

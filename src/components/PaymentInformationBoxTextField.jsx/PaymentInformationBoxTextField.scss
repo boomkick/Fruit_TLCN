@@ -1,0 +1,74 @@
+.detailOrder {
+    & p {
+        font-size: 13px !important;
+    }
+    &__boxInfo {
+        flex: 1;
+        gap: 15px;
+        padding: 16px;
+        background-color: #fff;
+    }
+    &__content {
+        & p {
+            margin-top: 5px;
+            color: #000000A6;
+        }
+    }
+    &__item {
+        p {
+            color: #333;
+        }
+    }
+    &__summary-label {
+        padding: 0 20px;
+        font-size: 14px !important;
+        text-align: end;
+        color: #787878 !important;
+    }
+    &__summary-value {
+        padding: 0 20px;
+        font-size: 13px !important;
+        text-align: end;
+        color: #333 !important;
+        width: 160px;
+    }
+    &__summary-value--final {
+        color: #ff3b27 !important;
+    }
+}
+
+.detailOrder-Table {
+    background-color: #fff;
+    border-radius: 4px;
+    &__heading {
+        border-bottom: 1px solid #f5f5f5;
+        &>* {
+            padding: 20px 15px;
+            width: 100px;
+            font-size: 15px;
+            color: #787878;
+            &:first-child {
+                flex: 1;
+            }
+            &:last-child {
+                width: 160px;
+                text-align: end;
+            }
+        }
+    }
+    &__row {
+        &>* {
+            padding: 20px 15px;
+            width: 100px;
+            font-size: 13px;
+            border-bottom: 1px solid #f5f5f5;
+            &:first-child {
+                flex: 1;
+            }
+            &:last-child {
+                width: 160px;
+                text-align: end;
+            }
+        }
+    }
+}

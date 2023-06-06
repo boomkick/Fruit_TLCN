@@ -15,6 +15,7 @@ import {
 } from "../../providers/GetGHNWardsProvider";
 import { paymentMethod } from "../../constraints/PaymentMethod";
 import "./PaymentInformationBoxTextField.scss";
+import { roundPrice } from "../../constraints/Util";
 
 export default function PaymentInformationBoxTextField(props) {
   // Province
@@ -69,7 +70,7 @@ export default function PaymentInformationBoxTextField(props) {
             </Typography>
             <Typography>
               Phí vận chuyển:{" "}
-              {props?.order?.shippingFee ? props?.order?.shippingFee : 0} đ
+              {roundPrice(props?.order?.shippingFee ? props?.order?.shippingFee : 0)} đ
             </Typography>
           </Box>
         </Box>

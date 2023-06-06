@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import "./Payment.scss";
 import { Grid, Typography, Box, Stack, Radio, RadioGroup } from "@mui/material";
-import { groupByGiftCart, numWithCommas } from "../../constraints/Util";
+import {
+  groupByGiftCart,
+  numWithCommas,
+  roundPrice,
+} from "../../constraints/Util";
 import { useDispatch, useSelector } from "react-redux";
 import ChooseAddress from "../../components/ChooseAddress";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
 import { deleteAll } from "../../slices/cartSlice";
@@ -13,6 +17,12 @@ import PaymentItem from "../../components/PaymentItem";
 import PaymentGiftCart from "../../components/PaymentGiftCart";
 import apiGiftCart from "../../apis/apiGiftCart";
 import apiGHNAddress from "../../apis/apiGHNAddress";
+
+const serviceTypeFee = {
+  1: 1.5,
+  2: 1.2,
+  3: 1,
+};
 
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
@@ -24,6 +34,8 @@ function Payment() {
   const [addresses, setAddresses] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("paymentAddress: ", paymentAddress);
 
   // Tính tiền phí ship giao hàng của GHN
   const [shippingFee, setShippingFee] = useState(0);
@@ -49,7 +61,13 @@ function Payment() {
         await apiGHNAddress
           .postShippingOrderFee(paramsFeeShip)
           .then((res) => {
-            setShippingFee(res?.data?.total);
+            // let shipFeeCoefficient =
+            setShippingFee(
+              roundPrice(
+                res?.data?.total *
+                  (serviceTypeFee[paymentAddress.serviceType.toString()] || 1)
+              )
+            );
           })
           .catch();
       }

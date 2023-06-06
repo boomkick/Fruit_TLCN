@@ -1,7 +1,7 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const baseURLGHN = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/"
+const baseURLGHN = "https://dev-online-gateway.ghn.vn/shiip/public-api/"
 
 export const axiosGHN = axios.create({
     baseURL: baseURLGHN,
@@ -15,15 +15,19 @@ export const axiosGHN = axios.create({
 
 const apiGHNAddress = {
     getProvinces: async () => {
-        const res = await axiosGHN.get('/province')
+        const res = await axiosGHN.get('/master-data/province')
         return res.data;
     },
     getDistrictsByProvinceId: async (params) => {
-        const res = await axiosGHN.post('/district', params)
+        const res = await axiosGHN.post('/master-data/district', params)
         return res.data;
     },
     getWardsByDictrictId: async (params) => {
-        const res = await axiosGHN.post('/ward', params)
+        const res = await axiosGHN.post('/master-data/ward', params)
+        return res.data;
+    },
+    postShippingOrderFee: async (params) => {
+        const res = await axiosGHN.post('/v2/shipping-order/fee', params)
         return res.data;
     },
 };

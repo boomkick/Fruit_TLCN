@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import {
   groupByGiftCartWithCartDetails,
   numWithCommas,
+  roundPrice,
 } from "../../../../constraints/Util";
 import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
 import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrictsProvider";
@@ -70,7 +71,7 @@ function DetailOrder() {
               <Typography fontSize="13px" textAlign="end">
                 Ngày đặt hàng: {order?.createdDate}
               </Typography>
-                <PaymentInformationBoxTextField order={order} />
+              <PaymentInformationBoxTextField order={order} />
 
               <Stack className="detailOrder-Table">
                 <Stack direction="row" className="detailOrder-Table__heading">
@@ -243,7 +244,7 @@ function DetailOrder() {
                       Phí vận chuyển
                     </Typography>
                     <Typography className="detailOrder__summary-value">
-                      {0} ₫
+                      {numWithCommas(roundPrice(order?.shippingFee || 0))} ₫
                     </Typography>
                   </Stack>
                   <Stack py={0.625} direction="row">
@@ -251,7 +252,10 @@ function DetailOrder() {
                       Tổng cộng
                     </Typography>
                     <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
-                      {numWithCommas(order?.bill?.total || 0)} ₫
+                      {numWithCommas(roundPrice(
+                        order?.bill?.total + order?.shippingFee || 0
+                      ))}{" "}
+                      ₫
                     </Typography>
                   </Stack>
                 </Stack>

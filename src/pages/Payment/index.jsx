@@ -12,6 +12,7 @@ import Loading from "../../components/Loading";
 import PaymentItem from "../../components/PaymentItem";
 import PaymentGiftCart from "../../components/PaymentGiftCart";
 import apiGiftCart from "../../apis/apiGiftCart";
+import apiGHNAddress from "../../apis/apiGHNAddress";
 
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
@@ -24,8 +25,39 @@ function Payment() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Tính tiền phí ship giao hàng của GHN
+  const [shippingFee, setShippingFee] = useState(0);
+  useEffect(() => {
+    const totalQuantity = CartItems.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+    const paramsFeeShip = {
+      service_id: 53320,
+      service_type_id: 2,
+      to_district_id: paymentAddress.district,
+      to_ward_code: paymentAddress.ward,
+      height: totalQuantity,
+      length: totalQuantity,
+      weight: totalQuantity * 250,
+      width: totalQuantity,
+    };
+
+    const handleGetFeeShip = async () => {
+      if (CartItems.length > 0) {
+        await apiGHNAddress
+          .postShippingOrderFee(paramsFeeShip)
+          .then((res) => {
+            setShippingFee(res?.data?.total);
+          })
+          .catch();
+      }
+    };
+    handleGetFeeShip();
+  }, [CartItems, paymentAddress]);
+
   // Tính tổng giá tiền, phí vận chuyển, mã giảm giá nếu có
-  const feeShip = 0;
   useEffect(() => {
     const handleGetData = async () => {
       await apiGiftCart
@@ -77,9 +109,11 @@ function Payment() {
     setPayment(event.target.value);
   };
 
-  const finalPrice = () => {
-    return totalPrice + feeShip > 0 ? Math.round(totalPrice + feeShip) : 0;
-  };
+  const finalPrice = useCallback(() => {
+    return totalPrice + shippingFee > 0
+      ? Math.round(totalPrice + shippingFee)
+      : 0;
+  }, [totalPrice, shippingFee]);
 
   // Thanh toán
   const handleSubmit = () => {
@@ -96,8 +130,8 @@ function Payment() {
       }),
     };
     payload = {
-      CityId: paymentAddress.city,
-      DistrictId: paymentAddress.district,
+      CityId: paymentAddress.city.toString(),
+      DistrictId: paymentAddress.district.toString(),
       WardId: paymentAddress.ward,
       DetailLocation: paymentAddress.addressDetail,
       Name: paymentAddress.name,
@@ -282,6 +316,12 @@ function Payment() {
                     <span> Giảm giá</span>
                     <span style={{ color: "#00AB56" }}>
                       {numWithCommas(-0)} ₫
+                    </span>
+                  </Box>
+                  <Box className="cart-summary__price">
+                    <span> Phí giao hàng</span>
+                    <span style={{ color: "#00AB56" }}>
+                      {numWithCommas(shippingFee)} ₫
                     </span>
                   </Box>
                   <Box className="cart-summary__divider"></Box>

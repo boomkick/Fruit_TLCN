@@ -33,7 +33,7 @@ export default function PaymentInformationBoxTextField(props) {
       loading={provinceDataLoading || districtDataLoading || wardDataLoading}
     >
       <Stack
-      display={"flex"}
+        display={"flex"}
         direction="row"
         mt={1.25}
         mb={2.5}
@@ -69,7 +69,7 @@ export default function PaymentInformationBoxTextField(props) {
             </Typography>
             <Typography>
               Phí vận chuyển:{" "}
-              {props?.order?.feeShip ? props?.order?.feeShip : 15000} đ
+              {props?.order?.shippingFee ? props?.order?.shippingFee : 0} đ
             </Typography>
           </Box>
         </Box>

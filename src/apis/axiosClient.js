@@ -46,8 +46,6 @@ export const axiosInstance = (user, dispatch, stateSuccess, stateFail) => {
             if(!(user && user.accessToken)){
                 return config;
             }
-            // const decodeToken = jwt_decode(user?.accessToken);
-            // let dateNow = new Date();
             config.headers['Authorization'] = `Bearer ${user.accessToken}`;
             return config;
         },

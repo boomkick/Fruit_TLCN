@@ -18,6 +18,23 @@ export const formatDate = (date) => {
   }
 };
 
+export const formatDateTime = (date) => {
+  date = new Date(date)
+  return (
+    date.getDate() +
+    "/" +
+    (date.getMonth() + 1) +
+    "/" +
+    date.getFullYear() +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds()
+  );
+};
+
 export const groupByGiftCart = (giftCartList, cartDetailList) => {
   let noGiftList = cartDetailList.filter((cartDetail) => !cartDetail.giftCart);
   let giftCartListAdded = [];

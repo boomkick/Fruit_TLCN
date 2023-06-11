@@ -20,11 +20,51 @@ import { useLocation, useParams } from "react-router-dom";
 import { Pagination as MuiPagination } from "@mui/material";
 import SearchBar from "../../components/SearchBar";
 
+const ProductList = [
+  {
+    id: 1,
+    name: "Mặc định",
+  },
+  {
+    id: 2,
+    name: "Chuối",
+  },
+  {
+    id: 3,
+    name: "Táo",
+  },
+  {
+    id: 4,
+    name: "Cam",
+  },
+  {
+    id: 5,
+    name: "Ổi",
+  },
+  {
+    id: 6,
+    name: "Thăng long",
+  },
+  {
+    id: 7,
+    name: "Xoài",
+  },
+  {
+    id: 8,
+    name: "Thơm",
+  },
+  {
+    id: 9,
+    name: "Mẵng cầu",
+  },
+];
+
 function FilterProduct(props) {
   const idParam = useParams().id
   const [idCategory, setIdCategory] = useState(idParam || "");
   const [category, setCategory] = useState(null);
   const [products, setProducts] = useState([]);
+  const [productFilter, setProductFilter] = useState(1);
   const [categories, setCategories] = useState([]);
   const [orderBy, setOrderBy] = useState(1);
   const [minValue, setMinValue] = useState(null);
@@ -152,6 +192,15 @@ function FilterProduct(props) {
   }
 
   // Lọc sản phẩm theo category
+  const handleChangeProduct = (event) => {
+    let product = ProductList.find((item) => item.id === Number(event.target.value))
+    if (product.id !== 0){
+      setProductFilter(product.id);
+      setKeyWord(product.name);
+    }
+  }
+
+  // Lọc sản phẩm theo category
   const handleChangeCategory = (event) => {
     setIdCategory(event.target.value)
   }
@@ -198,6 +247,21 @@ function FilterProduct(props) {
         </Box>
         <Box className="filterProduct__form">
           <Typography className="filterProduct__title">
+            Trái cây
+          </Typography>
+          <FormControl sx={{ minWidth: 120 , width: "100%"}}>
+            <Select
+              value={productFilter}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+              onChange={handleChangeProduct}
+            >
+              {ProductList ? ProductList.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
+            </Select>
+          </FormControl>
+        </Box>
+        <Box className="filterProduct__form">
+          <Typography className="filterProduct__title">
             Danh mục sản phẩm
           </Typography>
           <FormControl sx={{ minWidth: 120 , width: "100%"}}>
@@ -208,7 +272,7 @@ function FilterProduct(props) {
               onChange={handleChangeCategory}
             >
               <MenuItem value={""}>
-                <em>Mặc định</em>
+                Mặc định
               </MenuItem>
               {categories ? categories.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>) : <></>}
             </Select>

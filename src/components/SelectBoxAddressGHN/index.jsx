@@ -17,13 +17,13 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import apiGHNAddress from "../../apis/apiGHNAddress";
 
-SelectBoxAddressAddRecieve.propTypes = {
+SelectBoxAddressGHN.propTypes = {
   onChangeCity: PropTypes.func,
   onChangeDistrict: PropTypes.func,
   onChangeWard: PropTypes.func,
 };
 
-function SelectBoxAddressAddRecieve(props) {
+function SelectBoxAddressGHN(props) {
   const address = useSelector((state) => state.address.locations);
   const [listCity, setListCity] = useState([]);
   const [listDistrict, setListDistrict] = useState([]);
@@ -36,19 +36,14 @@ function SelectBoxAddressAddRecieve(props) {
   // Gán danh sách dữ liệu của thành phố -> quận -> phường
   useEffect(() => {
     const setDataCity = async () => {
-      await apiLocation
-        .getListCity()
+      await apiGHNAddress
+        .getProvinces()
         .then((res) => {
           setListCity(res.data);
         })
         .catch((error) => {
-          toast.error(error);
-        });
-
-      await apiGHNAddress
-        .getProvinces()
-        .then((res) => console.log("resGHN: ", res))
-        .catch((e) => console.log("errorGHN: ", e));
+            toast.error(error);
+        })
     };
 
     setDataCity();
@@ -62,8 +57,11 @@ function SelectBoxAddressAddRecieve(props) {
 
   useEffect(() => {
     const setDataDistrict = async () => {
-      apiLocation
-        .getListDistrictByCityId({ cityId: selectedCity })
+        let params = {
+            province_id: selectedCity
+        };
+        await apiGHNAddress
+        .getDistrictsByProvinceId(params)
         .then((res) => {
           setListDistrict(res.data);
         })
@@ -83,10 +81,9 @@ function SelectBoxAddressAddRecieve(props) {
 
   useEffect(() => {
     const setDataWard = async () => {
-      apiLocation
-        .getListWardByCityIdAndDistrictId({
-          cityId: selectedCity,
-          districtId: selectedDistrict,
+        apiGHNAddress
+        .getWardsByDictrictId({
+          district_id: selectedDistrict,
         })
         .then((res) => {
           setListWard(res.data);
@@ -124,7 +121,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listCity ? (
                 listCity.map((item) => (
-                  <MenuItem value={item.level1_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.ProvinceID}>{item.ProvinceName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -150,7 +147,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listDistrict ? (
                 listDistrict.map((item) => (
-                  <MenuItem value={item.level2_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.DistrictID}>{item.DistrictName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -174,7 +171,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listWard ? (
                 listWard.map((item) => (
-                  <MenuItem value={item.level3_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.WardCode}>{item.WardName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -202,7 +199,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listCity ? (
                 listCity.map((item) => (
-                  <MenuItem value={item.level1_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.ProvinceID}>{item.ProvinceName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -222,7 +219,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listDistrict ? (
                 listDistrict.map((item) => (
-                  <MenuItem value={item.level2_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.DistrictID}>{item.DistrictName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -242,7 +239,7 @@ function SelectBoxAddressAddRecieve(props) {
             >
               {listWard ? (
                 listWard.map((item) => (
-                  <MenuItem value={item.level3_id}>{item.name}</MenuItem>
+                  <MenuItem value={item.WardID}>{item.WardName}</MenuItem>
                 ))
               ) : (
                 <></>
@@ -275,4 +272,4 @@ const InputCustom = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default SelectBoxAddressAddRecieve;
+export default SelectBoxAddressGHN;

@@ -336,7 +336,6 @@ function Header() {
                     ) : (
                       <></>
                     )}
-
                     <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
                       Thoát tài khoản
                     </Box>

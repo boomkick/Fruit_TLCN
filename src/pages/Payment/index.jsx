@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import "./Payment.scss";
 import { Grid, Typography, Box, Stack, Radio, RadioGroup } from "@mui/material";
-import { groupByGiftCart, numWithCommas } from "../../constraints/Util";
+import {
+  formatDateTime,
+  groupByGiftCart,
+  numWithCommas,
+  roundPrice,
+} from "../../constraints/Util";
 import { useDispatch, useSelector } from "react-redux";
 import ChooseAddress from "../../components/ChooseAddress";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import apiCart from "../../apis/apiCart";
 import { toast } from "react-toastify";
 import { deleteAll } from "../../slices/cartSlice";
@@ -12,6 +17,19 @@ import Loading from "../../components/Loading";
 import PaymentItem from "../../components/PaymentItem";
 import PaymentGiftCart from "../../components/PaymentGiftCart";
 import apiGiftCart from "../../apis/apiGiftCart";
+import apiGHNAddress from "../../apis/apiGHNAddress";
+
+const serviceTypeFee = {
+  1: 1.5,
+  2: 1.2,
+  3: 1,
+};
+
+const serviceTypeTime = {
+  1: 1,
+  2: 1.2,
+  3: 1.7,
+};
 
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
@@ -24,8 +42,70 @@ function Payment() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Tính tiền phí ship giao hàng của GHN
+  const [shippingFee, setShippingFee] = useState(0);
+  useEffect(() => {
+    const handleGetFeeShip = async () => {
+      const totalQuantity = CartItems.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+
+      const paramsFeeShip = {
+        service_id: 53320,
+        service_type_id: 2,
+        to_district_id: paymentAddress.district,
+        to_ward_code: paymentAddress.ward,
+        height: totalQuantity,
+        length: totalQuantity,
+        weight: totalQuantity * 250,
+        width: totalQuantity,
+      };
+
+      if (CartItems.length > 0) {
+        await apiGHNAddress
+          .postShippingOrderFee(paramsFeeShip)
+          .then((res) => {
+            setShippingFee(
+              roundPrice(
+                res?.data?.total *
+                  (serviceTypeFee[paymentAddress.serviceType.toString()] || 1)
+              )
+            );
+          })
+          .catch();
+      }
+    };
+    if (paymentAddress) handleGetFeeShip();
+  }, [CartItems, paymentAddress]);
+
+  // Tính thời gian vận chuyển, thời gian này là timestamp
+  const [shippingTime, setShippingTime] = useState(0);
+  useEffect(() => {
+    const handleGetTimeShip = async () => {
+      const paramsTimeShip = {
+        service_id: 53320,
+        to_district_id: paymentAddress.district,
+        to_ward_code: paymentAddress.ward,
+      };
+
+      if (CartItems.length > 0) {
+        await apiGHNAddress
+          .postShippingOrderTime(paramsTimeShip)
+          .then((res) => {
+            const timeNow = Math.round(Date.now() / 1000)
+            const timeShipping = res?.data?.leadtime - timeNow
+            setShippingTime(
+              new Date((timeShipping * (serviceTypeTime[paymentAddress.serviceType.toString()] || 1) + timeNow)*1000)
+            );
+          })
+          .catch();
+      }
+    };
+    if (paymentAddress) handleGetTimeShip();
+  }, [CartItems, paymentAddress]);
+
   // Tính tổng giá tiền, phí vận chuyển, mã giảm giá nếu có
-  const feeShip = 0;
   useEffect(() => {
     const handleGetData = async () => {
       await apiGiftCart
@@ -77,9 +157,11 @@ function Payment() {
     setPayment(event.target.value);
   };
 
-  const finalPrice = () => {
-    return totalPrice + feeShip > 0 ? Math.round(totalPrice + feeShip) : 0;
-  };
+  const finalPrice = useCallback(() => {
+    return totalPrice + shippingFee > 0
+      ? Math.round(totalPrice + shippingFee)
+      : 0;
+  }, [totalPrice, shippingFee]);
 
   // Thanh toán
   const handleSubmit = () => {
@@ -96,12 +178,13 @@ function Payment() {
       }),
     };
     payload = {
-      CityId: paymentAddress.city,
-      DistrictId: paymentAddress.district,
+      CityId: paymentAddress.city.toString(),
+      DistrictId: paymentAddress.district.toString(),
       WardId: paymentAddress.ward,
       DetailLocation: paymentAddress.addressDetail,
       Name: paymentAddress.name,
       Phone: paymentAddress.phone,
+      ServiceType: paymentAddress.serviceType,
       paymentMethod: 0,
       ...listCartDetail,
     };
@@ -273,18 +356,25 @@ function Payment() {
             <Box>
               <Box className="cart-summary">
                 <Box py={1}>
+                <Box className="cart-summary__price">
+                    <span>Dự kiến giao hàng: </span>
+                    <span>{formatDateTime(shippingTime || Date.now())}</span>
+                  </Box>
+                  <Box className="cart-summary__divider"></Box>
                   <Box className="cart-summary__price">
                     <span>Tạm tính</span>
                     <span>{numWithCommas(totalPrice)} ₫</span>
                   </Box>
-                  {/* <Box className="cart-summary__price">
-                    <span>Phí vận chuyển</span>
-                    <span>{numWithCommas(feeShip)} ₫</span>
-                  </Box> */}
                   <Box className="cart-summary__price">
                     <span> Giảm giá</span>
                     <span style={{ color: "#00AB56" }}>
                       {numWithCommas(-0)} ₫
+                    </span>
+                  </Box>
+                  <Box className="cart-summary__price">
+                    <span> Phí giao hàng</span>
+                    <span style={{ color: "#00AB56" }}>
+                      {numWithCommas(shippingFee)} ₫
                     </span>
                   </Box>
                   <Box className="cart-summary__divider"></Box>

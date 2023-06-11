@@ -4,24 +4,27 @@ import {
   Box,
   Typography,
   Stack,
-  Checkbox,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Button,
   InputBase,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
-import SelectBoxAddress from "../../../../components/SelectBoxAddress";
 import "./AddRecieveAddress.scss";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
-import apiAddress from "../../../../apis/apiAddress";
-import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setAddress } from "../../../../slices/paymentSlice";
-import SelectBoxAddressAddRecieve from "../../../../components/SelectBoxAddressAddRecieve";
+import SelectBoxAddressGHN from "../../../../components/SelectBoxAddressGHN";
+
+const serviceTypeOptions = [
+  { id: 1, label: "NHANH", name: "Nhanh" },
+  { id: 2, label: "CHUAN", name: "Chuẩn" },
+  { id: 3, label: "TIETKIEM", name: "Tiết kiệm" },
+];
+
 
 function AddRecieveAddress() {
   const [name, setName] = useState("");
@@ -34,6 +37,12 @@ function AddRecieveAddress() {
   const navigate = useNavigate();
   const params = useParams();
   const dispatch = useDispatch();
+
+  // Thay đổi phương thức vận chuyển
+  const [serviceType, setServiceType] = useState(1)
+  const handleChangeServiceType = (event) => {
+    setServiceType(event.target.value);
+  };
 
   // Thay đổi gía trị địa chỉ
   const handleChangeCity = (value) => {
@@ -56,6 +65,7 @@ function AddRecieveAddress() {
       name: name,
       phone: phone,
       city: city,
+      serviceType: serviceType,
     };
 
     if (
@@ -65,7 +75,8 @@ function AddRecieveAddress() {
         district &&
         name &&
         phone &&
-        city
+        city &&
+        serviceType 
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
@@ -81,7 +92,7 @@ function AddRecieveAddress() {
       <Typography variant="h6">Địa chỉ nhận hàng</Typography>
 
       <Stack p="2rem" spacing={1.875} width="80%">
-        <SelectBoxAddressAddRecieve
+        <SelectBoxAddressGHN
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
@@ -119,7 +130,7 @@ function AddRecieveAddress() {
             ></InputCustom>
           </Stack>
         </Stack>
-
+        
         <Stack direction="row">
           <Typography className="create-address__label">
             Số điện thoại nhận hàng:
@@ -135,6 +146,32 @@ function AddRecieveAddress() {
             ></InputCustom>
           </Stack>
         </Stack>
+
+        <Stack direction="row">
+          <Typography className={"create-address__label"}>
+            Dịch vụ vận chuyển:
+          </Typography>
+          <FormControl className="create-address__input" sx={{ flex: "1" }}>
+            <Select
+              size="small"
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+              value={serviceType}
+              label="Age"
+              onChange={handleChangeServiceType}
+              input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
+            >
+              {serviceTypeOptions ? (
+                serviceTypeOptions.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))
+              ) : (
+                <></>
+              )}
+            </Select>
+          </FormControl>
+        </Stack>
+
 
         <Stack direction="row" justifyContent="flex-start">
           {/* <Typography className="create-address__label"></Typography> */}

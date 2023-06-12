@@ -19,6 +19,38 @@ import PaymentGiftCart from "../../components/PaymentGiftCart";
 import apiGiftCart from "../../apis/apiGiftCart";
 import apiGHNAddress from "../../apis/apiGHNAddress";
 
+const paymentMethods = [
+  {
+    id: "0",
+    display: "Thanh toán tiền mặt khi nhận hàng",
+    value: "0",
+    image:
+      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg",
+  },
+  {
+    id: "1",
+    display: "Thanh toán bằng Momo",
+    value: "1",
+    image: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
+  },
+];
+
+const shippingFeePayerOptions = [
+  {
+    id: "2",
+    display: "Trả phí khi nhận hàng",
+    value: "2",
+    image:
+      "https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Orange.png",
+  },
+  {
+    id: "1",
+    display: "Trả phí qua Momo",
+    value: "1",
+    image: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
+  },
+];
+
 const serviceTypeFee = {
   1: 1.5,
   2: 1.2,
@@ -27,7 +59,7 @@ const serviceTypeFee = {
 
 const serviceTypeTime = {
   1: 1,
-  2: 1.2,
+  2: 1.25,
   3: 1.7,
 };
 
@@ -36,6 +68,7 @@ function Payment() {
   const paymentAddress = useSelector((state) => state.payment.address);
   const [totalPrice, setTotalPrice] = useState(0);
   const [payment, setPayment] = useState("1");
+  const [shippingFeePayer, setShippingFeePayer] = useState("1");
   const [loading, setLoading] = useState(false);
   const [giftCartList, setGiftCartList] = useState([]);
   const [addresses, setAddresses] = useState();
@@ -93,11 +126,11 @@ function Payment() {
         await apiGHNAddress
           .postShippingOrderTime(paramsTimeShip)
           .then((res) => {
-            const timeNow = Math.round(Date.now() / 1000)
-            const timeShipping = res?.data?.leadtime - timeNow
-            setShippingTime(
-              new Date((timeShipping * (serviceTypeTime[paymentAddress.serviceType.toString()] || 1) + timeNow)*1000)
-            );
+            const timeNow = Math.round(Date.now() / 1000);
+            const timeShipping = res?.data?.leadtime - timeNow;
+            const heSo =
+              serviceTypeTime[paymentAddress.serviceType.toString()] || 1;
+            setShippingTime(new Date((timeShipping * heSo + timeNow) * 1000));
           })
           .catch();
       }
@@ -155,6 +188,11 @@ function Payment() {
 
   const handleChangeTypePayment = (event) => {
     setPayment(event.target.value);
+    if (event.target.value == 0) setShippingFeePayer("2");
+  };
+
+  const handleChangeTypeShippingFeePayer = (event) => {
+    setShippingFeePayer(event.target.value);
   };
 
   const finalPrice = useCallback(() => {
@@ -185,6 +223,7 @@ function Payment() {
       Name: paymentAddress.name,
       Phone: paymentAddress.phone,
       ServiceType: paymentAddress.serviceType,
+      ShippingFeePayer: Number(shippingFeePayer),
       paymentMethod: 0,
       ...listCartDetail,
     };
@@ -353,10 +392,64 @@ function Payment() {
                 ))}
               </RadioGroup>
             </Box>
+            {payment == 1 ? (
+              <Box
+              sx={{
+                backgroundColor: "#fff",
+                marginBottom: "20px",
+                padding: "16px",
+              }}
+            >
+              <Typography
+                className="payment__title"
+                gutterBottom
+                variant="h5"
+                component="div"
+              >
+                Phí shipping
+              </Typography>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={shippingFeePayer}
+                onChange={handleChangeTypeShippingFeePayer}
+              >
+                {shippingFeePayerOptions.map((item) => (
+                  <Stack
+                    key={item.id}
+                    direction="row"
+                    alignItems="center"
+                    sx={{ height: "64px" }}
+                  >
+                    <Radio
+                      name="payment"
+                      id={String(item.id)}
+                      value={item.value}
+                      sx={{ padding: 0, marginRight: "8px" }}
+                    />
+                    <img
+                      alt=""
+                      width="32px"
+                      height="32px"
+                      style={{ marginRight: "12px" }}
+                      src={item.image}
+                    ></img>
+                    <label htmlFor={item.id}>
+                      <Typography sx={{ margin: "auto 0" }}>
+                        {item.display}
+                      </Typography>
+                    </label>
+                  </Stack>
+                ))}
+              </RadioGroup>
+            </Box>
+            ) : null}
+            
+
             <Box>
               <Box className="cart-summary">
                 <Box py={1}>
-                <Box className="cart-summary__price">
+                  <Box className="cart-summary__price">
                     <span>Dự kiến giao hàng: </span>
                     <span>{formatDateTime(shippingTime || Date.now())}</span>
                   </Box>
@@ -417,21 +510,5 @@ function Payment() {
     </>
   );
 }
-
-const paymentMethods = [
-  {
-    id: "0",
-    display: "Thanh toán tiền mặt khi nhận hàng",
-    value: "0",
-    image:
-      "https://frontend.tikicdn.com/_desktop-next/static/img/icons/checkout/icon-payment-method-cod.svg",
-  },
-  {
-    id: "1",
-    display: "Thanh toán bằng Momo",
-    value: "1",
-    image: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
-  },
-];
 
 export default Payment;

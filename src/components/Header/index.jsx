@@ -34,6 +34,11 @@ import {
 import apiNotification from "../../apis/apiNotification";
 import LoadingAPI from "../LoadingAPI";
 
+import { db } from '../../firebase-config';
+import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, OrderByDirection, setDoc, doc, getDoc, limit, startAfter, getDocs } from 'firebase/firestore';
+
+
+
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -54,10 +59,15 @@ function Header() {
   const [countNotifications, setCountNotifications] = useState(0);
   const [remainNotifications, setRemainNotifications] = useState(0);
   const [notifications, setNotifications] = useState([]);
-  const [loadingNotifications, setLoadingNotifications] = useState(true);
+  const [loadingNotifications, setLoadingNotifications] = useState(false);
+
+  //Firestore
+  const cartNotificationRef = collection(db, 'CartNotification');
+  const countNotificationRef = collection(db, 'CountCartNotificationByUser');
+  const [countNotificationDocId, setCountNotificationDocId] = useState(null);
 
   const handleGetMoreNotifications = React.useCallback(() => {
-    setLoadingNotifications(true);
+    setLoadingNotifications(false);
     const params = {
       offset: notifications.length,
       size: 5,
@@ -76,18 +86,24 @@ function Header() {
   }, [notifications]);
 
   const handleResetNotification = React.useCallback(() => {
-    if (countNotifications !== 0 && notifications.length > 0) {
-      apiNotification
-        .getResetNewNotification()
-        .then((res) => setCountNotifications(0));
-    }
+    const countNotificationDoc = doc(countNotificationRef, countNotificationDocId);
+    setDoc(countNotificationDoc, {
+      "Count": 0
+    }, {
+      merge: true
+    }).then(() => console.log('aa'));
+
   }, [countNotifications, notifications]);
 
   const handleShowNotifications = React.useCallback(() => {
     const handleClick = (item) => {
-      apiNotification.putNotification({ id: item.id });
-      // setNotifications(notifications.filter((noti) => noti.id !== item.id));
-      navigate("/" + item.url);
+      const cartNotificationDocRef = doc(db, 'CartNotification', item.id);
+      setDoc(cartNotificationDocRef, {
+        "IsRead": true
+      }, {
+        merge: true
+      });
+      navigate("/" + item.Url);
     };
 
     if (notifications.length > 0) {
@@ -96,18 +112,18 @@ function Header() {
           <>
             <Stack
               onClick={() => handleClick(item)}
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", backgroundColor: item.IsRead ? '': '#ccc' }}
               paddingTop={"3px"}
             >
               <Typography lineHeight={"1.3"} fontSize={"15px"} fontWeight={500}>
-                {item.content}
+                {item.Content}
               </Typography>
               <Typography
                 fontSize={"10px"}
                 color={"#ccc"}
                 paddingBottom={"3px"}
               >
-                {item.createdDate}
+                {/* {item.CreatedDate} */}
               </Typography>
             </Stack>
             <Divider light />
@@ -156,7 +172,7 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    setLoadingNotifications(true);
+    setLoadingNotifications(false);
     const getData = async () => {
       await apiCategory
         .showAllCategory()
@@ -166,29 +182,42 @@ function Header() {
         .catch((error) => {
           setCategories([]);
         });
-      await apiNotification.getCountNewNotification().then((res) => {
-        setCountNotifications(res.data);
-      });
-      await apiNotification.getNotification().then((res) => {
-        setNotifications(res.data.notifications);
-        setRemainNotifications(res.data.remainingNotification);
-        setLoadingNotifications(false);
-      });
     };
     getData();
   }, []);
 
-  useEffect(() => {
-    setLoadingNotifications(true);
-    const getData = async () => {
-      await apiNotification.getCountNewNotification().then((res) => {
-        setCountNotifications(res.data);
-      });
-      await apiNotification.getNotification().then((res) => {
-        setNotifications(res.data.notifications);
-        setRemainNotifications(res.data.remainingNotification);
-        setLoadingNotifications(false);
-      });
+  useEffect( () => {
+    setLoadingNotifications(false);
+    const getData = () => {
+      if(user != null) {
+        //Get count notification
+        const queryCountNotification = query(countNotificationRef, where('AccountId', '==', user.id));
+        const unsubcribeCountNotification = onSnapshot(queryCountNotification, async snapshot => {
+          //If User doesn't have count notification, add new one
+          if(snapshot.docs.length == 0) {
+            const countNotificationDoc = await addDoc(countNotificationRef, {
+              AccountId: user.id,
+              Count: 0
+            })
+            setCountNotificationDocId(countNotificationDoc.id);
+            setCountNotifications(0);
+          } else { // Get the current count if count notification of user exists
+            setCountNotificationDocId(snapshot.docs.at(0).id);
+            setCountNotifications(snapshot.docs.at(0).data().Count)
+          }
+        })
+
+        //Get cart notification
+        const queryCartNotification = query(cartNotificationRef, where('AccountId', '==', user.id), orderBy('CreatedDate', 'desc'));
+        const unsubcribeNotification = onSnapshot(queryCartNotification, snapshot => {
+          let noti = [];
+          snapshot.forEach(doc => {
+            noti.push({id: doc.id, ...doc.data()});
+          })
+          console.log(noti);
+          setNotifications(noti);
+        })
+      }
     };
     getData();
   }, [user]);

@@ -5,11 +5,16 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
 import {
+  formatDateTime,
   groupByGiftCartWithCartDetails,
   numWithCommas,
 } from "../../../../constraints/Util";
 import { paymentMethod } from "../../../../constraints/PaymentMethod";
 import apiLocation from "../../../../apis/apiLocation";
+import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
+import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrictsProvider";
+import { GetGHNWardByIdProvider } from "../../../../providers/GetGHNWardsProvider";
+import PaymentInformationBoxTextField from "../../../../components/PaymentInformationBoxTextField.jsx";
 
 function DetailOrder() {
   const id = useParams().id;
@@ -20,12 +25,6 @@ function DetailOrder() {
   // Thông tin giá trị đơn hàng
   const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
   const [discount, SetDiscount] = useState(0);
-
-  // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
-  const [weight, setWeight] = useState(0);
-  const [length, setLength] = useState(0);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -57,23 +56,21 @@ function DetailOrder() {
     let params = {
       processDescription: "",
       status: 1,
-      weight: weight,
-      length: length,
-      width: width,
-      height: height,
+      weight: 1,
+      length: 1,
+      width: 1,
+      height: 1,
     };
-    console.log("param: ", params);
-    if (weight > 0 && length > 0 && width > 0 && height > 0) {
-      apiCart
-        .putProcessCart(params, id)
-        .then((res) => {
-          toast.success("Xác nhận thành công");
-          navigate("/admin/order");
-        })
-        .catch((error) => {
-          toast.error("Xác nhận không thành công");
-        });
-    } else toast.info("Vui lòng nhập thông tin chính xác.");
+
+    apiCart
+      .putProcessCart(params, id)
+      .then((res) => {
+        toast.success("Xác nhận thành công");
+        navigate("/admin/order");
+      })
+      .catch((error) => {
+        toast.error("Xác nhận không thành công");
+      });
   };
   const handleCancel = () => {
     let params = {
@@ -128,338 +125,237 @@ function DetailOrder() {
   };
 
   return (
-    <Box>
-      <Stack bgcolor="white" p={2}>
-        <Typography mt={2.5} mx={2} fontSize="22px" fontWeight={300}>
-          Chi tiết đơn hàng {order?.id}
-        </Typography>
-        <Typography sx={{ fontSize: "13px", textAlign: "end" }}>
-          Ngày đặt hàng: {order?.createdDate}
-        </Typography>
-      </Stack>
-      <Stack
-        direction="row"
-        mt={1.25}
-        mb={2.5}
-        className="detailOrder"
-        jutifyContent="space-between"
-        mx={2}
-      >
-        <Stack className="detailOrder__boxInfo">
-          <Typography>ĐỊA CHỈ NHẬN HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography style={{ color: "#000", fontWeight: 500 }}>
-              {order?.name}
-            </Typography>
-            <Typography>
-              Địa chỉ:{" "}
-              {`${city?.name}, ${district?.name},
-                                  ${ward?.name},
-                                  ${order?.detailLocation}`}
-            </Typography>
-            <Typography>Điện thoại: {order?.phone}</Typography>
-          </Box>
-        </Stack>
-
-        <Stack className="detailOrder__boxInfo">
-          <Typography>HÌNH THỨC GIAO HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography>
-              <img
-                width="56px"
-                height="16px"
-                src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Slogan-VN.png"
-                alt=""
-              />
-              {order?.shipping ? order?.shipping : "Giao hàng nhanh"}
-            </Typography>
-            <Typography>
-              Phí vận chuyển: {order?.feeShip ? order?.feeShip : "15000"}đ
-            </Typography>
-          </Box>
-        </Stack>
-        <Stack className="detailOrder__boxInfo">
-          <Typography>HÌNH THỨC THANH TOÁN</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography>
-              {
-                paymentMethod.find(
-                  (item) => item.id == order?.bill?.paymentMethod
-                )?.text
-              }
-            </Typography>
-            <Typography style={{ color: "#fda223" }}>
-              {order?.bill?.purchaseDate
-                ? order?.bill?.purchaseDate
-                : "Chưa thanh toán"}
-            </Typography>
-          </Box>
-        </Stack>
-      </Stack>
-
-      <Stack className="detailOrder-Table">
-        <Stack direction="row" className="detailOrder-Table__heading">
-          <Box>Sản phẩm</Box>
-          <Box>Giá</Box>
-          <Box>Số lượng</Box>
-          <Box>Giảm giá</Box>
-          <Box>Tạm tính</Box>
-        </Stack>
-        {products?.noGiftList?.map((item) => (
-          <Stack
-            key={item?.id}
-            direction="row"
-            className="detailOrder-Table__row"
+    <>
+      <GetGHNProvinceByIdProvider ProvinceId={order?.cityId}>
+        <GetGHNDistrictByIdProvider
+          ProvinceId={order?.cityId}
+          DistrictId={order?.districtId}
+        >
+          <GetGHNWardByIdProvider
+            DistrictId={order?.districtId}
+            WardId={order?.wardId}
           >
-            <Stack direction="row" className="orderDetail__item">
-              <Box mr={1.875}>
-                <img
-                  height="60px"
-                  width="60px"
-                  src={item?.product?.image?.url}
-                  alt=""
-                />
-              </Box>
-              <Stack spacing={1.5}>
-                <Link
-                  to={
-                    item?.product?.id
-                      ? `/product-detail/${item?.product?.id}`
-                      : ""
-                  }
-                >
-                  <Typography fontSize="14px">{item?.product?.name}</Typography>
-                </Link>
-                <Typography fontSize="13px">
-                  ID product in bill: {item?.id}
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      fontSize: "12px",
-                      width: "102px",
-                      height: "30px",
-                      padding: 0,
-                    }}
-                    onClick={(event) => {
-                      handleWriteReview(event, item?.product?.id);
-                    }}
-                  >
-                    Viết nhận xét
-                  </Button>
-                </Stack>
-              </Stack>
-            </Stack>
-            <Box>{numWithCommas(item.product.price || 0)}₫</Box>
-            <Box>{numWithCommas(item.quantity || 0)}</Box>
             <Box>
-              {numWithCommas(
-                (item.product.price - item.price) * item.quantity || 0
-              )}{" "}
-              ₫
-            </Box>
-            <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
-          </Stack>
-        ))}
-      </Stack>
-      {/* Sản phẩm theo giỏ quà */}
-      {products?.giftCartList?.map((giftCart) => (
-        <Stack className="detailOrder-Table">
-          <Stack direction="row" className="detailOrder-Table__heading">
-            <Box>{giftCart?.name}</Box>
-            <Box></Box>
-            <Box></Box>
-            <Box></Box>
-            <Box></Box>
-          </Stack>
-          {giftCart?.cartDetails?.map((item) => (
-            <Stack
-              key={item?.id}
-              direction="row"
-              className="detailOrder-Table__row"
-            >
-              <Stack direction="row" className="orderDetail__item">
-                <Box mr={1.875}>
-                  <img
-                    height="60px"
-                    width="60px"
-                    src={item?.product?.image?.url}
-                    alt=""
-                  />
-                </Box>
-                <Stack spacing={1.5}>
-                  <Link
-                    to={
-                      item?.product?.id
-                        ? `/product-detail/${item?.product?.id}`
-                        : ""
-                    }
+              <Stack bgcolor="white" p={2}>
+                <Typography mt={2.5} mx={2} fontSize="22px" fontWeight={300}>
+                  Chi tiết đơn hàng {order?.id}
+                </Typography>
+                <Typography sx={{ fontSize: "13px", textAlign: "end" }}>
+                  Ngày đặt hàng: {formatDateTime(order?.createdDate)}
+                </Typography>
+              </Stack>
+              <PaymentInformationBoxTextField order={order} />
+
+              <Stack className="detailOrder-Table">
+                <Stack direction="row" className="detailOrder-Table__heading">
+                  <Box>Sản phẩm</Box>
+                  <Box>Giá</Box>
+                  <Box>Số lượng</Box>
+                  <Box>Giảm giá</Box>
+                  <Box>Tạm tính</Box>
+                </Stack>
+                {products?.noGiftList?.map((item) => (
+                  <Stack
+                    key={item?.id}
+                    direction="row"
+                    className="detailOrder-Table__row"
                   >
-                    <Typography fontSize="14px">
-                      {item?.product?.name}
-                    </Typography>
-                  </Link>
-                  <Typography fontSize="13px">
-                    ID product in bill: {item?.id}
-                  </Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Button
-                      variant="outlined"
-                      sx={{
-                        fontSize: "12px",
-                        width: "102px",
-                        height: "30px",
-                        padding: 0,
-                      }}
-                      onClick={(event) => {
-                        handleWriteReview(event, item?.product?.id);
-                      }}
+                    <Stack direction="row" className="orderDetail__item">
+                      <Box mr={1.875}>
+                        <img
+                          height="60px"
+                          width="60px"
+                          src={item?.product?.image?.url}
+                          alt=""
+                        />
+                      </Box>
+                      <Stack spacing={1.5}>
+                        <Link
+                          to={
+                            item?.product?.id
+                              ? `/product-detail/${item?.product?.id}`
+                              : ""
+                          }
+                        >
+                          <Typography fontSize="14px">
+                            {item?.product?.name}
+                          </Typography>
+                        </Link>
+                        <Typography fontSize="13px">
+                          ID product in bill: {item?.id}
+                        </Typography>
+                        <Stack direction="row" spacing={1}>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              fontSize: "12px",
+                              width: "102px",
+                              height: "30px",
+                              padding: 0,
+                            }}
+                            onClick={(event) => {
+                              handleWriteReview(event, item?.product?.id);
+                            }}
+                          >
+                            Xem nhận xét
+                          </Button>
+                        </Stack>
+                      </Stack>
+                    </Stack>
+                    <Box>{numWithCommas(item.product.price || 0)}₫</Box>
+                    <Box>{numWithCommas(item.quantity || 0)}</Box>
+                    <Box>
+                      {numWithCommas(
+                        (item.product.price - item.price) * item.quantity || 0
+                      )}{" "}
+                      ₫
+                    </Box>
+                    <Box>
+                      {numWithCommas(item.price * item.quantity || 0)} ₫
+                    </Box>
+                  </Stack>
+                ))}
+              </Stack>
+              {/* Sản phẩm theo giỏ quà */}
+              {products?.giftCartList?.map((giftCart) => (
+                <Stack className="detailOrder-Table">
+                  <Stack direction="row" className="detailOrder-Table__heading">
+                    <Box>{giftCart?.name}</Box>
+                    <Box></Box>
+                    <Box></Box>
+                    <Box></Box>
+                    <Box></Box>
+                  </Stack>
+                  {giftCart?.cartDetails?.map((item) => (
+                    <Stack
+                      key={item?.id}
+                      direction="row"
+                      className="detailOrder-Table__row"
                     >
-                      Viết nhận xét
-                    </Button>
+                      <Stack direction="row" className="orderDetail__item">
+                        <Box mr={1.875}>
+                          <img
+                            height="60px"
+                            width="60px"
+                            src={item?.product?.image?.url}
+                            alt=""
+                          />
+                        </Box>
+                        <Stack spacing={1.5}>
+                          <Link
+                            to={
+                              item?.product?.id
+                                ? `/product-detail/${item?.product?.id}`
+                                : ""
+                            }
+                          >
+                            <Typography fontSize="14px">
+                              {item?.product?.name}
+                            </Typography>
+                          </Link>
+                          <Typography fontSize="13px">
+                            ID product in bill: {item?.id}
+                          </Typography>
+                          <Stack direction="row" spacing={1}>
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                fontSize: "12px",
+                                width: "102px",
+                                height: "30px",
+                                padding: 0,
+                              }}
+                              onClick={(event) => {
+                                handleWriteReview(event, item?.product?.id);
+                              }}
+                            >
+                              Viết nhận xét
+                            </Button>
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                      <Box>{numWithCommas(item.product.price || 0)}₫</Box>
+                      <Box>{numWithCommas(item.quantity || 0)}</Box>
+                      <Box>
+                        {numWithCommas(
+                          (item.product.price - item.price) * item.quantity || 0
+                        )}{" "}
+                        ₫
+                      </Box>
+                      <Box>
+                        {numWithCommas(item.price * item.quantity || 0)} ₫
+                      </Box>
+                    </Stack>
+                  ))}
+                </Stack>
+              ))}
+              {order && (
+                <Stack
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="flex-end"
+                  mt={3.5}
+                >
+                  <Stack py={0.625} direction="row">
+                    <Typography className="detailOrder__summary-label">
+                      Tạm tính
+                    </Typography>
+                    <Typography className="detailOrder__summary-value">
+                      {numWithCommas(billWithoutDiscount || 0)} ₫
+                    </Typography>
+                  </Stack>
+                  <Stack py={0.625} direction="row">
+                    <Typography className="detailOrder__summary-label">
+                      Giảm giá
+                    </Typography>
+                    <Typography className="detailOrder__summary-value">
+                      {numWithCommas(discount || 0)} ₫
+                    </Typography>
+                  </Stack>
+                  <Stack py={0.625} direction="row">
+                    <Typography className="detailOrder__summary-label">
+                      Phí vận chuyển
+                    </Typography>
+                    <Typography className="detailOrder__summary-value">
+                      {numWithCommas(0)} ₫
+                    </Typography>
+                  </Stack>
+                  <Stack py={0.625} direction="row">
+                    <Typography className="detailOrder__summary-label">
+                      Phí tổng cộng
+                    </Typography>
+                    <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
+                      {numWithCommas(order?.bill?.total + 0 || 0)}₫
+                    </Typography>
                   </Stack>
                 </Stack>
+              )}
+              <Stack
+                direction="row"
+                spacing="16px"
+                justifyContent="flex-end"
+                p={2}
+              >
+                {order?.status === 0 && (
+                  <>
+                    <Button variant="contained" onClick={handleComfirm}>
+                      Xác nhận
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleCancel}
+                    >
+                      Hủy bỏ
+                    </Button>
+                  </>
+                )}
               </Stack>
-              <Box>{numWithCommas(item.product.price || 0)}₫</Box>
-              <Box>{numWithCommas(item.quantity || 0)}</Box>
-              <Box>
-                {numWithCommas(
-                  (item.product.price - item.price) * item.quantity || 0
-                )}{" "}
-                ₫
-              </Box>
-              <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
-            </Stack>
-          ))}
-        </Stack>
-      ))}
-      {order && (
-        <Stack
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-end"
-          mt={3.5}
-        >
-          <Stack py={0.625} direction="row">
-            <Typography className="detailOrder__summary-label">
-              Tạm tính
-            </Typography>
-            <Typography className="detailOrder__summary-value">
-              {numWithCommas(billWithoutDiscount || 0)} ₫
-            </Typography>
-          </Stack>
-          <Stack py={0.625} direction="row">
-            <Typography className="detailOrder__summary-label">
-              Giảm giá
-            </Typography>
-            <Typography className="detailOrder__summary-value">
-              {numWithCommas(discount || 0)} ₫
-            </Typography>
-          </Stack>
-          <Stack py={0.625} direction="row">
-            <Typography className="detailOrder__summary-label">
-              Phí vận chuyển
-            </Typography>
-            <Typography className="detailOrder__summary-value">
-              {numWithCommas(0)} ₫
-            </Typography>
-          </Stack>
-          <Stack py={0.625} direction="row">
-            <Typography className="detailOrder__summary-label">
-              Phí tổng cộng
-            </Typography>
-            <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
-              {numWithCommas(order?.bill?.total + 0 || 0)}₫
-            </Typography>
-          </Stack>
-          {order?.status === 0 && (
-            <>
-              <Stack py={0.625} direction="row">
-                <Typography
-                  className="detailOrder__summary-label"
-                  style={{ paddingRight: "100px", borderTop: "1px solid #ccc" }}
-                >
-                  Cân đo đơn hàng
-                </Typography>
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Trọng lượng
-                </Typography>
-                <TextField
-                  value={weight}
-                  onChange={(event) => {
-                    setWeight(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều cao
-                </Typography>
-                <TextField
-                  value={height}
-                  onChange={(event) => {
-                    setHeight(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều dài
-                </Typography>
-                <TextField
-                  value={length}
-                  onChange={(event) => {
-                    setLength(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều rộng
-                </Typography>
-                <TextField
-                  value={width}
-                  onChange={(event) => {
-                    setWidth(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-            </>
-          )}
-        </Stack>
-      )}
-      <Stack direction="row" spacing="16px" justifyContent="flex-end" p={2}>
-        {order?.status === 0 && (
-          <>
-            <Button variant="contained" onClick={handleComfirm}>
-              Xác nhận
-            </Button>
-            <Button variant="contained" color="error" onClick={handleCancel}>
-              Hủy bỏ
-            </Button>
-          </>
-        )}
-      </Stack>
-    </Box>
+            </Box>
+          </GetGHNWardByIdProvider>
+        </GetGHNDistrictByIdProvider>
+      </GetGHNProvinceByIdProvider>
+    </>
   );
 }
 

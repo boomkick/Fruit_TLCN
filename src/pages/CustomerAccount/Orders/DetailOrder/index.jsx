@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
 import {
+  formatDateTime,
   groupByGiftCartWithCartDetails,
   numWithCommas,
   roundPrice,
@@ -69,7 +70,7 @@ function DetailOrder() {
                 Chi tiết đơn hàng #{order?.id}
               </Typography>
               <Typography fontSize="13px" textAlign="end">
-                Ngày đặt hàng: {order?.createdDate}
+                Ngày đặt hàng: {formatDateTime(order?.createdDate)}
               </Typography>
               <PaymentInformationBoxTextField order={order} />
 

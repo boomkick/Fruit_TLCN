@@ -5,11 +5,16 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
 import {
+  formatDateTime,
   groupByGiftCartWithCartDetails,
   numWithCommas,
 } from "../../../../constraints/Util";
 import { paymentMethod } from "../../../../constraints/PaymentMethod";
 import apiLocation from "../../../../apis/apiLocation";
+import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
+import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrictsProvider";
+import { GetGHNWardByIdProvider } from "../../../../providers/GetGHNWardsProvider";
+import PaymentInformationBoxTextField from "../../../../components/PaymentInformationBoxTextField.jsx";
 
 function DetailOrder() {
   const id = useParams().id;
@@ -20,12 +25,6 @@ function DetailOrder() {
   // Thông tin giá trị đơn hàng
   const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
   const [discount, SetDiscount] = useState(0);
-
-  // Thông tin đơn hàng, trọng lượng, chiều dài, cao, rộng
-  const [weight, setWeight] = useState("");
-  const [length, setLength] = useState("");
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
 
   useEffect(() => {
     const getData = async () => {
@@ -57,22 +56,20 @@ function DetailOrder() {
     let params = {
       processDescription: "",
       status: 1,
-      weight: weight,
-      length: length,
-      width: width,
-      height: height,
+      weight: 1,
+      length: 1,
+      width: 1,
+      height: 1,
     };
-    if (weight && length && width && height) {
-      apiCart
-        .putProcessCart(params, id)
-        .then((res) => {
-          toast.success("Xác nhận thành công");
-          navigate("/employee/order");
-        })
-        .catch((error) => {
-          toast.error("Xác nhận không thành công");
-        });
-    } else toast.info("Vui lòng nhập đầy đủ thông tin.");
+    apiCart
+      .putProcessCart(params, id)
+      .then((res) => {
+        toast.success("Xác nhận thành công");
+        navigate("/employee/order");
+      })
+      .catch((error) => {
+        toast.error("Xác nhận không thành công");
+      });
   };
   const handleCancel = () => {
     apiCart
@@ -125,68 +122,10 @@ function DetailOrder() {
           Chi tiết đơn hàng {order?.id}
         </Typography>
         <Typography sx={{ fontSize: "13px", textAlign: "end" }}>
-          Ngày đặt hàng: {order?.createdDate}
+          Ngày đặt hàng: {formatDateTime(order?.createdDate)}
         </Typography>
       </Stack>
-      <Stack
-        direction="row"
-        mt={1.25}
-        mb={2.5}
-        className="detailOrder"
-        jutifyContent="space-between"
-        mx={2}
-      >
-        <Stack className="detailOrder__boxInfo">
-          <Typography>ĐỊA CHỈ NHẬN HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography style={{ color: "#000", fontWeight: 500 }}>
-              {order?.name}
-            </Typography>
-            <Typography>
-              Địa chỉ:{" "}
-              {`${city?.name}, ${district?.name},
-                                  ${ward?.name},
-                                  ${order?.detailLocation}`}
-            </Typography>
-            <Typography>Điện thoại: {order?.phone}</Typography>
-          </Box>
-        </Stack>
-
-        <Stack className="detailOrder__boxInfo">
-          <Typography>HÌNH THỨC GIAO HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography>
-              <img
-                width="56px"
-                height="16px"
-                src="https://cdn.haitrieu.com/wp-content/uploads/2022/05/Logo-GHN-Slogan-VN.png"
-                alt=""
-              />
-              {order?.shipping ? order?.shipping : "Giao hàng nhanh"}
-            </Typography>
-            <Typography>
-              Phí vận chuyển: {order?.feeShip ? order?.feeShip : "15000"}đ
-            </Typography>
-          </Box>
-        </Stack>
-        <Stack className="detailOrder__boxInfo">
-          <Typography>HÌNH THỨC THANH TOÁN</Typography>
-          <Box p={1.25} className="detailOrder__content">
-            <Typography>
-              {
-                paymentMethod.find(
-                  (item) => item.id == order?.bill?.paymentMethod
-                )?.text
-              }
-            </Typography>
-            <Typography style={{ color: "#fda223" }}>
-              {order?.bill?.purchaseDate
-                ? order?.bill?.purchaseDate
-                : "Chưa thanh toán"}
-            </Typography>
-          </Box>
-        </Stack>
-      </Stack>
+      <PaymentInformationBoxTextField order={order} />
 
       <Stack className="detailOrder-Table">
         <Stack direction="row" className="detailOrder-Table__heading">
@@ -364,78 +303,6 @@ function DetailOrder() {
               {numWithCommas(order?.bill?.total + 0 || 0)}₫
             </Typography>
           </Stack>
-          {order?.status === 0 && (
-            <>
-              <Stack py={0.625} direction="row">
-                <Typography
-                  className="detailOrder__summary-label"
-                  style={{ paddingRight: "100px", borderTop: "1px solid #ccc" }}
-                >
-                  Cân đo đơn hàng
-                </Typography>
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Trọng lượng
-                </Typography>
-                <TextField
-                  value={weight}
-                  onChange={(event) => {
-                    setWeight(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều cao
-                </Typography>
-                <TextField
-                  value={height}
-                  onChange={(event) => {
-                    setHeight(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều dài
-                </Typography>
-                <TextField
-                  value={length}
-                  onChange={(event) => {
-                    setLength(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-              <Stack py={0.625} direction="row">
-                <Typography className="detailOrder__summary-label">
-                  Chiều rộng
-                </Typography>
-                <TextField
-                  value={width}
-                  onChange={(event) => {
-                    setWidth(event.target.value);
-                  }}
-                  size="small"
-                  id="outlined-basic"
-                  variant="outlined"
-                  style={{ width: "160px", padding: "0px 20px" }}
-                />
-              </Stack>
-            </>
-          )}
         </Stack>
       )}
       <Stack direction="row" spacing="16px" justifyContent="flex-end" p={2}>

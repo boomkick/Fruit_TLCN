@@ -99,7 +99,6 @@ function SlideBackGround() {
                     border: "2px solid currentColor",
                     width: "100%",
                     color: "#ffffff",
-                    // textTransform:"uppercase",
                     fontSize: "20px",
                     "&:hover": {
                       backgroundColor: "#fff",
@@ -136,7 +135,6 @@ function SlideBackGround() {
                     border: "2px solid currentColor",
                     color: "#fff",
                     fontSize: "20px",
-                    // textTransform: "uppercase",
                     "&:hover": {
                       backgroundColor: "#fff",
                       borderColor: "#fff",
@@ -151,7 +149,6 @@ function SlideBackGround() {
                     border: "2px solid currentColor",
                     color: "#fff",
                     fontSize: "20px",
-                    // textTransform: "uppercase",
                     "&:hover": {
                       backgroundColor: "#fff",
                       borderColor: "#fff",

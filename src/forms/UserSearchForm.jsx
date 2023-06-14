@@ -20,7 +20,7 @@ UserSearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
 };
 
-const keyWordTypeItems = [
+const searchByItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
   { id: 1, label: "PHONE", name: "Số điện thoại" },
   { id: 2, label: "NAME", name: "Tên người nhận" },
@@ -28,9 +28,9 @@ const keyWordTypeItems = [
 
 export default function UserSearchForm(props) {
   // Theo loại keyword
-  const [keyWordType, setKeyWordType] = useState(0);
-  const handleChangeKeyWordType = (event) => {
-    setKeyWordType(event.target.value);
+  const [searchBy, setSearchBy] = useState(0);
+  const handleChangeSearchBy = (event) => {
+    setSearchBy(event.target.value);
   };
   // Theo nội dung keyword
   const [keyWord, setKeyWord] = useState("");
@@ -41,8 +41,8 @@ export default function UserSearchForm(props) {
   useEffect(() => {
     const getData = async () => {
       let param = {};
-      if (keyWordType !== 0) {
-        param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
+      if (searchBy !== 0) {
+        param["SearchBy"] = searchBy === 1 ? "PHONE" : "NAME";
       }
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
@@ -63,8 +63,8 @@ export default function UserSearchForm(props) {
   const handleFilter = () => {
     const getData = async () => {
       let param = {};
-      if (keyWordType !== 0) {
-        param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
+      if (searchBy !== 0) {
+        param["SearchBy"] = searchBy === 1 ? "PHONE" : "NAME";
       }
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
@@ -81,7 +81,7 @@ export default function UserSearchForm(props) {
 
   const handleReset = () => {
     setKeyWord("");
-    setKeyWordType(0);
+    setSearchBy(0);
   };
 
   return (
@@ -128,15 +128,15 @@ export default function UserSearchForm(props) {
                 Tìm kiếm theo:
               </Typography>
               <Select
-                value={keyWordType}
-                onChange={handleChangeKeyWordType}
+                value={searchBy}
+                onChange={handleChangeSearchBy}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
                 cursor="pointer"
                 sx={{ minWidth: 300, width: "70%" }}
               >
-                {keyWordTypeItems ? (
-                  keyWordTypeItems.map((item) => (
+                {searchByItems ? (
+                  searchByItems.map((item) => (
                     <MenuItem value={item.id}>{item.name}</MenuItem>
                   ))
                 ) : (

@@ -15,7 +15,7 @@ import {
 } from "../../providers/GetGHNWardsProvider";
 import { paymentMethod } from "../../constraints/PaymentMethod";
 import "./PaymentInformationBoxTextField.scss";
-import { roundPrice } from "../../constraints/Util";
+import { formatDateTime, roundPrice } from "../../constraints/Util";
 
 export default function PaymentInformationBoxTextField(props) {
   // Province
@@ -48,9 +48,12 @@ export default function PaymentInformationBoxTextField(props) {
               {props?.order?.name}
             </Typography>
             <Typography>
-              {`Địa chỉ: ${props?.order?.detailLocation}, ${provinceData?.ProvinceName},
+              {`Địa chỉ: ${provinceData?.ProvinceName},
                 ${districtData?.DistrictName},
                 ${wardData?.WardName}`}
+            </Typography>
+            <Typography>
+              {`Địa chỉ chi tiết: ${props?.order?.detailLocation}`}
             </Typography>
             <Typography>Điện thoại: {props?.order?.phone}</Typography>
           </Box>
@@ -83,6 +86,11 @@ export default function PaymentInformationBoxTextField(props) {
                   (item) => item.id == props?.order?.bill?.paymentMethod
                 )?.text
               }
+            </Typography>
+            <Typography style={{ color: "#fda223" }}>
+              {props?.order?.bill?.purchaseDate
+                ? formatDateTime(props?.order?.bill?.purchaseDate)
+                : "Chưa thanh toán"}
             </Typography>
           </Box>
         </Box>

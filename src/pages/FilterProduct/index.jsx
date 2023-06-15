@@ -85,6 +85,13 @@ function FilterProduct(props) {
   }, [location.pathname, id]);
 
   useEffect(() => {
+    setTimeout(() => {
+      setKeyWord(new URLSearchParams(location.search).get("productName"))
+      setRenderCount(count => count + 1);
+    }, 200)
+  }, [location]);
+
+  useEffect(() => {
     const getData = async () => {
       let param = {
         page: currentPage,

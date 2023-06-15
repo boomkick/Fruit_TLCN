@@ -219,6 +219,7 @@
 
   li:hover .subnav {
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -274,8 +275,8 @@
     }
 
     &__dropdown-img {
-      width: 46%;
-      padding: 8px 0px 6px 0px;
+      width: 130px;
+      padding: 6px;
       margin-left: 5px;
     }
 

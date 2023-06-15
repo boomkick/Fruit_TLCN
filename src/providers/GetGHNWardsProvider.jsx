@@ -19,7 +19,7 @@ export const GetGHNWardsProvider = (props) => {
       }
     };
     getValue();
-  }, []);
+  }, [props?.DistrictId]);
 
   return (
     <GetGHNWards.Provider value={value}>

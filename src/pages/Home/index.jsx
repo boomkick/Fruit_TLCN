@@ -1,8 +1,8 @@
 import "./Home.scss";
-import { Stack, Button, Box } from "@mui/material";
+import { Stack, Button, Box, Grid, styled, Paper } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Pagination, Navigation, Autoplay, EffectCreative } from "swiper";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
@@ -21,6 +21,62 @@ import GetTop8ProductConsumer from "../../consumers/GetTop8ProductConsumer";
 import GetAllProductConsumer from "../../consumers/GetAllProductConsumer";
 import GetBestProductProvider from "../../providers/GetBestProductProvider";
 import GetBestProductConsumer from "../../consumers/GetBestProductConsumer";
+import waterMelonPNG from "../../assets/fruit_icon/watermelon.png";
+import bananaPNG from "../../assets/fruit_icon/banana.png";
+import blueberriesPNG from "../../assets/fruit_icon/blueberries.png";
+import applePNG from "../../assets/fruit_icon/apple.png";
+import mangoPNG from "../../assets/fruit_icon/mango.png";
+import cherriesPNG from "../../assets/fruit_icon/cherries.png";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+  backgroundImage:
+    "url(https://www.toptal.com/designers/subtlepatterns/uploads/dot-grid.png)",
+  height: "136px",
+  transition: "ease 0.5s",
+  cursor: "pointer",
+  ":hover": {
+    boxShadow:
+      "rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px",
+  },
+}));
+
+const fruitList = [
+  {
+    name: "Dưa hấu",
+    link: `/product-category/?productName=Dưa hấu`,
+    image: waterMelonPNG,
+  },
+  {
+    name: "Chuối",
+    link: `/product-category/?productName=Chuối`,
+    image: bananaPNG,
+  },
+  {
+    name: "Việt quất",
+    link: `/product-category/?productName=Việt quất`,
+    image: blueberriesPNG,
+  },
+  {
+    name: "Táo",
+    link: `/product-category/?productName=Táo`,
+    image: applePNG,
+  },
+  {
+    name: "Xoài",
+    link: `/product-category/?productName=Xoài`,
+    image: mangoPNG,
+  },
+  {
+    name: "Cherry",
+    link: `/product-category/?productName=Cherry`,
+    image: cherriesPNG,
+  },
+];
 
 function Home() {
   const address = useSelector((state) => {
@@ -177,277 +233,327 @@ function SlideHome() {
       <GetAllProductProvider page={currentPage}>
         <GetTop8ProductProvider>
           <GetBestProductProvider>
-          <section className="section" id="section_1">
-            <div className="section-content">
-              {/* introduce */}
-              <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={0}
-                sx={{
-                  maxWidth: "1170px",
-                  width: "100%",
-                  margin: "0 175px",
-                }}
-              >
-                {/* Box1 */}
-                <Box
+            <section className="section" id="section_1">
+              <div className="section-content">
+                {/* introduce */}
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={0}
                   sx={{
-                    position: "relative",
-                    margin: "0",
-                    padding: "0 15px 30px",
+                    maxWidth: "1170px",
                     width: "100%",
+                    margin: "0 175px",
                   }}
                 >
-                  <Stack
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={0}
+                  {/* Box1 */}
+                  <Box
+                    sx={{
+                      position: "relative",
+                      margin: "0",
+                      padding: "0 15px 30px",
+                      width: "100%",
+                    }}
                   >
-                    <div
-                      style={{
-                        width: "42px",
-                        height: "44px",
-                        position: "relative",
-                        marginBottom: "0",
-                        maxWidth: "200px",
-                      }}
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="flex-start"
+                      spacing={0}
                     >
-                      <div className="icon-box">
-                        <LocalShippingIcon
-                          sx={{
-                            position: "absolute",
-                            left: "0",
-                            objectFit: "cover",
-                            padding: "0",
-                            top: "20%",
-                            left: "20%",
-                            margin: "0",
-                          }}
-                        ></LocalShippingIcon>
-                      </div>
-                    </div>
-                    <div className="icon-text">
-                      <p
+                      <div
                         style={{
-                          lineHeight: "22px",
-                          fontSize: "16px",
+                          width: "42px",
+                          height: "44px",
+                          position: "relative",
+                          marginBottom: "0",
+                          maxWidth: "200px",
                         }}
                       >
-                        {
-                          "Giao hàng hỏa tốc trong vòng 4h và miễn phí vận chuyển khi có hóa đơn trên "
-                        }
-                        <strong>400,000đ</strong>
-                      </p>
-                    </div>
-                  </Stack>
-                </Box>
+                        <div className="icon-box">
+                          <LocalShippingIcon
+                            sx={{
+                              position: "absolute",
+                              left: "0",
+                              objectFit: "cover",
+                              padding: "0",
+                              top: "20%",
+                              left: "20%",
+                              margin: "0",
+                            }}
+                          ></LocalShippingIcon>
+                        </div>
+                      </div>
+                      <div className="icon-text">
+                        <p
+                          style={{
+                            lineHeight: "22px",
+                            fontSize: "16px",
+                          }}
+                        >
+                          {
+                            "Giao hàng hỏa tốc trong vòng 4h và miễn phí vận chuyển khi có hóa đơn trên "
+                          }
+                          <strong>400,000đ</strong>
+                        </p>
+                      </div>
+                    </Stack>
+                  </Box>
 
-                {/* Box2 */}
+                  {/* Box2 */}
 
+                  <Box
+                    sx={{
+                      position: "relative",
+                      margin: "0",
+                      padding: "0 15px 30px",
+                      width: "100%",
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="flex-start"
+                      spacing={0}
+                    >
+                      <div
+                        style={{
+                          width: "42px",
+                          height: "44px",
+                          position: "relative",
+                          marginBottom: "0",
+                          maxWidth: "200px",
+                        }}
+                      >
+                        <div className="icon-box">
+                          <CardGiftcardIcon
+                            sx={{
+                              position: "absolute",
+                              left: "0",
+                              objectFit: "cover",
+                              padding: "0",
+                              top: "20%",
+                              left: "20%",
+                              margin: "0",
+                            }}
+                          ></CardGiftcardIcon>
+                        </div>
+                      </div>
+                      <div className="icon-text">
+                        <p
+                          style={{
+                            fontSize: "16px",
+                            lineHeight: "22px",
+                          }}
+                        >
+                          Trái cây tươi ngon 100%, không ngon không lấy tiền
+                        </p>
+                      </div>
+                    </Stack>
+                  </Box>
+
+                  {/* Box3 */}
+                  <Box
+                    sx={{
+                      position: "relative",
+                      margin: "0",
+                      padding: "0 15px 30px",
+                      width: "100%",
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      justifyContent="center"
+                      alignItems="flex-start"
+                      spacing={0}
+                    >
+                      <div
+                        style={{
+                          width: "42px",
+                          height: "44px",
+                          position: "relative",
+                          marginBottom: "0",
+                          maxWidth: "200px",
+                        }}
+                      >
+                        <div className="icon-box">
+                          <PriceCheckIcon
+                            sx={{
+                              position: "absolute",
+                              left: "0",
+                              objectFit: "cover",
+                              padding: "0",
+                              top: "20%",
+                              left: "20%",
+                              margin: "0",
+                            }}
+                          ></PriceCheckIcon>
+                        </div>
+                      </div>
+                      <div className="icon-text">
+                        <p
+                          style={{
+                            fontSize: "16px",
+                            lineHeight: "22px",
+                          }}
+                        >
+                          Đặt hàng online nhanh chóng, tiện lợi, thanh toán sau
+                          khi nhận hàng
+                        </p>
+                      </div>
+                    </Stack>
+                  </Box>
+                </Stack>
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={0}
+                  sx={{
+                    maxWidth: "1170px",
+                    width: "100%",
+                    margin: "20px 175px",
+                  }}
+                >
+                  <Grid container spacing={2}>
+                    {fruitList.map((item) => (
+                      <Grid item xs={6} md={2}>
+                        <Link to={item.link}>
+                          <Item>
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              style={{ width: "60%" }}
+                            />
+                          </Item>
+                        </Link>
+                      </Grid>
+                    ))}
+                    {/*                 
+                <Grid item xs={6} md={2}>
+                  <Item>
+                    <img src={bananaPNG} alt="bananaPNG" style={{width: "60%"}}/>
+                  </Item>
+                </Grid>
+                <Grid item xs={6} md={2}>
+                  <Item>
+                    <img src={blueberriesPNG} alt="blueberriesPNG" style={{width: "60%"}}/>
+                  </Item>
+                </Grid>
+                <Grid item xs={6} md={2}>
+                  <Item>
+                    <img src={applePNG} alt="applePNG" style={{width: "60%"}}/>
+                  </Item>
+                </Grid>
+                <Grid item xs={6} md={2}>
+                  <Item>
+                    <img src={mangoPNG} alt="mangoPNG" style={{width: "60%"}}/>
+                  </Item>
+                </Grid>
+                <Grid item xs={6} md={2}>
+                  <Item>
+                    <img src={cherriesPNG} alt="cherriesPNG" style={{width: "60%"}}/>
+                  </Item>
+                </Grid> */}
+                  </Grid>
+                </Stack>
+                {/* saleProduct */}
                 <Box
                   sx={{
-                    position: "relative",
-                    margin: "0",
-                    padding: "0 15px 30px",
+                    maxWidth: "1170px",
                     width: "100%",
+                    margin: "0 175px",
+                    padding: "0px 15px 30px",
                   }}
                 >
                   <Stack
                     direction="row"
                     justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={0}
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                      marginBottom: "20px",
+                    }}
                   >
-                    <div
-                      style={{
-                        width: "42px",
-                        height: "44px",
-                        position: "relative",
-                        marginBottom: "0",
-                        maxWidth: "200px",
-                      }}
-                    >
-                      <div className="icon-box">
+                    <h2 className="section-title">
+                      <b></b>
+                      <span className="section-title-main">
                         <CardGiftcardIcon
-                          sx={{
-                            position: "absolute",
-                            left: "0",
-                            objectFit: "cover",
-                            padding: "0",
-                            top: "20%",
-                            left: "20%",
-                            margin: "0",
-                          }}
+                          sx={{ marginRight: "12px" }}
                         ></CardGiftcardIcon>
-                      </div>
-                    </div>
-                    <div className="icon-text">
-                      <p
-                        style={{
-                          fontSize: "16px",
-                          lineHeight: "22px",
-                        }}
-                      >
-                        Trái cây tươi ngon 100%, không ngon không lấy tiền
-                      </p>
-                    </div>
+                        {"Những sản phẩm bán chạy"}
+                      </span>
+                      <b></b>
+                    </h2>
                   </Stack>
+                  <GetTop8ProductConsumer />
                 </Box>
 
-                {/* Box3 */}
-
+                {/* best product */}
                 <Box
                   sx={{
-                    position: "relative",
-                    margin: "0",
-                    padding: "0 15px 30px",
+                    maxWidth: "1170px",
                     width: "100%",
+                    margin: "0 175px",
+                    padding: "0px 15px 30px",
                   }}
                 >
                   <Stack
                     direction="row"
                     justifyContent="center"
-                    alignItems="flex-start"
-                    spacing={0}
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                      marginBottom: "20px",
+                    }}
                   >
-                    <div
-                      style={{
-                        width: "42px",
-                        height: "44px",
-                        position: "relative",
-                        marginBottom: "0",
-                        maxWidth: "200px",
-                      }}
-                    >
-                      <div className="icon-box">
-                        <PriceCheckIcon
-                          sx={{
-                            position: "absolute",
-                            left: "0",
-                            objectFit: "cover",
-                            padding: "0",
-                            top: "20%",
-                            left: "20%",
-                            margin: "0",
-                          }}
-                        ></PriceCheckIcon>
-                      </div>
-                    </div>
-                    <div className="icon-text">
-                      <p
-                        style={{
-                          fontSize: "16px",
-                          lineHeight: "22px",
-                        }}
-                      >
-                        Đặt hàng online nhanh chóng, tiện lợi, thanh toán sau
-                        khi nhận hàng
-                      </p>
-                    </div>
+                    <h2 className="section-title">
+                      <b></b>
+                      <span className="section-title-main">
+                        <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
+                        {"Trái cây được mua nhiều nhất"}
+                      </span>
+                      <b></b>
+                    </h2>
                   </Stack>
+                  <GetBestProductConsumer />
                 </Box>
-              </Stack>
 
-              {/* best product */}
-              <Box
-                sx={{
-                  maxWidth: "1170px",
-                  width: "100%",
-                  margin: "0 175px",
-                  padding: "0px 15px 30px",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
+                {/* Category */}
+                <Box
                   sx={{
-                    marginBottom: "20px",
+                    maxWidth: "1170px",
+                    width: "100%",
+                    margin: "0 175px",
+                    padding: "0px 15px 30px",
                   }}
                 >
-                  <h2 className="section-title">
-                    <b></b>
-                    <span className="section-title-main">
-                      <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
-                      {"Trái cây được mua nhiều nhất"}
-                    </span>
-                    <b></b>
-                  </h2>
-                </Stack>
-                <GetBestProductConsumer/>
-              </Box>
-
-              {/* saleProduct */}
-
-              <Box
-                sx={{
-                  maxWidth: "1170px",
-                  width: "100%",
-                  margin: "0 175px",
-                  padding: "0px 15px 30px",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{
-                    marginBottom: "20px",
-                  }}
-                >
-                  <h2 className="section-title">
-                    <b></b>
-                    <span className="section-title-main">
-                      <CardGiftcardIcon
-                        sx={{ marginRight: "12px" }}
-                      ></CardGiftcardIcon>
-                      {"Những sản phẩm bán chạy"}
-                    </span>
-                    <b></b>
-                  </h2>
-                </Stack>
-                <GetTop8ProductConsumer />
-              </Box>
-
-              {/* Category */}
-              <Box
-                sx={{
-                  maxWidth: "1170px",
-                  width: "100%",
-                  margin: "0 175px",
-                  padding: "0px 15px 30px",
-                }}
-              >
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={2}
-                  sx={{
-                    marginBottom: "20px",
-                  }}
-                >
-                  <h2 className="section-title">
-                    <b></b>
-                    <span className="section-title-main">
-                      <DoneIcon sx={{ marginRight: "12px" }}></DoneIcon>
-                      {"Toàn bộ sản phẩm"}
-                    </span>
-                    <b></b>
-                  </h2>
-                </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    spacing={2}
+                    sx={{
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <h2 className="section-title">
+                      <b></b>
+                      <span className="section-title-main">
+                        <DoneIcon sx={{ marginRight: "12px" }}></DoneIcon>
+                        {"Toàn bộ sản phẩm"}
+                      </span>
+                      <b></b>
+                    </h2>
+                  </Stack>
                   <GetAllProductConsumer
                     handleChangePage={handleChangePage}
                     currentPage={currentPage}
                   />
-              </Box>
-            </div>
-          </section>
+                </Box>
+              </div>
+            </section>
           </GetBestProductProvider>
         </GetTop8ProductProvider>
       </GetAllProductProvider>

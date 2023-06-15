@@ -34,10 +34,51 @@ import {
 import apiNotification from "../../apis/apiNotification";
 import LoadingAPI from "../LoadingAPI";
 
-import { db } from '../../firebase-config';
-import { addDoc, collection, serverTimestamp, onSnapshot, query, where, orderBy, OrderByDirection, setDoc, doc, getDoc, limit, startAfter, getDocs } from 'firebase/firestore';
+import { db } from "../../firebase-config";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+  orderBy,
+  setDoc,
+  doc,
+} from "firebase/firestore";
+import bananaImage from "../../assets/fruit_fresh_header/Banana-Bread-Muffin-Tops-–-Oh-She-Glows.jpg";
+import appleImage from "../../assets/fruit_fresh_header/Everything-You-Need-to-Know-About-Buying-and-Cooking-with-Apples.jpg";
+import mangoImage from "../../assets/fruit_fresh_header/Fresh-Mangos-_Dr_-Sebi-Approved-Alkaline-Food_.jpg";
+import watermelonImage from "../../assets/fruit_fresh_header/Good-Food-Princess.jpg";
+import greenGrapesImage from "../../assets/fruit_fresh_header/Green-grapes-stock-image_-Image-of-cluster_-fresh_-branch-15408615.jpg";
+import HeaderDropdown from "../HeaderDropDown";
 
-
+const fruitList = [
+  {
+    name: "Dưa hấu",
+    link: `/product-category/?productName=Dưa hấu`,
+    image: watermelonImage,
+  },
+  {
+    name: "Nho xanh",
+    link: `/product-category/?productName=Nho xanh`,
+    image: greenGrapesImage,
+  },
+  {
+    name: "Chuối",
+    link: `/product-category/?productName=Chuối`,
+    image: bananaImage,
+  },
+  {
+    name: "Táo",
+    link: `/product-category/?productName=Táo`,
+    image: appleImage,
+  },
+  {
+    name: "Xoài",
+    link: `/product-category/?productName=Xoài`,
+    image: mangoImage,
+  },
+];
 
 function Header() {
   const navigate = useNavigate();
@@ -62,8 +103,8 @@ function Header() {
   const [loadingNotifications, setLoadingNotifications] = useState(false);
 
   //Firestore
-  const cartNotificationRef = collection(db, 'CartNotification');
-  const countNotificationRef = collection(db, 'CountCartNotificationByUser');
+  const cartNotificationRef = collection(db, "CartNotification");
+  const countNotificationRef = collection(db, "CountCartNotificationByUser");
   const [countNotificationDocId, setCountNotificationDocId] = useState(null);
 
   const handleGetMoreNotifications = React.useCallback(() => {
@@ -86,23 +127,33 @@ function Header() {
   }, [notifications]);
 
   const handleResetNotification = React.useCallback(() => {
-    const countNotificationDoc = doc(countNotificationRef, countNotificationDocId);
-    setDoc(countNotificationDoc, {
-      "Count": 0
-    }, {
-      merge: true
-    }).then(() => console.log('aa'));
-
+    const countNotificationDoc = doc(
+      countNotificationRef,
+      countNotificationDocId
+    );
+    setDoc(
+      countNotificationDoc,
+      {
+        Count: 0,
+      },
+      {
+        merge: true,
+      }
+    ).then(() => console.log("aa"));
   }, [countNotifications, notifications]);
 
   const handleShowNotifications = React.useCallback(() => {
     const handleClick = (item) => {
-      const cartNotificationDocRef = doc(db, 'CartNotification', item.id);
-      setDoc(cartNotificationDocRef, {
-        "IsRead": true
-      }, {
-        merge: true
-      });
+      const cartNotificationDocRef = doc(db, "CartNotification", item.id);
+      setDoc(
+        cartNotificationDocRef,
+        {
+          IsRead: true,
+        },
+        {
+          merge: true,
+        }
+      );
       navigate("/" + item.Url);
     };
 
@@ -112,7 +163,10 @@ function Header() {
           <>
             <Stack
               onClick={() => handleClick(item)}
-              style={{ cursor: "pointer", backgroundColor: item.IsRead ? '': '#ccc' }}
+              style={{
+                cursor: "pointer",
+                backgroundColor: item.IsRead ? "" : "#ccc",
+              }}
               paddingTop={"3px"}
             >
               <Typography lineHeight={"1.3"} fontSize={"15px"} fontWeight={500}>
@@ -186,37 +240,51 @@ function Header() {
     getData();
   }, []);
 
-  useEffect( () => {
+  useEffect(() => {
     setLoadingNotifications(false);
     const getData = () => {
-      if(user != null) {
+      if (user != null) {
         //Get count notification
-        const queryCountNotification = query(countNotificationRef, where('AccountId', '==', user.id));
-        const unsubcribeCountNotification = onSnapshot(queryCountNotification, async snapshot => {
-          //If User doesn't have count notification, add new one
-          if(snapshot.docs.length == 0) {
-            const countNotificationDoc = await addDoc(countNotificationRef, {
-              AccountId: user.id,
-              Count: 0
-            })
-            setCountNotificationDocId(countNotificationDoc.id);
-            setCountNotifications(0);
-          } else { // Get the current count if count notification of user exists
-            setCountNotificationDocId(snapshot.docs.at(0).id);
-            setCountNotifications(snapshot.docs.at(0).data().Count)
+        const queryCountNotification = query(
+          countNotificationRef,
+          where("AccountId", "==", user.id)
+        );
+        const unsubcribeCountNotification = onSnapshot(
+          queryCountNotification,
+          async (snapshot) => {
+            //If User doesn't have count notification, add new one
+            if (snapshot.docs.length == 0) {
+              const countNotificationDoc = await addDoc(countNotificationRef, {
+                AccountId: user.id,
+                Count: 0,
+              });
+              setCountNotificationDocId(countNotificationDoc.id);
+              setCountNotifications(0);
+            } else {
+              // Get the current count if count notification of user exists
+              setCountNotificationDocId(snapshot.docs.at(0).id);
+              setCountNotifications(snapshot.docs.at(0).data().Count);
+            }
           }
-        })
+        );
 
         //Get cart notification
-        const queryCartNotification = query(cartNotificationRef, where('AccountId', '==', user.id), orderBy('CreatedDate', 'desc'));
-        const unsubcribeNotification = onSnapshot(queryCartNotification, snapshot => {
-          let noti = [];
-          snapshot.forEach(doc => {
-            noti.push({id: doc.id, ...doc.data()});
-          })
-          console.log(noti);
-          setNotifications(noti);
-        })
+        const queryCartNotification = query(
+          cartNotificationRef,
+          where("AccountId", "==", user.id),
+          orderBy("CreatedDate", "desc")
+        );
+        const unsubcribeNotification = onSnapshot(
+          queryCartNotification,
+          (snapshot) => {
+            let noti = [];
+            snapshot.forEach((doc) => {
+              noti.push({ id: doc.id, ...doc.data() });
+            });
+            console.log(noti);
+            setNotifications(noti);
+          }
+        );
       }
     };
     getData();
@@ -288,6 +356,57 @@ function Header() {
                 />
               </div>
             </li>
+            {/* <li className="header__leftElement-item">
+              <Link to={"/"}>
+                <Typography
+                  className="header__leftElement-main"
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    position: "relative",
+                    paddingBottom: "5px",
+                    borderBottom: "3px solid transparent",
+                  }}
+                >
+                  Trái cây
+                </Typography>
+              </Link>
+              <div className="subnav subnav__dropdown">
+                <ul>
+                      <li>
+                        <Link to={`/product-category/?productName='Dưa hấu'`}>
+                          Dưa hấu
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={`/product-category/?productName='Dưa hấu'`}>
+                          Nho xanh
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={`/product-category/?productName='Dưa hấu'`}>
+                          Chuối
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={`/product-category/?productName='Dưa hấu'`}>
+                          Táo
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={`/product-category/?productName='Dưa hấu'`}>
+                          Xoài
+                        </Link>
+                      </li>
+                </ul>
+                <img
+                  className="subnav__dropdown-img"
+                  src={imgCategorySalad}
+                  alt=""
+                />
+              </div>
+            </li> */}
+            <HeaderDropdown headerName="Trái cây" dropdownItems={fruitList} />
             <li className="header__leftElement-item">
               <Link to={"/"}>
                 <Typography

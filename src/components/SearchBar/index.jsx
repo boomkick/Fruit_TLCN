@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Box, TextField , InputAdornment } from "@mui/material";
 
@@ -20,6 +20,12 @@ function SearchBar(props) {
       onSearch(searchText);
     }
   };
+
+  useEffect(() => {
+    if(props.value !== null && props.value !== undefined){
+      setSearchText(props.value)
+    }
+  }, [props])
 
   return (
     <div>

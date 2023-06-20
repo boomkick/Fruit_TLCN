@@ -20,7 +20,9 @@ function Header() {
           height: "100%",
           width: "100%",
           maxWidth: "1170px",
-          margin: "0 175px",
+          marginLeft: "175px",
+          marginRight: "175px",
+          marginTop: "10px",
           paddingTop: "30px",
         }}
       >

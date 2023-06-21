@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, CardMedia, Rating, Typography } from "@mui/material";
 import { Pagination } from "@mui/material";
+import {formatDate, formatDateTime} from '../../constraints/Util'
 
 function Comment(props) {
   const [idPreview, setIdPreview] = useState(null);
@@ -62,13 +63,14 @@ function Comment(props) {
                     readOnly
                     size="small"
                   />
-                  <h4>{item?.postDate}</h4>
+                  <h4>{formatDateTime(item?.postDate)}</h4>
                   <p>{item?.content}</p>
                   <Box display={"flex"}>
                     {item?.reviewResource ? (
                       item?.reviewResource.map((reviewResource) =>
                         reviewResource.type === 0 ? (
                           <img
+                            style={{width: 100, height: 100}}
                             className="detailProduct__comment-card-user-info-img"
                             src={reviewResource?.url}
                             alt=""
@@ -80,8 +82,9 @@ function Comment(props) {
                           />
                         ) : (
                           <img
+                            style={{width: 100, height: 100}}
                             className="detailProduct__comment-card-user-info-img"
-                            src="https://uxwing.com/wp-content/themes/uxwing/download/video-photography-multimedia/video-icon.png"
+                            src={reviewResource?.url.replace('mp4', 'jpg')}
                             alt=""
                             onClick={() => {
                               setIdPreview(item?.id);

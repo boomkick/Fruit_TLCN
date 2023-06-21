@@ -50,7 +50,7 @@ function DetailProduct({ data }) {
   }, [id]);
 
   useEffect(() => {
-    setRatingStars(data?.rating);
+    setRatingStars(data?.rating.toFixed(2));
     if (data?.promotion) {
       if (Number(data?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()) {
         setPromotionPrice(Math.round(data?.price - data?.promotion.value));

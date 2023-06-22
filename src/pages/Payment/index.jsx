@@ -230,6 +230,12 @@ function Payment() {
 
   // Thanh toán
   const handleSubmit = () => {
+    if (!paymentAddress) {
+      toast.info(
+        "Vui lòng nhập thông tin địa chỉ nhận hàng!"
+      );
+      return;
+    }
     if (loading) {
       toast.info(
         "Thanh toán đang được thực hiện. Vui lòng không thao tác quá nhanh"
@@ -297,14 +303,14 @@ function Payment() {
 
   return (
     <>
-      <GetGHNProvinceByIdProvider ProvinceId={paymentAddress.city}>
+      <GetGHNProvinceByIdProvider ProvinceId={paymentAddress?.city}>
         <GetGHNDistrictByIdProvider
-          ProvinceId={paymentAddress.city}
-          DistrictId={paymentAddress.district}
+          ProvinceId={paymentAddress?.city}
+          DistrictId={paymentAddress?.district}
         >
           <GetGHNWardByIdProvider
-            DistrictId={paymentAddress.district}
-            WardId={paymentAddress.ward}
+            DistrictId={paymentAddress?.district}
+            WardId={paymentAddress?.ward}
           >
             <Box className="container">
               <Grid container spacing={2} mt="24px">

@@ -21,7 +21,6 @@ function DetailOrder() {
   const [order, setOrder] = useState(null);
   const [products, setProducts] = useState(null);
   const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
-  const [discount, SetDiscount] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -31,13 +30,10 @@ function DetailOrder() {
           setOrder(res.data);
           if (res.data?.cartDetails) {
             let realBill = 0;
-            let sumaryBill = 0;
             res.data?.cartDetails.forEach((item) => {
-              realBill += item?.product?.price * item?.quantity;
-              sumaryBill += item?.price * item?.quantity;
+              realBill += item?.price * item?.quantity;
             });
             SetBillWithoutDiscount(realBill);
-            SetDiscount(realBill - sumaryBill);
           }
           setProducts(groupByGiftCartWithCartDetails(res.data?.cartDetails));
         })
@@ -79,7 +75,6 @@ function DetailOrder() {
                   <Box>Sản phẩm</Box>
                   <Box>Giá</Box>
                   <Box>Số lượng</Box>
-                  <Box>Giảm giá</Box>
                   <Box>Tạm tính</Box>
                 </Stack>
                 {products?.noGiftList?.map((item) => (
@@ -130,14 +125,8 @@ function DetailOrder() {
                         </Stack>
                       </Stack>
                     </Stack>
-                    <Box>{numWithCommas(item.product.price || 0)}₫</Box>
+                    <Box>{numWithCommas(item.price || 0)}₫</Box>
                     <Box>{numWithCommas(item.quantity || 0)}</Box>
-                    <Box>
-                      {numWithCommas(
-                        (item.product.price - item.price) * item.quantity || 0
-                      )}{" "}
-                      ₫
-                    </Box>
                     <Box>
                       {numWithCommas(item.price * item.quantity || 0)} ₫
                     </Box>
@@ -149,7 +138,6 @@ function DetailOrder() {
                 <Stack className="detailOrder-Table">
                   <Stack direction="row" className="detailOrder-Table__heading">
                     <Box>{giftCart?.name}</Box>
-                    <Box></Box>
                     <Box></Box>
                     <Box></Box>
                     <Box></Box>
@@ -202,13 +190,9 @@ function DetailOrder() {
                           </Stack>
                         </Stack>
                       </Stack>
-                      <Box>{numWithCommas(item.product.price || 0)}₫</Box>
-                      <Box>{numWithCommas(item.quantity || 0)}</Box>
+                      <Box>{numWithCommas(item.price || 0)}₫</Box>
                       <Box>
-                        {numWithCommas(
-                          (item.product.price - item.price) * item.quantity || 0
-                        )}{" "}
-                        ₫
+                        {item.quantity}
                       </Box>
                       <Box>
                         {numWithCommas(item.price * item.quantity || 0)} ₫
@@ -230,14 +214,6 @@ function DetailOrder() {
                     </Typography>
                     <Typography className="detailOrder__summary-value">
                       {numWithCommas(billWithoutDiscount || 0)} ₫
-                    </Typography>
-                  </Stack>
-                  <Stack py={0.625} direction="row">
-                    <Typography className="detailOrder__summary-label">
-                      Giảm giá
-                    </Typography>
-                    <Typography className="detailOrder__summary-value">
-                      {numWithCommas(discount || 0)} ₫
                     </Typography>
                   </Stack>
                   <Stack py={0.625} direction="row">

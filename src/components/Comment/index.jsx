@@ -25,6 +25,7 @@ function Comment(props) {
           src={itemSelected.url}
           allow="autoPlay"
           autoPlay
+          allowFullScreen={true}
           sx={{width: "32.25rem"}}
         />
       );

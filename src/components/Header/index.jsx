@@ -356,56 +356,6 @@ function Header() {
                 />
               </div>
             </li>
-            {/* <li className="header__leftElement-item">
-              <Link to={"/"}>
-                <Typography
-                  className="header__leftElement-main"
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    position: "relative",
-                    paddingBottom: "5px",
-                    borderBottom: "3px solid transparent",
-                  }}
-                >
-                  Trái cây
-                </Typography>
-              </Link>
-              <div className="subnav subnav__dropdown">
-                <ul>
-                      <li>
-                        <Link to={`/product-category/?productName='Dưa hấu'`}>
-                          Dưa hấu
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={`/product-category/?productName='Dưa hấu'`}>
-                          Nho xanh
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={`/product-category/?productName='Dưa hấu'`}>
-                          Chuối
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={`/product-category/?productName='Dưa hấu'`}>
-                          Táo
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to={`/product-category/?productName='Dưa hấu'`}>
-                          Xoài
-                        </Link>
-                      </li>
-                </ul>
-                <img
-                  className="subnav__dropdown-img"
-                  src={imgCategorySalad}
-                  alt=""
-                />
-              </div>
-            </li> */}
             <HeaderDropdown headerName="Trái cây" dropdownItems={fruitList} />
             <li className="header__leftElement-item">
               <Link to={"/"}>

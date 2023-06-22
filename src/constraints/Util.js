@@ -19,20 +19,26 @@ export const formatDate = (date) => {
 };
 
 export const formatDateTime = (date) => {
-  date = new Date(date)
-  return (
-    date.getDate() +
-    "/" +
-    (date.getMonth() + 1) +
-    "/" +
-    date.getFullYear() +
-    " " +
-    date.getHours() +
-    ":" +
-    date.getMinutes() +
-    ":" +
-    date.getSeconds()
-  );
+  date = new Date(date);
+  
+  // Lấy ngày, tháng, năm
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  
+  // Lấy giờ, phút, giây
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  
+  // Chuyển đổi sang chuỗi và thêm số 0 nếu cần thiết
+  day = day < 10 ? "0" + day : day;
+  month = month < 10 ? "0" + month : month;
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
 export const groupByGiftCart = (giftCartList, cartDetailList) => {

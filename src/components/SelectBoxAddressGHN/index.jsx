@@ -18,6 +18,9 @@ import { toast } from "react-toastify";
 import apiGHNAddress from "../../apis/apiGHNAddress";
 
 SelectBoxAddressGHN.propTypes = {
+  cityId: PropTypes.number,
+  districtId: PropTypes.number,
+  wardId: PropTypes.string,
   onChangeCity: PropTypes.func,
   onChangeDistrict: PropTypes.func,
   onChangeWard: PropTypes.func,
@@ -32,6 +35,12 @@ function SelectBoxAddressGHN(props) {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedWard, setSelectedWard] = useState("");
+
+  useEffect(() => {
+    setSelectedCity(props?.cityId)
+    setSelectedDistrict(props?.districtId)
+    setSelectedWard(props?.wardId)
+  }, [props?.cityId, props?.districtId, props?.wardId])
 
   // Gán danh sách dữ liệu của thành phố -> quận -> phường
   useEffect(() => {

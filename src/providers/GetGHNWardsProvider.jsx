@@ -10,9 +10,9 @@ export const GetGHNWardsProvider = (props) => {
   useEffect(() => {
     // Get danh sách quận, huyện theo địa chỉ của GHN
     const getValue = async () => {
-      const response = await apiGHNAddress.getWardsByDictrictId(
-        {district_id: Number(props?.DistrictId)}
-      );
+      const response = await apiGHNAddress.getWardsByDictrictId({
+        district_id: Number(props?.DistrictId),
+      });
       if (response) {
         setValue(response.data);
         setLoading(false);
@@ -39,16 +39,18 @@ export const GetGHNWardByIdProvider = (props) => {
   useEffect(() => {
     // Get danh sách quận, huyện theo địa chỉ của GHN
     const getValue = async () => {
-      const response = await apiGHNAddress.getWardsByDictrictId(
-        {district_id: Number(props?.DistrictId)}
-      );
-      if (response) {
-        if (props?.WardId) {
-          let data = response.data?.find(
-            (item) => item?.WardCode.toString() === props?.WardId
-          );
-          setValue(data);
-          setLoading(false);
+      if (props?.DistrictId && props?.WardId) {
+        const response = await apiGHNAddress.getWardsByDictrictId({
+          district_id: Number(props?.DistrictId),
+        });
+        if (response) {
+          if (props?.WardId) {
+            let data = response.data?.find(
+              (item) => item?.WardCode.toString() === props?.WardId.toString()
+            );
+            setValue(data);
+            setLoading(false);
+          }
         }
       }
     };

@@ -18,6 +18,11 @@ import PaymentItem from "../../components/PaymentItem";
 import PaymentGiftCart from "../../components/PaymentGiftCart";
 import apiGiftCart from "../../apis/apiGiftCart";
 import apiGHNAddress from "../../apis/apiGHNAddress";
+import ChangeButton from "../../components/Button/ChangeButton";
+import { GetGHNProvinceByIdProvider } from "../../providers/GetGHNProvincesProvider";
+import { GetGHNDistrictByIdProvider } from "../../providers/GetGHNDistrictsProvider";
+import { GetGHNWardByIdProvider } from "../../providers/GetGHNWardsProvider";
+import { PaymentAddress } from "./PaymentAddress";
 
 const paymentMethods = [
   {
@@ -63,6 +68,11 @@ const serviceTypeTime = {
   3: 1.7,
 };
 
+const PromotionTypeEnum = {
+  PRCIE: 0,
+  PERCENTAGE: 1,
+};
+
 function Payment() {
   const CartItems = useSelector((state) => state.cart.items);
   const paymentAddress = useSelector((state) => state.payment.address);
@@ -71,9 +81,33 @@ function Payment() {
   const [shippingFeePayer, setShippingFeePayer] = useState("1");
   const [loading, setLoading] = useState(false);
   const [giftCartList, setGiftCartList] = useState([]);
-  const [addresses, setAddresses] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Tính tiền giảm giá
+  const [totalPromotionPrice, setTotalPromotionPrice] = useState(0);
+  const handleGetPromotionPriceItem = useCallback((item) => {
+    if (
+      Number(item.product?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()
+    ) {
+      return item.product?.promotion.value;
+    } else {
+      const percent = item.product?.promotion.value / 100;
+      return item.product?.price * percent;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (CartItems.length > 0) {
+      let totalPromotion = CartItems.reduce((total, item) => {
+        if (item.product?.promotion) {
+          return total + handleGetPromotionPriceItem(item);
+        }
+        return total;
+      }, 0);
+      setTotalPromotionPrice(totalPromotion);
+    }
+  }, [CartItems, handleGetPromotionPriceItem]);
 
   // Tính tiền phí ship giao hàng của GHN
   const [shippingFee, setShippingFee] = useState(0);
@@ -165,9 +199,6 @@ function Payment() {
   }, [CartItems]);
 
   // Địa chỉ nhận hàng
-  const [open, setOpen] = useState(false);
-  const handleOpen = useCallback(() => setOpen(true), []);
-  const handleClose = useCallback(() => setOpen(false), []);
   const [openAddress, setOpenAddress] = useState(false);
   const handleOpenAddress = useCallback(() => setOpenAddress(true), []);
   const handleCloseAddress = useCallback(() => setOpenAddress(false), []);
@@ -177,10 +208,6 @@ function Payment() {
       if (!CartItems || CartItems.length < 1) {
         navigate("/");
         toast.warning("Hãy thêm sản phẩm vào giỏ hàng trước");
-      }
-      if (!paymentAddress) {
-        navigate("/my-account/address/add");
-        toast.warning("Vui lòng thêm địa chỉ nhận hàng");
       }
     };
     getAddresses();
@@ -197,9 +224,9 @@ function Payment() {
 
   const finalPrice = useCallback(() => {
     return totalPrice + shippingFee > 0
-      ? Math.round(totalPrice + shippingFee)
+      ? Math.round(totalPrice + shippingFee - totalPromotionPrice)
       : 0;
-  }, [totalPrice, shippingFee]);
+  }, [totalPrice, shippingFee, totalPromotionPrice]);
 
   // Thanh toán
   const handleSubmit = () => {
@@ -270,243 +297,253 @@ function Payment() {
 
   return (
     <>
-      <Box className="container">
-        <Grid container spacing={2} mt="24px">
-          <Grid item lg={8} md={12} sm={12} xs={12}>
-            <Box bgcolor="#fff" p={2}>
-              <Box mb={2}>
-                <Stack direction={"row"} spacing={68.5}>
-                  <Typography
-                    className="payment__title"
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                  >
-                    Sản phẩm
-                  </Typography>
-                  <Typography
-                    className="payment__title"
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                  >
-                    Tổng cộng
-                  </Typography>
-                </Stack>
-                <Box
-                  sx={{
-                    borderTop: "1px solid #bfbfbf",
-                    width: "90%",
-                    paddingBottom: "20px",
-                  }}
-                ></Box>
-                <Stack className="payment__listItem">
-                  {groupByGiftCart(giftCartList, CartItems)?.noGiftList?.map(
-                    (item) => (
-                      <PaymentItem data={item} />
-                    )
-                  )}
-                </Stack>
-              </Box>
-            </Box>
-
-            {groupByGiftCart(giftCartList, CartItems)?.giftCartList?.map(
-              (item) => (
-                <PaymentGiftCart data={item} />
-              )
-            )}
-          </Grid>
-          <Grid item lg={4} md={12} sm={12} xs={12}>
-            <Box className="cart__address">
-              <Stack direction="row" mb={1.5} justifyContent="space-between">
-                <Typography
-                  style={{ fontSize: "16px", fontWeight: 500, color: "#888" }}
-                >
-                  Giao tới
-                </Typography>
-                <Typography
-                  onClick={handleOpenAddress}
-                  color="#1890ff"
-                  sx={{ cursor: "pointer" }}
-                >
-                  Thay đổi
-                </Typography>
-              </Stack>
-              {addresses && (
-                <>
-                  <Typography mb={0.25} fontWeight={500}>
-                    {addresses.name}&nbsp;&nbsp;&nbsp;{addresses.phone}
-                  </Typography>
-                  <Typography color="#888">{`${addresses.addressDetail}, ${addresses.commune.name}, ${addresses.district.name}, ${addresses.province.name}`}</Typography>
-                </>
-              )}
-            </Box>
-
-            <Box
-              sx={{
-                backgroundColor: "#fff",
-                marginBottom: "20px",
-                padding: "16px",
-              }}
-            >
-              <Typography
-                className="payment__title"
-                gutterBottom
-                variant="h5"
-                component="div"
-              >
-                Chọn hình thức thanh toán
-              </Typography>
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={payment}
-                onChange={handleChangeTypePayment}
-              >
-                {paymentMethods.map((item) => (
-                  <Stack
-                    key={item.id}
-                    direction="row"
-                    alignItems="center"
-                    sx={{ height: "64px" }}
-                  >
-                    <Radio
-                      name="payment"
-                      id={String(item.id)}
-                      value={item.value}
-                      sx={{ padding: 0, marginRight: "8px" }}
-                    />
-                    <img
-                      alt=""
-                      width="32px"
-                      height="32px"
-                      style={{ marginRight: "12px" }}
-                      src={item.image}
-                    ></img>
-                    <label htmlFor={item.id}>
-                      <Typography sx={{ margin: "auto 0" }}>
-                        {item.display}
-                      </Typography>
-                    </label>
-                  </Stack>
-                ))}
-              </RadioGroup>
-            </Box>
-            {payment == 1 ? (
-              <Box
-              sx={{
-                backgroundColor: "#fff",
-                marginBottom: "20px",
-                padding: "16px",
-              }}
-            >
-              <Typography
-                className="payment__title"
-                gutterBottom
-                variant="h5"
-                component="div"
-              >
-                Phí shipping
-              </Typography>
-              <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={shippingFeePayer}
-                onChange={handleChangeTypeShippingFeePayer}
-              >
-                {shippingFeePayerOptions.map((item) => (
-                  <Stack
-                    key={item.id}
-                    direction="row"
-                    alignItems="center"
-                    sx={{ height: "64px" }}
-                  >
-                    <Radio
-                      name="payment"
-                      id={String(item.id)}
-                      value={item.value}
-                      sx={{ padding: 0, marginRight: "8px" }}
-                    />
-                    <img
-                      alt=""
-                      width="32px"
-                      height="32px"
-                      style={{ marginRight: "12px" }}
-                      src={item.image}
-                    ></img>
-                    <label htmlFor={item.id}>
-                      <Typography sx={{ margin: "auto 0" }}>
-                        {item.display}
-                      </Typography>
-                    </label>
-                  </Stack>
-                ))}
-              </RadioGroup>
-            </Box>
-            ) : null}
-            
-
-            <Box>
-              <Box className="cart-summary">
-                <Box py={1}>
-                  <Box className="cart-summary__price">
-                    <span>Dự kiến giao hàng: </span>
-                    <span>{formatDateTime(shippingTime || Date.now())}</span>
-                  </Box>
-                  <Box className="cart-summary__divider"></Box>
-                  <Box className="cart-summary__price">
-                    <span>Tạm tính</span>
-                    <span>{numWithCommas(totalPrice)} ₫</span>
-                  </Box>
-                  <Box className="cart-summary__price">
-                    <span> Giảm giá</span>
-                    <span style={{ color: "#00AB56" }}>
-                      {numWithCommas(-0)} ₫
-                    </span>
-                  </Box>
-                  <Box className="cart-summary__price">
-                    <span> Phí giao hàng</span>
-                    <span style={{ color: "#00AB56" }}>
-                      {numWithCommas(shippingFee)} ₫
-                    </span>
-                  </Box>
-                  <Box className="cart-summary__divider"></Box>
-                  <Box className="cart-summary__price">
-                    <span>Tổng tiền</span>
-                    <Box className="cart-summary__valueprice">
-                      <span>{numWithCommas(finalPrice())} ₫</span>
-                      <span>(Đã bao gồm VAT nếu có)</span>
+      <GetGHNProvinceByIdProvider ProvinceId={paymentAddress.city}>
+        <GetGHNDistrictByIdProvider
+          ProvinceId={paymentAddress.city}
+          DistrictId={paymentAddress.district}
+        >
+          <GetGHNWardByIdProvider
+            DistrictId={paymentAddress.district}
+            WardId={paymentAddress.ward}
+          >
+            <Box className="container">
+              <Grid container spacing={2} mt="24px">
+                <Grid item lg={8} md={12} sm={12} xs={12}>
+                  <Box bgcolor="#fff" p={2}>
+                    <Box mb={2}>
+                      <Stack direction={"row"} spacing={68.5}>
+                        <Typography
+                          className="payment__title"
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                        >
+                          Sản phẩm
+                        </Typography>
+                        <Typography
+                          className="payment__title"
+                          gutterBottom
+                          variant="h5"
+                          component="div"
+                        >
+                          Tổng cộng
+                        </Typography>
+                      </Stack>
+                      <Box
+                        sx={{
+                          borderTop: "1px solid #bfbfbf",
+                          width: "90%",
+                          paddingBottom: "20px",
+                        }}
+                      ></Box>
+                      <Stack className="payment__listItem">
+                        {groupByGiftCart(
+                          giftCartList,
+                          CartItems
+                        )?.noGiftList?.map((item) => (
+                          <PaymentItem data={item} />
+                        ))}
+                      </Stack>
                     </Box>
                   </Box>
-                </Box>
-              </Box>
-              <button
-                onClick={handleSubmit}
-                style={{
-                  width: "100%",
-                  height: "42px",
-                  fontWeight: 600,
-                  backgroundColor: "black",
-                  color: "white",
-                  fontSize: "1em",
-                  lineHeight: "38px",
-                  padding: "0 18px",
-                  marginBottom: "15px",
-                  cursor: "pointer",
-                  textTransform: "uppercase",
-                }}
-              >
-                {loading && <Loading />} Mua hàng
-              </button>
+
+                  {groupByGiftCart(giftCartList, CartItems)?.giftCartList?.map(
+                    (item) => (
+                      <PaymentGiftCart data={item} />
+                    )
+                  )}
+                </Grid>
+                <Grid item lg={4} md={12} sm={12} xs={12}>
+                  <Box className="cart__address">
+                    <Stack
+                      direction="row"
+                      mb={1.5}
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography
+                        style={{
+                          fontSize: "16px",
+                          fontWeight: 500,
+                          color: "#888",
+                        }}
+                      >
+                        Giao tới
+                      </Typography>
+                      <ChangeButton handleChange={handleOpenAddress} />
+                    </Stack>
+                    <PaymentAddress />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      backgroundColor: "#fff",
+                      marginBottom: "20px",
+                      padding: "16px",
+                    }}
+                  >
+                    <Typography
+                      className="payment__title"
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                    >
+                      Chọn hình thức thanh toán
+                    </Typography>
+                    <RadioGroup
+                      aria-labelledby="demo-controlled-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      value={payment}
+                      onChange={handleChangeTypePayment}
+                    >
+                      {paymentMethods.map((item) => (
+                        <Stack
+                          key={item.id}
+                          direction="row"
+                          alignItems="center"
+                          sx={{ height: "64px" }}
+                        >
+                          <Radio
+                            name="payment"
+                            id={String(item.id)}
+                            value={item.value}
+                            sx={{ padding: 0, marginRight: "8px" }}
+                          />
+                          <img
+                            alt=""
+                            width="32px"
+                            height="32px"
+                            style={{ marginRight: "12px" }}
+                            src={item.image}
+                          ></img>
+                          <label htmlFor={item.id}>
+                            <Typography sx={{ margin: "auto 0" }}>
+                              {item.display}
+                            </Typography>
+                          </label>
+                        </Stack>
+                      ))}
+                    </RadioGroup>
+                  </Box>
+                  {payment == 1 ? (
+                    <Box
+                      sx={{
+                        backgroundColor: "#fff",
+                        marginBottom: "20px",
+                        padding: "16px",
+                      }}
+                    >
+                      <Typography
+                        className="payment__title"
+                        gutterBottom
+                        variant="h5"
+                        component="div"
+                      >
+                        Phí shipping
+                      </Typography>
+                      <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        value={shippingFeePayer}
+                        onChange={handleChangeTypeShippingFeePayer}
+                      >
+                        {shippingFeePayerOptions.map((item) => (
+                          <Stack
+                            key={item.id}
+                            direction="row"
+                            alignItems="center"
+                            sx={{ height: "64px" }}
+                          >
+                            <Radio
+                              name="payment"
+                              id={String(item.id)}
+                              value={item.value}
+                              sx={{ padding: 0, marginRight: "8px" }}
+                            />
+                            <img
+                              alt=""
+                              width="32px"
+                              height="32px"
+                              style={{ marginRight: "12px" }}
+                              src={item.image}
+                            ></img>
+                            <label htmlFor={item.id}>
+                              <Typography sx={{ margin: "auto 0" }}>
+                                {item.display}
+                              </Typography>
+                            </label>
+                          </Stack>
+                        ))}
+                      </RadioGroup>
+                    </Box>
+                  ) : null}
+
+                  <Box>
+                    <Box className="cart-summary">
+                      <Box py={1}>
+                        <Box className="cart-summary__price">
+                          <span>Dự kiến giao hàng: </span>
+                          <span>
+                            {formatDateTime(shippingTime || Date.now())}
+                          </span>
+                        </Box>
+                        <Box className="cart-summary__divider"></Box>
+                        <Box className="cart-summary__price">
+                          <span>Tạm tính</span>
+                          <span>{numWithCommas(totalPrice)} ₫</span>
+                        </Box>
+                        <Box className="cart-summary__price">
+                          <span> Giảm giá</span>
+                          <span style={{ color: "#00AB56" }}>
+                            {numWithCommas(totalPromotionPrice || 0)} ₫
+                          </span>
+                        </Box>
+                        <Box className="cart-summary__price">
+                          <span> Phí giao hàng</span>
+                          <span style={{ color: "#00AB56" }}>
+                            {numWithCommas(shippingFee)} ₫
+                          </span>
+                        </Box>
+                        <Box className="cart-summary__divider"></Box>
+                        <Box className="cart-summary__price">
+                          <span>Tổng tiền</span>
+                          <Box className="cart-summary__valueprice">
+                            <span>{numWithCommas(finalPrice())} ₫</span>
+                            <span>(Đã bao gồm VAT nếu có)</span>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <button
+                      onClick={handleSubmit}
+                      style={{
+                        width: "100%",
+                        height: "42px",
+                        fontWeight: 600,
+                        backgroundColor: "black",
+                        color: "white",
+                        fontSize: "1em",
+                        lineHeight: "38px",
+                        padding: "0 18px",
+                        marginBottom: "15px",
+                        cursor: "pointer",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {loading && <Loading />} Mua hàng
+                    </button>
+                  </Box>
+                </Grid>
+              </Grid>
             </Box>
-          </Grid>
-        </Grid>
-      </Box>
-      <ChooseAddress
-        handleOpen={handleOpenAddress}
-        handleClose={handleCloseAddress}
-        open={openAddress}
-      />
+            <ChooseAddress
+              handleOpen={handleOpenAddress}
+              handleClose={handleCloseAddress}
+              open={openAddress}
+            />
+          </GetGHNWardByIdProvider>
+        </GetGHNDistrictByIdProvider>
+      </GetGHNProvinceByIdProvider>
     </>
   );
 }

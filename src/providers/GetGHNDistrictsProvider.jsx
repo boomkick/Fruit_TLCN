@@ -10,9 +10,9 @@ export const GetGHNDistrictsProvider = (props) => {
   useEffect(() => {
     // Get danh sách quận, huyện theo địa chỉ của GHN
     const getValue = async () => {
-      const response = await apiGHNAddress.getDistrictsByProvinceId(
-        {province_id: Number(props?.ProvinceId)}
-      );
+      const response = await apiGHNAddress.getDistrictsByProvinceId({
+        province_id: Number(props?.ProvinceId),
+      });
       if (response) {
         setValue(response.data);
         setLoading(false);
@@ -39,16 +39,18 @@ export const GetGHNDistrictByIdProvider = (props) => {
   useEffect(() => {
     // Get danh sách quận, huyện theo địa chỉ của GHN
     const getValue = async () => {
-      const response = await apiGHNAddress.getDistrictsByProvinceId(
-        {province_id: Number(props?.ProvinceId)}
-      );
-      if (response) {
-        if (props?.DistrictId) {
-          let data = response.data?.find(
-            (item) => item?.DistrictID.toString() === props?.DistrictId
-          );
-          setValue(data);
-          setLoading(false);
+      if (props?.ProvinceId && props?.DistrictId) {
+        const response = await apiGHNAddress.getDistrictsByProvinceId({
+          province_id: Number(props?.ProvinceId),
+        });
+        if (response) {
+          if (props?.DistrictId) {
+            let data = response.data?.find(
+              (item) => item?.DistrictID.toString() === props?.DistrictId.toString()
+            );
+            setValue(data);
+            setLoading(false);
+          }
         }
       }
     };

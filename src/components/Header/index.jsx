@@ -139,7 +139,7 @@ function Header() {
       {
         merge: true,
       }
-    ).then(() => console.log("aa"));
+    ).then();
   }, [countNotifications, notifications]);
 
   const handleShowNotifications = React.useCallback(() => {

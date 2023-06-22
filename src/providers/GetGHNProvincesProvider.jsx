@@ -37,14 +37,16 @@ export const GetGHNProvinceByIdProvider = (props) => {
   useEffect(() => {
     // Get danh sách thành phố, tỉnh thành theo địa chỉ của GHN
     const getValue = async () => {
-      const response = await apiGHNAddress.getProvinces();
-      if (response) {
-        if (props?.ProvinceId) {
-          let data = response.data?.find(
-            (item) => item?.ProvinceID.toString() === props?.ProvinceId
-          );
-          setValue(data);
-          setLoading(false);
+      if (props?.ProvinceId) {
+        const response = await apiGHNAddress.getProvinces();
+        if (response) {
+          if (props?.ProvinceId) {
+            let data = response.data?.find(
+              (item) => item?.ProvinceID.toString() === props?.ProvinceId.toString()
+            );
+            setValue(data);
+            setLoading(false);
+          }
         }
       }
     };

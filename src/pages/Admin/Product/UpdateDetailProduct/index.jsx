@@ -89,12 +89,11 @@ function UpdateDetailProduct() {
 
   // handle update product
   const handleUpdate = async () => {
-    setloadingUpdateProduct(true)
+    setloadingUpdateProduct(true);
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''
     let unitString = "UNIT";
-    let statusString =
-      status == 0 ? "SELLING" : "UNSOLD";
+    let statusString = status == 0 ? "SELLING" : "UNSOLD";
     let params = new FormData();
     const product = {
       Name: name,
@@ -128,7 +127,7 @@ function UpdateDetailProduct() {
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
-      setloadingUpdateProduct(false)
+      setloadingUpdateProduct(false);
       return;
     } else {
       await apiProduct
@@ -148,18 +147,17 @@ function UpdateDetailProduct() {
             setFilesEdit(product?.productImages);
             setFilesStatus(createStatusFiles(product?.productImages?.length));
             navigate("/admin/product/");
-            setloadingUpdateProduct(false)
+            setloadingUpdateProduct(false);
           } else {
             toast.error("Cập nhật sản phẩm thất bại!");
-            setloadingUpdateProduct(false)
+            setloadingUpdateProduct(false);
           }
         })
         .catch((error) => {
-          setloadingUpdateProduct(false)
+          setloadingUpdateProduct(false);
           toast.error("Cập nhật sản phẩm thất bại!");
         });
     }
-    
   };
 
   // get data for a particular product
@@ -173,7 +171,7 @@ function UpdateDetailProduct() {
           setQuantity(product?.quantity);
           setPrice(product?.price);
           setUnit(product?.unit);
-          setMinPurchase('1');
+          setMinPurchase("1");
           setDescription(product?.description);
           setStatus(product?.status);
           // old image
@@ -721,21 +719,12 @@ function UpdateDetailProduct() {
           </Button>
 
           <Stack justifyContent="end" flexDirection={"row"}>
-          <Button
-              variant="contained"
-              onClick={() => navigate(`/admin/review/${id}`)}
-              sx={{ marginRight: "10px", width: "120px" }}
-              startIcon={<RateReviewOutlinedIcon />}
-              disable = {loadingUpdateProduct}
-            >
-              {"Đánh giá"}
-            </Button>
             <Button
               variant="contained"
               onClick={handleUpdate}
               sx={{ marginRight: "10px", width: "120px" }}
               startIcon={<SaveIcon />}
-              disable = {loadingUpdateProduct}
+              disable={loadingUpdateProduct}
             >
               {"Cập nhật"}
             </Button>

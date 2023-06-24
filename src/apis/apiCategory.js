@@ -16,6 +16,10 @@ const apiCategory = {
     putCategory: async (params, id) => {
         const res = await axiosClientWithToken.put(`/Category/${id}`, params)
         return res.data;
+    },
+    getCategoryById: async (id) => {
+        const res = await axiosClientWithToken.get(`/Category/${id}`);
+        return res.data;
     }
 }
 export default apiCategory;

@@ -23,28 +23,23 @@ import {
 function CrudCategory(props) {
     const [id, setId] = useState("");
     const [name, setName] = useState("")
-    const [listCategory, setListCategory] = useState([]);
     const [category, setCategory] = useState(null);
     const [edit, setEdit] = useState(props.edit);
     const params = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const loaddata = async () => {
-            await apiCategory.showAllCategory()
+        const getCategoryById = async () => {
+            await apiCategory.getCategoryById(params.id)
             .then((res) => {
-                setListCategory(res.data);
+                setCategory(res.data);
+                setName(res.data.name);
             })
-            .catch((error) => {
-                setListCategory([]);
-            });
-
-            if (edit === true) {
-                setId(params?.id)
-                setCategory(listCategory.find((item) => item.id == id))
-            }
         }
-        loaddata()
+        getCategoryById();
+        if(edit === true) {
+            setId(params?.id);
+        }
     }, [])
 
     // useEffect(() => {
@@ -97,9 +92,8 @@ function CrudCategory(props) {
             <Stack p={3} justifyContent="center" sx={{ width: "700px" }} spacing={3}>
                 <Stack direction="row" p={2} >
                     <Typography sx={{ width: "200px" }}>Tên danh mục</Typography>
-                    <TextField value={category?.name} onChange={(event) => {
-                        setName(event.target.value)
-                    }} size="small" id="outlined-basic" variant="outlined" sx={{ flex: 1 }} />
+                    <TextField value={name} size="small" id="outlined-basic" variant="outlined" sx={{ flex: 1 }} 
+                        onChange={(event) => {setName(event.target.value)}}/>
                 </Stack>
                 <Stack justifyContent="center" alignItems="center">
                     <Button onClick={

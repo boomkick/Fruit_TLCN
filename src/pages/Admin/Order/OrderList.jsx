@@ -31,7 +31,7 @@ import BasicDateRangePicker from "../../../components/BasicDateRangePicker";
 import { toast } from "react-toastify";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
-import { formatDateTime } from "../../../constraints/Util";
+import { formatDateTime, numWithCommas } from "../../../constraints/Util";
  
  const items = [
      { id: 0, label: 'Đang xử lý'},
@@ -576,7 +576,7 @@ const orderByItems = [
                              <TableCell component="th" scope="row">{item.id} / {handleDate(item.createdDate)}</TableCell>
                              <TableCell align="left">{cartStatus.find((e) => e.id == item.status)?.text}</TableCell>
                              <TableCell align="center">{item?.bill?.purchaseDate ? formatDateTime(item?.bill?.purchaseDate) : "Chưa xác nhận"}</TableCell>
-                             <TableCell align="center">{item?.bill?.total}</TableCell>
+                             <TableCell align="center">{numWithCommas(item?.bill?.total)}₫</TableCell>
                              <TableCell align="left">{item?.name}</TableCell>
                              <TableCell align="center">
                                  <Stack spacing={1} justifyContent="center" py={1}>

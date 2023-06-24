@@ -12,6 +12,8 @@ import { green } from "@mui/material/colors";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import {numWithCommas} from '../constraints/Util'
+
 EmployeeTable.propTypes = {
   data: PropTypes.object.isRequired,
   handleSetPage: PropTypes.func.isRequired,
@@ -88,7 +90,7 @@ export default function EmployeeTable(props) {
                       <TableCell align="center">{item.role === 0 ? "Người dùng" : item.role === 1 ? "Nhân viên" : "Quản trị viên" }</TableCell>
                       <TableCell align="center">{item.phone}</TableCell>
                       <TableCell align="center">{item.email}</TableCell>
-                      <TableCell align="center">{item.salary}</TableCell>
+                      <TableCell align="center">{numWithCommas(item.salary || 0)}₫</TableCell>
                       <TableCell align="center">
                         <Stack
                           display="flex"

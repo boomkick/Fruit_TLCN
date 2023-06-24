@@ -217,6 +217,9 @@ function UpdateDetailProduct() {
         <Stack direction="row">
           <Typography className="cruBrand__label">Mô Tả</Typography>
           <TextField
+            maxRows={10}
+            rows={5}
+            multiline = {true}
             value={description}
             onChange={(event) => {
               setDescription(event.target.value);

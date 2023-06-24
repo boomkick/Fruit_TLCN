@@ -1,5 +1,5 @@
 import "./Home.scss";
-import { Stack, Button, Box, Grid, styled, Paper } from "@mui/material";
+import { Stack, Button, Box, Grid, styled, Paper, createTheme } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,6 +31,16 @@ import cherriesPNG from "../../assets/fruit_icon/cherries.png";
 import naturalFruitsBanner from "../../assets/fruit_banner/natural_fruits.jpg";
 import GetNewProductsProvider from "../../providers/GetNewProductsProvider";
 import GetNewProductsConsumer from "../../consumers/GetNewProductsConsumer";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: `"Pathway Extreme", sans-serif`,
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+});
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -440,12 +450,7 @@ function SlideHome() {
 
                   {/* newProducts */}
                   <Box
-                    sx={{
-                      maxWidth: "1170px",
-                      width: "100%",
-                      margin: "0 175px",
-                      padding: "0px 15px 30px",
-                    }}
+                    className="section-box"
                   >
                     <Stack
                       direction="row"
@@ -453,14 +458,14 @@ function SlideHome() {
                       alignItems="center"
                       spacing={2}
                       sx={{
-                        marginBottom: "20px",
+                        marginBottom: "30px",
                       }}
                     >
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
                           <NewReleasesIcon
-                            sx={{ marginRight: "12px" }}
+                            sx={{ marginRight: "16px", fontSize: "35px" }}
                           ></NewReleasesIcon>
                           {"Danh sách sản phẩm mới"}
                         </span>
@@ -472,12 +477,7 @@ function SlideHome() {
 
                   {/* best product */}
                   <Box
-                    sx={{
-                      maxWidth: "1170px",
-                      width: "100%",
-                      margin: "0 175px",
-                      padding: "0px 15px 30px",
-                    }}
+                    className="section-box"
                   >
                     <Stack
                       direction="row"
@@ -485,13 +485,13 @@ function SlideHome() {
                       alignItems="center"
                       spacing={2}
                       sx={{
-                        marginBottom: "20px",
+                        marginBottom: "30px",
                       }}
                     >
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
-                          <StarIcon sx={{ marginRight: "12px" }}></StarIcon>
+                          <StarIcon sx={{ marginRight: "16px", fontSize: "35px" }}></StarIcon>
                           {"Trái cây được mua nhiều nhất"}
                         </span>
                         <b></b>
@@ -502,12 +502,7 @@ function SlideHome() {
 
                   {/* saleProduct */}
                   <Box
-                    sx={{
-                      maxWidth: "1170px",
-                      width: "100%",
-                      margin: "0 175px",
-                      padding: "0px 15px 30px",
-                    }}
+                    className="section-box"
                   >
                     <Stack
                       direction="row"
@@ -515,14 +510,14 @@ function SlideHome() {
                       alignItems="center"
                       spacing={2}
                       sx={{
-                        marginBottom: "20px",
+                        marginBottom: "30px",
                       }}
                     >
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
                           <CardGiftcardIcon
-                            sx={{ marginRight: "12px" }}
+                            sx={{ marginRight: "16px", fontSize: "35px" }}
                           ></CardGiftcardIcon>
                           {"Những sản phẩm bán chạy"}
                         </span>
@@ -534,12 +529,7 @@ function SlideHome() {
 
                   {/* Category */}
                   <Box
-                    sx={{
-                      maxWidth: "1170px",
-                      width: "100%",
-                      margin: "0 175px",
-                      padding: "0px 15px 30px",
-                    }}
+                    className="section-box"
                   >
                     <img
                       src={naturalFruitsBanner}
@@ -550,12 +540,7 @@ function SlideHome() {
 
                   {/* Category */}
                   <Box
-                    sx={{
-                      maxWidth: "1170px",
-                      width: "100%",
-                      margin: "0 175px",
-                      padding: "0px 15px 30px",
-                    }}
+                    className="section-box"
                   >
                     <Stack
                       direction="row"
@@ -563,13 +548,13 @@ function SlideHome() {
                       alignItems="center"
                       spacing={2}
                       sx={{
-                        marginBottom: "20px",
+                        marginBottom: "30px",
                       }}
                     >
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
-                          <DoneIcon sx={{ marginRight: "12px" }}></DoneIcon>
+                          <DoneIcon sx={{ marginRight: "16px", fontSize: "35px" }}></DoneIcon>
                           {"Toàn bộ sản phẩm"}
                         </span>
                         <b></b>

@@ -15,6 +15,8 @@ import {
   Box,
   Modal,
   Divider,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 
 import { logoutSuccess } from "../../slices/authSlice";
@@ -51,6 +53,16 @@ import mangoImage from "../../assets/fruit_fresh_header/Fresh-Mangos-_Dr_-Sebi-A
 import watermelonImage from "../../assets/fruit_fresh_header/Good-Food-Princess.jpg";
 import greenGrapesImage from "../../assets/fruit_fresh_header/Green-grapes-stock-image_-Image-of-cluster_-fresh_-branch-15408615.jpg";
 import HeaderDropdown from "../HeaderDropDown";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: `"Pathway Extreme", sans-serif`,
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+});
 
 const fruitList = [
   {
@@ -298,286 +310,297 @@ function Header() {
   }
 
   return (
-    <header id="header" className="header">
-      <Stack
-        justifyContent="space-between"
-        direction="row"
-        alignItems="center"
-        sx={{
-          height: "100%",
-          width: "100%",
-          maxWidth: "1170px",
-          margin: "0 175px",
-        }}
-      >
-        {/* logo */}
-        <Link className="header__logo" to={"/"}>
-          <img
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            src={img}
-          />
-        </Link>
+    <ThemeProvider theme={theme}>
+      <header id="header" className="header">
+        <Stack
+          justifyContent="space-between"
+          direction="row"
+          alignItems="center"
+          sx={{
+            height: "100%",
+            width: "100%",
+            maxWidth: "1170px",
+            margin: "0 175px",
+          }}
+        >
+          {/* logo */}
+          <Link className="header__logo" to={"/"}>
+            <img
+              alt=""
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              src={img}
+            />
+          </Link>
 
-        {/* Left Element */}
-        <div className="element header__leftElement">
-          <ul className="navbar">
-            <li className="header__leftElement-item">
-              <Link to={"/"}>
-                <Typography
-                  className="header__leftElement-main"
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    position: "relative",
-                    paddingBottom: "5px",
-                    borderBottom: "3px solid transparent",
-                  }}
-                >
-                  Danh mục trái cây
-                </Typography>
-              </Link>
-              <div className="subnav subnav__dropdown">
-                <ul>
-                  {categories.map((item) => {
-                    return (
-                      <li>
-                        <Link to={`/product-category/${item?.id}`}>
-                          {item?.name}
-                        </Link>
-                      </li>
-                    );
-                  })}
+          {/* Left Element */}
+          <div className="element header__leftElement">
+            <ul className="navbar">
+              <li className="header__leftElement-item">
+                <Link to={"/"}>
+                  <Typography
+                    className="header__leftElement-main"
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: "700",
+                      position: "relative",
+                      paddingBottom: "5px",
+                      borderBottom: "3px solid transparent",
+                    }}
+                  >
+                    DANH MỤC
+                  </Typography>
+                </Link>
+                <div className="subnav subnav__dropdown">
+                  <ul>
+                    {categories.map((item) => {
+                      return (
+                        <li>
+                          <Link to={`/product-category/${item?.id}`}>
+                            {item?.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <img
+                    className="subnav__dropdown-img"
+                    src={imgCategorySalad}
+                    alt=""
+                  />
+                </div>
+              </li>
+              <HeaderDropdown headerName="Trái cây" dropdownItems={fruitList} />
+              <li className="header__leftElement-item">
+                <Link to={"/"}>
+                  <Typography
+                    className="header__leftElement-main"
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: "700",
+                      position: "relative",
+                      paddingBottom: "5px",
+                      borderBottom: "3px solid transparent",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Hỗ Trợ Khách Hàng
+                  </Typography>
+                </Link>
+                <ul className="subnav subnav__dropdown">
+                  <li>
+                    <Link to={"/"}>Hướng dẫn sử dụng</Link>
+                    <Link to={"/"}>Hướng dẫn đăng kí tài khoản</Link>
+                  </li>
                 </ul>
-                <img
-                  className="subnav__dropdown-img"
-                  src={imgCategorySalad}
-                  alt=""
-                />
-              </div>
-            </li>
-            <HeaderDropdown headerName="Trái cây" dropdownItems={fruitList} />
-            <li className="header__leftElement-item">
-              <Link to={"/"}>
-                <Typography
-                  className="header__leftElement-main"
-                  sx={{
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    position: "relative",
-                    paddingBottom: "5px",
-                    borderBottom: "3px solid transparent",
-                  }}
-                >
-                  Hỗ Trợ Khách Hàng
-                </Typography>
-              </Link>
-              <ul className="subnav subnav__dropdown">
-                <li>
-                  <Link to={"/"}>Hướng dẫn sử dụng</Link>
-                  <Link to={"/"}>Hướng dẫn đăng kí tài khoản</Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+              </li>
+            </ul>
+          </div>
 
-        {/* Right Element */}
-        <div className="element header_rightElement">
-          <ul className="navbar">
-            <li className="header__account">
-              {user ? (
-                <>
-                  <Stack>
-                    <Button
-                      sx={{ color: "#3D8B91", padding: "6px 0" }}
-                      endIcon={<ArrowDropDownOutlinedIcon />}
-                    >
-                      <Typography
-                        className="text-overflow-1-lines"
-                        sx={{
-                          fontSize: "14px",
-                          textAlign: "start",
-                          color: "#3D8B91",
-                          fontWeight: "700",
-                        }}
+          {/* Right Element */}
+          <div className="element header_rightElement">
+            <ul className="navbar">
+              <li className="header__account">
+                {user ? (
+                  <>
+                    <Stack>
+                      <Button
+                        sx={{ color: "#3D8B91", padding: "6px 0" }}
+                        endIcon={<ArrowDropDownOutlinedIcon />}
                       >
-                        {user.fullName}
+                        <Typography
+                          className="text-overflow-1-lines"
+                          sx={{
+                            fontSize: "14px",
+                            textAlign: "start",
+                            color: "#3D8B91",
+                            fontWeight: "700",
+                          }}
+                        >
+                          {user.fullName}
+                        </Typography>
+                      </Button>
+                    </Stack>
+
+                    <Box className="header__dropdown">
+                      <Link
+                        to={"/my-account/orders"}
+                        style={{ padding: "8px 20px" }}
+                      >
+                        Đơn hàng của tôi
+                      </Link>
+
+                      <Link to={"/my-account"} style={{ padding: "8px 20px" }}>
+                        Tài khoản của tôi
+                      </Link>
+
+                      {user?.role == 1 ? (
+                        <>
+                          <Link
+                            to={"/employee"}
+                            style={{ padding: "8px 20px" }}
+                          >
+                            Trang nhân viên
+                          </Link>
+                        </>
+                      ) : user.role == 2 ? (
+                        <>
+                          <Link to={"/admin"} style={{ padding: "8px 20px" }}>
+                            Trang quản trị viên
+                          </Link>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
+                        Thoát tài khoản
+                      </Box>
+                    </Box>
+                  </>
+                ) : (
+                  <>
+                    <Button onClick={openModalLogin} sx={{ color: "#3D8B91" }}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        Đăng nhập
                       </Typography>
                     </Button>
-                  </Stack>
+                  </>
+                )}
+              </li>
 
-                  <Box className="header__dropdown">
-                    <Link
-                      to={"/my-account/orders"}
-                      style={{ padding: "8px 20px" }}
-                    >
-                      Đơn hàng của tôi
-                    </Link>
-
-                    <Link to={"/my-account"} style={{ padding: "8px 20px" }}>
-                      Tài khoản của tôi
-                    </Link>
-
-                    {user?.role == 1 ? (
-                      <>
-                        <Link to={"/employee"} style={{ padding: "8px 20px" }}>
-                          Trang nhân viên
-                        </Link>
-                      </>
-                    ) : user.role == 2 ? (
-                      <>
-                        <Link to={"/admin"} style={{ padding: "8px 20px" }}>
-                          Trang quản trị viên
-                        </Link>
-                      </>
-                    ) : (
-                      <></>
-                    )}
-                    <Box onClick={handleLogout} style={{ fontSize: "14px" }}>
-                      Thoát tài khoản
-                    </Box>
-                  </Box>
-                </>
-              ) : (
+              {user ? (
                 <>
-                  <Button onClick={openModalLogin} sx={{ color: "#3D8B91" }}>
-                    <Typography sx={{ fontSize: "14px" }}>Đăng nhập</Typography>
-                  </Button>
-                </>
-              )}
-            </li>
+                  <li className="divider"></li>
+                  <li className="header__notification">
+                    <div onMouseLeave={handleResetNotification}>
+                      <Stack>
+                        <Badge
+                          color="warning"
+                          badgeContent={countNotifications}
+                          invisible={countNotifications === 0}
+                          showZero
+                        >
+                          <NotificationsActiveIcon sx={{ fontSize: "25px" }} />
+                        </Badge>
+                      </Stack>
+                    </div>
 
-            {user ? (
-              <>
-                <li className="divider"></li>
-                <li className="header__notification">
-                  <div onMouseLeave={handleResetNotification}>
-                    <Stack>
+                    <Box className="header__notification__dropdown">
+                      <Stack className="header__notification__dropdown__top">
+                        <Typography sx={{ fontWeight: "700" }}>
+                          Thông báo này bạn ơi !
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          maxHeight: "500px",
+                          overflowY: "scroll",
+                        }}
+                      >
+                        <LoadingAPI loading={loadingNotifications}>
+                          {notifications ? (
+                            handleShowNotifications()
+                          ) : (
+                            <>
+                              <Stack
+                                style={{
+                                  padding: "8px 20px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <Typography>
+                                  Bạn không có thông báo mới
+                                </Typography>
+                              </Stack>
+                            </>
+                          )}
+                        </LoadingAPI>
+                        {remainNotifications > 0 ? (
+                          <Stack
+                            display={"flex"}
+                            alignItems={"center"}
+                            paddingTop={"10px"}
+                          >
+                            <Button
+                              startIcon={<AddBoxOutlinedIcon />}
+                              variant="outlined"
+                              color="success"
+                              onClick={() => handleGetMoreNotifications()}
+                            >
+                              {" "}
+                              Xem thêm
+                            </Button>
+                          </Stack>
+                        ) : null}
+                      </Stack>
+                    </Box>
+                  </li>
+                </>
+              ) : null}
+              {user ? (
+                <>
+                  <li className="divider"></li>
+                  <li>
+                    <Link to="/cart">
                       <Badge
                         color="warning"
-                        badgeContent={countNotifications}
-                        invisible={countNotifications === 0}
+                        badgeContent={cart?.length}
+                        invisible={cart?.length === 0}
                         showZero
                       >
-                        <NotificationsActiveIcon sx={{ fontSize: "25px" }} />
+                        <ShoppingBagIcon sx={{ fontSize: "25px" }} />
                       </Badge>
-                    </Stack>
-                  </div>
+                    </Link>
+                  </li>
+                </>
+              ) : null}
 
-                  <Box className="header__notification__dropdown">
-                    <Stack className="header__notification__dropdown__top">
-                      <Typography sx={{ fontWeight: "700" }}>
-                        Thông báo này bạn ơi !
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        maxHeight: "500px",
-                        overflowY: "scroll",
-                      }}
-                    >
-                      <LoadingAPI loading={loadingNotifications}>
-                        {notifications ? (
-                          handleShowNotifications()
-                        ) : (
-                          <>
-                            <Stack
-                              style={{ padding: "8px 20px", cursor: "pointer" }}
-                            >
-                              <Typography>
-                                Bạn không có thông báo mới
-                              </Typography>
-                            </Stack>
-                          </>
-                        )}
-                      </LoadingAPI>
-                      {remainNotifications > 0 ? (
-                        <Stack
-                          display={"flex"}
-                          alignItems={"center"}
-                          paddingTop={"10px"}
-                        >
-                          <Button
-                            startIcon={<AddBoxOutlinedIcon />}
-                            variant="outlined"
-                            color="success"
-                            onClick={() => handleGetMoreNotifications()}
-                          >
-                            {" "}
-                            Xem thêm
-                          </Button>
-                        </Stack>
-                      ) : null}
-                    </Stack>
-                  </Box>
-                </li>
-              </>
-            ) : null}
-            {user ? (
-              <>
-                <li className="divider"></li>
-                <li>
-                  <Link to="/cart">
-                    <Badge
-                      color="warning"
-                      badgeContent={cart?.length}
-                      invisible={cart?.length === 0}
-                      showZero
-                    >
-                      <ShoppingBagIcon sx={{ fontSize: "25px" }} />
-                    </Badge>
+              <li className="divider"></li>
+
+              <li>
+                <div className="buttonSearch">
+                  <Link
+                    to={`/product-category/`}
+                    className="icon"
+                    aria-label="Tìm Kiếm"
+                    data-open="#search-lightbox"
+                    data-focus="input.search-field"
+                  >
+                    <SearchIcon sx={{ fontSize: "25px" }} />
                   </Link>
-                </li>
-              </>
-            ) : null}
+                </div>
+              </li>
+            </ul>
+          </div>
+        </Stack>
 
-            <li className="divider"></li>
+        {/* ModelLogin */}
+        <Modal
+          sx={{ overflowY: "scroll" }}
+          open={modalLogin}
+          onClose={closeModalLogin}
+        >
+          <Box className="modal-login" sx={{ width: "800px" }}>
+            {isLoginForm && (
+              <Login
+                handleOpenSignup={handleOpenSignup}
+                closeModalLogin={closeModalLogin}
+              />
+            )}
 
-            <li>
-              <div className="buttonSearch">
-                <Link
-                  to={`/product-category/`}
-                  className="icon"
-                  aria-label="Tìm Kiếm"
-                  data-open="#search-lightbox"
-                  data-focus="input.search-field"
-                >
-                  <SearchIcon sx={{ fontSize: "25px" }} />
-                </Link>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </Stack>
-
-      {/* ModelLogin */}
-      <Modal
-        sx={{ overflowY: "scroll" }}
-        open={modalLogin}
-        onClose={closeModalLogin}
-      >
-        <Box className="modal-login" sx={{ width: "800px" }}>
-          {isLoginForm && (
-            <Login
-              handleOpenSignup={handleOpenSignup}
-              closeModalLogin={closeModalLogin}
-            />
-          )}
-
-          {isRegister && (
-            <SignUp
-              handleOpenLogin={handleOpenLogin}
-              closeModalLogin={closeModalLogin}
-            />
-          )}
-        </Box>
-      </Modal>
-    </header>
+            {isRegister && (
+              <SignUp
+                handleOpenLogin={handleOpenLogin}
+                closeModalLogin={closeModalLogin}
+              />
+            )}
+          </Box>
+        </Modal>
+      </header>
+    </ThemeProvider>
   );
 }
 

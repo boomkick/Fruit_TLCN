@@ -31,9 +31,9 @@ function UpdateDetailProduct() {
   const [category, setCategory] = useState("");
   const [listCategory, setListCategory] = useState([]);
   const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [unit, setUnit] = useState("");
-  const [minPurchase, setMinPurchase] = useState("");
+  const [quantity, setQuantity] = useState("0");
+  const [unit, setUnit] = useState("UNIT");
+  const [minPurchase, setMinPurchase] = useState("1");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [loadingUpdateProduct, setloadingUpdateProduct] = useState(false);
@@ -66,7 +66,7 @@ function UpdateDetailProduct() {
     setloadingUpdateProduct(true);
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''
-    let unitString = unit == 0 ? "WEIGHT" : "UNIT";
+    let unitString = "UNIT";
     let statusString =
       status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK";
     let params = new FormData();
@@ -113,10 +113,10 @@ function UpdateDetailProduct() {
             toast.success("Thêm sản phẩm thành công");
             setName("");
             setCategory("");
-            setQuantity("");
+            setQuantity("0");
             setPrice("");
             setUnit("");
-            setMinPurchase("");
+            setMinPurchase("1");
             setDescription("");
             setStatus("");
             setFirstImage(null);
@@ -160,34 +160,6 @@ function UpdateDetailProduct() {
             value={price}
             onChange={(event) => {
               setPrice(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">
-            Giá trị mua tối thiểu
-          </Typography>
-          <TextField
-            value={minPurchase}
-            onChange={(event) => {
-              setMinPurchase(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Số lượng</Typography>
-          <TextField
-            value={quantity}
-            onChange={(event) => {
-              setQuantity(event.target.value);
             }}
             size="small"
             id="outlined-basic"
@@ -250,24 +222,6 @@ function UpdateDetailProduct() {
           </FormControl>
         </Stack>
 
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Đơn vị:</Typography>
-          <FormControl className="create-address__input" sx={{ flex: "1" }}>
-            <Select
-              size="small"
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={unit}
-              label="Age"
-              onChange={(e) => setUnit(e.target.value)}
-              input={<InputCustom placeholder="Chọn đơn vị" />}
-            >
-              {productUnit.map((item) => (
-                <MenuItem value={item.id}>{item.text}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
         <Stack direction="row" p={2}>
           <Typography className="cruBrand__label" style={{ minWidth: "184px" }}>
             Ảnh sản phẩm:

@@ -50,6 +50,10 @@ const apiProfile = {
         const res = await axiosClientWithToken.get(`/account/admin/account/${params.id}`);
         return res.data;
     },
+    getEmployeeByAdminWithID_V2: async (params) => {
+        const res = await axiosClientWithToken.get(`/account/admin/employee/${params.id}`);
+        return res.data;
+    },
     getUserDetailByAdmin: async (params) => {
         const res = await axiosClientWithToken.get(`/account/admin/userDetail/${params.userId}?${getSearchParams(params, true)}`);
         return res.data;

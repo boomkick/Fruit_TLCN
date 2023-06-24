@@ -22,7 +22,8 @@ EmployeeSearchForm.propTypes = {
 };
 
 const keyWordTypeItems = [
-  { id: 0, label: "NONE", name: "Mặc định" },
+  { id: 3, label: "NONE", name: "Mặc định" },
+  { id: 0, label: "EMAIL", name: "Email" },
   { id: 1, label: "PHONE", name: "Số điện thoại" },
   { id: 2, label: "NAME", name: "Tên người nhận" },
 ];
@@ -36,7 +37,7 @@ const roleItems = [
 
 export default function EmployeeSearchForm(props) {
   // Theo loại keyword
-  const [keyWordType, setKeyWordType] = useState(0);
+  const [keyWordType, setKeyWordType] = useState(3);
   const handleChangeKeyWordType = (event) => {
     setKeyWordType(event.target.value);
   };
@@ -54,9 +55,11 @@ export default function EmployeeSearchForm(props) {
   useEffect(() => {
     const getData = async () => {
       let param = {};
-      if (keyWordType !== 0) {
-        param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
-      }
+      // if (keyWordType !== 0) {
+      //   param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
+      // }
+      if(keyWordType !== 3)
+        param["SearchBy"] = keyWordType;
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
       }
@@ -80,9 +83,11 @@ export default function EmployeeSearchForm(props) {
   const handleFilter = () => {
     const getData = async () => {
       let param = {};
-      if (keyWordType !== 0) {
-        param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
-      }
+      // if (keyWordType !== 0) {
+      //   param["KeyWordType"] = keyWordType === 1 ? "PHONE" : "NAME";
+      // }
+      if(keyWordType !== 3)
+        param["SearchBy"] = keyWordType;
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
       }
@@ -101,7 +106,7 @@ export default function EmployeeSearchForm(props) {
 
   const handleReset = () => {
     setKeyWord("");
-    setKeyWordType(0);
+    setKeyWordType(3);
     setRole(0);
   };
 

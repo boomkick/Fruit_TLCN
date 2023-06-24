@@ -34,8 +34,8 @@ function UpdateDetailProduct() {
   const [listCategory, setListCategory] = useState([]);
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [unit, setUnit] = useState("");
-  const [minPurchase, setMinPurchase] = useState("");
+  const [unit, setUnit] = useState("UNIT");
+  const [minPurchase, setMinPurchase] = useState("1");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
   const [loadingUpdateProduct, setloadingUpdateProduct] = useState(false);
@@ -92,7 +92,7 @@ function UpdateDetailProduct() {
     setloadingUpdateProduct(true)
     // Xử lí tham số tình trạng ảnh chỉnh sửa
     // let text_status = ''
-    let unitString = unit == 0 ? "WEIGHT" : "UNIT";
+    let unitString = "UNIT";
     let statusString =
       status == 0 ? "SELLING" : "UNSOLD";
     let params = new FormData();
@@ -121,7 +121,6 @@ function UpdateDetailProduct() {
         name &&
         category &&
         price &&
-        quantity &&
         unitString &&
         minPurchase &&
         description &&
@@ -174,7 +173,7 @@ function UpdateDetailProduct() {
           setQuantity(product?.quantity);
           setPrice(product?.price);
           setUnit(product?.unit);
-          setMinPurchase(product?.minPurchase);
+          setMinPurchase('1');
           setDescription(product?.description);
           setStatus(product?.status);
           // old image
@@ -251,23 +250,9 @@ function UpdateDetailProduct() {
           />
         </Stack>
         <Stack direction="row">
-          <Typography className="cruBrand__label">
-            Giá trị mua tối thiểu
-          </Typography>
-          <TextField
-            value={minPurchase}
-            onChange={(event) => {
-              setMinPurchase(event.target.value);
-            }}
-            size="small"
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ flex: "1" }}
-          />
-        </Stack>
-        <Stack direction="row">
           <Typography className="cruBrand__label">Số lượng</Typography>
           <TextField
+            disabled={true}
             value={quantity}
             onChange={(event) => {
               setQuantity(event.target.value);
@@ -333,24 +318,6 @@ function UpdateDetailProduct() {
           </FormControl>
         </Stack>
 
-        <Stack direction="row">
-          <Typography className="cruBrand__label">Đơn vị:</Typography>
-          <FormControl className="create-address__input" sx={{ flex: "1" }}>
-            <Select
-              size="small"
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={unit}
-              label="Age"
-              onChange={(e) => setUnit(e.target.value)}
-              input={<InputCustom placeholder="Chọn đơn vị" />}
-            >
-              {productUnit.map((item) => (
-                <MenuItem value={item.id}>{item.text}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Stack>
         <Stack direction="row" p={2}>
           <Typography className="cruBrand__label" style={{ minWidth: "184px" }}>
             Ảnh sản phẩm:

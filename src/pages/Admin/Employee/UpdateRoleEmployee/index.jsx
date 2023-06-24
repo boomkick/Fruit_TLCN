@@ -51,11 +51,11 @@ function UpdateRoleEmployee() {
                     toast.success("Cập nhật quyền thành công");
                     navigate("/admin/employee")
                 } else {
-                    toast.error("Cập nhật quyền không thành công");
+                    toast.error(res.message);
                 }
             })
             .catch((error) => {
-                toast.error("Cập nhật quyền không thành công");
+                toast.error(error);
             })
     }
 
@@ -64,7 +64,7 @@ function UpdateRoleEmployee() {
             <Stack className="cruBrand" p={3} justifyContent="center" width="700px" spacing={2} bgcolor='#fff'>
                 <Stack direction="row">
                     <Typography className="cruBrand__label">Nhập email nhân viên:</Typography>
-                    <TextField value={email} onChange={handleChangeEmail} disabled
+                    <TextField value={email} onChange={handleChangeEmail} disabled={id ? true : false}
                         size="small" id="outlined-basic" variant="outlined" sx={{ flex: "1" }} />
                 </Stack>
                 <Stack direction="row">

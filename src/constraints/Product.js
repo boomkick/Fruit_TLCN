@@ -36,11 +36,6 @@ export const productStatus = [
         value: 'UNSOLD',
         text: 'Ngừng bán',
     },
-    {
-        id: 2   ,
-        value: 'OUT_OF_STOCK',
-        text: 'Hết hàng',
-    },
 ]
 
 

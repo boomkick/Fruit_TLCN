@@ -17,6 +17,8 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { green, red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { formatDateTime, numWithCommas } from "../constraints/Util"
 
 InventoryTable.propTypes = {
   data: PropTypes.array.isRequired,
@@ -40,22 +42,7 @@ export default function InventoryTable(props) {
   const closeModalDelete = () => setModalDelete(false);
   const handleDelete = () => {
     closeModalDelete();
-    // apiProduct
-    //   .deleteProduct({ id: itemdelete.id })
-    //   .then((res) => {
-    //     if (res.status === 200) {
-    //       toast.success("Xóa sản phẩm thành công");
-    //       const newProducts = products.filter((item) => {
-    //         return itemdelete.id !== item.id;
-    //       });
-    //       setProducts(newProducts);
-    //     } else {
-    //       toast.error("Xóa sản phẩm không thành công");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     toast.error("Xóa sản phẩm không thành công!");
-    //   });
+    toast.error("Hiện tại ứng dụng chưa hỗ trợ tính năng này");
   };
   return (
     <>
@@ -99,7 +86,7 @@ export default function InventoryTable(props) {
                 <TableCell>
                   <Stack direction="row" justifyContent="center">
                     <Typography sx={{ margin: "auto 0" }}>
-                      {row.importPrice}
+                      {numWithCommas(row.importPrice || 0)}
                     </Typography>
                   </Stack>
                 </TableCell>
@@ -107,10 +94,10 @@ export default function InventoryTable(props) {
                   <Typography>{row.quantity}</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography>{row.deliveryDate}</Typography>
+                  <Typography>{formatDateTime(row.deliveryDate)}</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography>{row.expireDate}</Typography>
+                  <Typography>{formatDateTime(row.expireDate)}</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Typography>{row.description}</Typography>

@@ -14,6 +14,7 @@ import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
 import apiProfile from "../apis/apiProfile";
 import { Link } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 
 EmployeeSearchForm.propTypes = {
   page: PropTypes.number.isRequired,
@@ -121,6 +122,11 @@ export default function EmployeeSearchForm(props) {
             <Link to="/admin/user">
               <Button variant="outlined" pr={2} sx={{ marginRight: "5px" }}>
                 Người dùng
+              </Button>
+            </Link>
+            <Link to="/admin/employee/update-role/">
+              <Button variant="contained" pr={2} sx={{ marginRight: "5px" }} startIcon={<AddIcon />}>
+                Thêm mới
               </Button>
             </Link>
           </Stack>

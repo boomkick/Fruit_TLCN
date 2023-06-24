@@ -307,6 +307,23 @@ function ProductDetail(props) {
           }}
         >
           <Box className="detailProduct__title">
+            <h2>{"Mô tả sản phẩm"}</h2>
+          </Box>
+          <Stack style={{fontSize: "15px", padding: "10px"}}>
+            <span>
+              {product?.description}
+            </span>
+          </Stack>
+        </Box>
+
+        <Box
+          sx={{
+            width: "100%",
+            padding: "0px 15px 30px",
+            borderTop: "1px solid #ECECEC",
+          }}
+        >
+          <Box className="detailProduct__title">
             <h2>{"Top sản phẩm bán chạy"}</h2>
           </Box>
           <GetTop8ProductConsumer />

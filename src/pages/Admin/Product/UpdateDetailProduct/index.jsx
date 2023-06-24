@@ -94,7 +94,7 @@ function UpdateDetailProduct() {
     // let text_status = ''
     let unitString = unit == 0 ? "WEIGHT" : "UNIT";
     let statusString =
-      status == 0 ? "SELLING" : status == 1 ? "UNSOLD" : "OUT_OF_STOCK";
+      status == 0 ? "SELLING" : "UNSOLD";
     let params = new FormData();
     const product = {
       Name: name,

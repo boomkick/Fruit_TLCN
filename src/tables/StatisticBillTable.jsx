@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { formatDateTime } from "../constraints/Util";
 
 StatisticBillTable.propTypes = {
   data: PropTypes.array.isRequired,
@@ -58,18 +59,30 @@ export default function StatisticBillTable(props) {
           </TableHead>
           <TableBody>
             {props.data
-              ? props.data.map((item) => {
-                  return (
-                    <TableRow
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell align="center">{item.id}</TableCell>
-                      <TableCell align="center">{item.orderCode || 'N/A'}</TableCell>
-                      <TableCell align="center">{item.paymentMethod === 1 ? "Dịch vụ thanh toán MoMo" : "Tiền mặt"}</TableCell>
-                      <TableCell align="center">{item.purchaseDate || 'N/A'}</TableCell>
-                      <TableCell align="center">{item.total}</TableCell>
-                    </TableRow>
-                  );
+              ? props.data.foreach((item) => {
+                  if (item.purchaseDate) {
+                    return (
+                      <TableRow
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell align="center">{item.id}</TableCell>
+                        <TableCell align="center">
+                          {item.orderCode || "N/A"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {item.paymentMethod === 1
+                            ? "Dịch vụ thanh toán MoMo"
+                            : "Tiền mặt"}
+                        </TableCell>
+                        <TableCell align="center">
+                          {formatDateTime(item.purchaseDate)}
+                        </TableCell>
+                        <TableCell align="center">{item.total}</TableCell>
+                      </TableRow>
+                    );
+                  }
                 })
               : null}
           </TableBody>

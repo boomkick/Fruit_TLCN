@@ -40,6 +40,8 @@ function CreateUpdatePromotion(props) {
   const [id, setId] = useState("");
   const [edit, setEdit] = useState(props.edit);
   const [promotion, setPromotion] = useState(null);
+  const [productPrice, setProductPrice] = useState(null);
+  const [promotionPrice, setPromotionPrice] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
   const [productSuggests, setProductSuggests] = useState([]);
@@ -58,6 +60,16 @@ function CreateUpdatePromotion(props) {
   const handleChangeExpireDate = React.useCallback((date) => {
     setExpireDate(date);
   }, []);
+
+  useEffect(() => {
+    const getProductDetail = async () => {
+      const response = await apiProduct.getProductDetail(id);
+      if (response) {
+        setProductPrice(response.data?.price);
+      }
+    };
+    getProductDetail();
+  }, [id]);
 
   useEffect(() => {
     const loadProductSuggest = async () => {
@@ -159,6 +171,10 @@ function CreateUpdatePromotion(props) {
   }, [productId, value, expireDate, promotion, type, isEnable]);
 
   const handleSave = React.useCallback(() => {
+    if(promotionPrice <= 0){
+      toast.warning("Vui lòng lưu khuyến mãi có giá trị nhỏ hơn giá trị sản phẩm");
+      return
+    }
     if (!(productId && value && expireDate)) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
       return;
@@ -189,6 +205,19 @@ function CreateUpdatePromotion(props) {
         });
     }
   }, [productId, value, expireDate]);
+
+  useEffect(() => {
+    console.log("isEnable && type: ", isEnable && type);
+    if (isEnable && (type === 0 || type === 1)) {
+        if (type === 0) {
+          // Nếu là giá trị
+          setPromotionPrice(productPrice - value);
+        } else {
+          // Nếu là phần trăm
+          setPromotionPrice(productPrice - (productPrice * value) / 100);
+        }
+    }
+  }, [isEnable, type, value]);
 
   return (
     <Box width={"100%"} bgcolor="#fff">
@@ -262,6 +291,28 @@ function CreateUpdatePromotion(props) {
             onChange={(event) => {
               setValue(event.target.value);
             }}
+            size="small"
+            id="outlined-basic"
+            variant="outlined"
+            sx={{ flex: 1 }}
+          />
+        </Stack>
+        <Stack direction="row">
+          <Typography sx={{ width: "200px" }}>Giá Gốc</Typography>
+          <TextField
+            value={productPrice}
+            size="small"
+            id="outlined-basic"
+            variant="outlined"
+            sx={{ flex: 1 }}
+            disabled={true}
+          />
+        </Stack>
+        <Stack direction="row">
+          <Typography sx={{ width: "200px" }}>Giá khuyến mãi</Typography>
+          <TextField
+            value={promotionPrice}
+            disabled={true}
             size="small"
             id="outlined-basic"
             variant="outlined"

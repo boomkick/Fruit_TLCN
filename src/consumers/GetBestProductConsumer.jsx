@@ -21,9 +21,34 @@ const AddToCartButton = styled(Button)({
   },
 });
 
+const PromotionTypeEnum = {
+  PRCIE: 0,
+  PERCENTAGE: 1,
+};
+
 const GetBestProductConsumer = () => {
   const BestProductData = React.useContext(GetBestProduct);
   const BestProductDataLoading = React.useContext(GetBestProductLoading);
+
+  const [promotionPrice, setPromotionPrice] = React.useState(null);
+  React.useEffect(() => {
+    if (BestProductData?.promotion) {
+      if (
+        Number(BestProductData?.promotion.type) ===
+        PromotionTypeEnum.PRCIE.valueOf()
+      ) {
+        setPromotionPrice(
+          Math.round(BestProductData?.price - BestProductData?.promotion.value)
+        );
+      } else {
+        const percent = BestProductData?.promotion.value / 100;
+        setPromotionPrice(
+          Math.round(BestProductData?.price - BestProductData?.price * percent)
+        );
+      }
+    }
+  }, [BestProductData]);
+
   return (
     <LoadingAPI loading={BestProductDataLoading}>
       <Grid container spacing={2} justifyContent="between" marginTop={"10px"}>
@@ -42,15 +67,38 @@ const GetBestProductConsumer = () => {
             {BestProductData.name}
           </Typography>
           <Typography variant="h5" gutterBottom sx={{ "margin-bottom": "5px" }}>
-            {numWithCommas(BestProductData.price ? BestProductData.price : 0)}₫
+            {promotionPrice ? (
+              <>
+                <span
+                  style={{
+                    fontSize: "15px",
+                    marginRight: "10px",
+                    textDecoration: "line-through",
+                  }}
+                >
+                  {numWithCommas(
+                    BestProductData.price ? BestProductData.price : 0
+                  )}
+                  ₫
+                </span>
+                <span style={{ color: "#FA9210" }}>
+                  {numWithCommas(promotionPrice)}₫
+                </span>
+              </>
+            ) : (
+              <span style={{ color: "#FA9210" }}>
+                {numWithCommas(
+                  BestProductData.price ? BestProductData.price : 0
+                )}
+                ₫
+              </span>
+            )}
           </Typography>
           <Typography variant="body2" gutterBottom mb={3}>
             {BestProductData.description ? BestProductData.description : ""}
           </Typography>
           <Link to={`/product-detail/${BestProductData?.id}`}>
-            <AddToCartButton>
-              CHI TIẾT SẢN PHẨM
-            </AddToCartButton>
+            <AddToCartButton>CHI TIẾT SẢN PHẨM</AddToCartButton>
           </Link>
         </Grid>
       </Grid>

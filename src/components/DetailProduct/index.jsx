@@ -100,15 +100,23 @@ function DetailProduct({ data }) {
     } else if (status?.id == 1) {
       return (
         <>
-          <ProductionQuantityLimitsIcon style={{ color: "E40100" }} />
-          {/* <p>{status?.text}</p> */}
+          <ProductionQuantityLimitsIcon
+            style={{ color: "E40100", marginRight: "5px" }}
+          />
+          <p
+            style={{
+              fontSize: "15px",
+              color: "#E40100",
+              textTransform: "uppercase",
+            }}
+          >{`Sản phẩm tạm thời ${status?.text}`}</p>
         </>
       );
     } else {
       return (
         <>
           <RemoveShoppingCartIcon style={{ color: "E40100" }} />
-          {/* <p>{status?.text}</p> */}
+          <p>{status?.text}</p>
         </>
       );
     }
@@ -182,7 +190,7 @@ function DetailProduct({ data }) {
               <p className="detailProduct__info-general-text">
                 Giá trị tối thiểu:
               </p>
-              <p className="detailProduct__info-general-text">Mô tả:</p>
+              {/* <p className="detailProduct__info-general-text">Mô tả:</p> */}
             </div>
             <div>
               <p className="detailProduct__info-general-text">
@@ -196,11 +204,17 @@ function DetailProduct({ data }) {
                   ? `${data?.minPurchase} kilogram`
                   : `${data?.minPurchase} phần`}
               </p>
-              <p className="detailProduct__info-general-text">
-                {data?.description}
-              </p>
             </div>
+            {/* <p className="detailProduct__info-general-text">
+              Nếu bạn đang tìm kiếm một loại trái cây ngon, thì không còn gì
+              tuyệt vời hơn sản phẩm này. Được thu hoạch từ vườn trái cây chất
+              lượng cao, trái cây này đã được chọn lọc cẩn thận để đảm bảo chất
+              lượng tốt nhất. Với màu sắc tươi sáng và vị ngọt tự nhiên, sản
+              phẩm này sẽ làm hài lòng cả những người ưa thích trái cây khó tính
+              nhất.
+            </p> */}
           </div>
+
           <div className="detailProduct__status">
             {status?.id != 0 ? (
               <></>
@@ -237,13 +251,15 @@ function DetailProduct({ data }) {
                 </button>
               </>
             )}
-            <button
-              className="detailProduct__add-to-gift"
-              style={{ fontWeight: 600, cursor: "pointer" }}
-              onClick={handleOpenGiftCartList}
-            >
-              <CardGiftcardIcon />
-            </button>
+            {status?.id != 0 ? null : (
+              <button
+                className="detailProduct__add-to-gift"
+                style={{ fontWeight: 600, cursor: "pointer" }}
+                onClick={handleOpenGiftCartList}
+              >
+                <CardGiftcardIcon />
+              </button>
+            )}
             <div className="detailProduct__status-info">
               {handleStatusProduct(status)}
             </div>
@@ -261,13 +277,11 @@ function DetailProduct({ data }) {
               <BookIcon sx={{ fontSize: "20px", marginRight: "2px" }} />
               <p>Câu hỏi thường gặp khi mua hàng</p>
             </div>
-            <FacebookIcon
-              sx={{
-                fontSize: "40px",
-                marginTop: "10px",
-                cursor: "pointer",
-              }}
-            />
+            <div
+              style={{ display: "flex", fontSize: "20px", lineHeight: "28px" }}
+            >
+              {/* <BookIcon sx={{ fontSize: "20px", marginRight: "2px" }} /> */}
+            </div>
           </div>
         </div>
         <div className="detailProduct__support">
@@ -338,7 +352,10 @@ function DetailProduct({ data }) {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal-gift">
-          <GiftListModal closeModalGiftCart={handleCloseGiftCartList} quantity={quantity}/>
+          <GiftListModal
+            closeModalGiftCart={handleCloseGiftCartList}
+            quantity={quantity}
+          />
         </Box>
       </Modal>
     </Box>

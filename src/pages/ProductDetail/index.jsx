@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Rating, Button, Box, TextareaAutosize, Stack } from "@mui/material";
+import { Rating, Button, Box, TextareaAutosize, Stack, Typography } from "@mui/material";
 import "./ProductDetail.scss";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -294,6 +294,8 @@ function ProductDetail(props) {
     getReviews();
   };
 
+  console.log("descript: ", product?.description)
+
   return (
     <GetTop8ProductProvider>
       <Box className="container" style={{ backgroundColor: "#fff" }}>
@@ -310,12 +312,14 @@ function ProductDetail(props) {
             <h2>{"Mô tả sản phẩm"}</h2>
           </Box>
           <Stack style={{fontSize: "15px", padding: "10px"}}>
-            <span>
-              {product?.description}
-            </span>
+            <Typography ></Typography>
+              {product?.description.split("\n").map((item) => (
+                <span>
+                  {item}
+                </span>
+              ))}
           </Stack>
         </Box>
-
         <Box
           sx={{
             width: "100%",

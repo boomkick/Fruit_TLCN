@@ -59,8 +59,8 @@ export default function StatisticBillTable(props) {
           </TableHead>
           <TableBody>
             {props.data
-              ? props.data.foreach((item) => {
-                  if (item.purchaseDate) {
+              ? props.data?.map((item) => {
+                  if (item?.purchaseDate) {
                     return (
                       <TableRow
                         sx={{
@@ -82,7 +82,7 @@ export default function StatisticBillTable(props) {
                         <TableCell align="center">{item.total}</TableCell>
                       </TableRow>
                     );
-                  }
+                  }else return null
                 })
               : null}
           </TableBody>

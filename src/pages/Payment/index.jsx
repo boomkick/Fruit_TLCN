@@ -288,9 +288,13 @@ function Payment() {
       apiCart
         .postPayment(payload)
         .then((res) => {
-          toast.success("Đặt hàng thành công!");
-          dispatch(deleteAll());
-          navigate("/my-account/orders");
+          if(res?.status === 200){
+            toast.success("Đặt hàng thành công!");
+            dispatch(deleteAll());
+            navigate("/my-account/orders");
+          }else{
+            toast.error(res?.message);
+          }
         })
         .catch((error) => {
           toast.error("Đặt hàng không thành công. Vui lòng thử lại");

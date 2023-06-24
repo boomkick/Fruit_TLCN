@@ -63,13 +63,15 @@ function CreateUpdatePromotion(props) {
 
   useEffect(() => {
     const getProductDetail = async () => {
-      const response = await apiProduct.getProductDetail(id);
-      if (response) {
-        setProductPrice(response.data?.price);
+      if(id || productId){
+        const response = await apiProduct.getProductDetail(id || productId?.id);
+        if (response) {
+          setProductPrice(response.data?.price);
+        }
       }
     };
     getProductDetail();
-  }, [id]);
+  }, [id, productId]);
 
   useEffect(() => {
     const loadProductSuggest = async () => {
@@ -208,7 +210,7 @@ function CreateUpdatePromotion(props) {
 
   useEffect(() => {
     console.log("isEnable && type: ", isEnable && type);
-    if (isEnable && (type === 0 || type === 1)) {
+    if (isEnable && (type === 0 || type === 1) && (value !== 0)) {
         if (type === 0) {
           // Nếu là giá trị
           setPromotionPrice(productPrice - value);

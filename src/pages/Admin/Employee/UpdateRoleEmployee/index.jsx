@@ -13,7 +13,7 @@ function UpdateRoleEmployee() {
 
     useEffect(() => {
         apiProfile
-        .getEmployeeByAdminWithID({id: id})
+        .getEmployeeByAdminWithID_V2({id: id})
         .then((response) => {
             setEmail(response.data.email)
             setEmployeeRole(response.data.role)

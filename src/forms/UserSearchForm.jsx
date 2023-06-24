@@ -21,14 +21,15 @@ UserSearchForm.propTypes = {
 };
 
 const searchByItems = [
-  { id: 0, label: "NONE", name: "Mặc định" },
+  { id: 3, label: "NONE", name: "Mặc định" },
+  { id: 0, label: "EMAIL", name: "Email" },
   { id: 1, label: "PHONE", name: "Số điện thoại" },
   { id: 2, label: "NAME", name: "Tên người nhận" },
 ];
 
 export default function UserSearchForm(props) {
   // Theo loại keyword
-  const [searchBy, setSearchBy] = useState(0);
+  const [searchBy, setSearchBy] = useState(3);
   const handleChangeSearchBy = (event) => {
     setSearchBy(event.target.value);
   };
@@ -41,8 +42,8 @@ export default function UserSearchForm(props) {
   useEffect(() => {
     const getData = async () => {
       let param = {};
-      if (searchBy !== 0) {
-        param["SearchBy"] = searchBy === 1 ? "PHONE" : "NAME";
+      if (searchBy !== 3) {
+        param["SearchBy"] = searchBy
       }
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
@@ -63,8 +64,8 @@ export default function UserSearchForm(props) {
   const handleFilter = () => {
     const getData = async () => {
       let param = {};
-      if (searchBy !== 0) {
-        param["SearchBy"] = searchBy === 1 ? "PHONE" : "NAME";
+      if (searchBy !== 3) {
+        param["SearchBy"] = searchBy;
       }
       if (keyWord && keyWord !== "") {
         param["keyWord"] = keyWord;
@@ -81,7 +82,7 @@ export default function UserSearchForm(props) {
 
   const handleReset = () => {
     setKeyWord("");
-    setSearchBy(0);
+    setSearchBy(3);
   };
 
   return (

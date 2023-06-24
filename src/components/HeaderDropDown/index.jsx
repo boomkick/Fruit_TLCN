@@ -27,6 +27,7 @@ export default function HeaderDropdown(props) {
               position: "relative",
               paddingBottom: "5px",
               borderBottom: "3px solid transparent",
+              textTransform: "uppercase",
             }}
           >
             {props.headerName}

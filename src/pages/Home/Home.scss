@@ -134,6 +134,13 @@
   flex-flow: row;
   align-items: center;
 
+  &-box{
+    max-width: 1170px;
+    width: 100%;
+    margin: 50px 175px;
+    padding: 0px 15px 30px;
+  }
+
   &-content {
     width: 100%;
     position: relative;
@@ -165,7 +172,8 @@
     &-main {
       display: flex;
       align-items: center;
-      font-weight: 400;
+      font-size: 43px !important;
+      font-weight: 600;
       text-align: center;
       margin: 0 15px;
       text-transform: uppercase;
@@ -174,7 +182,7 @@
     & span {
       color: #252121;
       font-size: 24px;
-      font-family: "Roboto", sans-serif;
+      font-family: "Pathway Extreme", sans-serif;
     }
 
   }

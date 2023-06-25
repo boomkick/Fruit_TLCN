@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, CardMedia, Rating, Typography } from "@mui/material";
 import { Pagination } from "@mui/material";
-import {formatDate, formatDateTime} from '../../constraints/Util'
+import { formatDate, formatDateTime } from "../../constraints/Util";
 
 function Comment(props) {
   const [idPreview, setIdPreview] = useState(null);
@@ -26,7 +26,7 @@ function Comment(props) {
           allow="autoPlay"
           autoPlay
           allowFullScreen={true}
-          sx={{width: "32.25rem"}}
+          sx={{ width: "32.25rem" }}
         />
       );
     }
@@ -72,7 +72,7 @@ function Comment(props) {
                       item?.reviewResource.map((reviewResource) =>
                         reviewResource.type === 0 ? (
                           <img
-                            style={{width: 100, height: 100}}
+                            style={{ width: 100, height: 100 }}
                             className="detailProduct__comment-card-user-info-img"
                             src={reviewResource?.url}
                             alt=""
@@ -84,9 +84,9 @@ function Comment(props) {
                           />
                         ) : (
                           <img
-                            style={{width: 100, height: 100}}
+                            style={{ width: 100, height: 100 }}
                             className="detailProduct__comment-card-user-info-img"
-                            src={reviewResource?.url.replace('mp4', 'jpg')}
+                            src={reviewResource?.url.replace("mp4", "jpg")}
                             alt=""
                             onClick={() => {
                               setIdPreview(item?.id);
@@ -100,8 +100,8 @@ function Comment(props) {
                       <></>
                     )}
                   </Box>
-                  <Box sx={{transition: "1s ease"}}>
-                  {idPreview == item?.id ?  getItemSelected() : null}
+                  <Box sx={{ transition: "1s ease" }}>
+                    {idPreview == item?.id ? getItemSelected() : null}
                   </Box>
                 </div>
               </div>

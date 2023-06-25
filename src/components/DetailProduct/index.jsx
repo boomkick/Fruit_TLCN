@@ -186,10 +186,11 @@ function DetailProduct({ data }) {
           <div className="detailProduct__info-general">
             <div>
               <p className="detailProduct__info-general-text">Số lượng:</p>
-              <p className="detailProduct__info-general-text">Đơn vị:</p>
+              <p className="detailProduct__info-general-text">Số lượng đã bán:</p>
               <p className="detailProduct__info-general-text">
-                Giá trị tối thiểu:
+                Loại sản phẩm:
               </p>
+              <p className="detailProduct__info-general-text">Khối lượng sản phẩm:</p>
               {/* <p className="detailProduct__info-general-text">Mô tả:</p> */}
             </div>
             <div>
@@ -197,12 +198,13 @@ function DetailProduct({ data }) {
                 {data?.quantity + " sản phẩm"}
               </p>
               <p className="detailProduct__info-general-text">
-                {productUnit.find((item) => item.id == data?.unit)?.text}
+                {data?.sales + ' sản phẩm'}
               </p>
               <p className="detailProduct__info-general-text">
-                {data?.unit == 0
-                  ? `${data?.minPurchase} kilogram`
-                  : `${data?.minPurchase} phần`}
+                {data?.category?.name}
+              </p>
+              <p className="detailProduct__info-general-text">
+                {(data?.weight / 1000) >= 1 ? (data?.weight / 1000) + ' kilogram' : (data?.weight) + ' gram'}
               </p>
             </div>
             {/* <p className="detailProduct__info-general-text">

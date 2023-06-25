@@ -36,6 +36,7 @@ function UpdateDetailProduct() {
   const [minPurchase, setMinPurchase] = useState("1");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [weight, setWeight] = useState('');
   const [loadingUpdateProduct, setloadingUpdateProduct] = useState(false);
   const navigate = useNavigate();
 
@@ -79,6 +80,7 @@ function UpdateDetailProduct() {
       MinPurchase: minPurchase,
       Description: description,
       Status: statusString,
+      Weight: weight,
     };
 
     params.append("product", JSON.stringify(product));
@@ -98,7 +100,8 @@ function UpdateDetailProduct() {
         unitString &&
         minPurchase &&
         description &&
-        statusString
+        statusString &&
+        weight
       )
     ) {
       toast.warning("Vui lòng nhập đầy đủ thông tin !!");
@@ -119,6 +122,7 @@ function UpdateDetailProduct() {
             setMinPurchase("1");
             setDescription("");
             setStatus("");
+            setWeight('');
             setFirstImage(null);
             setSecondImage(null);
             setThirdImage(null);
@@ -160,6 +164,19 @@ function UpdateDetailProduct() {
             value={price}
             onChange={(event) => {
               setPrice(event.target.value);
+            }}
+            size="small"
+            id="outlined-basic"
+            variant="outlined"
+            sx={{ flex: "1" }}
+          />
+        </Stack>
+        <Stack direction="row">
+          <Typography className="cruBrand__label">Khối lượng</Typography>
+          <TextField
+            value={weight}
+            onChange={(event) => {
+              setWeight(event.target.value);
             }}
             size="small"
             id="outlined-basic"

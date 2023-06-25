@@ -51,8 +51,9 @@ function Comment(props) {
             <Box className="detailProduct__comment-card">
               <div className="detailProduct__comment-card-user">
                 <img
-                  src="https://secure.gravatar.com/avatar/f7c6b77bf377de274f6a06b9cf79fa95?s=60&d=mm&r=g"
-                  alt=""
+                  src={item?.account?.photoUrl == null || item?.account?.photoUrl === '' ?
+                  "https://secure.gravatar.com/avatar/f7c6b77bf377de274f6a06b9cf79fa95?s=60&d=mm&r=g" : item?.account?.photoUrl}
+                  alt="https://secure.gravatar.com/avatar/f7c6b77bf377de274f6a06b9cf79fa95?s=60&d=mm&r=g"
                 />
                 <div className="detailProduct__comment-card-user-info">
                   <h3>

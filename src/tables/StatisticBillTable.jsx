@@ -1,22 +1,91 @@
 import {
   Grid,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
-import { formatDateTime } from "../constraints/Util";
+import { formatDateTime, numWithCommas } from "../constraints/Util";
 
 StatisticBillTable.propTypes = {
   data: PropTypes.array.isRequired,
+};
+
+const PaymentMethodOptions = {
+  CASH: 0,
+  MOMO: 1,
 };
 
 export default function StatisticBillTable(props) {
   return (
     <>
       <Grid container spacing={2}>
+        {props?.data && props?.data.length > 0 ? (
+          <Stack
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "end",
+              margin: "0 20px",
+            }}
+          >
+            <Stack
+              display={"flex"}
+              justifyContent={"space-between"}
+              flexDirection={"row"}
+            >
+              <Typography marginRight={"30px"}>Tổng hóa đơn:</Typography>
+              <Typography>
+                {`${numWithCommas(
+                  props?.data.reduce((total, item) => (total += item?.total), 0)
+                )} đ`}
+              </Typography>
+            </Stack>
+            <Stack
+              display={"flex"}
+              justifyContent={"space-between"}
+              flexDirection={"row"}
+            >
+              <Typography marginRight={"30px"}>
+                Tổng hóa đơn với Momo:
+              </Typography>
+              <Typography>
+                {`${numWithCommas(
+                  props?.data.reduce((total, item) => {
+                    if (item?.paymentMethod === PaymentMethodOptions["MOMO"]) {
+                      return (total += item?.total);
+                    }
+                    return total;
+                  }, 0)
+                )} đ`}
+              </Typography>
+            </Stack>
+            <Stack
+              display={"flex"}
+              justifyContent={"space-between"}
+              flexDirection={"row"}
+            >
+              <Typography marginRight={"30px"}>
+                Tổng hóa đơn với tiền mặt:
+              </Typography>
+              <Typography>
+                {`${numWithCommas(
+                  props?.data.reduce((total, item) => {
+                    if (item?.paymentMethod === PaymentMethodOptions["CASH"]) {
+                      return (total += item?.total);
+                    }
+                    return total;
+                  }, 0)
+                )} đ`}
+              </Typography>
+            </Stack>
+          </Stack>
+        ) : null}
+
         <Table
           className="tableCategory"
           sx={{ minWidth: "800px" }}
@@ -82,7 +151,7 @@ export default function StatisticBillTable(props) {
                         <TableCell align="center">{item.total}</TableCell>
                       </TableRow>
                     );
-                  }else return null
+                  } else return null;
                 })
               : null}
           </TableBody>

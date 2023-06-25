@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import apiStatistics from "../apis/apiStatistic";
 import { toast } from "react-toastify";
 import ClearButton from "../components/Button/ClearButton";
@@ -23,9 +23,14 @@ StatisticBillSearchForm.propTypes = {
 
 const sortByItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
-  { id: 1, label: "PRODUCTNAME ", name: "Tên sản phẩm" },
-  { id: 2, label: "SALE", name: "Số lượng bán được" },
-  { id: 3, label: "PROFIT", name: "Lợi nhuận" },
+  { id: 1, label: "PURCHASEDATE", name: "Ngày thanh toán" },
+  { id: 2, label: "TOTAL", name: "Lợi nhuận" },
+];
+
+const paymentMethodByItems = [
+  { id: 0, label: "NONE", name: "Mặc định" },
+  { id: 1, label: "MOMO", name: "Momo" },
+  { id: 2, label: "CASH", name: "Tiền mặt" },
 ];
 
 const orderByItems = [
@@ -39,6 +44,12 @@ export default function StatisticBillSearchForm(props) {
   const [createdDate, setCreatedDate] = useState([null, null]);
   const handleChangeCreatedDate = (value) => {
     setCreatedDate(value);
+  };
+
+  // Theo phương thức thanh toán
+  const [paymentMethod, setPaymentMethod] = useState(0);
+  const handleChangePaymentMethod = (event) => {
+    setPaymentMethod(event.target.value);
   };
 
   // Sắp xếp loại
@@ -104,6 +115,11 @@ export default function StatisticBillSearchForm(props) {
       if (maxValue) {
         param["ToTotal"] = maxValue;
       }
+      if (paymentMethod !== 0) {
+        param["paymentMethod"] = paymentMethodByItems.find(
+          (item) => item.id === paymentMethod
+        )?.label;
+      }
       apiStatistics
         .getBill(param)
         .then((response) => {
@@ -113,6 +129,10 @@ export default function StatisticBillSearchForm(props) {
     };
     getData();
   };
+
+  // useEffect(() => {
+  //   handleFilter();
+  // }, [])
 
   const handleReset = () => {
     setCreatedDate([null, null]);
@@ -143,16 +163,14 @@ export default function StatisticBillSearchForm(props) {
       if (maxValue) {
         param["ToTotal"] = maxValue;
       }
-      apiStatistics
-        .getBillExport(param)
-        .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', `StatisticBill.xlsx`);
-          document.body.appendChild(link);
-          link.click();
-        });
+      apiStatistics.getBillExport(param).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `StatisticBill.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
     };
     getData();
   }, []);
@@ -247,6 +265,38 @@ export default function StatisticBillSearchForm(props) {
               onChangeCreatedDate={handleChangeCreatedDate}
               value={createdDate}
             />
+          </FormControl>
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl
+            sx={{
+              m: 1,
+              minWidth: 120,
+              maxWidth: 600,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography sx={{ fontSize: "16px", fontWeight: "bold" }} mr={2}>
+              Phương thức thanh toán:
+            </Typography>
+            <Select
+              value={paymentMethod}
+              onChange={handleChangePaymentMethod}
+              displayEmpty
+              inputProps={{ "aria-label": "Without label" }}
+              cursor="pointer"
+              sx={{ minWidth: 300, width: "70%" }}
+            >
+              {paymentMethodByItems ? (
+                paymentMethodByItems.map((item) => (
+                  <MenuItem value={item.id}>{item.name}</MenuItem>
+                ))
+              ) : (
+                <></>
+              )}
+            </Select>
           </FormControl>
         </Grid>
         <Grid item xs={6}>

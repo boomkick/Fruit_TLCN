@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useCallback } from "react";
 import React from "react";
 import {
   Stack,
@@ -24,6 +24,7 @@ import AlertNotFound from "../../components/AlertNotFound";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import apiModelImageSearching from "../../apis/apiModelImageSearching";
 import LoadingAPI from "../../components/LoadingAPI";
+import ImageSearchingModal from "../../components/ImageSearchingModal";
 
 const tabs = [
   {
@@ -115,28 +116,15 @@ function FilterProduct(props) {
   }, [location]);
 
   // Tìm kiếm bằng hình ảnh
-  const [imageSearching, setImageSearching] = useState(null);
-  const [imageSearchingLoading, setImageSearchingLoading] = useState(false);
-
-  useEffect(() => {
-    const getImageSearching = async () => {
-      if (imageSearching) {
-        setImageSearchingLoading(true);
-        let params = new FormData();
-        params.append("images", imageSearching);
-        await apiModelImageSearching
-          .postGetForm(params)
-          .then((res) => {
-            setKeyWord(res?.fruit);
-          })
-          .catch((err) => {
-            toast.error(err);
-          });
-        setImageSearchingLoading(false);
-      }
-    };
-    getImageSearching();
-  }, [imageSearching]);
+  const [openImageSearchingModal, setOpenImageSearchingModal] = useState(false);
+  const handleOpenImageSearchingModal = useCallback(
+    () => setOpenImageSearchingModal(true),
+    []
+  );
+  const handleCloseImageSearchingModal = useCallback(
+    () => setOpenImageSearchingModal(false),
+    []
+  );
 
   useEffect(() => {
     handleGetData();
@@ -240,7 +228,6 @@ function FilterProduct(props) {
   };
 
   // Xử lí phân trang
-
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
@@ -307,7 +294,7 @@ function FilterProduct(props) {
               >
                 TÌM KIẾM
               </Typography>
-              {/* <CameraAltOutlinedIcon className="filterProduct__icon-camera"/> */}
+              <CameraAltOutlinedIcon className="filterProduct__icon-camera" onClick={handleOpenImageSearchingModal}/>
             </Stack>
 
             <Box
@@ -326,62 +313,6 @@ function FilterProduct(props) {
                 value={keyWord}
               />
             </Box>
-          </Box>
-          <Box className="filterProduct__form">
-            <Typography className="filterProduct__title">
-              Tìm kiếm bằng hình ảnh
-            </Typography>
-            <Stack
-              display={"flex"}
-              flexDirection={"column"}
-              flex={"1"}
-              justifyContent={"center"}
-              alignItem={"center"}
-            >
-              <LoadingAPI loading={imageSearchingLoading}>
-                {imageSearching ? (
-                  <img
-                    src={
-                      imageSearching
-                        ? URL.createObjectURL(imageSearching)
-                        : null
-                    }
-                    width="100%"
-                    height="180px"
-                    style={{ marginRight: "10px", borderRadius: "5px" }}
-                    alt=""
-                  />
-                ) : null}
-
-                <FormControl
-                  sx={{ minWidth: 120, width: "100%", marginTop: "10px" }}
-                >
-                  <Fragment>
-                    <input
-                      color="primary"
-                      accept="image/*"
-                      type="file"
-                      onChange={(e) => {
-                        setImageSearching(e.target.files[0]);
-                      }}
-                      id="icon-button-file"
-                      style={{ display: "none" }}
-                    />
-                    <label htmlFor="icon-button-file">
-                      <Button
-                        variant="outlined"
-                        startIcon={<CameraAltOutlinedIcon />}
-                        color="success"
-                        component={"span"}
-                        sx={{ marginTop: "0px !important", width: "100%" }}
-                      >
-                        Thêm ảnh
-                      </Button>
-                    </label>
-                  </Fragment>
-                </FormControl>
-              </LoadingAPI>
-            </Stack>
           </Box>
           <Box className="filterProduct__form">
             <Typography className="filterProduct__title">Trái cây</Typography>
@@ -534,6 +465,12 @@ function FilterProduct(props) {
             )}
           </Box>
         </Box>
+        <ImageSearchingModal
+          handleOpen={handleOpenImageSearchingModal}
+          handleClose={handleCloseImageSearchingModal}
+          open={openImageSearchingModal}
+          handleSetKeyWord={setKeyWord}
+        />
       </Stack>
     </>
   );

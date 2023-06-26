@@ -49,12 +49,13 @@
       border-radius: 12px;
     }
   }
-//   &__icon-camera {
-//     position: absolute;
-//     right: 0px;
-//     top: 18px;
-//     color: #757575;
-//   }
+    &__icon-camera {
+      position: absolute;
+      right: 0px;
+      top: 18px;
+      color: #757575;
+      cursor: pointer;
+    }
 }
 
 .filterPrice {

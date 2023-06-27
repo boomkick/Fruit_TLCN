@@ -14,8 +14,9 @@ import {
   GetGHNWardByIdLoading,
 } from "../../providers/GetGHNWardsProvider";
 import { paymentMethod } from "../../constraints/PaymentMethod";
+import {ServiceTypeEnum} from '../../constraints/GHNService'
 import "./PaymentInformationBoxTextField.scss";
-import { formatDateTime, roundPrice } from "../../constraints/Util";
+import { formatDateTime, roundPrice, numWithCommas, formatDate } from "../../constraints/Util";
 
 export default function PaymentInformationBoxTextField(props) {
   // Province
@@ -43,9 +44,9 @@ export default function PaymentInformationBoxTextField(props) {
       >
         <Box className="detailOrder__boxInfo">
           <Typography>ĐỊA CHỈ NHẬN HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
             <Typography style={{ color: "#000", fontWeight: 500 }}>
-              {props?.order?.name}
+              Tên người nhận: {props?.order?.name}
             </Typography>
             <Typography>
               {`Địa chỉ: ${provinceData?.ProvinceName},
@@ -61,7 +62,7 @@ export default function PaymentInformationBoxTextField(props) {
 
         <Box className="detailOrder__boxInfo">
           <Typography>HÌNH THỨC GIAO HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
             <Typography>
               <img
                 width="56px"
@@ -73,13 +74,21 @@ export default function PaymentInformationBoxTextField(props) {
             </Typography>
             <Typography>
               Phí vận chuyển:{" "}
-              {roundPrice(props?.order?.shippingFee ? props?.order?.shippingFee : 0)} đ
+              {numWithCommas(roundPrice(props?.order?.shippingFee ? props?.order?.shippingFee : 0))} đ
+            </Typography>
+            <Typography>
+              Dịch vụ vận chuyển:{" "}
+              {ServiceTypeEnum[props?.order?.ghnServiceType]}
+            </Typography>
+            <Typography>
+              Giao hàng lúc:{" "}
+              {formatDateTime(new Date(props?.order?.deliveryTime)).substring(0, 10)}
             </Typography>
           </Box>
         </Box>
         <Box className="detailOrder__boxInfo">
           <Typography>HÌNH THỨC THANH TOÁN</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
             <Typography>
               {
                 paymentMethod.find(
@@ -87,9 +96,9 @@ export default function PaymentInformationBoxTextField(props) {
                 )?.text
               }
             </Typography>
-            <Typography style={{ color: "#fda223" }}>
+            <Typography>
               {props?.order?.bill?.purchaseDate
-                ? formatDateTime(props?.order?.bill?.purchaseDate)
+                ? 'Ngày thanh toán: ' + formatDateTime(props?.order?.bill?.purchaseDate)
                 : "Chưa thanh toán"}
             </Typography>
           </Box>

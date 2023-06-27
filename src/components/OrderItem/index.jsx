@@ -8,16 +8,29 @@ import { useEffect } from "react";
 function OrderItem(props) {
   const { order } = props;
   const state = getState(order);
+  const getBackgroundColorByCartStatus = (status) => {
+    switch(status) {
+      case 0: //Pending
+        return '#FFCC33'
+      case 1: //Deliveried
+        return '#33CC33'
+      case 2: // Cancelled
+        return '#CC0000'
+      default:
+        return 'blue'
+    }
+  }
+
   return (
     <Box className="orderItem">
-      <Stack direction="row" className="orderItem__heading">
+      <Stack direction="row" className="orderItem__heading" style={{backgroundColor: getBackgroundColorByCartStatus(order?.status)}}>
         {state?.icon && (
           <>
             <state.icon /> <Typography>{state.type}</Typography>
           </>
         )}
 
-        <Typography component="span" variant="h3" fontWeight={500} color="#888">
+        <Typography component="span" variant="h3" fontWeight={500} color="#FFF">
           {state?.display}
         </Typography>
       </Stack>
@@ -55,6 +68,28 @@ function OrderItem(props) {
         </Stack>
       ))}
       <Box>
+      <Box className="orderItem__total">
+          <Typography
+            component="span"
+            fontSize="13px"
+            fontWeight="400"
+            color="#888"
+          >
+            Phí Ship:
+          </Typography>
+          <Typography
+            component="span"
+            fontSize="13px"
+            fontWeight="500"
+            color="#333"
+          >
+            {numWithCommas(
+              roundPrice(order?.shippingFee || 0)
+            )}{" "}
+            ₫
+          </Typography>
+        </Box>
+
         <Box className="orderItem__total">
           <Typography
             component="span"
@@ -76,6 +111,8 @@ function OrderItem(props) {
             ₫
           </Typography>
         </Box>
+        
+
         <Box className="orderItem__groupbtn">
           <Link to={`/my-account/orders/detail/${order?.id}`}>
             <Button variant="outlined">Xem chi tiết</Button>

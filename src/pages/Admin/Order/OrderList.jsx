@@ -20,6 +20,9 @@ import {
 import apiCart from "../../../apis/apiCart";
 import apiLocation from "../../../apis/apiLocation";
 import SearchIcon from "@mui/icons-material/Search";
+import LocalShippingSharpIcon from '@mui/icons-material/LocalShippingSharp';
+import CancelSharpIcon from '@mui/icons-material/CancelSharp';
+import PendingActionsSharpIcon from '@mui/icons-material/PendingActionsSharp';
 import Checkbox from "@mui/material/Checkbox";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -778,12 +781,12 @@ function OrderList() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Checkbox />
+                
               </TableCell>
-              <TableCell sx={{ width: "22%", top: "64px" }}>
+              <TableCell sx={{ width: "22%", top: "64px" }} align="center">
                 Mã đơn hàng/Ngày đặt hàng
               </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }}>
+              <TableCell sx={{ width: "15%", top: "64px" }} style={{textAlign: 'center'}}>
                 Trạng thái&nbsp;
               </TableCell>
               <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
@@ -792,10 +795,10 @@ function OrderList() {
               <TableCell align="center" sx={{ width: "18%", top: "64px" }}>
                 Giá trị đơn hàng&nbsp;
               </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }}>
+              <TableCell sx={{ width: "15%", top: "64px" }} align="center">
                 Tên người nhận&nbsp;
               </TableCell>
-              <TableCell sx={{ width: "10%", top: "64px" }}>
+              <TableCell sx={{ width: "10%", top: "64px" }} align="center">
                 Thao tác&nbsp;
               </TableCell>
             </TableRow>
@@ -806,13 +809,13 @@ function OrderList() {
                 key={item.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell>
-                  <Checkbox />
+                <TableCell align="center">
+                  {getIconByStatus(item.status)}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" align="center">
                   {item.id} / {handleDate(item.createdDate)}
                 </TableCell>
-                <TableCell align="left">
+                <TableCell align="center">
                   {cartStatus.find((e) => e.id == item.status)?.text}
                 </TableCell>
                 <TableCell align="center">
@@ -823,7 +826,7 @@ function OrderList() {
                 <TableCell align="center">
                   {numWithCommas(item?.bill?.total)}₫
                 </TableCell>
-                <TableCell align="left">{item?.name}</TableCell>
+                <TableCell align="center">{item?.name}</TableCell>
                 <TableCell align="center">
                   <Stack spacing={1} justifyContent="center" py={1}>
                     <Link to={`detail/${item.id}`}>
@@ -860,6 +863,18 @@ function OrderList() {
     </>
   );
 }
+
+const getIconByStatus = (status) => {
+  switch(status) {
+    case 1:
+      return <LocalShippingSharpIcon/>
+    case 2:
+      return <CancelSharpIcon/>
+    default:
+      return <PendingActionsSharpIcon/>
+  }
+}
+
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "& .MuiInputBase-input": {
     boxSizing: "border-box",

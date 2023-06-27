@@ -53,6 +53,7 @@ import mangoImage from "../../assets/fruit_fresh_header/Fresh-Mangos-_Dr_-Sebi-A
 import watermelonImage from "../../assets/fruit_fresh_header/Good-Food-Princess.jpg";
 import greenGrapesImage from "../../assets/fruit_fresh_header/Green-grapes-stock-image_-Image-of-cluster_-fresh_-branch-15408615.jpg";
 import HeaderDropdown from "../HeaderDropDown";
+import ForgetPassword from "../ForgetPassword";
 
 const theme = createTheme({
   typography: {
@@ -102,6 +103,7 @@ function Header() {
 
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [isRegister, setIsRegister] = useState(false);
+  const [isForgetPassword, setIsForgetPassword] = useState(false);
 
   const [categories, setCategories] = useState([]);
 
@@ -220,6 +222,7 @@ function Header() {
     setModalLogin(false);
     setIsLoginForm(true);
     setIsRegister(false);
+    setIsForgetPassword(false);
   };
 
   const handleReturnLogin = useCallback(() => {
@@ -227,14 +230,22 @@ function Header() {
     setIsRegister(false);
   }, []);
 
+  const handleOpenForgetPassword = useCallback(() => {
+    setIsForgetPassword(true);
+    setIsLoginForm(false);
+    setIsRegister(false);
+  }, []);
+
   const handleOpenSignup = useCallback(() => {
     setIsRegister(true);
     setIsLoginForm(false);
+    setIsForgetPassword(false);
   }, []);
 
   const handleOpenLogin = useCallback(() => {
     setIsLoginForm(true);
     setIsRegister(false);
+    setIsForgetPassword(false);
   }, []);
 
   useEffect(() => {
@@ -587,12 +598,20 @@ function Header() {
             {isLoginForm && (
               <Login
                 handleOpenSignup={handleOpenSignup}
+                handleOpenForgetPassword={handleOpenForgetPassword}
                 closeModalLogin={closeModalLogin}
               />
             )}
 
             {isRegister && (
               <SignUp
+                handleOpenLogin={handleOpenLogin}
+                closeModalLogin={closeModalLogin}
+              />
+            )}
+
+            {isForgetPassword && (
+              <ForgetPassword
                 handleOpenLogin={handleOpenLogin}
                 closeModalLogin={closeModalLogin}
               />

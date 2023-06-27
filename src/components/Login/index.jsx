@@ -201,7 +201,7 @@ function Login(props) {
         <Stack alignItems="center">
           <span
             style={{ color: "#1890ff", cursor: "pointer" }}
-            onClick={props.handleOpenForgetPwd}
+            onClick={props.handleOpenForgetPassword}
           >
             {" "}
             Quên mật khẩu

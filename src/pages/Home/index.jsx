@@ -1,5 +1,13 @@
 import "./Home.scss";
-import { Stack, Button, Box, Grid, styled, Paper, createTheme } from "@mui/material";
+import {
+  Stack,
+  Button,
+  Box,
+  Grid,
+  styled,
+  Paper,
+  createTheme,
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Link, useNavigate } from "react-router-dom";
@@ -129,11 +137,11 @@ function SlideBackGround() {
         pagination={{
           clickable: true,
         }}
-        autoplay={{
-          delay: 8000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
+        // autoplay={{
+        //   delay: 4000,
+        //   disableOnInteraction: false,
+        //   pauseOnMouseEnter: true,
+        // }}
         grabCursor={true}
         effect={"creative"}
         creativeEffect={{
@@ -153,10 +161,10 @@ function SlideBackGround() {
         <SwiperSlide>
           <div className="bg bg1"></div>
           <div className="text-content">
-            <h3 className="text-heading" style={{ textTransform: "uppercase" }}>
-              QUÀ TẶNG TRÁI CÂY – TRAO LỜI MUỐN NÓI
+            <h3 className="text-heading" style={{ textTransform: "uppercase", opacity: "0.7" }}>
+            Khám phá sự đa dạng của trái cây tươi
             </h3>
-            <h4 className="text-description">Giá chỉ từ 1.000.000đ</h4>
+            <h4 className="text-description">Hãy cùng chúng tôi khám phá sự đa dạng tuyệt vời của trái cây tươi.</h4>
             <p style={{ margin: "25px 0" }}>
               <Box
                 sx={{
@@ -168,17 +176,17 @@ function SlideBackGround() {
                   sx={{
                     border: "2px solid currentColor",
                     width: "100%",
-                    color: "#ffffff",
+                    backgroundColor: "#fff",
+                    borderColor: "#fff",
+                    color: "#2AC5B3",
                     fontSize: "20px",
                     "&:hover": {
-                      backgroundColor: "#fff",
-                      borderColor: "#fff",
-                      color: "#666",
+                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                     },
                   }}
                   onClick={() => navigate("/")}
                 >
-                  Mua ngay
+                  Xem ngay
                 </Button>
               </Box>
             </p>
@@ -186,10 +194,10 @@ function SlideBackGround() {
         </SwiperSlide>
         <SwiperSlide>
           <div className="bg bg2"></div>
-          <div className="text-content">
+          <div className="text-content content-2">
             <h2
               className="text-heading"
-              style={{ lineHeight: "60px", textTransform: "uppercase" }}
+              style={{ lineHeight: "60px", textTransform: "uppercase", color: "#2ac5b3" }}
             >
               Vị ngon bùng nổ vị giác
             </h2>
@@ -203,12 +211,12 @@ function SlideBackGround() {
                 <Button
                   sx={{
                     border: "2px solid currentColor",
-                    color: "#fff",
+                    backgroundColor: "#fff",
+                    borderColor: "#fff",
+                    color: "#2AC5B3",
                     fontSize: "20px",
                     "&:hover": {
-                      backgroundColor: "#fff",
-                      borderColor: "#fff",
-                      color: "#666",
+                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                     },
                   }}
                 >
@@ -217,12 +225,12 @@ function SlideBackGround() {
                 <Button
                   sx={{
                     border: "2px solid currentColor",
-                    color: "#fff",
+                    backgroundColor: "#fff",
+                    borderColor: "#fff",
+                    color: "#2AC5B3",
                     fontSize: "20px",
                     "&:hover": {
-                      backgroundColor: "#fff",
-                      borderColor: "#fff",
-                      color: "#666",
+                      boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                     },
                   }}
                 >
@@ -449,9 +457,7 @@ function SlideHome() {
                   </Stack>
 
                   {/* newProducts */}
-                  <Box
-                    className="section-box"
-                  >
+                  <Box className="section-box">
                     <Stack
                       direction="row"
                       justifyContent="center"
@@ -476,9 +482,7 @@ function SlideHome() {
                   </Box>
 
                   {/* best product */}
-                  <Box
-                    className="section-box"
-                  >
+                  <Box className="section-box">
                     <Stack
                       direction="row"
                       justifyContent="center"
@@ -491,7 +495,9 @@ function SlideHome() {
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
-                          <StarIcon sx={{ marginRight: "16px", fontSize: "35px" }}></StarIcon>
+                          <StarIcon
+                            sx={{ marginRight: "16px", fontSize: "35px" }}
+                          ></StarIcon>
                           {"Trái cây được mua nhiều nhất"}
                         </span>
                         <b></b>
@@ -501,9 +507,7 @@ function SlideHome() {
                   </Box>
 
                   {/* saleProduct */}
-                  <Box
-                    className="section-box"
-                  >
+                  <Box className="section-box">
                     <Stack
                       direction="row"
                       justifyContent="center"
@@ -528,9 +532,7 @@ function SlideHome() {
                   </Box>
 
                   {/* Category */}
-                  <Box
-                    className="section-box"
-                  >
+                  <Box className="section-box">
                     <img
                       src={naturalFruitsBanner}
                       alt="banner"
@@ -539,9 +541,7 @@ function SlideHome() {
                   </Box>
 
                   {/* Category */}
-                  <Box
-                    className="section-box"
-                  >
+                  <Box className="section-box">
                     <Stack
                       direction="row"
                       justifyContent="center"
@@ -554,7 +554,9 @@ function SlideHome() {
                       <h2 className="section-title">
                         <b></b>
                         <span className="section-title-main">
-                          <DoneIcon sx={{ marginRight: "16px", fontSize: "35px" }}></DoneIcon>
+                          <DoneIcon
+                            sx={{ marginRight: "16px", fontSize: "35px" }}
+                          ></DoneIcon>
                           {"Toàn bộ sản phẩm"}
                         </span>
                         <b></b>

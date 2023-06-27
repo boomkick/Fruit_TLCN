@@ -131,7 +131,7 @@ function Password() {
             </Typography>
           </Box>
           
-          <Button onClick={handleChangePassword} variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#3D8B91", '&:hover': {backgroundColor: '#3D8B91'}}}>Lưu thay đổi</Button>
+          <Button onClick={handleChangePassword} variant="contained" sx={{ width: 200, alignSelf: "center", backgroundColor: "#2AC5B3", '&:hover': {backgroundColor: '#2AC5B3'}}}>Lưu thay đổi</Button>
           
         </Stack>
       </Stack>

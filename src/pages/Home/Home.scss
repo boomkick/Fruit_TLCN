@@ -4,7 +4,7 @@
     border-radius: 4px;
   }
 
-  &>div {
+  & > div {
     border-radius: 4px;
   }
 }
@@ -55,19 +55,22 @@
     width: 100%;
   }
 
-
   // content
   .text-content {
     position: absolute !important;
     color: #ffffff;
-    bottom: 20%;
-    left: 50%;
+    top: 12%;
+    left: 70%;
     transform: translateX(-50%) !important;
     text-align: center;
-    width: 65%;
-    font-size: 16px;
+    width: 45%;
+    font-size: 20px;
     font-family: "Roboto", sans-serif;
     padding: 0px 20px 0px 0px;
+    &.content-2 {
+      top: 50%;
+      left: 30%;
+    }
 
     & p {
       color: #f1f1f1;
@@ -77,13 +80,15 @@
     }
   }
 
-
   .text-heading {
     padding: 0;
-    font-weight: 400;
     margin-top: 0.2em;
     margin-bottom: 0.2em;
     font-size: 2.9em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: black;
+    font-family: "Fredoka", sans-serif;
   }
 
   .text-description {
@@ -91,9 +96,9 @@
     font-size: 1.5em;
     margin-top: 0.6em;
     margin-bottom: 0.6em;
+    font-family: "Fredoka", sans-serif;
+    color: #2ac5b3;
   }
-
-
 
   // slide background
   .swiper-slide {
@@ -111,15 +116,15 @@
   }
 
   .bg.bg1 {
-    background-image: url(../../assets/img/home_background_1.jpg);
+    background-image: url(../../assets/img/home_background_3.jpg);
   }
 
   .bg.bg2 {
-    background-image: url(../../assets/img/home_background_2.jpg);
+    background-image: url(../../assets/img/home_background_5.jpg);
   }
 }
 
-//HomePage 
+//HomePage
 #section_1 {
   padding-top: 60px;
   background-color: rgb(255, 255, 255);
@@ -134,7 +139,7 @@
   flex-flow: row;
   align-items: center;
 
-  &-box{
+  &-box {
     max-width: 1170px;
     width: 100%;
     margin: 50px 175px;
@@ -184,15 +189,13 @@
       font-size: 24px;
       font-family: "Pathway Extreme", sans-serif;
     }
-
   }
-
 
   & b {
     display: block;
     flex: 1;
     height: 2px;
-    opacity: .1;
+    opacity: 0.1;
     background-color: currentColor;
   }
 
@@ -218,8 +221,6 @@
     height: 100%;
     object-fit: cover;
   }
-
-  
 }
 
 .products-consumer {

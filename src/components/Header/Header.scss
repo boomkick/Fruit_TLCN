@@ -34,7 +34,6 @@
     box-shadow: rgb(0 0 0 / 25%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px,
       rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px,
       rgb(0 0 0 / 9%) 0px -3px 5px;
-    
 
     &::before {
       position: absolute;
@@ -132,7 +131,7 @@
         left: 50%;
         transform: translateX(-50%);
       }
-      & > div{
+      & > div {
         cursor: default;
         font-size: 12px;
         font-weight: bold;
@@ -156,10 +155,9 @@
           font-size: 12px;
         }
       }
-      &__top{
+      &__top {
         border-bottom: 1px solid #ccc;
       }
-
     }
   }
 
@@ -177,8 +175,14 @@
     max-height: 70px;
     margin-left: 0;
     margin-right: 30px;
-    line-height: 1;
-    font-family: "Roboto", sans-serif;
+
+    &-title {
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 1.5;
+      color: #2ac5b3;
+      font-family: "Fredoka", sans-serif;
+    }
   }
 
   .element {

@@ -295,7 +295,7 @@ function Info() {
                 <Button
                   size="small"
                   variant="outlined"
-                  style={{ color: "#3D8B91", border: "1px solid #3D8B91" }}
+                  style={{ color: "#2AC5B3", border: "1px solid #2AC5B3" }}
                 >
                   Quên mật khẩu
                 </Button>
@@ -346,8 +346,8 @@ function Info() {
             sx={{
               width: 200,
               alignSelf: "center",
-              backgroundColor: "#3D8B91",
-              "&:hover": { backgroundColor: "#3D8B91" },
+              backgroundColor: "#2AC5B3",
+              "&:hover": { backgroundColor: "#2AC5B3" },
             }}
             onClick={onSaveChange}
           >

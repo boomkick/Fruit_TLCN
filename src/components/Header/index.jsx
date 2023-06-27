@@ -65,6 +65,15 @@ const theme = createTheme({
   },
 });
 
+const themeLogo = createTheme({
+  typography: {
+    fontFamily: `"Fredoka", sans-serif`,
+    fontSize: "32px",
+    fontWeight: "700",
+    lineHeight: "1.5"
+  },
+});
+
 const fruitList = [
   {
     name: "Dưa hấu",
@@ -336,11 +345,7 @@ function Header() {
         >
           {/* logo */}
           <Link className="header__logo" to={"/"}>
-            <img
-              alt=""
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              src={img}
-            />
+            <p className="header__logo-title">FRUITs</p>
           </Link>
 
           {/* Left Element */}
@@ -415,7 +420,7 @@ function Header() {
                   <>
                     <Stack>
                       <Button
-                        sx={{ color: "#3D8B91", padding: "6px 0" }}
+                        sx={{ color: "#2AC5B3", padding: "6px 0" }}
                         endIcon={<ArrowDropDownOutlinedIcon />}
                       >
                         <Typography
@@ -423,7 +428,7 @@ function Header() {
                           sx={{
                             fontSize: "14px",
                             textAlign: "start",
-                            color: "#3D8B91",
+                            color: "#2AC5B3",
                             fontWeight: "700",
                           }}
                         >
@@ -469,7 +474,7 @@ function Header() {
                   </>
                 ) : (
                   <>
-                    <Button onClick={openModalLogin} sx={{ color: "#3D8B91" }}>
+                    <Button onClick={openModalLogin} sx={{ color: "#2AC5B3" }}>
                       <Typography sx={{ fontSize: "14px" }}>
                         Đăng nhập
                       </Typography>

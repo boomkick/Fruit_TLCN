@@ -299,7 +299,7 @@ function FilterProduct(props) {
 
             <Box
               sx={{
-                backgroundColor: "#3D8B91",
+                backgroundColor: "#2AC5B3",
                 border: 0,
                 height: "3px",
                 margin: "7px 0",

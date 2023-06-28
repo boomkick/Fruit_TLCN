@@ -37,9 +37,9 @@ import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 // import Dashboard from "./Dashboard";
 import Order from "./Order";
 import { useDispatch, useSelector } from "react-redux";
-import LogoutIcon from '@mui/icons-material/Logout';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import logo_shop from "../../assets/img/logo.png"
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import logo_shop from "../../assets/img/logo.png";
 import { logoutSuccess } from "../../slices/authSlice";
 import { useEffect } from "react";
 
@@ -391,17 +391,9 @@ function Employee() {
 
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            <img
-              src={logo_shop}
-              alt=""
-              style={{width: "50px"}}
-            />
-          </IconButton>
-
-          <Typography sx={{ ml: "2px", fontWeight: "bold" }} variant="h6">
-            Nhân viên
-          </Typography>
+          <Link className="employee__logo" to={"/"}>
+            <p className="employee__logo-title">FRUITs</p>
+          </Link>
         </DrawerHeader>
 
         <Divider />
@@ -444,7 +436,6 @@ function Employee() {
         </List>
       </Drawer>
 
-        
       <Box
         component="main"
         flexGrow={1}
@@ -457,9 +448,8 @@ function Employee() {
           <Route path="order/*" element={<Order />} />
         </Routes>
       </Box>
-
     </Stack>
-    );
+  );
 }
 
 export default Employee;

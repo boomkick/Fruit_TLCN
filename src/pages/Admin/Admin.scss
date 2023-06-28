@@ -9,3 +9,21 @@
     border-radius: 5px;
     padding: 1rem;
 }
+
+.admin {
+    &__logo {
+        // vertical-align:middle;
+        width: 80px;
+        max-height: 70px;
+        margin-left: 1rem;
+        margin-right: 30px;
+    
+        &-title {
+          font-weight: 700;
+          font-size: 43px;
+          line-height: 1.5;
+          color: #2ac5b3;
+          font-family: "Fredoka", sans-serif;
+        }
+      }
+}

@@ -53,7 +53,7 @@ import StatisticCart from "./Statistic/Cart";
 import StatisticProfit from "./Statistic/Profit";
 import StatisticProduct from "./Statistic/Product";
 import StatisticBill from "./Statistic/Bill";
-import Dashboard from "./Dashboard"
+import Dashboard from "./Dashboard";
 import Inventory from "./Inventory";
 import CreateUpdateInventory from "./Inventory/CreateUpdateInventory";
 import CreateUpdatePromotion from "./Promotion";
@@ -305,8 +305,9 @@ function Admin() {
                 onClick={() => setOpenNotify(true)}
                 sx={{ border: "1px solid silver" }}
               >
-                <Badge color="info" 
-                // badgeContent={6}
+                <Badge
+                  color="info"
+                  // badgeContent={6}
                 >
                   <NotificationsNoneOutlinedIcon />
                 </Badge>
@@ -419,20 +420,13 @@ function Admin() {
           </Stack>
         </Toolbar>
       </AppBar>
-
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            <img src={logo_shop} alt="" style={{ width: "50px" }} />
-          </IconButton>
-
-          <Typography sx={{ ml: "1rem", fontWeight: "bold" }} variant="h6">
-            Quản trị viên
-          </Typography>
+          <Link className="admin__logo" to={"/"}>
+            <p className="admin__logo-title">FRUITs</p>
+          </Link>
         </DrawerHeader>
-
         <Divider />
-
         <List>
           {sidebar.map((item) => (
             <Link to={item.link}>
@@ -441,7 +435,9 @@ function Admin() {
                 disablePadding
                 sx={{ display: "block" }}
                 selected={selectedTabId === item.id}
-                onClick={() => item?.childs ? null : setSelectedTabId(item.id)}
+                onClick={() =>
+                  item?.childs ? null : setSelectedTabId(item.id)
+                }
               >
                 {item?.childs ? (
                   <>
@@ -475,21 +471,21 @@ function Admin() {
                         {item?.childs.map((element) => {
                           return (
                             <Link to={element.link}>
-                            <ListItemButton sx={{ pl: 4 }}>
-                              <ListItemIcon
-                                sx={{
-                                  minWidth: 0,
-                                  mr: open ? 3 : "auto",
-                                  justifyContent: "center",
-                                }}
-                              >
-                                {element.icon ? <element.icon /> : null}
-                              </ListItemIcon>
-                              <ListItemText
-                                primary={element.text}
-                                sx={{ opacity: open ? 1 : 0 }}
-                              />
-                            </ListItemButton>
+                              <ListItemButton sx={{ pl: 4 }}>
+                                <ListItemIcon
+                                  sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : "auto",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  {element.icon ? <element.icon /> : null}
+                                </ListItemIcon>
+                                <ListItemText
+                                  primary={element.text}
+                                  sx={{ opacity: open ? 1 : 0 }}
+                                />
+                              </ListItemButton>
                             </Link>
                           );
                         })}
@@ -552,8 +548,14 @@ function Admin() {
             path="promotion/*"
             element={
               <Routes>
-                <Route path="create" element={<CreateUpdatePromotion edit={false} />} />
-                <Route path=":id" element={<CreateUpdatePromotion edit={true}/>} />
+                <Route
+                  path="create"
+                  element={<CreateUpdatePromotion edit={false} />}
+                />
+                <Route
+                  path=":id"
+                  element={<CreateUpdatePromotion edit={true} />}
+                />
               </Routes>
             }
           />
@@ -587,7 +589,10 @@ function Admin() {
             element={
               <Routes>
                 <Route index element={<Employee />} />
-                <Route path="update-role/:id" element={<UpdateRoleEmployee />} />
+                <Route
+                  path="update-role/:id"
+                  element={<UpdateRoleEmployee />}
+                />
                 <Route path="update-role/" element={<UpdateRoleEmployee />} />
               </Routes>
             }
@@ -608,8 +613,14 @@ function Admin() {
               <Routes>
                 <Route index element={<Inventory />} />
                 <Route path="statistic" element={<StatisticInventory />} />
-                <Route path="create" element={<CreateUpdateInventory edit={false} />} />
-                <Route path="detail/:id" element={<CreateUpdateInventory edit={true}/>} />
+                <Route
+                  path="create"
+                  element={<CreateUpdateInventory edit={false} />}
+                />
+                <Route
+                  path="detail/:id"
+                  element={<CreateUpdateInventory edit={true} />}
+                />
               </Routes>
             }
           />

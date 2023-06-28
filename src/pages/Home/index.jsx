@@ -137,11 +137,11 @@ function SlideBackGround() {
         pagination={{
           clickable: true,
         }}
-        // autoplay={{
-        //   delay: 4000,
-        //   disableOnInteraction: false,
-        //   pauseOnMouseEnter: true,
-        // }}
+        autoplay={{
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        }}
         grabCursor={true}
         effect={"creative"}
         creativeEffect={{

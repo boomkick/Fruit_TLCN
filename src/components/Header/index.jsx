@@ -70,7 +70,7 @@ const themeLogo = createTheme({
     fontFamily: `"Fredoka", sans-serif`,
     fontSize: "32px",
     fontWeight: "700",
-    lineHeight: "1.5"
+    lineHeight: "1.5",
   },
 });
 
@@ -182,26 +182,29 @@ function Header() {
 
     if (notifications.length > 0) {
       return notifications.map((item) => {
+        let isRead = item?.IsRead ? "" : "bold";
         return (
           <>
             <Stack
+              direction="row"
+              spacing={2}
+              sx={{ padding: "5px", cursor: "pointer" }}
               onClick={() => handleClick(item)}
-              style={{
-                cursor: "pointer",
-                backgroundColor: item.IsRead ? "" : "#ccc",
-              }}
-              paddingTop={"3px"}
             >
-              <Typography lineHeight={"1.3"} fontSize={"15px"} fontWeight={500}>
-                {item.Content}
-              </Typography>
-              <Typography
-                fontSize={"10px"}
-                color={"#ccc"}
-                paddingBottom={"3px"}
-              >
-                {/* {item.CreatedDate} */}
-              </Typography>
+              <Stack width="40px" height="40px">
+                <img
+                  style={{ borderRadius: "8px" }}
+                  src="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+                  alt=""
+                />
+              </Stack>
+              <Stack sx={{ overflow: "auto" }}>
+                <Stack>
+                  <Typography sx={{ fontSize: "13px", fontWeight: isRead }}>
+                    {item?.Content}
+                  </Typography>
+                </Stack>
+              </Stack>
             </Stack>
             <Divider light />
           </>

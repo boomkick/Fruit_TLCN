@@ -182,6 +182,7 @@ function UpdateDetailProduct() {
             id="outlined-basic"
             variant="outlined"
             sx={{ flex: "1" }}
+            helperText= 'Đơn vị gram'
           />
         </Stack>
         <Stack direction="row">

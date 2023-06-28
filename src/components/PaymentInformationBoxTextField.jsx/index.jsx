@@ -17,6 +17,7 @@ import { paymentMethod } from "../../constraints/PaymentMethod";
 import {ServiceTypeEnum} from '../../constraints/GHNService'
 import "./PaymentInformationBoxTextField.scss";
 import { formatDateTime, roundPrice, numWithCommas, formatDate } from "../../constraints/Util";
+import { cartStatus } from "../../constraints/Cart";
 
 export default function PaymentInformationBoxTextField(props) {
   // Province
@@ -57,6 +58,7 @@ export default function PaymentInformationBoxTextField(props) {
               {`Địa chỉ chi tiết: ${props?.order?.detailLocation}`}
             </Typography>
             <Typography>Điện thoại: {props?.order?.phone}</Typography>
+            <Typography>Trạng thái đơn hàng: {cartStatus.find((e) => e.id == props?.order?.status)?.text}</Typography>
           </Box>
         </Box>
 

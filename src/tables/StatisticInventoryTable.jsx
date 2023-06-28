@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
+import {formatDateTime} from '../constraints/Util'
 
 StatisticInventoryTable.propTypes = {
   data: PropTypes.array.isRequired,
@@ -52,7 +53,7 @@ export default function StatisticInventoryTable(props) {
             <Fragment>
               <TableRow>
                 <TableCell rowSpan={item.notification.length + 1}>
-                  {item.date}
+                  {formatDateTime(item.date)}
                 </TableCell>
               </TableRow>
               {item.notification.map((item) => (

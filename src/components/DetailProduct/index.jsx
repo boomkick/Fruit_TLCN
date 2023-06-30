@@ -191,7 +191,6 @@ function DetailProduct({ data }) {
                 Loại sản phẩm:
               </p>
               <p className="detailProduct__info-general-text">Khối lượng sản phẩm:</p>
-              {/* <p className="detailProduct__info-general-text">Mô tả:</p> */}
             </div>
             <div>
               <p className="detailProduct__info-general-text">

@@ -52,6 +52,8 @@ import appleImage from "../../assets/fruit_fresh_header/Everything-You-Need-to-K
 import mangoImage from "../../assets/fruit_fresh_header/Fresh-Mangos-_Dr_-Sebi-Approved-Alkaline-Food_.jpg";
 import watermelonImage from "../../assets/fruit_fresh_header/Good-Food-Princess.jpg";
 import greenGrapesImage from "../../assets/fruit_fresh_header/Green-grapes-stock-image_-Image-of-cluster_-fresh_-branch-15408615.jpg";
+import cancelImage from "../../assets/notification/cancel.png";
+import checkedImage from "../../assets/notification/checked.png";
 import HeaderDropdown from "../HeaderDropDown";
 import ForgetPassword from "../ForgetPassword";
 
@@ -182,7 +184,9 @@ function Header() {
 
     if (notifications.length > 0) {
       return notifications.map((item) => {
+        console.log("item: ", item);
         let isRead = item?.IsRead ? "" : "bold";
+        let isDeleted = item?.IsDeleted ? cancelImage : checkedImage;
         return (
           <>
             <Stack
@@ -194,7 +198,7 @@ function Header() {
               <Stack width="40px" height="40px">
                 <img
                   style={{ borderRadius: "8px" }}
-                  src="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+                  src={ isDeleted }
                   alt=""
                 />
               </Stack>

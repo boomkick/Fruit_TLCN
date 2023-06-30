@@ -226,10 +226,17 @@ function Orders() {
           <Tabs
             value={selected}
             onChange={handleChange}
-            textColor="primary"
-            indicatorColor="primary"
             variant="fullWidth"
             aria-label="full width tabs example"
+            sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#2AC5B3",
+                height: 3,
+              },
+              "& .MuiTab-root.Mui-selected": {
+                color: '#2AC5B3'
+              }
+            }}
           >
             {orderTabs.map((item) => (
               <Tab
@@ -248,7 +255,7 @@ function Orders() {
         <Box
           style={{
             marginTop: "10px",
-            backgroundColor: "aliceblue",
+            backgroundColor: "#7ad6cb24",
             borderRadius: "5px",
           }}
         >
@@ -431,7 +438,7 @@ function Orders() {
               <Button
                 variant="contained"
                 startIcon={<FilterAltIcon />}
-                style={{ padding: "7px 10px", margin: "0px 0px 10px 10px" }}
+                style={{ padding: "7px 10px", margin: "0px 0px 10px 10px", backgroundColor: "#2AC5B3" }}
                 onClick={handleFilter}
               >
                 Bộ lọc
@@ -441,7 +448,7 @@ function Orders() {
               <Button
                 variant="contained"
                 endIcon={<RotateLeftIcon />}
-                style={{ padding: "7px 10px", margin: "0px 10px 10px 0px" }}
+                style={{ padding: "7px 10px", margin: "0px 10px 10px 0px", backgroundColor: "#2AC5B3" }}
                 onClick={handleReset}
               >
                 Làm mới

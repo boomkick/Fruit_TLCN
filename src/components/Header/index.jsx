@@ -184,15 +184,14 @@ function Header() {
 
     if (notifications.length > 0) {
       return notifications.map((item) => {
-        console.log("item: ", item);
         let isRead = item?.IsRead ? "" : "bold";
-        let isDeleted = item?.IsDeleted ? cancelImage : checkedImage;
+        let isDeleted = item?.Content.includes("từ chối") ? cancelImage : checkedImage;
         return (
           <>
             <Stack
               direction="row"
               spacing={2}
-              sx={{ padding: "5px", cursor: "pointer" }}
+              sx={{ padding: "10px 5px", cursor: "pointer" }}
               onClick={() => handleClick(item)}
             >
               <Stack width="40px" height="40px">

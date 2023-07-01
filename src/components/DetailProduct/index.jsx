@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "./DetailProduct.scss";
 import { Box, Modal, Rating } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 //import img
 import apiCart from "../../apis/apiCart";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { productUnit, productStatus } from "../../constraints/Product";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -24,6 +24,7 @@ import { numWithCommas } from "../../constraints/Util";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import HelpIcon from "@mui/icons-material/Help";
 import GiftListModal from "../GiftListModal";
+import { updateCart } from "../../slices/cartSlice";
 
 const PromotionTypeEnum = {
   PRCIE: 0,
@@ -44,6 +45,7 @@ function DetailProduct({ data }) {
   const [promotionPrice, setPromotionPrice] = useState(null);
   const [ratingStars, setRatingStars] = useState(5);
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setProductImage("");
@@ -61,7 +63,18 @@ function DetailProduct({ data }) {
     }
   }, [data]);
 
-  async function handleClickAddItem() {
+  const updateCartGlobal = useCallback(async () => {
+    await apiCart
+        .getCart()
+        .then((res) => {
+          dispatch(updateCart(res?.data));
+        })
+        .catch((error) => {
+          toast.error(error.toString());
+        });
+  }, []);
+
+  const handleClickAddItem = async () => {
     if (!user) {
       toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
       return;
@@ -88,9 +101,10 @@ function DetailProduct({ data }) {
       .catch((error) => {
         toast.error(error.toString());
       });
+    updateCartGlobal();
   }
 
-  function handleStatusProduct(status) {
+  const handleStatusProduct = (status) => {
     if (status?.id == 0) {
       return (
         <>

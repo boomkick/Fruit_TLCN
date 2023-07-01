@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./ShoppingCart.scss";
 import { Grid, Typography, Button, Stack, Box, Dialog } from "@mui/material";
 import CartItem from "../../components/CartItem";
@@ -47,7 +47,6 @@ function ShoppingCart() {
           toast.error(error.toString());
         });
 
-      // setData(groupByGiftCart(giftCartList, cart));
     };
     handleGetData();
   }, []);

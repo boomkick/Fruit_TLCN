@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Box, CardMedia, Rating, Typography } from "@mui/material";
-import { Pagination } from "@mui/material";
-import { formatDate, formatDateTime } from "../../constraints/Util";
+import { formatDateTime } from "../../constraints/Util";
 
 function Comment(props) {
   const [idPreview, setIdPreview] = useState(null);

@@ -13,14 +13,14 @@
   position: relative;
   background-size: cover;
   background-position: 50% 0;
-  background-color:  #363636;
+  background-color:  #fff;
   list-style: none;
 
   &_title {
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: .05em;
-    color: #f1f1f1;
+    color: black;
     font-size: 15px;
   }
 
@@ -35,13 +35,13 @@
   }
 
   &_content {
-    color: #f1f1f1;
+    color: black;
     font-size: 15px;
   }
 
   & li {
     margin-bottom: 9px;
-    color: #f1f1f1;
+    color: black;
     font-size: 15px;
   }
 

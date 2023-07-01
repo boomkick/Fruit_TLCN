@@ -30,10 +30,12 @@
                             cursor: zoom-in;
                             margin-bottom: 12px;
                             transition: 1s ease;
+                            border-radius: 5px;
                             &-focus{
                                 width: 32.25rem;
                                 height: 31.25rem;
                                 transition: 1s ease;
+                                border-radius: 5px;
                             }
                         }
                         &>h3 {

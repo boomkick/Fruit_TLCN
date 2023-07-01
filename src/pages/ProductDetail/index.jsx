@@ -294,8 +294,6 @@ function ProductDetail(props) {
     getReviews();
   };
 
-  console.log("descript: ", product?.description)
-
   return (
     <GetTop8ProductProvider>
       <Box className="container" style={{ backgroundColor: "#fff" }}>
@@ -345,13 +343,20 @@ function ProductDetail(props) {
         {myReview ? (
           <Box className="textComment">
             <h2>Đánh giá của bạn về sản phẩm </h2>
-            <Rating
-              name="simple-controlled"
-              value={ratingStars}
-              onChange={(event, newValue) => {
-                setRatingStars(newValue);
-              }}
-            />
+            <Stack sx={{
+              display: "flex",
+              flexDirection: "row",
+              margin: "10px 0px"
+            }}>
+              <Typography sx={{marginRight: "10px"}}>Số sao: </Typography>
+              <Rating
+                name="simple-controlled"
+                value={ratingStars}
+                onChange={(event, newValue) => {
+                  setRatingStars(newValue);
+                }}
+              />
+            </Stack>
             <TextareaAutosize
               className="textComment__textarea"
               aria-label="empty textarea"
@@ -385,9 +390,10 @@ function ProductDetail(props) {
                   spacing={1}
                   py={1}
                   style={{
-                    display: "flex",
+                    display: "#2AC5B3",
                     flexDirection: "row",
                     marginRight: "10px",
+                    marginBottom: "10px",
                     justifyContent: "center",
                   }}
                 >
@@ -530,7 +536,7 @@ function ProductDetail(props) {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "black",
+                backgroundColor: "#2AC5B3",
                 textTransform: "uppercase",
                 fontWeight: "400",
                 marginRight: "10px",
@@ -543,7 +549,7 @@ function ProductDetail(props) {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "black",
+                backgroundColor: "#2AC5B3",
                 textTransform: "uppercase",
                 fontWeight: "400",
               }}
@@ -626,16 +632,6 @@ function ProductDetail(props) {
                           </Button>
                         </label>
                       </Fragment>
-                      {/* <Button
-                        variant="outlined"
-                        startIcon={<DeleteIcon />}
-                        color="error"
-                        onClick={() => {
-                          setImageComment(null);
-                        }}
-                      >
-                        Delete
-                      </Button> */}
                     </>
                   ) : (
                     <Fragment>
@@ -750,7 +746,7 @@ function ProductDetail(props) {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "black",
+                backgroundColor: "#2AC5B3",
                 textTransform: "uppercase",
                 fontWeight: "400",
               }}

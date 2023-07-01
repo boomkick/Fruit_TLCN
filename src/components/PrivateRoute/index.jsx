@@ -21,7 +21,7 @@ PrivateRoute = ({
                 const decodeToken = jwt_decode(user?.accessToken);
                 let dateNow = new Date();
                 if (decodeToken.exp < dateNow.getTime()/1000) {
-                    toast.warning("Token đã hết hạn bạn vui lòng đăng nhập lại để sử dụng tính năng", { autoClose: 1000, pauseOnHover: false })
+                    toast.warning("Vui lòng đăng nhập lại để sử dụng tính năng", { autoClose: 1000, pauseOnHover: false })
                     setAuth(false)
                     dispatch(logoutSuccess())
                     return

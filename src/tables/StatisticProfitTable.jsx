@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import {numWithCommas} from "../constraints/Util"
 
 StatisticProfitTable.propTypes = {
   data: PropTypes.number.isRequired,
@@ -40,7 +41,7 @@ export default function StatisticProfitTable(props) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell align="left">Tổng</TableCell>
-              <TableCell align="center">{props.data || 0}</TableCell>
+              <TableCell align="center">{`${numWithCommas(props.data || 0)} đ`}</TableCell>
             </TableRow>
           </TableBody>
         </Table>

@@ -26,7 +26,7 @@ export default function StatisticProductTable(props) {
               flexDirection: "column",
               justifyContent: "end",
               margin: "0 20px",
-              width: "25%"
+              width: "30%"
             }}
           >
             <Stack
@@ -34,7 +34,7 @@ export default function StatisticProductTable(props) {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <Typography marginRight={"30px"}>Tổng lợi nhuận:</Typography>
+              <Typography marginRight={"30px"} fontWeight={"bold"}>Tổng lợi nhuận:</Typography>
               <Typography>
                 {`${numWithCommas(
                   props?.data.reduce((total, item) => (total += item?.Profit), 0)
@@ -46,7 +46,7 @@ export default function StatisticProductTable(props) {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <Typography marginRight={"30px"}>
+              <Typography marginRight={"30px"} fontWeight={"bold"}>
                 Tổng số lượng sản phẩm:
               </Typography>
               <Typography>
@@ -100,7 +100,7 @@ export default function StatisticProductTable(props) {
                     >
                       <TableCell align="center">{item.Id}</TableCell>
                       <TableCell align="center">{item.Name}</TableCell>
-                      <TableCell align="center">{item.Profit}</TableCell>
+                      <TableCell align="center">{`${numWithCommas(item.Profit)}`}</TableCell>
                       <TableCell align="center">{item.Sale}</TableCell>
                     </TableRow>
                   );

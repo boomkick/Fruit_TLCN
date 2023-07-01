@@ -14,6 +14,7 @@ import { orderTabs } from "../constraints/OrderItem";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { green } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
+import { numWithCommas, formatDateTime } from "../constraints/Util";
 
 UserDetailCartTable.propTypes = {
   data: PropTypes.object.isRequired,
@@ -25,7 +26,7 @@ export default function UserDetailCartTable(props) {
   return (
     <>
     <Grid container spacing={2} mb={3} ml={0.5}>
-      <Typography fontSize={'18px'} fontWeight={'600'}>Tổng giá trị các đơn hàng đã vận chuyển: {props.data.total}</Typography>
+      <Typography fontSize={'18px'} fontWeight={'600'}>Tổng giá trị các đơn hàng đã vận chuyển: {`${numWithCommas(props.data.total)}đ`}</Typography>
     </Grid>
       <Grid container spacing={2}>
         <Table
@@ -85,7 +86,7 @@ export default function UserDetailCartTable(props) {
                             ?.type
                         }
                       </TableCell>
-                      <TableCell align="center">{item.createdDate}</TableCell>
+                      <TableCell align="center">{formatDateTime(item.createdDate)}</TableCell>
                       <TableCell align="center">
                         {item.processDescription}
                       </TableCell>

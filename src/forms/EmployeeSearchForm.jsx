@@ -259,5 +259,5 @@ export default function EmployeeSearchForm(props) {
         </Grid>
       </Grid>
     </>
-  );
+  )
 }

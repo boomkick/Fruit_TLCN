@@ -49,12 +49,12 @@ export const sidebar = [
         icon: RateReviewOutlinedIcon,
         link: '/admin/review'
     },
-    {
-        id: 7,
-        text: 'Thanh toán',
-        icon: CalculateOutlinedIcon,
-        link: '/admin/payment'
-    },
+    // {
+    //     id: 7,
+    //     text: 'Thanh toán',
+    //     icon: CalculateOutlinedIcon,
+    //     link: '/admin/payment'
+    // },
     {
         id: 8,
         text: 'Kho và hàng tồn',

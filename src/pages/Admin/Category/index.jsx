@@ -84,18 +84,17 @@ function Category() {
         </Stack>
 
         <Table
-          className="tableCategory"
+          className="tableCategoryAdmin"
           sx={{ minWidth: "650px" }}
           stickyHeader
           size="small"
         >
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: "15%", top: "64px" }}>
+              <TableCell sx={{ width: "80%", top: "64px" }}>
                 Tên danh mục
               </TableCell>
-              {/* <TableCell sx={{ width: "15%", top: "64px" }}>Danh mục cha</TableCell> */}
-              <TableCell align="center" sx={{ width: "10%", top: "64px" }}>
+              <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
                 Thao tác&nbsp;
               </TableCell>
             </TableRow>
@@ -105,9 +104,8 @@ function Category() {
               category.filter((category) => (category?.name.toLowerCase().includes(query))).map((item, id) => (
                 <TableRow
                   key={item.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell scope="row">
                     {item.name}
                   </TableCell>
                   <TableCell >
@@ -124,7 +122,7 @@ function Category() {
                       <DeleteIcon onClick={() => openDialogDeleteAll(item)} variant="outlined" style={{cursor: "pointer", marginTop: "0px", marginLeft: "5px"}} 
                       sx={{
                         "&:hover": { color: "#FFFFFF", backgroundColor: "red" }, 
-                        transition: "ease 1s",
+                        transition: "ease 0.2s",
                         borderRadius: "5px",
                       }}/>
                     </Stack>

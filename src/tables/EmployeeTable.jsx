@@ -72,7 +72,7 @@ export default function EmployeeTable(props) {
                 align="center"
                 sx={{ width: "10%", top: "64px", fontSize: "15px" }}
               >
-                
+                Xử lí
               </TableCell>
             </TableRow>
           </TableHead>

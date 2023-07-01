@@ -79,7 +79,8 @@ function UpdateRoleEmployee() {
                         onChange={handleChangeEmployeeRole}
                         >
                         {
-                            role.map(item => <MenuItem value={item?.id}>{item?.text}</MenuItem>)
+                            id ? role.map(item => <MenuItem value={item?.id}>{item?.text}</MenuItem>) :
+                            role.map(item => item?.id !== 0 ? <MenuItem value={item?.id}>{item?.text}</MenuItem> : null)
                         }
                         </Select>
                     </FormControl>

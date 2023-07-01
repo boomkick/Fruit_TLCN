@@ -1,5 +1,13 @@
-.tableCategory{
-    & td{
+.tableCategoryAdmin{
+    margin-top: 10px;
+    & th{
+        background-color: #e8e8e8 !important;
+        border: 1px solid #bfbfbf !important;
+        font-weight: bold;
+    }
+    & td {
+        border: 1px solid #bfbfbf !important;
+        border-collapse: collapse;
         font-size: 13px !important;
     }
     & p{

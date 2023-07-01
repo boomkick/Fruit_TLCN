@@ -67,15 +67,6 @@ const theme = createTheme({
   },
 });
 
-const themeLogo = createTheme({
-  typography: {
-    fontFamily: `"Fredoka", sans-serif`,
-    fontSize: "32px",
-    fontWeight: "700",
-    lineHeight: "1.5",
-  },
-});
-
 const fruitList = [
   {
     name: "Dưa hấu",
@@ -185,7 +176,9 @@ function Header() {
     if (notifications.length > 0) {
       return notifications.map((item) => {
         let isRead = item?.IsRead ? "" : "bold";
-        let isDeleted = item?.Content.includes("từ chối") ? cancelImage : checkedImage;
+        let isDeleted = item?.Content.includes("từ chối")
+          ? cancelImage
+          : checkedImage;
         return (
           <>
             <Stack
@@ -195,11 +188,7 @@ function Header() {
               onClick={() => handleClick(item)}
             >
               <Stack width="40px" height="40px">
-                <img
-                  style={{ borderRadius: "8px" }}
-                  src={ isDeleted }
-                  alt=""
-                />
+                <img style={{ borderRadius: "8px" }} src={isDeleted} alt="" />
               </Stack>
               <Stack sx={{ overflow: "auto" }}>
                 <Stack>
@@ -330,7 +319,8 @@ function Header() {
 
   if (
     location.pathname.includes("employee") ||
-    location.pathname.includes("admin")
+    location.pathname.includes("admin") ||
+    location.pathname.includes("email-expired")
   ) {
     return null;
   }

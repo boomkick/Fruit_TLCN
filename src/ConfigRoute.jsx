@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute"
 import Admin from "./pages/Admin";
 import { Route, Routes } from "react-router-dom";
 import Employee from "./pages/Employee";
+import { PageError } from "./pages/PageError";
 
 function ConfigRoute() {
   return (
@@ -27,6 +28,7 @@ function ConfigRoute() {
       <Route path="product-detail/:id" element={<ProductDetail/>} />
       <Route path="product-category/:id" element={<FilterProduct />} />
       <Route path="product-category/" element={<FilterProduct />} />
+      <Route path="email-expired/" element={<PageError value={"Mail đã hết hạn sử dụng vui lòng thực hiện lại tính năng để có mật khẩu mới"} />} />
     </Routes>
   );
 }

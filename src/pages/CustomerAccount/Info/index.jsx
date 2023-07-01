@@ -297,7 +297,7 @@ function Info() {
                   variant="outlined"
                   style={{ color: "#2AC5B3", border: "1px solid #2AC5B3" }}
                 >
-                  Quên mật khẩu
+                  Đổi mật khẩu
                 </Button>
               </Link>
             </Stack>
@@ -407,7 +407,7 @@ function Info() {
                       <Typography
                         sx={{ ml: "auto", mr: "auto", color: "blue" }}
                       >
-                        Nhấn để chọn hoặc kéo thả hình ảnh vào khung này.
+                        Kéo thả hình ảnh vào khung này.
                       </Typography>
                     </Stack>
                   ) : null}

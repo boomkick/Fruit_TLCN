@@ -1,13 +1,17 @@
 import "./Footer.scss";
 import { Link, useLocation } from "react-router-dom";
 
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 
 const { Stack } = require("@mui/system");
 
 function Header() {
   const location = useLocation();
-  if (location.pathname.includes("employee") || location.pathname.includes("admin")) {
+  if (
+    location.pathname.includes("employee") ||
+    location.pathname.includes("admin") ||
+    location.pathname.includes("email-expired")
+  ) {
     return null;
   }
   return (
@@ -85,9 +89,11 @@ function Header() {
           <div>
             <ul style={{ listStyle: "none" }}>
               <li>
-              <a href="https://www.facebook.com/profile.php?id=100004971784205">
-                <FacebookOutlinedIcon sx={{color:"black"}}></FacebookOutlinedIcon>
-              </a>
+                <a href="https://www.facebook.com/profile.php?id=100004971784205">
+                  <FacebookOutlinedIcon
+                    sx={{ color: "black" }}
+                  ></FacebookOutlinedIcon>
+                </a>
               </li>
             </ul>
           </div>
@@ -98,15 +104,9 @@ function Header() {
           <div className="footer_divier"></div>
           <div>
             <ul style={{ listStyle: "none" }}>
-              <li>
-              1 Đ. Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức
-              </li>
-              <li>
-              Làm việc kể cả Thứ 7 - Chủ Nhật
-              </li>
-              <li>
-                Hotline: 0357 22 44 36
-              </li>
+              <li>1 Đ. Võ Văn Ngân, Linh Chiểu, Thành Phố Thủ Đức</li>
+              <li>Làm việc kể cả Thứ 7 - Chủ Nhật</li>
+              <li>Hotline: 0357 22 44 36</li>
             </ul>
           </div>
         </div>

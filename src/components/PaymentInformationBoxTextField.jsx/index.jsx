@@ -16,7 +16,7 @@ import {
 import { paymentMethod } from "../../constraints/PaymentMethod";
 import {ServiceTypeEnum} from '../../constraints/GHNService'
 import "./PaymentInformationBoxTextField.scss";
-import { formatDateTime, roundPrice, numWithCommas, formatDate } from "../../constraints/Util";
+import { formatDateTime, roundPrice, numWithCommas } from "../../constraints/Util";
 import { cartStatus } from "../../constraints/Cart";
 
 export default function PaymentInformationBoxTextField(props) {
@@ -45,7 +45,7 @@ export default function PaymentInformationBoxTextField(props) {
       >
         <Box className="detailOrder__boxInfo">
           <Typography>ĐỊA CHỈ NHẬN HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
+          <Box p={1.25} className="detailOrder__content">
             <Typography style={{ color: "#000", fontWeight: 500 }}>
               Tên người nhận: {props?.order?.name}
             </Typography>
@@ -64,7 +64,7 @@ export default function PaymentInformationBoxTextField(props) {
 
         <Box className="detailOrder__boxInfo">
           <Typography>HÌNH THỨC GIAO HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
+          <Box p={1.25} className="detailOrder__content">
             <Typography>
               <img
                 width="56px"
@@ -90,7 +90,7 @@ export default function PaymentInformationBoxTextField(props) {
         </Box>
         <Box className="detailOrder__boxInfo">
           <Typography>HÌNH THỨC THANH TOÁN</Typography>
-          <Box p={1.25} className="detailOrder__content" style={{border: '0.5px solid grey', borderRadius: '5px', height: '200px'}}>
+          <Box p={1.25} className="detailOrder__content">
             <Typography>
               {
                 paymentMethod.find(

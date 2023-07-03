@@ -9,6 +9,10 @@
         background-color: #fff;
     }
     &__content {
+        border: 0.5px solid #8080808a;
+        border-radius: 20px;
+        height: 200px;
+        margin-top: 10px;
         & p {
             margin-top: 5px;
             color: #000000A6;

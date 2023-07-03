@@ -26,7 +26,7 @@ export default function UserDetailCartTable(props) {
   return (
     <>
     <Grid container spacing={2} mb={3} ml={0.5}>
-      <Typography fontSize={'18px'} fontWeight={'600'}>Tổng giá trị các đơn hàng đã vận chuyển: {`${numWithCommas(props.data.total)}đ`}</Typography>
+      <Typography fontSize={'18px'} fontWeight={'600'}>Tổng giá trị các đơn hàng đã vận chuyển: {`${numWithCommas(props.data?.total || 0)}đ`}</Typography>
     </Grid>
       <Grid container spacing={2}>
         <Table
@@ -86,7 +86,7 @@ export default function UserDetailCartTable(props) {
                             ?.type
                         }
                       </TableCell>
-                      <TableCell align="center">{formatDateTime(item.createdDate)}</TableCell>
+                      <TableCell align="center">{formatDateTime(item?.createdDate)}</TableCell>
                       <TableCell align="center">
                         {item.processDescription}
                       </TableCell>

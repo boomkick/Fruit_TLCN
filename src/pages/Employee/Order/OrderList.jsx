@@ -772,29 +772,29 @@ function OrderList() {
         </Stack>
 
         <Table
-          className="tableCategory"
+          className="tableOrderEmployee"
           sx={{ minWidth: "650px" }}
           stickyHeader
           size="small"
         >
           <TableHead>
             <TableRow>
-              <TableCell>
-
+              <TableCell sx={{ width: "10%", top: "64px" }} align="center">
+                #
               </TableCell>
-              <TableCell sx={{ width: "22%", top: "64px" }} align="center">
+              <TableCell sx={{ width: "20%", top: "64px" }} align="center">
                 Mã đơn hàng/Ngày đặt hàng
               </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }} align="center">
+              <TableCell sx={{ width: "12%", top: "64px" }} style={{textAlign: 'center'}}>
                 Trạng thái&nbsp;
               </TableCell>
               <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
                 Ngày xác nhận&nbsp;
               </TableCell>
-              <TableCell align="center" sx={{ width: "18%", top: "64px" }}>
+              <TableCell align="center" sx={{ width: "15%", top: "64px" }}>
                 Giá trị đơn hàng&nbsp;
               </TableCell>
-              <TableCell sx={{ width: "15%", top: "64px" }} align="center">
+              <TableCell sx={{ width: "13%", top: "64px" }} align="center">
                 Tên người nhận&nbsp;
               </TableCell>
               <TableCell sx={{ width: "10%", top: "64px" }} align="center">
@@ -811,7 +811,7 @@ function OrderList() {
                 <TableCell align="center">
                   {getIconByStatus(item.status)}
                 </TableCell>
-                <TableCell component="th" scope="row" align="center">
+                <TableCell scope="row" align="center">
                   {item.id} / {handleDate(item.createdDate)}
                 </TableCell>
                 <TableCell align="center">

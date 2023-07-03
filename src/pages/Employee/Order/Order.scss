@@ -41,7 +41,7 @@
     }
 }
 
-.tableCategory {
+.tableOrderEmployee {
     margin-top: 10px;
     & th,
     & td {
@@ -49,24 +49,8 @@
         border-collapse: collapse;
     }
     & th {
-        background-color: #E8E8E8 !important;
+        background-color: #e8e8e8 !important;
         font-weight: bold;
-        width: calc(13*100%/101);
-        &:nth-child(1) {
-            width: calc(8*100%/101);
-        }
-        &:nth-child(2) {
-            width: calc(20*100%/101);
-        }
-        &:nth-child(2) {
-            width: calc(18*100%/101);
-        }
-        &:nth-child(9) {
-            width: calc(15*100%/101);
-        }
-        &:nth-child(10) {
-            width: calc(18*100%/101);
-        }
     }
     & p {
         font-size: 12px !important;

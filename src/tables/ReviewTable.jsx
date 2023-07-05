@@ -114,7 +114,7 @@ export default function ReviewTable(props) {
                 align="center"
                 sx={{ width: "10%", top: "64px", fontSize: "15px" }}
               >
-                ID Sản phẩm
+                Tên sản phẩm
               </TableCell>
               <TableCell
                 align="center"
@@ -168,7 +168,7 @@ export default function ReviewTable(props) {
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell align="center">{item.id}</TableCell>
-                      <TableCell align="center">{item.productId}</TableCell>
+                      <TableCell align="center">{item.product.name}</TableCell>
                       <TableCell>
                         {item.account.firstName + " " + item.account.lastName}
                       </TableCell>

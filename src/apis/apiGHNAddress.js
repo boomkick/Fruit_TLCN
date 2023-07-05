@@ -1,12 +1,12 @@
 import axios from 'axios';
 import queryString from 'query-string';
 
-const baseURLGHN = "https://online-gateway.ghn.vn/shiip/public-api/"
+const baseURLGHN = "https://dev-online-gateway.ghn.vn/shiip/public-api/"
 
 export const axiosGHN = axios.create({
     baseURL: baseURLGHN,
     headers: {
-        "token": "a4864617-17cb-11ee-8506-6ead57e9219a",
+        "token": "9d4848e1-54d0-11ed-9ad7-269dd9db11fd",
         "Content-Type": "application/json",
     },
     withCredentials: false,
@@ -16,9 +16,9 @@ export const axiosGHN = axios.create({
 export const axiosGHNTime = axios.create({
     baseURL: baseURLGHN,
     headers: {
-        "token": "a4864617-17cb-11ee-8506-6ead57e9219a",
+        "token": "9d4848e1-54d0-11ed-9ad7-269dd9db11fd",
         "Content-Type": "application/json",
-        "ShopId": "4300980",
+        "ShopId": "120212",
     },
     withCredentials: false,
     paramsSerializer: (params) => queryString.stringify(params)

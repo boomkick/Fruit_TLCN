@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 LoginGoogle.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
@@ -13,6 +14,11 @@ function LoginGoogle(props) {
 
   useEffect(() => {
     /* global google */
+    if(!google){
+      console.log("google: ", google)
+      toast.warning("Bạn vui lòng truy cập mạng!");
+      return
+    }
     google.accounts.id.initialize({
       client_id: CLIENT_ID,
       callback: handleCallbackRes,

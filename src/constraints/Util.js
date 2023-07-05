@@ -41,6 +41,21 @@ export const formatDateTime = (date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
+export const formatDateText = (date) => {
+  date = new Date(date);
+  
+  // Lấy ngày, tháng, năm
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  
+  // Chuyển đổi sang chuỗi và thêm số 0 nếu cần thiết
+  day = day < 10 ? "0" + day : day;
+  month = month < 10 ? "0" + month : month;
+
+  return `${day}/${month}/${year}`;
+};
+
 export const groupByGiftCart = (giftCartList, cartDetailList) => {
   let noGiftList = cartDetailList.filter((cartDetail) => !cartDetail.giftCart);
   let giftCartListAdded = [];

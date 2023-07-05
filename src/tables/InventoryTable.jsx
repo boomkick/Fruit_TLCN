@@ -18,7 +18,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { green, red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { formatDateTime, numWithCommas } from "../constraints/Util"
+import { formatDateText, formatDateTime, numWithCommas } from "../constraints/Util"
 
 InventoryTable.propTypes = {
   data: PropTypes.array.isRequired,
@@ -27,9 +27,6 @@ InventoryTable.propTypes = {
 
 export default function InventoryTable(props) {
   const [modalDelete, setModalDelete] = useState(false);
-  //   const [products, setProducts] = useState([]);
-  //   const [page, setPage] = useState(1);
-  //   const [totalPage, setTotalPage] = useState(1);
   const [itemdelete, setItemdelete] = useState(null);
   const navigate = useNavigate();
 
@@ -94,10 +91,10 @@ export default function InventoryTable(props) {
                   <Typography>{row.quantity}</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography>{formatDateTime(row.deliveryDate)}</Typography>
+                  <Typography>{formatDateText(row.deliveryDate)}</Typography>
                 </TableCell>
                 <TableCell align="center">
-                  <Typography>{formatDateTime(row.expireDate)}</Typography>
+                  <Typography>{formatDateText(row.expireDate)}</Typography>
                 </TableCell>
                 <TableCell align="center">
                   <Typography>{row.description}</Typography>

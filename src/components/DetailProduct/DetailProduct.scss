@@ -189,6 +189,14 @@
             font-weight: 100;
         }
     }
+    &__quantity-text-field{
+        & .MuiInputBase-input{
+            padding: 7px 14px;
+            width: 32px;
+            color: #327fcd;
+            border: 1px solid #8CBAE8
+        }
+    }
 }
 
 .modal-gift {

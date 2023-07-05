@@ -3,6 +3,7 @@ import "./CardProduct.scss";
 import { Card, CardContent, CardMedia, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { numWithCommas } from "../../constraints/Util";
+import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 
 const PromotionTypeEnum = {
   PRCIE: 0,
@@ -74,23 +75,33 @@ function CardProduct({ data }) {
               {data?.category?.name ? data?.category?.name : "Danh mục"}
             </p>
           </Box>
-          <Box display={"flex"}>
-            <p className="card__content-price" align="left">
-              {numWithCommas(promotionPrice ? promotionPrice : data?.price)}₫
-            </p>
-            {percentDiscount ? (
-              <p
-                style={{
-                  textDecoration: "line-through",
-                  opacity: "0.7",
-                  paddingLeft: "5px",
-                }}
-              >
-                {numWithCommas(data?.price)}₫
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Box display={"flex"}>
+              <p className="card__content-price" align="left">
+                {numWithCommas(promotionPrice ? promotionPrice : data?.price)}₫
               </p>
-            ) : (
-              <></>
-            )}
+              {percentDiscount ? (
+                <p
+                  style={{
+                    textDecoration: "line-through",
+                    opacity: "0.7",
+                    paddingLeft: "5px",
+                  }}
+                >
+                  {numWithCommas(data?.price)}₫
+                </p>
+              ) : (
+                <></>
+              )}
+            </Box>
+            <Box display={"flex"}>
+            <p className="card__content-product-quantity">
+                {`${data?.quantity} sản phẩm`}
+              </p>
+              {
+                data?.quantity <= 10 ? <ProductionQuantityLimitsIcon sx={{ color: "red", marginLeft: "5px", fontSize: "14px"}}/> : null
+              }
+              </Box>
           </Box>
         </CardContent>
       </Card>

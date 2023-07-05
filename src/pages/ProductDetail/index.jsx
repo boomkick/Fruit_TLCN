@@ -298,7 +298,6 @@ function ProductDetail(props) {
     <GetTop8ProductProvider>
       <Box className="container" style={{ backgroundColor: "#fff" }}>
         <DetailProduct data={product} />
-
         <Box
           sx={{
             width: "100%",

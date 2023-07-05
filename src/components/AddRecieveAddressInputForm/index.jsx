@@ -34,14 +34,13 @@ function AddRecieveAddressInputForm(props) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
-  const [city, setCity] = useState("");
+  const [city, setCity] = useState(202);
   const [district, setDistrict] = useState("");
   const [ward, setWard] = useState("");
   const paymentAddress = useSelector((state) => state.payment.address);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("paymentAddress: ", paymentAddress);
     if(paymentAddress){
       setName(paymentAddress.name)
       setPhone(paymentAddress.phone)
@@ -111,6 +110,7 @@ function AddRecieveAddressInputForm(props) {
           onChangeCity={handleChangeCity}
           onChangeDistrict={handleChangeDistrict}
           onChangeWard={handleChangeWard}
+          isDisableCity={true}
         />
 
         <Stack direction="row">

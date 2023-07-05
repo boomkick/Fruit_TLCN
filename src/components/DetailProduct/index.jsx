@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import "./DetailProduct.scss";
-import { Box, Modal, Rating } from "@mui/material";
+import { Box, Modal, Rating, TextField } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import BookIcon from "@mui/icons-material/Book";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -13,7 +13,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import apiCart from "../../apis/apiCart";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { productUnit, productStatus } from "../../constraints/Product";
+import { productStatus } from "../../constraints/Product";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
@@ -93,7 +93,7 @@ function DetailProduct({ data }) {
       .postCart(param)
       .then((res) => {
         if (res.status !== 200) {
-          toast.success(res?.message);
+          toast.error(res?.message);
         } else {
           toast.success("Đã thêm sản phẩm thành công");
         }
@@ -107,9 +107,7 @@ function DetailProduct({ data }) {
   const handleStatusProduct = (status) => {
     if (status?.id == 0) {
       return (
-        <>
-          <AddShoppingCartIcon style={{ color: "#49A94D" }} />
-        </>
+        null
       );
     } else if (status?.id == 1) {
       return (
@@ -207,9 +205,18 @@ function DetailProduct({ data }) {
               <p className="detailProduct__info-general-text">Khối lượng sản phẩm:</p>
             </div>
             <div>
-              <p className="detailProduct__info-general-text">
-                {data?.quantity + " sản phẩm"}
-              </p>
+              {
+                data?.quantity <= 10 ? (
+                  <p className="detailProduct__info-general-text" style={{color: "red"}}>
+                    {data?.quantity + ` sản phẩm (${data?.quantity <= 0 ? "hết hàng" : "gần hết hàng"})`}
+                  </p>
+                ) : (
+                  <p className="detailProduct__info-general-text">
+                    {data?.quantity + " sản phẩm"}
+                  </p>
+                )
+              }
+              
               <p className="detailProduct__info-general-text">
                 {data?.sales + ' sản phẩm'}
               </p>
@@ -220,14 +227,6 @@ function DetailProduct({ data }) {
                 {(data?.weight / 1000) >= 1 ? (data?.weight / 1000) + ' kilogram' : (data?.weight) + ' gram'}
               </p>
             </div>
-            {/* <p className="detailProduct__info-general-text">
-              Nếu bạn đang tìm kiếm một loại trái cây ngon, thì không còn gì
-              tuyệt vời hơn sản phẩm này. Được thu hoạch từ vườn trái cây chất
-              lượng cao, trái cây này đã được chọn lọc cẩn thận để đảm bảo chất
-              lượng tốt nhất. Với màu sắc tươi sáng và vị ngọt tự nhiên, sản
-              phẩm này sẽ làm hài lòng cả những người ưa thích trái cây khó tính
-              nhất.
-            </p> */}
           </div>
 
           <div className="detailProduct__status">
@@ -248,7 +247,19 @@ function DetailProduct({ data }) {
                   >
                     -
                   </Button>
-                  <Button>{quantity}</Button>
+                  <TextField 
+                    className="detailProduct__quantity-text-field"
+                    variant="outlined"
+                    value={quantity} onChange={(event) => {
+                      if(isNaN(Number(event.target.value))  || Number(event.target.value) <0){
+                        toast.error("Vui lòng nhập số lượng lớn hơn 0 !")
+                        setQuantity(1)
+                        return
+                      }
+                      setQuantity(Number(event.target.value))
+                    }}
+                    size="small"
+                  />
                   <Button
                     onClick={() => {
                       setQuantity(quantity + 1);
@@ -295,7 +306,6 @@ function DetailProduct({ data }) {
             <div
               style={{ display: "flex", fontSize: "20px", lineHeight: "28px" }}
             >
-              {/* <BookIcon sx={{ fontSize: "20px", marginRight: "2px" }} /> */}
             </div>
           </div>
         </div>

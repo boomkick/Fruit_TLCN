@@ -61,6 +61,14 @@
             font-weight: 700;
             color: $client-main-color;
         }
+        &-product-quantity{
+            font-size: 14px;
+            font-weight: 400;
+            text-overflow: ellipsis;
+            overflow: hidden; 
+            max-width: 100px;
+            color: #666666;
+        }
     }
     &:hover {
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

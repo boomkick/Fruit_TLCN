@@ -8,14 +8,13 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
-import {formatDateTime} from '../constraints/Util'
+import {formatDateText, formatDateTime} from '../constraints/Util'
 
 StatisticInventoryTable.propTypes = {
   data: PropTypes.array.isRequired,
 };
 
 export default function StatisticInventoryTable(props) {
-  console.log("data: ", props.data);
   return (
     <>
       <Grid container spacing={2}>
@@ -29,13 +28,13 @@ export default function StatisticInventoryTable(props) {
             <TableRow>
               <TableCell
                 align="center"
-                sx={{ width: "30%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "25%", top: "64px", fontSize: "15px" }}
               >
                 Ngày
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ width: "10%", top: "64px", fontSize: "15px" }}
+                sx={{ width: "15%", top: "64px", fontSize: "15px" }}
               >
                 ID thông báo&nbsp;
               </TableCell>
@@ -53,7 +52,7 @@ export default function StatisticInventoryTable(props) {
             <Fragment>
               <TableRow>
                 <TableCell rowSpan={item.notification.length + 1}>
-                  {formatDateTime(item.date)}
+                  {formatDateText(item.date)}
                 </TableCell>
               </TableRow>
               {item.notification.map((item) => (

@@ -24,6 +24,7 @@ SelectBoxAddressGHN.propTypes = {
   onChangeCity: PropTypes.func,
   onChangeDistrict: PropTypes.func,
   onChangeWard: PropTypes.func,
+  isDisableCity: PropTypes.bool,
 };
 
 function SelectBoxAddressGHN(props) {
@@ -127,6 +128,7 @@ function SelectBoxAddressGHN(props) {
               label="Age"
               onChange={handleChangeCity}
               input={<InputCustom placeholder="Chọn Tỉnh/Thành phố" />}
+              disabled={props?.isDisableCity}
             >
               {listCity ? (
                 listCity.map((item) => (

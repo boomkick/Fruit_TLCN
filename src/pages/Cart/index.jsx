@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import "./ShoppingCart.scss";
-import { Grid, Typography, Button, Stack, Box, Dialog } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Button,
+  Stack,
+  Box,
+  Dialog,
+  Modal,
+} from "@mui/material";
 import CartItem from "../../components/CartItem";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { groupByGiftCart, numWithCommas } from "../../constraints/Util";
@@ -12,6 +20,8 @@ import { toast } from "react-toastify";
 import apiCart from "../../apis/apiCart";
 import apiGiftCart from "../../apis/apiGiftCart";
 import GiftCart from "../../components/GiftCart";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { red } from "@mui/material/colors";
 
 const PromotionTypeEnum = {
   PRCIE: 0,
@@ -25,6 +35,8 @@ function ShoppingCart() {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const [giftCartList, setGiftCartList] = useState([]);
+  const [modalError, setModalError] = useState(false);
+  const [errorContent, setErrorContent] = useState("");
 
   // get cart by user
   useEffect(() => {
@@ -105,7 +117,7 @@ function ShoppingCart() {
         apiCart.putCart(param).then((res) => {
           if (res?.status !== 200) {
             isEnoughQuantity = false;
-            toast.error(res?.message);
+            // toast.error(res?.message);
           }
         });
       });
@@ -122,14 +134,16 @@ function ShoppingCart() {
   const handleValidateQuantity = async () => {
     await apiCart.getValidateQuantity().then((res) => {
       if (res?.status != 200) {
-        res?.data.forEach((item) => {
-          toast.error(item);
-        });
+        setErrorContent(res?.data.map((item) => <Typography>{item}</Typography>));
+        setModalError(true);
         return false;
       }
     });
     return true;
   };
+
+  // modal error
+  const closeModalError = () => setModalError(false);
 
   return (
     <>
@@ -250,6 +264,42 @@ function ShoppingCart() {
           </Box>
         </Dialog>
       )}
+      <Modal
+        sx={{ overflowY: "scroll" }}
+        open={modalError}
+        onClose={closeModalError}
+      >
+        <Stack
+          className="modal-info"
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+          width="20rem"
+        >
+          {/* <Stack>
+                <InfoOutlinedIcon sx={{ color: red[500] }}  />
+              </Stack> */}
+
+          <Stack spacing={3}>
+            <Stack>
+              <Typography fontWeight="bold">
+                {`Số lượng hàng không đủ`}
+              </Typography>
+              {errorContent}
+            </Stack>
+
+            <Stack direction="row" justifyContent="flex-end" spacing={1}>
+              <Button
+                onClick={closeModalError}
+                variant="contained"
+                color="error"
+              >
+                Đồng ý
+              </Button>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Modal>
     </>
   );
 }

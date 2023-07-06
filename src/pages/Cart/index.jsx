@@ -46,7 +46,6 @@ function ShoppingCart() {
         .catch((error) => {
           toast.error(error.toString());
         });
-
     };
     handleGetData();
   }, []);
@@ -95,19 +94,41 @@ function ShoppingCart() {
   };
 
   const navigate = useNavigate();
-  const handleBuy = () => {
+  const handleBuy = async () => {
     if (cart?.length > 0) {
-      cart.forEach((item) => {
+      let isEnoughQuantity = true;
+      await cart.forEach((item) => {
         let param = {
           id: item.id,
           quantity: item.quantity,
         };
-        apiCart.putCart(param);
+        apiCart.putCart(param).then((res) => {
+          if (res?.status !== 200) {
+            isEnoughQuantity = false;
+            toast.error(res?.message);
+          }
+        });
       });
-      navigate("/payment");
+      setTimeout(() => {
+        if (handleValidateQuantity() && isEnoughQuantity) {
+          navigate("/payment");
+        }
+      }, 500);
     } else {
       toast.info("Hiện bạn chưa có sản phẩm nào trong giỏ cả");
     }
+  };
+
+  const handleValidateQuantity = async () => {
+    await apiCart.getValidateQuantity().then((res) => {
+      if (res?.status != 200) {
+        res?.data.forEach((item) => {
+          toast.error(item);
+        });
+        return false;
+      }
+    });
+    return true;
   };
 
   return (
@@ -126,7 +147,9 @@ function ShoppingCart() {
             <Box>
               <Box className="cart__heading cart">
                 <Stack direction="row">
-                  {`Sản phẩm (${groupByGiftCart(giftCartList, cart)?.noGiftList?.length} sản phẩm)`}
+                  {`Sản phẩm (${
+                    groupByGiftCart(giftCartList, cart)?.noGiftList?.length
+                  } sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
                 <Stack>Gía giảm</Stack>
@@ -135,15 +158,20 @@ function ShoppingCart() {
                 <Stack>Số lượng</Stack>
                 <Stack>Tạm tính</Stack>
                 <Stack>
-                  <span style={{ cursor: "pointer" }} onClick={openDialogDeleteAll}>
+                  <span
+                    style={{ cursor: "pointer" }}
+                    onClick={openDialogDeleteAll}
+                  >
                     <DeleteOutlinedIcon />
                   </span>
                 </Stack>
               </Box>
               <Stack className="cart__list">
-                {groupByGiftCart(giftCartList, cart)?.noGiftList?.map((item) => (
-                  <CartItem key={item.id} data={item}/>
-                ))}
+                {groupByGiftCart(giftCartList, cart)?.noGiftList?.map(
+                  (item) => (
+                    <CartItem key={item.id} data={item} />
+                  )
+                )}
               </Stack>
             </Box>
             {groupByGiftCart(giftCartList, cart)?.giftCartList?.map((item) => (

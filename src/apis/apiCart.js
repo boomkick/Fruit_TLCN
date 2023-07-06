@@ -59,5 +59,9 @@ const apiCart = {
         const res = await axiosClientWithToken.get(`/Cart/CartCancel/${id}`)
         return res.data;
     },
+    getValidateQuantity: async () => {
+        const res = await axiosClientWithToken.get(`/Cart/validateQuantity`)
+        return res.data;
+    },
 }
 export default apiCart;

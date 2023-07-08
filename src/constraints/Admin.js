@@ -11,6 +11,7 @@ import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
 import BubbleChartIcon from '@mui/icons-material/BubbleChart';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import PermMediaOutlinedIcon from '@mui/icons-material/PermMediaOutlined';
 
 export const sidebar = [
     {
@@ -49,17 +50,17 @@ export const sidebar = [
         icon: RateReviewOutlinedIcon,
         link: '/admin/review'
     },
-    // {
-    //     id: 7,
-    //     text: 'Thanh toán',
-    //     icon: CalculateOutlinedIcon,
-    //     link: '/admin/payment'
-    // },
     {
-        id: 8,
+        id: 7,
         text: 'Kho và hàng tồn',
         icon: WarehouseOutlinedIcon,
         link: '/admin/inventory'
+    },
+    {
+        id: 8,
+        text: 'Dữ liệu trainning',
+        icon: PermMediaOutlinedIcon,
+        link: '/admin/input-data-training'
     },
     {
         id: 9,

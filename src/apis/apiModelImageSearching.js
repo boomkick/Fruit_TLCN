@@ -17,5 +17,13 @@ const apiModelImageSearching = {
         const res = await axiosModel.post('/test-form', params)
         return res.data;
     },
+    getLabels: async () => {
+        const res = await axiosModel.get('/get-labels')
+        return res.data;
+    },
+    postAddImages: async (params) => {
+        const res = await axiosModel.post('/add-images', params)
+        return res.data;
+    },
 };
 export default apiModelImageSearching

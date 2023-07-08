@@ -22,8 +22,6 @@ import SearchBar from "../../components/SearchBar";
 import juicyFruitBanner50 from "../../assets/fruit_banner/juicy_fruit_50.jpg";
 import AlertNotFound from "../../components/AlertNotFound";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
-import apiModelImageSearching from "../../apis/apiModelImageSearching";
-import LoadingAPI from "../../components/LoadingAPI";
 import ImageSearchingModal from "../../components/ImageSearchingModal";
 
 const tabs = [

@@ -63,6 +63,7 @@ import ReviewsByProduct from "./Review/ReviewsByProduct";
 import Employee from "./Employee";
 import UpdateRoleEmployee from "./Employee/UpdateRoleEmployee";
 import DetailUser from "./User/DetailUser";
+import InputDataTraining from "./InputDataTraining";
 
 const drawerWidth = 240;
 
@@ -603,7 +604,14 @@ function Admin() {
               <Routes>
                 <Route index element={<Review />} />
                 <Route path="product/:id" element={<ReviewsByProduct />} />
-                {/* <Route path="update-role/" element={<UpdateRoleUser />} /> */}
+              </Routes>
+            }
+          />
+          <Route
+            path="input-data-training/*"
+            element={
+              <Routes>
+                <Route index element={<InputDataTraining />} />
               </Routes>
             }
           />

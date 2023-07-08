@@ -9,13 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
 
-import {
-  Stack,
-  IconButton,
-  Button,
-  TextField,
-  Input,
-} from "@mui/material";
+import { Stack, IconButton, Button, TextField, Input } from "@mui/material";
 
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -69,18 +63,23 @@ function Login(props) {
       apiAuth
         .postLogin(params)
         .then((res) => {
-          let { accessToken, user } = res.data;
-          Object.assign(user, {
-            fullName: user.firstName + " " + user.lastName,
-          });
-          let refreshToken = "";
-          dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
-          toast.success(
-            `Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`
-          );
-          props.closeModalLogin();
+          if (res?.status == 200) {
+            let { accessToken, user } = res.data;
+            Object.assign(user, {
+              fullName: user.firstName + " " + user.lastName,
+            });
+            let refreshToken = "";
+            dispatch(loginSuccess({ accessToken, refreshToken, ...user }));
+            toast.success(
+              `Xin chào ${user.fullName || ""}, mời bạn tiếp tục mua sắm`
+            );
+            props.closeModalLogin();
+          } else {
+            toast.error(res.message);
+          }
         })
         .catch((error) => {
+          console.log("error: ", error);
           if (error.response.data.message === "Không tìm thấy tài khoản") {
             setIsNoAccount(true);
             setWrongPass(false);

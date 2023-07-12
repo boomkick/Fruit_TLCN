@@ -89,7 +89,7 @@ function OrderList() {
   const [listDistrict, setListDistrict] = useState([]);
   const [listWard, setListWard] = useState([]);
 
-  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedCity, setSelectedCity] = useState(202);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedWard, setSelectedWard] = useState("");
 
@@ -508,7 +508,7 @@ function OrderList() {
                 cursor="pointer"
                 sx={{ minWidth: 300, width: "70%" }}
               >
-                {listCity ? (
+                {/* {listCity ? (
                   listCity.map((item) => (
                     <MenuItem value={item.ProvinceID}>
                       {item.ProvinceName}
@@ -516,7 +516,11 @@ function OrderList() {
                   ))
                 ) : (
                   <></>
-                )}
+                )} */
+                  <MenuItem value={202}>
+                    Hồ Chí Minh
+                  </MenuItem>
+                }
               </Select>
             </FormControl>
           </Stack>
@@ -790,7 +794,7 @@ function OrderList() {
                 Trạng thái&nbsp;
               </TableCell>
               <TableCell align="center" sx={{ width: "20%", top: "64px" }}>
-                Ngày xác nhận&nbsp;
+                Ngày tạo đơn&nbsp;
               </TableCell>
               <TableCell align="center" sx={{ width: "15%", top: "64px" }}>
                 Giá trị đơn hàng&nbsp;
@@ -819,8 +823,8 @@ function OrderList() {
                   {cartStatus.find((e) => e.id == item.status)?.text}
                 </TableCell>
                 <TableCell align="center">
-                  {item?.bill?.purchaseDate
-                    ? formatDateTime(item?.bill?.purchaseDate)
+                  {item?.createdDate
+                    ? formatDateTime(item?.createdDate)
                     : "Chưa xác nhận"}
                 </TableCell>
                 <TableCell align="center">

@@ -7,6 +7,7 @@ import {
   TextField,
   Select,
   MenuItem,
+  Autocomplete,
 } from "@mui/material";
 import BasicDateRangePicker from "../components/BasicDateRangePicker";
 import PropTypes from "prop-types";
@@ -15,11 +16,14 @@ import apiInventory from "../apis/apiInventory";
 import FilterButton from "../components/Button/FilterButton";
 import ClearButton from "../components/Button/ClearButton";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import apiProduct from "../apis/apiProduct";
+
 
 InventorySearchForm.propTypes = {
   handleSetData: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
+  handleSetPage: PropTypes.func.isRequired,
 };
 
 const unitByItems = [
@@ -51,10 +55,24 @@ export default function InventorySearchForm(props) {
   };
 
   // Theo productId
-  const [productId, setProductId] = useState("");
-  const handleChangeProductId = (event) => {
-    setProductId(event.target.value);
-  };
+  // Theo id sản phẩm
+    const id = useParams().id;
+    const [productId, setProductId] = useState(id ? {id: id, label: ""} : null);
+    const [productSuggests, setProductSuggests] = useState([]);
+    useEffect(() => {
+      const loadProductSuggest = async () => {
+        await apiProduct.getProductSuggest().then((res) => {
+          if (res.data.length > 0) {
+            const suggestProductOptions = res.data.map((item) => ({
+              label: `${item.name}`,
+              id: `${item.id}`
+            }));
+            setProductSuggests(suggestProductOptions);
+          }
+        });
+      };
+      loadProductSuggest();
+    }, []);
 
   // Theo số lượng
   const [minQuantity, setMinQuantity] = useState(null);
@@ -212,6 +230,7 @@ export default function InventorySearchForm(props) {
   }, [props.page]);
 
   const handleFilter = () => {
+    props.handleSetPage(1)
     const getData = async () => {
       let param = {
         page: props.page,
@@ -221,7 +240,7 @@ export default function InventorySearchForm(props) {
         param["keyWord"] = keyWord;
       }
       if (productId && productId !== "") {
-        param["productId"] = productId;
+        param["productId"] = productId?.id;
       }
       if (deliveryDate[0] && deliveryDate[0] !== null) {
         param["fromDeliveryDate"] = deliveryDate[0].format("YYYY-MM-DD");
@@ -358,14 +377,18 @@ export default function InventorySearchForm(props) {
                 <Typography sx={{ fontSize: "16px", fontWeight: "bold" }}>
                   ID sản phẩm:
                 </Typography>
-                <TextField
-                  id="outlined-basic"
-                  label="ID sản phẩm"
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={productSuggests}
                   value={productId}
-                  onChange={handleChangeProductId}
-                  variant="outlined"
+                  onChange={(event, value) => {
+                    setProductId(value);
+                  }}
                   sx={{ width: "70%" }}
-                  size="small"
+                  renderInput={(params) => (
+                    <TextField {...params} label="Sản phẩm" />
+                  )}
                 />
               </FormControl>
             </Stack>
@@ -491,7 +514,7 @@ export default function InventorySearchForm(props) {
                 />
               </FormControl>
             </Stack>
-            <Stack direction="column" sx={{ width: "45%", marginLeft: "8px" }}>
+            {/* <Stack direction="column" sx={{ width: "45%", marginLeft: "8px" }}>
               <FormControl
                 sx={{
                   m: 1,
@@ -515,8 +538,8 @@ export default function InventorySearchForm(props) {
                   size="small"
                 />
               </FormControl>
-            </Stack>
-            <Stack direction="column" sx={{ width: "45%" }}>
+            </Stack> */}
+            {/* <Stack direction="column" sx={{ width: "45%" }}>
               <FormControl
                 sx={{
                   m: 1,
@@ -547,7 +570,7 @@ export default function InventorySearchForm(props) {
                   )}
                 </Select>
               </FormControl>
-            </Stack>
+            </Stack> */}
             <Stack direction="column" sx={{ width: "45%" }}>
               <FormControl
                 sx={{

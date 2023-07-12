@@ -10,12 +10,14 @@ import {
   numWithCommas,
   roundPrice
 } from "../../../../constraints/Util";
-import { paymentMethod } from "../../../../constraints/PaymentMethod";
 import apiLocation from "../../../../apis/apiLocation";
 import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
 import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrictsProvider";
 import { GetGHNWardByIdProvider } from "../../../../providers/GetGHNWardsProvider";
 import PaymentInformationBoxTextField from "../../../../components/PaymentInformationBoxTextField.jsx";
+import Loading from "../../../../components/Loading";
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 function DetailOrder() {
   const id = useParams().id;
@@ -50,7 +52,11 @@ function DetailOrder() {
     getData();
   }, []);
 
-  const handleComfirm = () => {
+  // Xử lí đơn hàng
+  const [loadingConfirm, setLoadingConfirm] = useState(false);
+
+  const handleComfirm = async () => {
+    setLoadingConfirm(true)
     let params = {
       processDescription: "",
       status: 1,
@@ -59,8 +65,7 @@ function DetailOrder() {
       width: 1,
       height: 1,
     };
-
-    apiCart
+    await apiCart
       .putProcessCart(params, id)
       .then((res) => {
         toast.success("Xác nhận thành công");
@@ -69,8 +74,10 @@ function DetailOrder() {
       .catch((error) => {
         toast.error("Xác nhận không thành công");
       });
+      setLoadingConfirm(false)
   };
-  const handleCancel = () => {
+
+  const handleCancel = async () => {
     let params = {
       processDescription: "",
       status: 2,
@@ -79,7 +86,7 @@ function DetailOrder() {
       width: 1,
       height: 1,
     };
-    apiCart
+    await apiCart
       .putProcessCart(params, id)
       .then((res) => {
         toast.success("Hủy đơn thành công");
@@ -319,13 +326,15 @@ function DetailOrder() {
               >
                 {order?.status === 0 && (
                   <>
-                    <Button variant="contained" onClick={handleComfirm}>
+                    <Button variant="contained" onClick={handleComfirm} startIcon={loadingConfirm ? null : <SaveIcon />}>
+                    {loadingConfirm && <Loading color="#fff" />}
                       Xác nhận
                     </Button>
                     <Button
                       variant="contained"
                       color="error"
                       onClick={handleCancel}
+                      startIcon={<CancelIcon/>}
                     >
                       Hủy bỏ
                     </Button>

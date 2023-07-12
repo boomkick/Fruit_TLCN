@@ -31,8 +31,8 @@ export default function ImageUploadPreviewComponent() {
   };
 
   // Suggest Label
-  const [labelEnglishOptions, setLabelEnglishOptions] = useState(null);
-  const [labelVietNameseOptions, setLabelVietNameseOptions] = useState(null);
+  const [labelEnglishOptions, setLabelEnglishOptions] = useState([]);
+  const [labelVietNameseOptions, setLabelVietNameseOptions] = useState([]);
 
   const [labelEnglishID, setLabelEnglishID] = useState(null);
   const [labelVietNameseID, setLabelVietNameseID] = useState(null);
@@ -156,7 +156,7 @@ export default function ImageUploadPreviewComponent() {
           <Stack>
             <Grid container spacing={2} width={"100%"}>
               {fileArray.map((url) => (
-                <Grid xs={4} height={"400px"}>
+                <Grid xs={2} height={"200px"}>
                   <Stack
                     border={"1px solid #ccc"}
                     borderRadius={"5px"}

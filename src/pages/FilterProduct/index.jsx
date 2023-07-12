@@ -50,36 +50,24 @@ const ProductList = [
   },
   {
     id: 2,
-    name: "Chuối",
+    name: "Dưa hấu",
   },
   {
     id: 3,
-    name: "Táo",
+    name: "Nho",
   },
   {
     id: 4,
-    name: "Cam",
+    name: "Chuối",
   },
   {
     id: 5,
-    name: "Ổi",
+    name: "Táo",
   },
   {
     id: 6,
-    name: "Thăng long",
-  },
-  {
-    id: 7,
     name: "Xoài",
-  },
-  {
-    id: 8,
-    name: "Thơm",
-  },
-  {
-    id: 9,
-    name: "Mẵng cầu",
-  },
+  }
 ];
 
 function FilterProduct(props) {

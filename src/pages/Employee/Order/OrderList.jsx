@@ -34,7 +34,7 @@ import BasicDateRangePicker from "../../../components/BasicDateRangePicker";
 import { toast } from "react-toastify";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
-import { formatDateTime, numWithCommas } from "../../../constraints/Util";
+import { formatDateTime, formatDateTimeShort, numWithCommas } from "../../../constraints/Util";
 import apiGHNAddress from "../../../apis/apiGHNAddress";
 
 const items = [
@@ -822,8 +822,8 @@ function OrderList() {
                   {cartStatus.find((e) => e.id == item.status)?.text}
                 </TableCell>
                 <TableCell align="center">
-                  {item?.createdDate
-                    ? formatDateTime(item?.createdDate)
+                  {item?.bill?.purchaseDate
+                    ? formatDateTimeShort(item?.bill?.purchaseDate)
                     : "Chưa xác nhận"}
                 </TableCell>
                 <TableCell align="center">

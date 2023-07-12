@@ -210,7 +210,7 @@ function ShoppingCart() {
                   <span>Tổng tiền</span>
                   <Box className="cart-summary__valueprice">
                     <span>{numWithCommas(totalPrice || 0)} ₫</span>
-                    <span>(Đã bao gồm VAT nếu có)</span>
+                    <span>(Đã bao gồm phụ phí nếu có)</span>
                   </Box>
                 </Box>
               </Box>

@@ -32,7 +32,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { blue, green, orange, red, yellow } from "@mui/material/colors";
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-
+import {numWithCommas} from '../../../constraints/Util'
 
 const sortByItems = [
   { id: 0, label: "NONE", name: "Mặc định" },
@@ -571,9 +571,9 @@ function Product() {
                     <TableCell>
                       <Stack direction="row" justifyContent="center">
                         <Typography sx={{ margin: "auto 0" }}>
-                          {row.price}
+                          {numWithCommas(row.price)}
                         </Typography>
-                        <AttachMoneyIcon sx={{ width: "12px" }} />
+                        
                       </Stack>
                     </TableCell>
                     <TableCell align="center">

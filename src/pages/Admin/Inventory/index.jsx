@@ -17,7 +17,7 @@ export default function Inventory() {
   return (
     <>
       <Grid container style={{ padding: "24px", backgroundColor: "#fff" }}>
-        <InventorySearchForm handleSetData={handleSetData} page={page}/>
+        <InventorySearchForm handleSetData={handleSetData} page={page} handleSetPage={handleSetPage}/>
         <InventoryTable data={data} handleSetPage={handleSetPage}/>
       </Grid>
     </>

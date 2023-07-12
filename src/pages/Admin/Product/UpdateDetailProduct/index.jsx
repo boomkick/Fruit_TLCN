@@ -26,6 +26,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import Loading from "../../../../components/Loading";
 
 function UpdateDetailProduct() {
   const { id } = useParams();
@@ -742,10 +743,9 @@ function UpdateDetailProduct() {
               variant="contained"
               onClick={handleUpdate}
               sx={{ marginRight: "10px", width: "120px" }}
-              startIcon={<SaveIcon />}
-              disable={loadingUpdateProduct}
+              startIcon={loadingUpdateProduct ? null : <SaveIcon />}
             >
-              {"Cập nhật"}
+              {loadingUpdateProduct && <Loading />}Cập nhật
             </Button>
             <Button
               variant="contained"

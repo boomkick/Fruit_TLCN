@@ -519,7 +519,7 @@ function Payment() {
                           <span>Tổng tiền</span>
                           <Box className="cart-summary__valueprice">
                             <span>{numWithCommas(finalPrice())} ₫</span>
-                            <span>(Đã bao gồm VAT nếu có)</span>
+                            <span>(Đã bao gồm phụ phí nếu có)</span>
                           </Box>
                         </Box>
                       </Box>

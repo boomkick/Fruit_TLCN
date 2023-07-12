@@ -24,6 +24,7 @@ import apiCategory from "../../../../apis/apiCategory";
 import apiProduct from "../../../../apis/apiProduct";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Loading from "../../../../components/Loading";
 
 function UpdateDetailProduct() {
   const { id } = useParams();
@@ -127,10 +128,12 @@ function UpdateDetailProduct() {
             setSecondImage(null);
             setThirdImage(null);
             setFourthImage(null);
+            setloadingUpdateProduct(false);
           }
         })
         .catch((error) => {
           toast.error("Thêm sản phẩm thất bại!");
+          setloadingUpdateProduct(false);
         });
     }
   };
@@ -600,10 +603,9 @@ function UpdateDetailProduct() {
             variant="contained"
             onClick={handleAdd}
             sx={{ marginRight: "10px", width: "120px" }}
-            startIcon={<SaveIcon />}
-            disable={loadingUpdateProduct}
-          >
-            {"Thêm"}
+            startIcon={loadingUpdateProduct ? null : <SaveIcon />}
+            >
+              {loadingUpdateProduct && <Loading />}Thêm
           </Button>
           <Button
             variant="contained"

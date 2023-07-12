@@ -41,6 +41,27 @@ export const formatDateTime = (date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 };
 
+export const formatDateTimeShort = (date) => {
+  date = new Date(date);
+  
+  // Lấy ngày, tháng, năm
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  
+  // Lấy giờ, phút, giây
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  
+  // Chuyển đổi sang chuỗi và thêm số 0 nếu cần thiết
+  day = day < 10 ? "0" + day : day;
+  month = month < 10 ? "0" + month : month;
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+};
+
 export const formatDateText = (date) => {
   date = new Date(date);
   

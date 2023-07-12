@@ -74,8 +74,8 @@ const fruitList = [
     image: watermelonImage,
   },
   {
-    name: "Nho xanh",
-    link: `/product-category/?productName=Nho xanh`,
+    name: "Nho",
+    link: `/product-category/?productName=Nho`,
     image: greenGrapesImage,
   },
   {

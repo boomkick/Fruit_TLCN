@@ -84,7 +84,7 @@ function CreateUpdateInventory(props) {
           setQuantity(res.data.quantity);
           setImportPrice(res.data.importPrice);
           setDescription(res.data.description);
-          setUnit(res.data.unit + 1);
+          //setUnit(res.data.unit + 1);
           setDeliveryDate(res.data.deliveryDate);
           setExpireDate(res.data.expireDate);
         })
@@ -131,7 +131,7 @@ function CreateUpdateInventory(props) {
         quantity: Number(quantity),
         importPrice: Number(importPrice),
         description: description,
-        unit: unit === 1 ? 1 : 0,
+        unit: 1,
         deliveryDate: deliveryDateFormat,
         expireDate: expireDateFormat,
       };
@@ -167,7 +167,7 @@ function CreateUpdateInventory(props) {
         quantity: Number(quantity),
         importPrice: Number(importPrice),
         description: description,
-        unit: unit === 1 ? 1 : 0,
+        unit: 1,
         deliveryDate: deliveryDate.format("YYYY-MM-DD"),
         expireDate: expireDate.format("YYYY-MM-DD"),
       };
@@ -263,27 +263,6 @@ function CreateUpdateInventory(props) {
             variant="outlined"
             sx={{ flex: 1 }}
           />
-        </Stack>
-        <Stack direction="row">
-          <Typography sx={{ width: "200px" }}>Đơn vị</Typography>
-          <Select
-            value={unit}
-            onChange={(event) => {
-              setUnit(event.target.value);
-            }}
-            displayEmpty
-            inputProps={{ "aria-label": "Without label" }}
-            cursor="pointer"
-            sx={{ minWidth: 300, width: "70%" }}
-          >
-            {unitByItems ? (
-              unitByItems.map((item) => (
-                <MenuItem value={item.id}>{item.name}</MenuItem>
-              ))
-            ) : (
-              <></>
-            )}
-          </Select>
         </Stack>
         <Stack justifyContent="center" alignItems="center">
           <Button

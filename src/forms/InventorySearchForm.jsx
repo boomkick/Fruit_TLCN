@@ -179,7 +179,7 @@ export default function InventorySearchForm(props) {
         param["keyWord"] = keyWord;
       }
       if (productId && productId !== "") {
-        param["productId"] = productId;
+        param["productId"] = productId?.id;
       }
       if (deliveryDate[0] && deliveryDate[0] !== null) {
         param["fromDeliveryDate"] = deliveryDate[0].format("YYYY-MM-DD");

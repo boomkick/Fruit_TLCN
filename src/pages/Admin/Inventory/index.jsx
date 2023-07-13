@@ -13,11 +13,14 @@ export default function Inventory() {
   const handleSetPage = React.useCallback((event, value) => {
     setPage(value);
   }, []);
+  const handleSetPageWithoutEvent = React.useCallback((value) => {
+    setPage(value);
+  }, []);
 
   return (
     <>
       <Grid container style={{ padding: "24px", backgroundColor: "#fff" }}>
-        <InventorySearchForm handleSetData={handleSetData} page={page} handleSetPage={handleSetPage}/>
+        <InventorySearchForm handleSetData={handleSetData} page={page} handleSetPage={handleSetPageWithoutEvent}/>
         <InventoryTable data={data} handleSetPage={handleSetPage}/>
       </Grid>
     </>

@@ -822,8 +822,8 @@ function OrderList() {
                   {cartStatus.find((e) => e.id == item.status)?.text}
                 </TableCell>
                 <TableCell align="center">
-                  {item?.bill?.purchaseDate
-                    ? formatDateTimeShort(item?.bill?.purchaseDate)
+                  {item?.createdDate
+                    ? formatDateTimeShort(item?.createdDate)
                     : "Chưa xác nhận"}
                 </TableCell>
                 <TableCell align="center">

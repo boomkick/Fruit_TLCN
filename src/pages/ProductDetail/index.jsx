@@ -1,7 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Rating, Button, Box, TextareaAutosize, Stack, Typography } from "@mui/material";
+import {
+  Rating,
+  Button,
+  Box,
+  TextareaAutosize,
+  Stack,
+  Typography,
+} from "@mui/material";
 import "./ProductDetail.scss";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -308,13 +315,11 @@ function ProductDetail(props) {
           <Box className="detailProduct__title">
             <h2>{"Mô tả sản phẩm"}</h2>
           </Box>
-          <Stack style={{fontSize: "15px", padding: "10px"}}>
-            <Typography ></Typography>
-              {product?.description.split("\n").map((item) => (
-                <span>
-                  {item}
-                </span>
-              ))}
+          <Stack style={{ fontSize: "15px", padding: "10px" }}>
+            <Typography></Typography>
+            {product?.description.split("\n").map((item) => (
+              <span>{item}</span>
+            ))}
           </Stack>
         </Box>
         <Box
@@ -342,12 +347,14 @@ function ProductDetail(props) {
         {myReview ? (
           <Box className="textComment">
             <h2>Đánh giá của bạn về sản phẩm </h2>
-            <Stack sx={{
-              display: "flex",
-              flexDirection: "row",
-              margin: "10px 0px"
-            }}>
-              <Typography sx={{marginRight: "10px"}}>Số sao: </Typography>
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                margin: "10px 0px",
+              }}
+            >
+              <Typography sx={{ marginRight: "10px" }}>Số sao: </Typography>
               <Rating
                 name="simple-controlled"
                 value={ratingStars}
@@ -580,22 +587,31 @@ function ProductDetail(props) {
               <Stack
                 display={"flex"}
                 flexDirection={"column"}
-                justifyContent={"center"}
+                justifyContent={"start"}
                 alignItem={"center"}
               >
-                <img
-                  src={
-                    imageComment
-                      ? imageComment?.id
-                        ? imageComment?.url
-                        : URL.createObjectURL(imageComment)
-                      : null
-                  }
-                  width="180px"
-                  height="180px"
-                  style={{ marginRight: "10px" }}
-                  alt=""
-                />
+                {(
+                  imageComment
+                    ? imageComment?.id
+                      ? imageComment?.url
+                      : URL.createObjectURL(imageComment)
+                    : null
+                ) ? (
+                  <img
+                    src={
+                      imageComment
+                        ? imageComment?.id
+                          ? imageComment?.url
+                          : URL.createObjectURL(imageComment)
+                        : null
+                    }
+                    width="180px"
+                    height="180px"
+                    style={{ marginRight: "10px" }}
+                    alt=""
+                  />
+                ) : null}
+
                 <Stack
                   spacing={1}
                   py={1}
@@ -661,23 +677,32 @@ function ProductDetail(props) {
               <Stack
                 display={"flex"}
                 flexDirection={"column"}
-                justifyContent={"center"}
+                justifyContent={"start"}
                 alignItem={"center"}
               >
-                <video
-                  className="VideoInput_video"
-                  width="180px"
-                  height="180px"
-                  controls
-                  src={
-                    videoComment
-                      ? videoComment?.id
-                        ? videoComment?.url
-                        : URL.createObjectURL(videoComment)
-                      : null
-                  }
-                  style={{ marginRight: "10px" }}
-                />
+                {(
+                  videoComment
+                    ? videoComment?.id
+                      ? videoComment?.url
+                      : URL.createObjectURL(videoComment)
+                    : null
+                ) ? (
+                  <video
+                    className="VideoInput_video"
+                    width="180px"
+                    height="180px"
+                    controls
+                    src={
+                      videoComment
+                        ? videoComment?.id
+                          ? videoComment?.url
+                          : URL.createObjectURL(videoComment)
+                        : null
+                    }
+                    style={{ marginRight: "10px" }}
+                  />
+                ) : null}
+
                 <Stack
                   spacing={1}
                   py={1}

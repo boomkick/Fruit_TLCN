@@ -38,7 +38,7 @@ export default function StatisticBillTable(props) {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <Typography marginRight={"30px"}>Tổng hóa đơn:</Typography>
+              <Typography marginRight={"30px"} fontWeight={'bold'}>Tổng hóa đơn:</Typography>
               <Typography>
                 {`${numWithCommas(
                   props?.data.reduce((total, item) => (total += item?.total), 0)
@@ -50,7 +50,7 @@ export default function StatisticBillTable(props) {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <Typography marginRight={"30px"}>
+              <Typography marginRight={"30px"}  fontWeight={'bold'}>
                 Tổng hóa đơn với Momo:
               </Typography>
               <Typography>
@@ -69,7 +69,7 @@ export default function StatisticBillTable(props) {
               justifyContent={"space-between"}
               flexDirection={"row"}
             >
-              <Typography marginRight={"30px"}>
+              <Typography marginRight={"30px"}  fontWeight={'bold'}>
                 Tổng hóa đơn với tiền mặt:
               </Typography>
               <Typography>
@@ -148,7 +148,7 @@ export default function StatisticBillTable(props) {
                         <TableCell align="center">
                           {formatDateTime(item.purchaseDate)}
                         </TableCell>
-                        <TableCell align="center">{item.total}</TableCell>
+                        <TableCell align="center">{numWithCommas(item?.total)}</TableCell>
                       </TableRow>
                     );
                   } else return null;

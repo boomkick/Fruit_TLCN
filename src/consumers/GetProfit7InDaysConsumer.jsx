@@ -5,6 +5,7 @@ import {
 } from "../providers/GetProfit7InDaysProvider";
 import LoadingAPI from "../components/LoadingAPI";
 import SimpleLineChart from "../components/Chart/SimpleLineChart";
+import { numWithCommas } from "../constraints/Util";
 
 const GetProfitIn7DaysConsumer = (props) => {
   const ProfitIn7DaysData = React.useContext(GetProfitIn7Days);
@@ -15,7 +16,7 @@ const GetProfitIn7DaysConsumer = (props) => {
   let data = ProfitIn7DaysData.data ? ProfitIn7DaysData.data.reverse().map((item) => ({
     name: dateToYMD(new Date(item.date)),
     profit: item.profit,
-    amt: item.profit
+    amt: numWithCommas(item.profit)
   })) : []
   
   return (

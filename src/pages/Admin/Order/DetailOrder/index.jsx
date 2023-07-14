@@ -8,7 +8,7 @@ import {
   formatDateTime,
   groupByGiftCartWithCartDetails,
   numWithCommas,
-  roundPrice
+  roundPrice,
 } from "../../../../constraints/Util";
 import apiLocation from "../../../../apis/apiLocation";
 import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
@@ -16,8 +16,8 @@ import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrict
 import { GetGHNWardByIdProvider } from "../../../../providers/GetGHNWardsProvider";
 import PaymentInformationBoxTextField from "../../../../components/PaymentInformationBoxTextField.jsx";
 import Loading from "../../../../components/Loading";
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function DetailOrder() {
   const id = useParams().id;
@@ -27,7 +27,6 @@ function DetailOrder() {
 
   // Thông tin giá trị đơn hàng
   const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
-  const [discount, SetDiscount] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -54,9 +53,10 @@ function DetailOrder() {
 
   // Xử lí đơn hàng
   const [loadingConfirm, setLoadingConfirm] = useState(false);
+  const [loadingCancel, setLoadingCancel] = useState(false);
 
   const handleComfirm = async () => {
-    setLoadingConfirm(true)
+    setLoadingConfirm(true);
     let params = {
       processDescription: "",
       status: 1,
@@ -74,10 +74,11 @@ function DetailOrder() {
       .catch((error) => {
         toast.error("Xác nhận không thành công");
       });
-      setLoadingConfirm(false)
+    setLoadingConfirm(false);
   };
 
   const handleCancel = async () => {
+    setLoadingCancel(true);
     let params = {
       processDescription: "",
       status: 2,
@@ -95,6 +96,7 @@ function DetailOrder() {
       .catch((error) => {
         toast.error("Hủy đơn không thành công");
       });
+    setLoadingCancel(false);
   };
 
   // Lấy dữ liệu dịa chỉ
@@ -272,9 +274,7 @@ function DetailOrder() {
                         </Stack>
                       </Stack>
                       <Box>{numWithCommas(item.price || 0)}₫</Box>
-                      <Box>
-                        {item.quantity}
-                      </Box>
+                      <Box>{item.quantity}</Box>
                       <Box>
                         {numWithCommas(item.price * item.quantity || 0)} ₫
                       </Box>
@@ -310,9 +310,9 @@ function DetailOrder() {
                       Phí tổng cộng
                     </Typography>
                     <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
-                    {numWithCommas(roundPrice(
-                        order?.bill?.total + order?.shippingFee || 0
-                      ))}{" "}
+                      {numWithCommas(
+                        roundPrice(order?.bill?.total + order?.shippingFee || 0)
+                      )}{" "}
                       ₫
                     </Typography>
                   </Stack>
@@ -326,16 +326,21 @@ function DetailOrder() {
               >
                 {order?.status === 0 && (
                   <>
-                    <Button variant="contained" onClick={handleComfirm} startIcon={loadingConfirm ? null : <SaveIcon />}>
-                    {loadingConfirm && <Loading color="#fff" />}
+                    <Button
+                      variant="contained"
+                      onClick={handleComfirm}
+                      startIcon={loadingConfirm ? null : <SaveIcon />}
+                    >
+                      {loadingConfirm && <Loading color="#fff" />}
                       Xác nhận
                     </Button>
                     <Button
                       variant="contained"
                       color="error"
                       onClick={handleCancel}
-                      startIcon={<CancelIcon/>}
+                      startIcon={loadingCancel ? null : <CancelIcon />}
                     >
+                      {loadingCancel && <Loading color="#fff" />}
                       Hủy bỏ
                     </Button>
                   </>

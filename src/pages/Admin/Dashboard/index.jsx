@@ -123,7 +123,7 @@ export default function Dashboard() {
           </Grid>
           <Grid
             item
-            xs={4}
+            xs={4.2}
             backgroundColor={"#fff"}
             p={2}
             borderRadius={"0.375rem"}

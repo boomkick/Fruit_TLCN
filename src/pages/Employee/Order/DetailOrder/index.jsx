@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DetailOrder.scss";
-import { Box, Stack, Typography, Button, TextField } from "@mui/material";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import apiCart from "../../../../apis/apiCart";
 import { toast } from "react-toastify";
@@ -10,12 +10,14 @@ import {
   groupByGiftCartWithCartDetails,
   numWithCommas,
 } from "../../../../constraints/Util";
-import { paymentMethod } from "../../../../constraints/PaymentMethod";
 import apiLocation from "../../../../apis/apiLocation";
 import { GetGHNProvinceByIdProvider } from "../../../../providers/GetGHNProvincesProvider";
 import { GetGHNDistrictByIdProvider } from "../../../../providers/GetGHNDistrictsProvider";
 import { GetGHNWardByIdProvider } from "../../../../providers/GetGHNWardsProvider";
 import PaymentInformationBoxTextField from "../../../../components/PaymentInformationBoxTextField.jsx";
+import Loading from "../../../../components/Loading";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function DetailOrder() {
   const id = useParams().id;
@@ -49,7 +51,12 @@ function DetailOrder() {
     getData();
   }, []);
 
+  // Xử lí đơn hàng
+  const [loadingConfirm, setLoadingConfirm] = useState(false);
+  const [loadingCancel, setLoadingCancel] = useState(false);
+
   const handleComfirm = () => {
+    setLoadingConfirm(true);
     let params = {
       processDescription: "",
       status: 1,
@@ -67,8 +74,11 @@ function DetailOrder() {
       .catch((error) => {
         toast.error("Xác nhận không thành công");
       });
+    setLoadingConfirm(true)
   };
-  const handleCancel = () => {
+
+  const handleCancel = async () => {
+    setLoadingCancel(true)
     let params = {
       processDescription: "",
       status: 2,
@@ -77,7 +87,7 @@ function DetailOrder() {
       width: 1,
       height: 1,
     };
-    apiCart
+    await apiCart
       .putProcessCart(params, id)
       .then((res) => {
         toast.success("Hủy đơn thành công");
@@ -86,6 +96,7 @@ function DetailOrder() {
       .catch((error) => {
         toast.error("Hủy đơn không thành công");
       });
+    setLoadingCancel(false);
   };
 
   // Lấy dữ liệu dịa chỉ
@@ -172,7 +183,9 @@ function DetailOrder() {
                               : ""
                           }
                         >
-                          <Typography fontSize="14px">{item?.product?.name}</Typography>
+                          <Typography fontSize="14px">
+                            {item?.product?.name}
+                          </Typography>
                         </Link>
                         <Typography fontSize="13px">
                           ID product in bill: {item?.id}
@@ -197,7 +210,9 @@ function DetailOrder() {
                     </Stack>
                     <Box>{numWithCommas(item.price || 0)}₫</Box>
                     <Box>{numWithCommas(item.quantity || 0)}</Box>
-                    <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
+                    <Box>
+                      {numWithCommas(item.price * item.quantity || 0)} ₫
+                    </Box>
                   </Stack>
                 ))}
               </Stack>
@@ -259,10 +274,10 @@ function DetailOrder() {
                         </Stack>
                       </Stack>
                       <Box>{numWithCommas(item.price || 0)}₫</Box>
+                      <Box>{item.quantity}</Box>
                       <Box>
-                        {item.quantity}
+                        {numWithCommas(item.price * item.quantity || 0)} ₫
                       </Box>
-                      <Box>{numWithCommas(item.price * item.quantity || 0)} ₫</Box>
                     </Stack>
                   ))}
                 </Stack>
@@ -295,18 +310,37 @@ function DetailOrder() {
                       Phí tổng cộng
                     </Typography>
                     <Typography className="detailOrder__summary-value detailOrder__summary-value--final">
-                      {numWithCommas(order?.bill?.total + order?.shippingFee || 0)}₫
+                      {numWithCommas(
+                        order?.bill?.total + order?.shippingFee || 0
+                      )}
+                      ₫
                     </Typography>
                   </Stack>
                 </Stack>
               )}
-              <Stack direction="row" spacing="16px" justifyContent="flex-end" p={2}>
+              <Stack
+                direction="row"
+                spacing="16px"
+                justifyContent="flex-end"
+                p={2}
+              >
                 {order?.status === 0 && (
                   <>
-                    <Button variant="contained" onClick={handleComfirm}>
+                    <Button 
+                    variant="contained" 
+                    onClick={handleComfirm}
+                    startIcon={loadingConfirm ? null : <SaveIcon />}
+                    >
+                      {loadingConfirm && <Loading color="#fff" />}
                       Xác nhận
                     </Button>
-                    <Button variant="contained" color="error" onClick={handleCancel}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={handleCancel}
+                      startIcon={loadingCancel ? null : <CancelIcon />}
+                    >
+                      {loadingCancel && <Loading color="#fff" />}
                       Hủy bỏ
                     </Button>
                   </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LoadingAPI from "../LoadingAPI";
 import {
   GetGHNProvinceById,
@@ -31,6 +31,27 @@ export default function PaymentInformationBoxTextField(props) {
   // Ward
   const wardData = React.useContext(GetGHNWardById);
   const wardDataLoading = React.useContext(GetGHNWardByIdLoading);
+
+  const [isAddressLoaded, setIsAddressLoaded] = useState(false);
+  const [isShippingLoaded, setIsShippingLoaded] = useState(false);
+  const [isPaymentLoaded, setIsPaymentLoaded] = useState(false);
+  const addressRef = useRef(null);
+  const shippingRef = useRef(null);
+  const paymentRef = useRef(null);
+  useEffect(() => {
+    if(isAddressLoaded && isShippingLoaded && isPaymentLoaded) {      
+      const arrHeights = [addressRef.current.offsetHeight, shippingRef.current.offsetHeight, paymentRef.current.offsetHeight];
+      let max = arrHeights[0];
+      for(let i = 1; i < arrHeights.length; i++) {
+        if(arrHeights[i] > max)
+          max = arrHeights[i];
+      }
+      addressRef.current.style.height = `${max}px`
+      shippingRef.current.style.height = `${max}px`
+      paymentRef.current.style.height = `${max}px`
+    }
+  }, [isAddressLoaded, isShippingLoaded, isPaymentLoaded])
+
   return (
     <LoadingAPI
       loading={provinceDataLoading || districtDataLoading || wardDataLoading}
@@ -45,7 +66,7 @@ export default function PaymentInformationBoxTextField(props) {
       >
         <Box className="detailOrder__boxInfo">
           <Typography>ĐỊA CHỈ NHẬN HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" ref={e => {addressRef.current = e; setIsAddressLoaded(true)}}>
             <Typography style={{ color: "#000", fontWeight: 500 }}>
               Tên người nhận: {props?.order?.name}
             </Typography>
@@ -62,9 +83,9 @@ export default function PaymentInformationBoxTextField(props) {
           </Box>
         </Box>
 
-        <Box className="detailOrder__boxInfo">
+        <Box className="detailOrder__boxInfo" >
           <Typography>HÌNH THỨC GIAO HÀNG</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" ref={e => {shippingRef.current = e; setIsShippingLoaded(true)}}>
             <Typography>
               <img
                 width="56px"
@@ -88,9 +109,9 @@ export default function PaymentInformationBoxTextField(props) {
             </Typography>
           </Box>
         </Box>
-        <Box className="detailOrder__boxInfo">
+        <Box className="detailOrder__boxInfo" >
           <Typography>HÌNH THỨC THANH TOÁN</Typography>
-          <Box p={1.25} className="detailOrder__content">
+          <Box p={1.25} className="detailOrder__content" ref={e => {paymentRef.current = e; setIsPaymentLoaded(true)}}>
             <Typography>
               {
                 paymentMethod.find(

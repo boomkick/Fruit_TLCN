@@ -166,7 +166,7 @@ function ShoppingCart() {
                   } sản phẩm)`}
                 </Stack>
                 <Stack>Đơn giá</Stack>
-                <Stack>Gía giảm</Stack>
+                <Stack>Giá giảm</Stack>
                 <Stack>Đơn vị</Stack>
                 <Stack>Giá trị tối thiểu</Stack>
                 <Stack>Số lượng</Stack>

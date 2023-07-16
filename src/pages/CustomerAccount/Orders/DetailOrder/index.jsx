@@ -22,6 +22,8 @@ function DetailOrder() {
   const [products, setProducts] = useState(null);
   const [billWithoutDiscount, SetBillWithoutDiscount] = useState(0);
 
+  const [isPending, setIsPending] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
       await apiCart
@@ -36,6 +38,7 @@ function DetailOrder() {
             SetBillWithoutDiscount(realBill);
           }
           setProducts(groupByGiftCartWithCartDetails(res.data?.cartDetails));
+          setIsPending(res.data?.status === 0)
         })
         .catch((error) => {
           setOrder(null);
@@ -43,7 +46,16 @@ function DetailOrder() {
         });
     };
     getData();
-  }, [id]);
+  }, [id, isPending]);
+
+
+  function handleCancel() {
+    apiCart.getCancelCart(id)
+      .then(res => {
+        toast.success("Hủy đơn hàng thành công");
+        setIsPending(false);
+      });
+  }
 
   // Chuyển trang về sản phẩm để thêm nhận xét
   const handleWriteReview = (event, idProduct) => {
@@ -235,6 +247,14 @@ function DetailOrder() {
                       ₫
                     </Typography>
                   </Stack>
+                  {isPending ? <Button
+                      sx={{marginTop: '10px'}}
+                      variant="contained"
+                      color="error"
+                      onClick={handleCancel}
+                    >
+                      Hủy đơn hàng
+                  </Button> : null}
                 </Stack>
               )}
             </Box>

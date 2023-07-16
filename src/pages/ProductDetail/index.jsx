@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Rating, Button, Box, TextareaAutosize, Stack, Typography } from "@mui/material";
@@ -185,6 +185,8 @@ function ProductDetail(props) {
           });
       };
       getReviews();
+    } else {
+      toast.warn('Vui lòng nhập bình luận')
     }
   };
 
@@ -267,6 +269,7 @@ function ProductDetail(props) {
           setMyReview(null);
           setRatingStars(5);
           setContentComment("");
+          
         } else {
           toast.error("Xóa bình luận không thành công");
         }

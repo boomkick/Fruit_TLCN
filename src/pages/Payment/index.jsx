@@ -90,10 +90,10 @@ function Payment() {
     if (
       Number(item.product?.promotion.type) === PromotionTypeEnum.PRCIE.valueOf()
     ) {
-      return item.product?.promotion.value;
+      return item.product?.promotion.value * item.quantity;
     } else {
       const percent = item.product?.promotion.value / 100;
-      return item.product?.price * percent;
+      return item.product?.price * percent * item.quantity;
     }
   }, []);
 

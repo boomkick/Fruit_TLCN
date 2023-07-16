@@ -1,7 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
-const baseURL='https://localhost:7039'
-const apiURL='https://localhost:7039'
+const baseURL='http://tlcndotnet-dev.eba-ubynrpz2.ap-southeast-1.elasticbeanstalk.com/'
 export const axiosClient = axios.create({
     baseURL: baseURL,
     headers: {
@@ -31,7 +30,7 @@ export const axiosAdminGetFile = axios.create({
 });
 
 export const axiosAdmin = axios.create({
-    baseURL: apiURL,
+    baseURL: baseURL,
     headers: {
         "Content-Type": "application/json"
     },

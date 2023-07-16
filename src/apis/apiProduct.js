@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { axiosClientWithToken } from './axiosClient';
 
-const apiURL='https://localhost:7039/'
+const apiURL='http://tlcndotnet-dev.eba-ubynrpz2.ap-southeast-1.elasticbeanstalk.com/'
 export const axiosAdmin = axios.create({
     baseURL: apiURL,
     headers: {

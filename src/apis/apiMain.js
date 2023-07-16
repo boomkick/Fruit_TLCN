@@ -3,7 +3,7 @@ import queryString from 'query-string';
 
 
 // create axiosProducts to test favorite product
-const baseURL='https://localhost:7039'
+const baseURL='http://tlcndotnet-dev.eba-ubynrpz2.ap-southeast-1.elasticbeanstalk.com'
 export const axiosProducts = axios.create({
     baseURL: baseURL,
     headers: {

@@ -589,7 +589,7 @@ function ProductDetail(props) {
                       ? imageComment?.id
                         ? imageComment?.url
                         : URL.createObjectURL(imageComment)
-                      : null
+                      : ""
                   }
                   width="180px"
                   height="180px"
@@ -674,7 +674,7 @@ function ProductDetail(props) {
                       ? videoComment?.id
                         ? videoComment?.url
                         : URL.createObjectURL(videoComment)
-                      : null
+                      : ""
                   }
                   style={{ marginRight: "10px" }}
                 />

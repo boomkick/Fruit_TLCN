@@ -25,7 +25,7 @@ const keyWordTypeItems = [
   { id: 3, label: "NONE", name: "Mặc định" },
   { id: 0, label: "EMAIL", name: "Email" },
   { id: 1, label: "PHONE", name: "Số điện thoại" },
-  { id: 2, label: "NAME", name: "Tên người nhận" },
+  { id: 2, label: "NAME", name: "Tên nhân viên" },
 ];
 
 // Remember to subtract 1 unit when sent to BE

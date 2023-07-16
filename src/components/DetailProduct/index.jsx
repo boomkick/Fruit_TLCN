@@ -20,7 +20,7 @@ import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { numWithCommas } from "../../constraints/Util";
+import { formatDateText, numWithCommas } from "../../constraints/Util";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import HelpIcon from "@mui/icons-material/Help";
 import GiftListModal from "../GiftListModal";
@@ -203,6 +203,10 @@ function DetailProduct({ data }) {
                 Loại sản phẩm:
               </p>
               <p className="detailProduct__info-general-text">Khối lượng sản phẩm:</p>
+              {data?.promotion ? (
+                <p className="detailProduct__info-general-text red">Sản phẩm khuyến mãi đến:</p>
+              ) : null}
+              
             </div>
             <div>
               {
@@ -226,6 +230,11 @@ function DetailProduct({ data }) {
               <p className="detailProduct__info-general-text">
                 {(data?.weight / 1000) >= 1 ? (data?.weight / 1000) + ' kilogram' : (data?.weight) + ' gram'}
               </p>
+              {data?.promotion ? (
+                <p className="detailProduct__info-general-text red">
+                {formatDateText(data?.promotion?.expireDate)}
+              </p>
+              ) : null}
             </div>
           </div>
 

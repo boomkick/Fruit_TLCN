@@ -66,7 +66,7 @@ export default function ImageUploadPreviewComponent() {
     setLabelVietNameseID(
       labelVietNameseOptions.find((item, index) => index === id)
     );
-  }, []);
+  }, [labelVietNameseOptions, labelEnglishOptions]);
 
   // If new
   const [labelEnglish, setLabelEnglish] = useState("");
@@ -104,6 +104,7 @@ export default function ImageUploadPreviewComponent() {
     if (radioValue === "exist") {
       if (!labelEnglishID) {
         toast.error("Vui lòng chọn label tiếng anh!");
+        return
       }
       const label = {
         en: labelEnglishID?.label?.trim(),
@@ -291,6 +292,7 @@ export default function ImageUploadPreviewComponent() {
               }}
               sx={{ width: "70%" }}
               renderInput={(params) => <TextField {...params} />}
+              disabled={true}
             />
           ) : (
             <TextField
